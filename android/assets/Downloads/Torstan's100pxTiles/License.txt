@@ -1,0 +1,4 @@
+These tiles and images were created by Jonathan Roberts for release with the stable version
+of maptool 1.3. They are licensed for re-use and distribution under the Creative Commons
+share-alike, non-commercial, attribution license:
+http://creativecommons.org/licenses/by-nc-sa/3.0/

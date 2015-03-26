@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="48" height="27" tilewidth="40" tileheight="40" backgroundcolor="#604b37" nextobjectid="1">
+ <tileset firstgid="1" name="FlagsMid" tilewidth="40" tileheight="40">
+  <image source="../../../../Downloads/Torstan's100pxTiles/Background/Textures/FlagsMid.jpg" width="400" height="400"/>
+ </tileset>
+ <tileset firstgid="101" name="InternalCorner" tilewidth="40" tileheight="40">
+  <image source="../../../../Downloads/Torstan's100pxTiles/Background/Walls and pillars/Earth backed walls on grid lines/InternalCorner.png" width="300" height="300"/>
+ </tileset>
+ <tileset firstgid="150" name="Wall,4Squares" tilewidth="40" tileheight="40">
+  <image source="../../../../Downloads/Torstan's100pxTiles/Background/Walls and pillars/Earth backed walls on grid lines/Wall,4Squares.png" width="600" height="200"/>
+ </tileset>
+ <layer name="Ground" width="48" height="27">
+  <data encoding="base64" compression="zlib">
+   eJzt1UOSBUAARMGxbdu2bdvW/c8wuek79I/oishd7V9WVuavjHIqqKSKamqopY7SCH9hDTTSRDMttNJGOx3UR/gL66KbHnrpo58BBhmiM8Jf2AijjDHOBJNMMc0MwxH+wuaYZ4FFllhmhVXWmI3wF7bBJltss8Mue+xzwHqEv7AjjjnhlDPOueCSKw4j/IXdcMsd9zzwyBPPvHAd4S/sjXc++OSLb3745Y/XCH9hOeSSRz4FFFJEMSVkR/gLi62rqb+pv6m/qb+pv6m/qb+pv6m/qb8x9zeT9w82OdTM
+  </data>
+ </layer>
+ <layer name="Walls" width="48" height="27">
+  <data encoding="base64" compression="zlib">
+   eJzVmDlOQzEQQOcoc5R/oSQUCRQQZLHcY8rspCM7rtjhTDxrGnf85gvmS08oyJael5mx3RPRIVzCDTyLNC/wCm/wDh/wCV/wDV21adPnTCQNoA89/6sjuIJbeKTNBrawgz0c4AgneIKu2rTpc4HzOeCchj4W5beO4Q4mtJnCDOawgCWs4AHW0FWbNn2uccY1Md+JPZNYD2VMyv/1HuSffzgm5jmxVxL7PbHnjHUzxm5/7db2m/g+L7GqxIux52wayB9X3bi7EutGvNgskD+uunV3JU8ZsW7zQP646s7dlRxr5ClbBPLHVffurtQHI8faMpA/rnpwd6W2GfXBVoH8cdWjuyt12aht9hDIH1c9ubtypjDqsq0D+eOqT+6u0etXRP+6fkWsv/X8R6y/9fxHrL/1+SFi/a3PDxHrb31+iFh/6/NDxPpbnx8i1t/6/MAdsuEu2XCnbLhbNn/t9tuHY67PD9zhG+7yzdjv9uUNoOTXkqNKnJdYKfutrFkZdzl7SFdt2vTBMeOacc645yHOIzj3t5XyBiPUBiG/CjlKiHMhVoT9JqyZMG7pqk2bPjhmXPPI3XMP5z4M/G2rvIEJdU2oDUJ+FXKUEOdCrAj7TVgz6apNmz44Zlxz393zD3AmghE=
+  </data>
+ </layer>
+</map>
