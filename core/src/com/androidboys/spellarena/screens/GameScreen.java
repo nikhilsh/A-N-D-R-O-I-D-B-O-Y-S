@@ -1,5 +1,7 @@
 package com.androidboys.spellarena.screens;
 
+import org.json.JSONObject;
+
 import appwarp.WarpController;
 import appwarp.WarpListener;
 
@@ -63,6 +65,9 @@ public class GameScreen implements Screen, WarpListener{
 		
 		createTouchpad();
 		inputHandler = new InputHandler(world,this);
+		
+		WarpController.getInstance().setListener(this);
+		
 	}
 
 
@@ -175,8 +180,16 @@ public class GameScreen implements Screen, WarpListener{
 
 	@Override
 	public void onGameUpdateReceived(String message) {
-		// TODO Auto-generated method stub
-		
+		try{
+			JSONObject data = new JSONObject(message);
+			float x = (float)data.getDouble("x");	
+			float y = (float)data.getDouble("y");
+			float vx = (float)data.getDouble("vx");
+			float vy = (float)data.getDouble("vy");
+			int state = (int)data.getDouble("state");
+			world.updateEnemy(x, y, vx, vy, state);
+		} catch (Exception e){
+		}
 	}
 	
 	public Stage getStage(){

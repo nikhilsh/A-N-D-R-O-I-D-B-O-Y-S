@@ -1,5 +1,9 @@
 package com.androidboys.spellarena.gameworld;
 
+import org.json.JSONObject;
+
+import appwarp.WarpController;
+
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
 import com.badlogic.gdx.Gdx;
@@ -23,9 +27,12 @@ public class GameRenderer {
 	private ShapeRenderer shapeRenderer;
 	
 	private Bob bob;
+	private Bob enemy;
 	
 	private TiledMap map;
 	private TiledMapRenderer mapRenderer;
+	
+	private float _x,_y;
 	
 	public GameRenderer(SpriteBatch batcher, GameWorld world) {
 		this.world = world;
@@ -35,6 +42,7 @@ public class GameRenderer {
 		shapeRenderer = new ShapeRenderer();
 		
 		bob = world.getBob();
+		enemy = world.getEnemy();
 		
 		map = AssetLoader.map;
 		mapRenderer = new OrthogonalTiledMapRenderer(map);
@@ -51,15 +59,25 @@ public class GameRenderer {
 		
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(Color.BLUE);
-		
-		shapeRenderer.rect(bob.getPosition().x,bob.getPosition().y,50,50);
+		renderBob();
+		renderEnemy();
 		shapeRenderer.end();
 	}
 
+	private void renderBob(){
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.rect(bob.getPosition().x,bob.getPosition().y,50,50);
+	}
+	
+	private void renderEnemy(){
+		shapeRenderer.setColor(Color.RED);
+		shapeRenderer.rect(enemy.getPosition().x,enemy.getPosition().y,50,50);
+	}
+	
 	public void moveCamera(){
 		cam.position.set(bob.getPosition().x,bob.getPosition().y,0);
 		cam.update();
 	}
 	
+
 }
