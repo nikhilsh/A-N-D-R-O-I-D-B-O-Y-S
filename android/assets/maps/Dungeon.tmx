@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="48" height="27" tilewidth="40" tileheight="40" backgroundcolor="#604b37" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="48" height="27" tilewidth="40" tileheight="40" backgroundcolor="#604b37" nextobjectid="14">
  <tileset firstgid="1" name="FlagsMid" tilewidth="40" tileheight="40">
   <image source="../../../../Downloads/Torstan's100pxTiles/Background/Textures/FlagsMid.jpg" width="400" height="400"/>
  </tileset>
@@ -9,6 +9,195 @@
  <tileset firstgid="150" name="Wall,4Squares" tilewidth="40" tileheight="40">
   <image source="../../../../Downloads/Torstan's100pxTiles/Background/Walls and pillars/Earth backed walls on grid lines/Wall,4Squares.png" width="600" height="200"/>
  </tileset>
+ <tileset firstgid="225" name="Rubble" tilewidth="40" tileheight="40">
+  <image source="../../../../Downloads/Torstan's100pxTiles/Background/Walls and pillars/Rubble.png" width="200" height="200"/>
+ </tileset>
+ <tileset firstgid="250" name="WallCandle" tilewidth="40" tileheight="40">
+  <image source="../../../../Downloads/Torstan's100pxTiles/Objects/Lightsources/WallCandle.png" width="112" height="112"/>
+ </tileset>
+ <tileset firstgid="254" name="FirePit,Lit,Halo" tilewidth="40" tileheight="40">
+  <image source="../../../../Downloads/Torstan's100pxTiles/Objects/Lightsources/FirePit,Lit,Halo.png" width="400" height="400"/>
+  <tile id="22">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="26">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="32">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="34">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="35">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="36">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="37">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="42">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="43">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="44">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="45">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="46">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="47">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="52">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="53">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="54">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="55">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="56">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="57">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="62">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="63">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="64">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="65">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="66">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="67">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="72">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="73">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="74">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="75">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="76">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="77">
+   <properties>
+    <property name="Damage" value="True"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="Ground" width="48" height="27">
   <data encoding="base64" compression="zlib">
    eJzt1UOSBUAARMGxbdu2bdvW/c8wuek79I/oishd7V9WVuavjHIqqKSKamqopY7SCH9hDTTSRDMttNJGOx3UR/gL66KbHnrpo58BBhmiM8Jf2AijjDHOBJNMMc0MwxH+wuaYZ4FFllhmhVXWmI3wF7bBJltss8Mue+xzwHqEv7AjjjnhlDPOueCSKw4j/IXdcMsd9zzwyBPPvHAd4S/sjXc++OSLb3745Y/XCH9hOeSSRz4FFFJEMSVkR/gLi62rqb+pv6m/qb+pv6m/qb+pv6m/qb8x9zeT9w82OdTM
@@ -16,7 +205,19 @@
  </layer>
  <layer name="Walls" width="48" height="27">
   <data encoding="base64" compression="zlib">
-   eJzVmDlOQzEQQOcoc5R/oSQUCRQQZLHcY8rspCM7rtjhTDxrGnf85gvmS08oyJael5mx3RPRIVzCDTyLNC/wCm/wDh/wCV/wDV21adPnTCQNoA89/6sjuIJbeKTNBrawgz0c4AgneIKu2rTpc4HzOeCchj4W5beO4Q4mtJnCDOawgCWs4AHW0FWbNn2uccY1Md+JPZNYD2VMyv/1HuSffzgm5jmxVxL7PbHnjHUzxm5/7db2m/g+L7GqxIux52wayB9X3bi7EutGvNgskD+uunV3JU8ZsW7zQP646s7dlRxr5ClbBPLHVffurtQHI8faMpA/rnpwd6W2GfXBVoH8cdWjuyt12aht9hDIH1c9ubtypjDqsq0D+eOqT+6u0etXRP+6fkWsv/X8R6y/9fxHrL/1+SFi/a3PDxHrb31+iFh/6/NDxPpbnx8i1t/6/MAdsuEu2XCnbLhbNn/t9tuHY67PD9zhG+7yzdjv9uUNoOTXkqNKnJdYKfutrFkZdzl7SFdt2vTBMeOacc645yHOIzj3t5XyBiPUBiG/CjlKiHMhVoT9JqyZMG7pqk2bPjhmXPPI3XMP5z4M/G2rvIEJdU2oDUJ+FXKUEOdCrAj7TVgz6apNmz44Zlxz393zD3AmghE=
+   eJzVmNtOFEEQQOtT6lPmh3bxYRcfFFNR+Y965A5vcqefBEX9B1HxggoqF3nzdFqTkUwmnd2ZZejkZAPp3j3d011VPT0RHcADeAzPRYp9OIAX8BIO4RW8hjfQVp+cMfdEbAr60EufOoSH8ASe0WcdNmATtmAbdmAX9qCtPjlj7uM8DTjbIM1F+Vtn4CnM0WceFmARlmAZVmAV1qCtPjljHuGMq7Hexp4xnocyJ+X/OgvS8Yajsc7GXjH2u7HnnOfmzN1v2y23zaV9Hs+qcl6cPefzHfG/YI9cwhX8hmu42QdXXU/uyll3zosvdMT/DN8f8BN+wXmFP666kdyVOOWcdV/siP8Jvl/hG3yH0wp/XHUzuSsx1olTvtSQ/zvO1BG8hVHGH+P7ET7BZ/hS4Y+rbiV3JT84MdaXG17/4xH9mXfB/AvWoXgPHyr8cdXt5K7kNic/+EpH9k9Ow1V3kruSl53c5qtj+p/fWO+zEdc/p+Gqu8ldqSmcvOxrDa0/cc8uW3SPDVfdS+561/PXpPyPGvyucv6qy7+cfSMGWAMxsdFWXv+6/EvsNWKwEYuNmGyjxsSmW3n96/Ivuc/IgUYuNHKinXTEv1w/1OXfGBOpQYxaxKhJbNyYePX383qcL5H/64e6/MvvGDWg/YuJFx1Z/3L9cBfzb7l+aCr/TrKV64em8+8kWrl+4A5ZcJcsuFMWsxW1XtcajqFcP3CHL7jLFzPpbh/fAcT4GmNUPOfxrMT9Fp9ZnHesPaStPjljcAy4BpwD7mGA8xCm07uV+A5GyA1CfBVilHDOhbMi7DfhmQnzlrb65IzBMeAahsk99HDuw1R6txXfgQl5TcgNQnwVYpRwzoWzIuw34ZlJW31yxuAYcA395B7+AEhq0jA=
   </data>
  </layer>
+ <layer name="Lighting" width="48" height="27">
+  <data encoding="base64" compression="zlib">
+   eJzt1NdSwkAAheFgx96xd8Uuir1GwV6xYRffLI+S5yKK/t4ykoCbhL3YM3wzmexuOBe7q2kqssbStNQX/jvux1y7pPnGp813nMb9mKuiUkjYVzpnQ89+zzuTMdP/RoWFs6Fbf/TnnZkW7J/B9+9DgB9KUIoylKMClQGRf/A2VXQLoho1qEUd6tGARjRJ3L+Zbi1oRRvaEUIHOtGFbon799CtF33oxwAGMYRhjGBUsH+u8+tGxugWxjgmMIkpTGMGs5gT7J/r/Lpx/0ToNo8FRLGIJSxjBatY82j/uHH/rNNtA5vYwjZ2oGMXe4hJvP/jdNvHAQ5xhGOc4BRnOJe4/wXdLnGFBK5xg1vc4R5Jifs/0O0RT3jGC17xhnek8CHx/eNHvLx/ihk37h8VlexwJgz2leHFuNPafOfYhXNtWDbrRcad1uY7R6V4+QEg5G5j
+  </data>
+ </layer>
+ <objectgroup name="Collidable">
+  <object id="6" x="47.1286" y="47.1286" width="1825.39" height="19.2006"/>
+  <object id="8" x="1852" y="66.3583" width="32.6397" height="967.49"/>
+  <object id="9" x="66.7009" y="1011.51" width="1787" height="27.1201"/>
+  <object id="11" x="41.7797" y="66.7009" width="24.9212" height="969.728"/>
+  <object id="12" x="859.463" y="420.846" width="200.444" height="199.791"/>
+ </objectgroup>
 </map>

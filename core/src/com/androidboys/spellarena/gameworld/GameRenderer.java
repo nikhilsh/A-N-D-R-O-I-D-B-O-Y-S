@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -92,17 +93,36 @@ public class GameRenderer {
 		mapRenderer.render();
 		
 		batcher.setProjectionMatrix(cam.combined);
-		batcher.begin();
 		renderBob(runTime);
-		batcher.end();
-		
-		shapeRenderer.setProjectionMatrix(cam.combined);
-		shapeRenderer.begin(ShapeType.Filled);
 		renderEnemy();
-		shapeRenderer.end();
+		
+
+
+
 	}
 
 	private void renderBob(float runTime){
+		//Renders collision shape for debugging purposes
+		
+		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.rect(70,70,1780,940);
+		shapeRenderer.end();
+		
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(Color.RED);
+		for(Rectangle rect: bob.getTiles()){
+			shapeRenderer.rect(rect.x,rect.y,rect.width,rect.height);
+		}
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.rect(bob.getPosition().x-10,bob.getPosition().y,50,50);
+		
+
+		shapeRenderer.end();
+		
+		
+		batcher.begin();
 		if(bob.getState() == State.ALIVE){
 			switch(bob.getDirection()){
 				case EAST:
@@ -171,15 +191,18 @@ public class GameRenderer {
 			
 			}
 		}
-		/*
-		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(bob.getPosition().x,bob.getPosition().y,50,50);
-		*/
+		batcher.end();
+		
+		
 	}
 	
 	private void renderEnemy(){
-		shapeRenderer.setColor(Color.RED);
-		shapeRenderer.rect(enemy.getPosition().x,enemy.getPosition().y,50,50);
+		batcher.begin();
+		batcher.setColor(180/255f,0,0,1f);
+		batcher.draw(eastBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+		batcher.end();
+		//shapeRenderer.setColor(Color.RED);
+		//shapeRenderer.rect(enemy.getPosition().x,enemy.getPosition().y,50,50);
 	}
 	
 	public void moveCamera(){
