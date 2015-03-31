@@ -55,9 +55,9 @@ public class MainMenuScreen implements Screen {
 
 	private void update() {
 		if(Gdx.input.justTouched()){
-			WarpController.getInstance().startApp(getRandomHexString(10));
-			//game.setScreen(new GameScreen(game));
-			game.setScreen(new StartMultiplayerScreen(game,width,height));
+			//WarpController.getInstance().startApp(getRandomHexString(10));
+			//game.setScreen(new StartMultiplayerScreen(game,width,height));
+			game.setScreen(new GameScreen(game));
 			return;
 		}
 	}

@@ -26,6 +26,7 @@ public class GameWorld {
 		local_bob.update(delta);
 		enemy_bob.update(delta);
 		local_bob.sendLocation(0);
+		System.out.println(delta);
 	}
 
 	public void updateEnemy(float x, float y, float vx, float vy, int state) {

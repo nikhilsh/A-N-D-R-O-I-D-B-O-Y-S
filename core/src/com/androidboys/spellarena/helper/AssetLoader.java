@@ -22,6 +22,13 @@ public class AssetLoader {
 	
 	public static TextureRegion playRegion, helpRegion;
 	
+	public static Texture charTexture;
+	public static TextureRegion northBob, eastBob, southBob, westBob, 
+		northEastBob, southEastBob, southWestBob, northWestBob;
+	public static Animation northBobAnimation, eastBobAnimation, southBobAnimation, westBobAnimation, 
+		northEastBobAnimation, southEastBobAnimation, southWestBobAnimation, northWestBobAnimation;
+	
+	
 	public static BitmapFont header, playText, swordText;
 	
 	public static TiledMap map;
@@ -39,6 +46,97 @@ public class AssetLoader {
 		
 		loadFonts();
 		loadMaps();
+		loadSprites();
+		loadAnimations();
+	}
+	
+	private static void loadAnimations() {
+		northBobAnimation = new Animation(0.06f,new TextureRegion[]{
+				new TextureRegion(charTexture, 0, 155, 30, 30),
+				new TextureRegion(charTexture, 30, 155, 30, 30),
+				new TextureRegion(charTexture, 60, 155, 30, 30),
+				new TextureRegion(charTexture, 90, 155, 30, 30),
+				new TextureRegion(charTexture, 120, 155, 30, 30)
+			});
+		
+		northEastBobAnimation = new Animation(0.06f,new TextureRegion[]{
+				new TextureRegion(charTexture, 150, 125, 30, 30),
+				new TextureRegion(charTexture, 180, 125, 30, 30),
+				new TextureRegion(charTexture, 210, 125, 30, 30),
+				new TextureRegion(charTexture, 240, 125, 30, 30),
+				new TextureRegion(charTexture, 269, 125, 30, 30)
+			});
+		
+		eastBobAnimation = new Animation(0.06f,new TextureRegion[]{
+				new TextureRegion(charTexture, 150, 95, 30, 30),
+				new TextureRegion(charTexture, 180, 95, 30, 30),
+				new TextureRegion(charTexture, 210, 95, 30, 30),
+				new TextureRegion(charTexture, 240, 95, 30, 30),
+				new TextureRegion(charTexture, 269, 95, 30, 30)
+			});
+		
+		southEastBobAnimation = new Animation(0.06f,new TextureRegion[]{
+				new TextureRegion(charTexture, 150, 65, 30, 30),
+				new TextureRegion(charTexture, 180, 65, 30, 30),
+				new TextureRegion(charTexture, 210, 65, 30, 30),
+				new TextureRegion(charTexture, 240, 65, 30, 30),
+				new TextureRegion(charTexture, 269, 65, 30, 30)
+			});
+		
+		southBobAnimation = new Animation(0.06f,new TextureRegion[]{
+				new TextureRegion(charTexture, 150, 35, 30, 30),
+				new TextureRegion(charTexture, 180, 35, 30, 30),
+				new TextureRegion(charTexture, 210, 35, 30, 30),
+				new TextureRegion(charTexture, 240, 35, 30, 30),
+				new TextureRegion(charTexture, 269, 35, 30, 30)
+			});
+		
+		southWestBobAnimation = new Animation(0.06f,new TextureRegion[]{
+				new TextureRegion(charTexture, 0, 65, 30, 30),
+				new TextureRegion(charTexture, 30, 65, 30, 30),
+				new TextureRegion(charTexture, 60, 65, 30, 30),
+				new TextureRegion(charTexture, 90, 65, 30, 30),
+				new TextureRegion(charTexture, 120, 65, 30, 30)
+			});
+		
+		westBobAnimation = new Animation(0.06f,new TextureRegion[]{
+				new TextureRegion(charTexture, 0, 95, 30, 30),
+				new TextureRegion(charTexture, 30, 95, 30, 30),
+				new TextureRegion(charTexture, 60, 95, 30, 30),
+				new TextureRegion(charTexture, 90, 95, 30, 30),
+				new TextureRegion(charTexture, 120, 95, 30, 30)
+			});
+		
+		northWestBobAnimation = new Animation(0.06f,new TextureRegion[]{
+				new TextureRegion(charTexture, 0, 125, 30, 30),
+				new TextureRegion(charTexture, 30, 125, 30, 30),
+				new TextureRegion(charTexture, 60, 125, 30, 30),
+				new TextureRegion(charTexture, 90, 125, 30, 30),
+				new TextureRegion(charTexture, 120, 125, 30, 30)
+			});
+		
+		northBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		northEastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		eastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		southEastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		southBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		southWestBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		westBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		northWestBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
+	}
+
+	private static void loadSprites(){
+		charTexture = new Texture(Gdx.files.internal("sprites/wizard.png"));
+		charTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		southBob = new TextureRegion(charTexture, 60, 35, 30, 30);
+		southWestBob = new TextureRegion(charTexture, 60, 65, 30, 30);
+		westBob = new TextureRegion(charTexture, 60, 95, 30, 30);
+		northWestBob = new TextureRegion(charTexture, 60, 125, 30, 30);
+		northBob = new TextureRegion(charTexture, 60, 155, 30, 30);
+		northEastBob = new TextureRegion(charTexture, 210, 125, 30, 30);		
+		eastBob = new TextureRegion(charTexture, 210, 95, 30, 30);
+		southEastBob = new TextureRegion(charTexture, 210, 65, 30, 30);		
 	}
 	
 	private static void loadFonts(){

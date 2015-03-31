@@ -1,6 +1,7 @@
 package com.androidboys.spellarena.game;
 
 import com.androidboys.spellarena.helper.AssetLoader;
+import com.androidboys.spellarena.screens.LoadingScreen;
 import com.androidboys.spellarena.screens.MainMenuScreen;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
@@ -16,6 +17,7 @@ public class SpellArena extends Game {
 	
 	@Override
 	public void create () {
+		//setScreen(new LoadingScreen(this ,480, 320));
 		AssetLoader.load();
 		setScreen(new MainMenuScreen(this,480,320));
 		fps = new FPSLogger();
