@@ -46,37 +46,8 @@ public class GameWorld {
 	}
 
 	public void update(float delta) {
-		int startX, startY = 0, endX, endY = 0;
-		switch(local_bob.getDirection()){
-			case EAST:
-				startX = endX = (int)(local_bob.getPosition().x + 40 + local_bob.getVelocity().x);
-				startY = (int) (local_bob.getPosition().y - 25);
-				endY = (int) (local_bob.getPosition().y - 25);
-				break;
-			case NORTH:
-				startY = endY = (int)(local_bob.getPosition().y + 25 + local_bob.getVelocity().y);
-				startX = (int) (local_bob.getPosition().x - 10);
-				endX = (int) (local_bob.getPosition().x + 40);
-				break;
-			case SOUTH:
-				startX = endX = (int)(local_bob.getPosition().y - 25 + local_bob.getVelocity().y);
-				startX = (int) (local_bob.getPosition().x - 10);
-				endX = (int) (local_bob.getPosition().x + 40);
-				break;
-			case WEST:
-				startX = endX = (int)(local_bob.getPosition().x + 40 + local_bob.getVelocity().x);
-				startY = (int) (local_bob.getPosition().y - 25);
-				endY = (int) (local_bob.getPosition().y + 25);
-				break;
-			default:
-				startX = (int) (local_bob.getPosition().x - 10);
-				endX = (int) (local_bob.getPosition().x + 40);
-				startY = (int) (local_bob.getPosition().y - 25);
-				endY = (int) (local_bob.getPosition().y + 25);
-				break;
-		}
-		getTiles(startX, startY, endX, endY);
-		local_bob.updateTiles(tiles);
+		getObstacles();
+		local_bob.updateObstacles(tiles);
 		
 		local_bob.update(delta);
 		enemy_bob.update(delta);
@@ -84,7 +55,7 @@ public class GameWorld {
 		
 	}
 	
-	private void getTiles(int startX, int startY, int endX, int endY){
+	private void getObstacles(){
 		MapLayer layer = (MapLayer) map.getLayers().get("Collidable");
 		rectPool.freeAll(tiles);
 		tiles.clear();

@@ -98,7 +98,7 @@ public class GameScreen implements Screen, WarpListener{
 		touchpadStyle.background = new TextureRegionDrawable(new TextureRegion(new Texture(background))); 
 		touchpadStyle.knob = new TextureRegionDrawable(new TextureRegion(new Texture(knob)));
 		touchpad = new Touchpad(10,touchpadStyle);
-		touchpad.setBounds(15, 15, 152, 152);
+		touchpad.setBounds(45, 45, 152, 152);
 		
 		background.dispose();
 		knob.dispose();

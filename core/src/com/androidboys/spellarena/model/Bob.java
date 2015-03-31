@@ -23,11 +23,9 @@ public class Bob {
 		NORTHWEST;
 	}
 	
-	public enum State{
-		ALIVE,
-		RUNNING,
-		DEAD;
-	}
+	public static final int STATE_ALIVE = 0;
+	public static final int STATE_RUNNING = 1;
+	public static final int STATE_DEAD = 2;
 	
 	private static final float MAX_SPEED = 500f;
 	
@@ -40,7 +38,7 @@ public class Bob {
 	
 	private Touchpad touchpad;
 
-	private State state;
+	private int state;
 	
 	private Rectangle bobRect;
 	
@@ -51,7 +49,7 @@ public class Bob {
 		this.velocity = new Vector2();		
 		this.isEnemy = isEnemy;
 		this.direction = Direction.SOUTH;
-		this.setState(State.ALIVE);
+		this.state = STATE_ALIVE;
 		this.bobRect = new Rectangle();
 		this.tiles = null;
 	}
@@ -64,9 +62,114 @@ public class Bob {
 		position.add(1, 0);
 	}
 	
-	
 	public void update(float delta){
-		
+		checkCollision(delta);
+		updateVelocity();
+		updateState();
+	}
+
+	private void updateState(){
+		if(this.velocity.isZero()){
+			this.state = STATE_ALIVE;
+		} else {
+			this.state = STATE_RUNNING;
+		}
+	}
+	
+	private void updateVelocity(){
+		Vector2 newV = null;
+		if(!isEnemy){
+			float touchX = touchpad.getKnobPercentX();
+			float touchY = touchpad.getKnobPercentY();
+			if(touchX > 0.5){
+				if(touchY > 0.5){
+					this.direction = Direction.NORTHEAST;
+					newV = new Vector2(MAX_SPEED, MAX_SPEED);
+					
+				} else if (touchY < -0.5){
+					this.direction = Direction.SOUTHEAST;
+					newV = new Vector2(MAX_SPEED, -MAX_SPEED);
+					
+				} else {
+					this.direction = Direction.EAST;
+					newV = new Vector2(MAX_SPEED,	0);
+				}
+			}else if (touchX < -0.5){
+				if(touchY > 0.5){
+					this.direction = Direction.NORTHWEST;
+					newV = new Vector2(-MAX_SPEED, MAX_SPEED);
+				} else if (touchY < -0.5){
+					this.direction = Direction.SOUTHWEST;
+					newV = new Vector2(-MAX_SPEED, -MAX_SPEED);
+				} else {
+					this.direction = Direction.WEST;
+					newV = new Vector2(-MAX_SPEED, 0);
+				}
+			} else {
+				if(touchY > 0.5){
+					this.direction = Direction.NORTH;
+					newV = new Vector2(0, MAX_SPEED);
+				} else if(touchY < -0.5) {
+					this.direction = Direction.SOUTH;
+					newV = new Vector2(0, -MAX_SPEED);
+				} else {
+					newV = new Vector2(0,0);
+				}
+			}
+			if(!newV.equals(velocity)){
+				needsUpdate = true;
+				this.setVelocity(newV.x, newV.y);
+			}
+			//this.scaleAndSetVelocity(touchX, touchY);
+		} else {
+			if(this.velocity.x > 0){
+				if(this.velocity.y > 0){
+					this.direction = Direction.NORTHEAST;
+				} else if (this.velocity.y < 0){
+					this.direction = Direction.SOUTHEAST;
+				} else {
+					this.direction = Direction.EAST;
+				}
+			} else if (this.velocity.x < 0){
+				if(this.velocity.y > 0){
+					this.direction = Direction.NORTHWEST;
+				} else if (this.velocity.y < 0){
+					this.direction = Direction.SOUTHWEST;
+				} else {
+					this.direction = Direction.WEST;
+				}
+			} else {
+				if(this.velocity.y > 0){
+					this.direction = Direction.NORTH;
+				} else if (this.velocity.y < 0){
+					this.direction = Direction.SOUTH;
+				}
+			}
+		}
+	}
+	
+	
+	@Deprecated
+	private void checkBoundaries(float delta){
+		this.position.add(this.velocity.cpy().scl(delta));			
+		System.out.println("Position: "+this.position);
+		if(position.x > GameWorld.WORLD_BOUND_RIGHT){
+			System.out.println("Hit Right");
+			position.x = GameWorld.WORLD_BOUND_RIGHT;
+		} else if (position.x < GameWorld.WORLD_BOUND_LEFT){
+			System.out.println("Hit Left");
+			position.x = GameWorld.WORLD_BOUND_LEFT;
+		}
+		if(position.y > GameWorld.WORLD_BOUND_TOP){
+			System.out.println("Hit Top");
+			position.y = GameWorld.WORLD_BOUND_TOP;
+		} else if (position.y < GameWorld.WORLD_BOUND_BOTTOM){
+			System.out.println("Hit Bottom");
+			position.y = GameWorld.WORLD_BOUND_BOTTOM;
+		}
+	}
+	
+	private void checkCollision(float delta){
 		Vector2 newPos = this.position.cpy().add(this.velocity.cpy().scl(delta));
 		this.setRect(newPos);
 		if(getTiles() != null){
@@ -130,7 +233,7 @@ public class Bob {
 						}
 						break;
 					case WEST:
-						newPos.x = tile.x + tile.width + 15;
+						newPos.x = tile.x + tile.width + 10;
 						break;
 					default:
 						break;
@@ -140,86 +243,8 @@ public class Bob {
 			}
 		}
 		this.position = newPos;
-		//this.position.add(this.velocity.cpy().scl(delta));
-		System.out.println("Position: "+this.position);
-		if(position.x > GameWorld.WORLD_BOUND_RIGHT){
-			System.out.println("Hit Right");
-			position.x = GameWorld.WORLD_BOUND_RIGHT;
-		} else if (position.x < GameWorld.WORLD_BOUND_LEFT){
-			System.out.println("Hit Left");
-			position.x = GameWorld.WORLD_BOUND_LEFT;
-		}
-		if(position.y > GameWorld.WORLD_BOUND_TOP){
-			System.out.println("Hit Top");
-			position.y = GameWorld.WORLD_BOUND_TOP;
-		} else if (position.y < GameWorld.WORLD_BOUND_BOTTOM){
-			System.out.println("Hit Bottom");
-			position.y = GameWorld.WORLD_BOUND_BOTTOM;
-		}
-		Vector2 newV = null;
-		if(!isEnemy){
-			float touchX = touchpad.getKnobPercentX();
-			float touchY = touchpad.getKnobPercentY();
-			if(touchX > 0.5){
-				if(touchY > 0.5){
-					this.direction = Direction.NORTHEAST;
-					newV = new Vector2(MAX_SPEED, MAX_SPEED);
-					
-				} else if (touchY < -0.5){
-					this.direction = Direction.SOUTHEAST;
-					newV = new Vector2(MAX_SPEED, -MAX_SPEED);
-					
-				} else {
-					this.direction = Direction.EAST;
-					newV = new Vector2(MAX_SPEED,	0);
-				}
-			}else if (touchX < -0.5){
-				if(touchY > 0.5){
-					this.direction = Direction.NORTHWEST;
-					newV = new Vector2(-MAX_SPEED, MAX_SPEED);
-				} else if (touchY < -0.5){
-					this.direction = Direction.SOUTHWEST;
-					newV = new Vector2(-MAX_SPEED, -MAX_SPEED);
-				} else {
-					this.direction = Direction.WEST;
-					newV = new Vector2(-MAX_SPEED, 0);
-				}
-			} else {
-				if(touchY > 0.5){
-					this.direction = Direction.NORTH;
-					newV = new Vector2(0, MAX_SPEED);
-				} else if(touchY < -0.5) {
-					this.direction = Direction.SOUTH;
-					newV = new Vector2(0, -MAX_SPEED);
-				} else {
-					newV = new Vector2(0,0);
-				}
-			}
-			if(!newV.equals(velocity)){
-				needsUpdate = true;
-				this.setVelocity(newV.x, newV.y);
-			}
-			//this.scaleAndSetVelocity(touchX, touchY);
-			if(this.velocity.isZero()){
-				this.setState(State.ALIVE);
-			} else {
-				this.setState(State.RUNNING);
-			}
-		}
-		/*
-		if(!isEnemy){
-			float touchX = touchpad.getKnobPercentX();
-			float touchY = touchpad.getKnobPercentY();
-			if(Math.abs(touchX)>Math.abs(touchY)){	
-				this.scaleAndSetVelocity(touchX,0);
-			} 
-			else {
-				this.scaleAndSetVelocity(0, touchY);
-			}
-		}*/
-
 	}
-
+	
 	private void setRect(Vector2 newPos) {
 		this.bobRect.set(newPos.x - 10, newPos.y, 50, 50);
 	}
@@ -264,15 +289,15 @@ public class Bob {
 		this.position = new Vector2(x,y);
 	}
 
-	public State getState() {
+	public int getState() {
 		return state;
 	}
 
-	public void setState(State state) {
+	public void setState(int state) {
 		this.state = state;
 	}
 
-	public void updateTiles(Array<Rectangle> tiles) {
+	public void updateObstacles(Array<Rectangle> tiles) {
 		this.tiles = tiles;
 		System.out.println("tiles updated");
 	}

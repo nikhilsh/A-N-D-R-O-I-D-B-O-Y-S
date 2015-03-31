@@ -6,7 +6,6 @@ import appwarp.WarpController;
 
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
-import com.androidboys.spellarena.model.Bob.State;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -94,7 +93,7 @@ public class GameRenderer {
 		
 		batcher.setProjectionMatrix(cam.combined);
 		renderBob(runTime);
-		renderEnemy();
+		renderEnemy(runTime);
 		
 
 
@@ -103,7 +102,7 @@ public class GameRenderer {
 
 	private void renderBob(float runTime){
 		//Renders collision shape for debugging purposes
-		
+		/*
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLUE);
@@ -120,10 +119,10 @@ public class GameRenderer {
 		
 
 		shapeRenderer.end();
-		
+		*/
 		
 		batcher.begin();
-		if(bob.getState() == State.ALIVE){
+		if(bob.getState() == Bob.STATE_ALIVE){
 			switch(bob.getDirection()){
 				case EAST:
 					batcher.draw(eastBob,bob.getPosition().x-25f,bob.getPosition().y-25f,75f,75f);
@@ -152,7 +151,7 @@ public class GameRenderer {
 				default:
 					break;
 			}
-		} else if (bob.getState() == State.RUNNING){
+		} else if (bob.getState() == Bob.STATE_RUNNING){
 			switch(bob.getDirection()){
 				case EAST:
 					batcher.draw(eastBobAnimation.getKeyFrame(runTime),
@@ -192,14 +191,79 @@ public class GameRenderer {
 			}
 		}
 		batcher.end();
-		
-		
 	}
 	
-	private void renderEnemy(){
+	private void renderEnemy(float runTime){
 		batcher.begin();
 		batcher.setColor(180/255f,0,0,1f);
-		batcher.draw(eastBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+		if(enemy.getState() == enemy.STATE_ALIVE){
+			switch(enemy.getDirection()){
+				case EAST:
+					batcher.draw(eastBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case NORTH:
+					batcher.draw(northBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case NORTHEAST:
+					batcher.draw(northEastBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case NORTHWEST:
+					batcher.draw(northWestBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case SOUTH:
+					batcher.draw(southBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case SOUTHEAST:
+					batcher.draw(southEastBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case SOUTHWEST:
+					batcher.draw(southWestBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case WEST:
+					batcher.draw(westBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				default:
+					break;
+			}
+		} else if (enemy.getState() == enemy.STATE_RUNNING){
+			switch(enemy.getDirection()){
+				case EAST:
+					batcher.draw(eastBobAnimation.getKeyFrame(runTime),
+							enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case NORTH:
+					batcher.draw(northBobAnimation.getKeyFrame(runTime),
+							enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case NORTHEAST:
+					batcher.draw(northEastBobAnimation.getKeyFrame(runTime),
+							enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case NORTHWEST:
+					batcher.draw(northWestBobAnimation.getKeyFrame(runTime),
+							enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case SOUTH:
+					batcher.draw(southBobAnimation.getKeyFrame(runTime),
+							enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case SOUTHEAST:
+					batcher.draw(southEastBobAnimation.getKeyFrame(runTime),
+							enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case SOUTHWEST:
+					batcher.draw(southWestBobAnimation.getKeyFrame(runTime),
+							enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				case WEST:
+					batcher.draw(westBobAnimation.getKeyFrame(runTime),
+							enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
+					break;
+				default:
+					break;
+			
+			}
+		}
 		batcher.end();
 		//shapeRenderer.setColor(Color.RED);
 		//shapeRenderer.rect(enemy.getPosition().x,enemy.getPosition().y,50,50);
