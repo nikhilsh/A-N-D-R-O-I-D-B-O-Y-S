@@ -52,6 +52,8 @@ public class GameScreen implements Screen, WarpListener{
 	
 	private float runTime;
 	
+	private TiledMap map;
+	
 	//Constructor for debugging w/o multiplayer
 	public GameScreen(Game game) {
 		this.game = game;
