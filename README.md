@@ -68,6 +68,8 @@ Android app for 50.003 - Software Construction
       * MainMenuScreen.java
       * StartMultiplayerScreen.java
 * [lib](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/libs): Library files
+  * App42MultiPlayerGamingSDK.jar
+  * java-json.jar
 
 # Plugins
 * Gradle 1.0.0
