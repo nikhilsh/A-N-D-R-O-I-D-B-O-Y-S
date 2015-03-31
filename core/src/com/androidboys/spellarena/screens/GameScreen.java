@@ -50,6 +50,7 @@ public class GameScreen implements Screen, WarpListener{
 	
 	private InputHandler inputHandler;
 	
+	private float runTime;
 	
 	//Constructor for debugging w/o multiplayer
 	public GameScreen(Game game) {
@@ -79,19 +80,26 @@ public class GameScreen implements Screen, WarpListener{
 
 	private void createTouchpad(){
 		Pixmap.setBlending(Blending.None);
-		Pixmap background = new Pixmap(200,200,Format.RGBA8888);
-		background.setColor(1,1,1,0.6f);
-		background.fillCircle(100, 100, 100);
+		Pixmap background = new Pixmap(152,152,Format.RGBA8888);
+		background.setColor(1,1,1,0.75f);
+		background.drawCircle(76, 76, 74);
+		background.setColor(1,1,1,0.75f);
+		background.drawCircle(76, 76, 76);
+		background.setColor(81/255f,112/255f,130/255f,1f);
+		background.drawCircle(76, 76, 75);
 		
-		Pixmap knob = new Pixmap(66,66,Format.RGBA8888);
-		knob.setColor(1,1,1,0.85f);
-		knob.fillCircle(33, 33, 33);
+		Pixmap knob = new Pixmap(22,22,Format.RGBA8888);
+		knob.setColor(1,1,1,0.6f);
+		knob.fillCircle(11, 11, 11);
 		
 		touchpadStyle = new TouchpadStyle();
 		touchpadStyle.background = new TextureRegionDrawable(new TextureRegion(new Texture(background))); 
 		touchpadStyle.knob = new TextureRegionDrawable(new TextureRegion(new Texture(knob)));
 		touchpad = new Touchpad(10,touchpadStyle);
-		touchpad.setBounds(15, 15, 200, 200);
+		touchpad.setBounds(15, 15, 152, 152);
+		
+		background.dispose();
+		knob.dispose();
 		
 		stage = new Stage(new StretchViewport(960, 640), batcher);
 		stage.addActor(touchpad);
@@ -106,6 +114,7 @@ public class GameScreen implements Screen, WarpListener{
 
 	@Override
 	public void render(float delta) {
+		runTime+=delta;
 		update(delta);
 		draw();
 	}
@@ -116,7 +125,7 @@ public class GameScreen implements Screen, WarpListener{
 	}
 
 	private void draw() {
-		renderer.render();
+		renderer.render(runTime);
 		stage.draw();
 	}
 
