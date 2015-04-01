@@ -9,6 +9,12 @@ Android app for 50.003 - Software Construction
 `com.badlogic.gdx.Gdx`
 > Environment class holding references to the Application, Graphics, Audio, Files and Input instances.
 
+`com.badlogic.gdx.InputMultiplexer`
+> An `InputProcessor` that delegates to an ordered list of other InputProcessors.
+
+`com.badlogic.gdx.InputProcessor`
+> An InputProcessor is used to receive input events from the keyboard and the touch screen (mouse on the desktop).
+
 `com.badlogic.gdx.audio.Sound`
 > A Sound is a short audio clip that can be played numerous times in parallel.
 
@@ -56,6 +62,12 @@ Android app for 50.003 - Software Construction
 
 `com.badlogic.gdx.physics.box2d.World`
 > The world class manages all physics entities, dynamic simulation, and asynchronous queries. The world also contains efficient memory management facilities.
+
+`com.badlogic.gdx.scenes.scene2d.Stage`
+> A 2D scene graph containing hierarchies of `actor`s. Stage handles the viewport and distributes input events.
+
+`com.badlogic.gdx.scenes.scene2d.ui.Touchpad`
+> An on-screen joystick. The movement area of the joystick is circular, centered on the touchpad, and its size determined by the smaller touchpad dimension.
 
 `com.badlogic.gdx.utils.Array`
 > A resizable, ordered or unordered array of objects. If unordered, this class avoids a memory copy when removing elements (the last element is moved to the removed element's position).
