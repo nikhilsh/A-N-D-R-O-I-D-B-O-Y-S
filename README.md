@@ -33,6 +33,9 @@ Android app for 50.003 - Software Construction
 `com.badlogic.gdx.graphics.OrthographicCamera`
 > A camera with orthographic projection.
 
+`com.badlogic.gdx.graphics.Pixmap`
+> A Pixmap represents an image in memory.
+
 `com.badlogic.gdx.graphics.Texture`
 > A Texture wraps a standard OpenGL ES texture.
 
@@ -72,14 +75,23 @@ Android app for 50.003 - Software Construction
 `com.badlogic.gdx.scenes.scene2d.Stage`
 > A 2D scene graph containing hierarchies of `actor`s. Stage handles the viewport and distributes input events.
 
+`com.badlogic.gdx.scenes.scene2d.ui.Skin`
+> A skin stores resources for UI widgets to use (texture regions, ninepatches, fonts, colors, etc).
+
 `com.badlogic.gdx.scenes.scene2d.ui.Touchpad`
 > An on-screen joystick. The movement area of the joystick is circular, centered on the touchpad, and its size determined by the smaller touchpad dimension.
+
+`com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable`
+> Drawable for a TextureRegion.
 
 `com.badlogic.gdx.utils.Array`
 > A resizable, ordered or unordered array of objects. If unordered, this class avoids a memory copy when removing elements (the last element is moved to the removed element's position).
 
 `com.badlogic.gdx.utils.Pool`
 > A pool of objects that can be reused to avoid allocation.
+
+`com.badlogic.gdx.utils.viewport.StretchViewport`
+> A ScalingViewport that uses Scaling.stretch so it does not keep the aspect ratio, the world is scaled to take the whole screen.
 
 ## Directories
 * [desktop](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/desktop): Desktop version
