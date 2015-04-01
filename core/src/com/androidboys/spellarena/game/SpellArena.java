@@ -14,6 +14,10 @@ public class SpellArena extends Game {
 	
 	FPSLogger fps;
 	
+	/**
+	 * Called when the Application is first created.
+	 * Inherited from ApplicationListener
+	 */
 	@Override
 	public void create () {
 		AssetLoader.load();
@@ -21,12 +25,19 @@ public class SpellArena extends Game {
 		fps = new FPSLogger();
 	}
 
-	
+	/**
+	 * Called when the Application should render itself.
+	 * Inherited from ApplicationListener
+	 */
 	@Override
 	public void render () {
 		super.render();
 	}
 	
+	/**
+	 * Called when the Application is destroyed.
+	 * Inherited from ApplicationListener
+	 */
 	@Override
 	public void dispose () {
 		super.dispose();
