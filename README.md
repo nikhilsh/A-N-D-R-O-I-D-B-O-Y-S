@@ -9,11 +9,17 @@ Android app for 50.003 - Software Construction
 `com.badlogic.gdx.Gdx`
 > Environment class holding references to the Application, Graphics, Audio, Files and Input instances.
 
+`com.badlogic.gdx.Game`
+> An `ApplicationListener` that delegates to a Screen. This allows an application to easily have multiple screens.
+
 `com.badlogic.gdx.InputMultiplexer`
 > An `InputProcessor` that delegates to an ordered list of other InputProcessors.
 
 `com.badlogic.gdx.InputProcessor`
 > An InputProcessor is used to receive input events from the keyboard and the touch screen (mouse on the desktop).
+
+`com.badlogic.gdx.Screen`
+> Represents one of many application screens, such as a main menu, a settings menu, the game screen and so on.
 
 `com.badlogic.gdx.audio.Sound`
 > A Sound is a short audio clip that can be played numerous times in parallel.
