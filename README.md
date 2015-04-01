@@ -9,6 +9,9 @@ Android app for 50.003 - Software Construction
 `com.badlogic.gdx.Gdx`
 > Environment class holding references to the Application, Graphics, Audio, Files and Input instances.
 
+`com.badlogic.gdx.audio.Sound`
+> A Sound is a short audio clip that can be played numerous times in parallel.
+
 `com.badlogic.gdx.graphics.Color`
 > A color class, holding the r, g, b and alpha component as floats in the range [0,1]. All methods perform clamping on the internal values after execution.
 
@@ -18,8 +21,14 @@ Android app for 50.003 - Software Construction
 `com.badlogic.gdx.graphics.OrthographicCamera`
 > A camera with orthographic projection.
 
+`com.badlogic.gdx.graphics.Texture`
+> A Texture wraps a standard OpenGL ES texture.
+
 `com.badlogic.gdx.graphics.g2d.Animation`
 > An Animation stores a list of TextureRegions representing an animated sequence.
+
+`com.badlogic.gdx.graphics.g2d.BitmapFont`
+> Renders bitmap fonts.
 
 `com.badlogic.gdx.graphics.g2d.SpriteBatch`
 > Draws batched quads using indices.
