@@ -26,6 +26,7 @@ public class Bob {
 	public static final int STATE_ALIVE = 0;
 	public static final int STATE_RUNNING = 1;
 	public static final int STATE_DEAD = 2;
+	public static final int STATE_INVULNERABLE = 3;
 	
 	private static final float MAX_SPEED = 500f;
 	
