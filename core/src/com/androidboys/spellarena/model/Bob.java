@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class Bob {
 
+	//Directions
 	public enum Direction{
 		NORTH, 
 		NORTHEAST,
@@ -23,11 +24,13 @@ public class Bob {
 		NORTHWEST;
 	}
 	
+	//States
 	public static final int STATE_ALIVE = 0;
 	public static final int STATE_RUNNING = 1;
 	public static final int STATE_DEAD = 2;
 	public static final int STATE_INVULNERABLE = 3;
 	
+	//Speed
 	private static final float MAX_SPEED = 500f;
 	
 	private Vector2 position;
@@ -45,6 +48,11 @@ public class Bob {
 	
 	private Array<Rectangle> tiles;
 	
+	/**
+	 * Create a new Bob instance.
+	 * @param i,j		initial position
+	 * @param isEnemy	whether it is enemy
+	 */
 	public Bob(int i, int j, boolean isEnemy) {
 		this.position = new Vector2(i,j);
 		this.velocity = new Vector2();		
@@ -55,6 +63,10 @@ public class Bob {
 		this.tiles = null;
 	}
 
+	/**
+	 * Get the position of Bob.
+	 * @return Bob's position
+	 */
 	public Vector2 getPosition(){
 		return position;
 	}
@@ -63,6 +75,9 @@ public class Bob {
 		position.add(1, 0);
 	}
 	
+	/**
+	 * Update Bob's position and state.
+	 */
 	public void update(float delta){
 		checkCollision(delta);
 		updateVelocity();
@@ -250,14 +265,26 @@ public class Bob {
 		this.bobRect.set(newPos.x - 10, newPos.y, 50, 50);
 	}
 
+	/**
+	 * Get the velocity of Bob.
+	 * @return velocity of Bob
+	 */
 	public Vector2 getVelocity(){
 		return velocity;
 	}
 	
+	/**
+	 * Get the direction of Bob.
+	 * @return direction of Bob
+	 */
 	public Direction getDirection(){
 		return direction;
 	}
 	
+	/**
+	 * Set the velocity of Bob.
+	 * @param vx,vy	new velocity
+	 */
 	public void setVelocity(float vx, float vy){
 		velocity = new Vector2(vx,vy);
 	}
@@ -270,6 +297,10 @@ public class Bob {
 		this.touchpad = touchpad;
 	}
 	
+	/**
+	 * Send the location of Bob with JSON.
+	 * @param state	the state of Bob
+	 */
 	public void sendLocation(int state){
 		if(needsUpdate){
 			needsUpdate = false;
@@ -286,14 +317,26 @@ public class Bob {
 		}
 	}
 
+	/**
+	 * Set the position of Bob.
+	 * @param x,y	new position
+	 */
 	public void setPosition(float x, float y) {
 		this.position = new Vector2(x,y);
 	}
 
+	/**
+	 * Get the state of Bob.
+	 * @return state of Bob
+	 */
 	public int getState() {
 		return state;
 	}
 
+	/**
+	 * Set the state of Bob.
+	 * @param state	new state
+	 */
 	public void setState(int state) {
 		this.state = state;
 	}
@@ -303,10 +346,18 @@ public class Bob {
 		System.out.println("tiles updated");
 	}
 
+	/**
+	 * Get the tiles array.
+	 * @return tiles array
+	 */
 	public Array<Rectangle> getTiles() {
 		return tiles;
 	}
 
+	/**
+	 * Get the Rectangle instance.
+	 * @return Rectangle instance
+	 */
 	public Rectangle getbobRect() {
 		return bobRect;
 	}
