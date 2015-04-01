@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Pool;
 
 public class GameWorld {
 
+	//Boundaries
 	public static final float WORLD_BOUND_LEFT = 80;
 	public static final float WORLD_BOUND_RIGHT = 1805;
 	public static final float WORLD_BOUND_TOP = 960;
@@ -21,9 +22,11 @@ public class GameWorld {
 
 	private World physicsWorld;
 	
+	//Characters
 	private final Bob local_bob;
 	private final Bob enemy_bob;
 	
+	//Map
 	private TiledMap map;
 	
 	private Pool<Rectangle> rectPool = new Pool<Rectangle>() {
@@ -35,16 +38,23 @@ public class GameWorld {
 	private Array<Rectangle> tiles = new Array<Rectangle>();
 	
 	public GameWorld(){
+		//Create new characters
 		this.local_bob = new Bob(810, 540, false);
 		this.enemy_bob = new Bob(810, 540, true);
 		
 		map = AssetLoader.map;
 	}
 	
+	/**
+	 * Get the instance of character.
+	 */
 	public Bob getBob(){
 		return local_bob;
 	}
 
+	/**
+	 * Update game world.
+	 */
 	public void update(float delta) {
 		getObstacles();
 		local_bob.updateObstacles(tiles);
@@ -56,7 +66,9 @@ public class GameWorld {
 	}
 	
 	private void getObstacles(){
+		//Get the "Collidable" layer of map
 		MapLayer layer = (MapLayer) map.getLayers().get("Collidable");
+		//Puts objects of "tiles" in the pool.
 		rectPool.freeAll(tiles);
 		tiles.clear();
 		for(MapObject obj: layer.getObjects()){
@@ -71,12 +83,18 @@ public class GameWorld {
 			tiles.add(rect);
 		}
 	}
-
+	
+	/**
+	 * Update enemy bob.
+	 */
 	public void updateEnemy(float x, float y, float vx, float vy, int state) {
 		enemy_bob.setVelocity(vx, vy);
 		enemy_bob.setPosition(x, y);
 	}
-
+	
+	/**
+	 * Get the instance of enemy.
+	 */
 	public Bob getEnemy() {
 		return enemy_bob;
 	}

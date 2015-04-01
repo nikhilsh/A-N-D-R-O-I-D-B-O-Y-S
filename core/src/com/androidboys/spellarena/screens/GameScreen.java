@@ -108,12 +108,19 @@ public class GameScreen implements Screen, WarpListener{
 		world.getBob().setTouchpad(touchpad);
 	}
 	
+	/**
+	 * Called when this screen becomes the current screen for a Game.
+	 */
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Called when the screen should render itself.
+	 * @param delta	The time in seconds since the last render.
+	 */
 	@Override
 	public void render(float delta) {
 		runTime+=delta;
@@ -131,34 +138,52 @@ public class GameScreen implements Screen, WarpListener{
 		stage.draw();
 	}
 
+	/**
+	 * Called when the Application is resized.
+	 * @param width		the new width in pixels
+	 * @param height	the new height in pixels
+	 */
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	/**
+	 * Called when the Application is paused, usually when it's not active or visible on screen.
+	 * An Application is also paused before it is destroyed.
+	 */
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	/**
+	 * Called when the Application is resumed from a paused state, usually when it regains focus.
+	 */
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	/**
+	 * Called when this screen is no longer the current screen for a Game.
+	 */
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	/**
+	 * Called when this screen should release all resources.
+	 */
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
