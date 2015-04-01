@@ -33,6 +33,12 @@ Android app for 50.003 - Software Construction
 `com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType`
 > Shape types to be used with ShapeRenderer.
 
+`com.badlogic.gdx.maps.MapLayer`
+> Ordered list of MapLayer instances owned by a Map.
+
+`com.badlogic.gdx.maps.MapObject`
+> Generic Map entity with basic attributes like name, opacity, color.
+
 `com.badlogic.gdx.math.Rectangle`
 > Encapsulates a 2D rectangle defined by its corner point in the bottom left and its extents in x (width) and y (height).
 
@@ -41,6 +47,12 @@ Android app for 50.003 - Software Construction
 
 `com.badlogic.gdx.physics.box2d.World`
 > The world class manages all physics entities, dynamic simulation, and asynchronous queries. The world also contains efficient memory management facilities.
+
+`com.badlogic.gdx.utils.Array`
+> A resizable, ordered or unordered array of objects. If unordered, this class avoids a memory copy when removing elements (the last element is moved to the removed element's position).
+
+`com.badlogic.gdx.utils.Pool`
+> A pool of objects that can be reused to avoid allocation.
 
 ## Directories
 * [desktop](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/desktop): Desktop version
