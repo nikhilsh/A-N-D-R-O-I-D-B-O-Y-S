@@ -6,6 +6,7 @@ import appwarp.WarpController;
 
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -44,7 +45,9 @@ public class GameRenderer {
 	
 	public GameRenderer(SpriteBatch batcher, GameWorld world) {
 		this.world = world;
+		//Create a new camera
 		this.cam = new OrthographicCamera(960,540);
+		//Initialization of camera
 		cam.position.set(1920/2, 1080/2, 0);
 
 		this.batcher = batcher;
