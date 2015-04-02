@@ -154,7 +154,7 @@ public class WarpController {
 	
 	public void onRoomSubscribed(String id) {
 		log("onRoomSubscribed: "+id);
-		if(id != null){
+		if(id != null){ 
 			isConnected = true;
 			warpClient.getLiveRoomInfo(id);
 		} else {
@@ -240,12 +240,4 @@ public class WarpController {
 		warpClient.removeChatRequestListener(new ChatListener(this));
 	}
 
-	
-
-
-
-
-	
-
-	
 }

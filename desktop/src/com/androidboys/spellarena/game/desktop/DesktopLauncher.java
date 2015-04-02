@@ -3,6 +3,7 @@ package com.androidboys.spellarena.game.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.androidboys.spellarena.game.SpellArena;
+import com.androidboys.spellarena.ggps.DesktopGoogleServices;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

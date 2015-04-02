@@ -2,6 +2,7 @@ package com.androidboys.spellarena.gameworld;
 
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.Enemy;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -22,7 +23,7 @@ public class GameWorld {
 	private World physicsWorld;
 	
 	private final Bob local_bob;
-	private final Bob enemy_bob;
+	private final Enemy enemy_bob;
 	
 	private TiledMap map;
 	
@@ -35,8 +36,8 @@ public class GameWorld {
 	private Array<Rectangle> tiles = new Array<Rectangle>();
 	
 	public GameWorld(){
-		this.local_bob = new Bob(810, 540, false);
-		this.enemy_bob = new Bob(810, 540, true);
+		this.local_bob = new Bob(810, 540);
+		this.enemy_bob = new Enemy(810, 540);
 		
 		map = AssetLoader.map;
 	}
@@ -71,13 +72,13 @@ public class GameWorld {
 			tiles.add(rect);
 		}
 	}
-
+	
 	public void updateEnemy(float x, float y, float vx, float vy, int state) {
-		enemy_bob.setVelocity(vx, vy);
-		enemy_bob.setPosition(x, y);
+		//enemy_bob.setVelocity(vx, vy);
+		enemy_bob.setFuturePosition(x, y);
 	}
 
-	public Bob getEnemy() {
+	public Enemy getEnemy() {
 		return enemy_bob;
 	}
 }

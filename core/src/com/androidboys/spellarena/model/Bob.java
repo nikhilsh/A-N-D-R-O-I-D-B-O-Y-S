@@ -30,10 +30,9 @@ public class Bob {
 	private static final float MAX_SPEED = 500f;
 	
 	private Vector2 position;
-	private Vector2 velocity;
-	private Direction direction;
+	protected Vector2 velocity;
+	protected Direction direction;
 	
-	private boolean isEnemy;
 	private boolean needsUpdate;
 	
 	private Touchpad touchpad;
@@ -44,10 +43,9 @@ public class Bob {
 	
 	private Array<Rectangle> tiles;
 	
-	public Bob(int i, int j, boolean isEnemy) {
+	public Bob(int i, int j) {
 		this.position = new Vector2(i,j);
 		this.velocity = new Vector2();		
-		this.isEnemy = isEnemy;
 		this.direction = Direction.SOUTH;
 		this.state = STATE_ALIVE;
 		this.bobRect = new Rectangle();
@@ -68,7 +66,7 @@ public class Bob {
 		updateState();
 	}
 
-	private void updateState(){
+	protected void updateState(){
 		if(this.velocity.isZero()){
 			this.state = STATE_ALIVE;
 		} else {
@@ -76,75 +74,48 @@ public class Bob {
 		}
 	}
 	
-	private void updateVelocity(){
+	protected void updateVelocity(){
 		Vector2 newV = null;
-		if(!isEnemy){
-			float touchX = touchpad.getKnobPercentX();
-			float touchY = touchpad.getKnobPercentY();
-			if(touchX > 0.5){
-				if(touchY > 0.5){
-					this.direction = Direction.NORTHEAST;
-					newV = new Vector2(MAX_SPEED, MAX_SPEED);
-					
-				} else if (touchY < -0.5){
-					this.direction = Direction.SOUTHEAST;
-					newV = new Vector2(MAX_SPEED, -MAX_SPEED);
-					
-				} else {
-					this.direction = Direction.EAST;
-					newV = new Vector2(MAX_SPEED,	0);
-				}
-			}else if (touchX < -0.5){
-				if(touchY > 0.5){
-					this.direction = Direction.NORTHWEST;
-					newV = new Vector2(-MAX_SPEED, MAX_SPEED);
-				} else if (touchY < -0.5){
-					this.direction = Direction.SOUTHWEST;
-					newV = new Vector2(-MAX_SPEED, -MAX_SPEED);
-				} else {
-					this.direction = Direction.WEST;
-					newV = new Vector2(-MAX_SPEED, 0);
-				}
+		float touchX = touchpad.getKnobPercentX();
+		float touchY = touchpad.getKnobPercentY();
+		if(touchX > 0.5){
+			if(touchY > 0.5){
+				this.direction = Direction.NORTHEAST;
+				newV = new Vector2(MAX_SPEED, MAX_SPEED);
+				
+			} else if (touchY < -0.5){
+				this.direction = Direction.SOUTHEAST;
+				newV = new Vector2(MAX_SPEED, -MAX_SPEED);
+				
 			} else {
-				if(touchY > 0.5){
-					this.direction = Direction.NORTH;
-					newV = new Vector2(0, MAX_SPEED);
-				} else if(touchY < -0.5) {
-					this.direction = Direction.SOUTH;
-					newV = new Vector2(0, -MAX_SPEED);
-				} else {
-					newV = new Vector2(0,0);
-				}
+				this.direction = Direction.EAST;
+				newV = new Vector2(MAX_SPEED,	0);
 			}
-			if(!newV.equals(velocity)){
-				needsUpdate = true;
-				this.setVelocity(newV.x, newV.y);
+		}else if (touchX < -0.5){
+			if(touchY > 0.5){
+				this.direction = Direction.NORTHWEST;
+				newV = new Vector2(-MAX_SPEED, MAX_SPEED);
+			} else if (touchY < -0.5){
+				this.direction = Direction.SOUTHWEST;
+				newV = new Vector2(-MAX_SPEED, -MAX_SPEED);
+			} else {
+				this.direction = Direction.WEST;
+				newV = new Vector2(-MAX_SPEED, 0);
 			}
-			//this.scaleAndSetVelocity(touchX, touchY);
 		} else {
-			if(this.velocity.x > 0){
-				if(this.velocity.y > 0){
-					this.direction = Direction.NORTHEAST;
-				} else if (this.velocity.y < 0){
-					this.direction = Direction.SOUTHEAST;
-				} else {
-					this.direction = Direction.EAST;
-				}
-			} else if (this.velocity.x < 0){
-				if(this.velocity.y > 0){
-					this.direction = Direction.NORTHWEST;
-				} else if (this.velocity.y < 0){
-					this.direction = Direction.SOUTHWEST;
-				} else {
-					this.direction = Direction.WEST;
-				}
+			if(touchY > 0.5){
+				this.direction = Direction.NORTH;
+				newV = new Vector2(0, MAX_SPEED);
+			} else if(touchY < -0.5) {
+				this.direction = Direction.SOUTH;
+				newV = new Vector2(0, -MAX_SPEED);
 			} else {
-				if(this.velocity.y > 0){
-					this.direction = Direction.NORTH;
-				} else if (this.velocity.y < 0){
-					this.direction = Direction.SOUTH;
-				}
+				newV = new Vector2(0,0);
 			}
+		}
+		if(!newV.equals(velocity)){
+			needsUpdate = true;
+			this.setVelocity(newV.x, newV.y);
 		}
 	}
 	
@@ -169,7 +140,7 @@ public class Bob {
 		}
 	}
 	
-	private void checkCollision(float delta){
+	protected void checkCollision(float delta){
 		Vector2 newPos = this.position.cpy().add(this.velocity.cpy().scl(delta));
 		this.setRect(newPos);
 		if(getTiles() != null){
@@ -261,6 +232,7 @@ public class Bob {
 		velocity = new Vector2(vx,vy);
 	}
 	
+	@Deprecated
 	private void scaleAndSetVelocity(float touchX, float touchY) {
 		velocity = new Vector2(touchX*MAX_SPEED, touchY*MAX_SPEED);
 	}
@@ -269,8 +241,10 @@ public class Bob {
 		this.touchpad = touchpad;
 	}
 	
+	int i=0;
 	public void sendLocation(int state){
-		if(needsUpdate){
+		i++;
+		if(i%10==0){
 			needsUpdate = false;
 			try {
 				JSONObject data = new JSONObject();
@@ -309,5 +283,7 @@ public class Bob {
 	public Rectangle getbobRect() {
 		return bobRect;
 	}
+
+	
 	
 }

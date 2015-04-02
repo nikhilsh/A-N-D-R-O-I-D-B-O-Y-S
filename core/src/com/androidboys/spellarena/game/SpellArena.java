@@ -1,5 +1,7 @@
 package com.androidboys.spellarena.game;
 
+
+import com.androidboys.spellarena.ggps.IGoogleServices;
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.screens.LoadingScreen;
 import com.androidboys.spellarena.screens.MainMenuScreen;
@@ -15,6 +17,12 @@ public class SpellArena extends Game {
 	
 	FPSLogger fps;
 	
+	public static IGoogleServices googleServices;
+	
+	public SpellArena() {
+		super();
+	}
+
 	@Override
 	public void create () {
 		//setScreen(new LoadingScreen(this ,480, 320));

@@ -25,8 +25,6 @@ public class StartMultiplayerScreen implements Screen, WarpListener {
 	Rectangle backBounds;
 	Vector3 touchPoints;
 	
-	private float xOffset;
-	
 	private final String[] tryingToConnect = {"Connecting","to AppWarp"};
 	private final String[] waitForOtherUser = {"Waiting for","other user"};
 	private final String[] errorInConnection = {"Error in","Connection", "Go Back"};
@@ -53,13 +51,9 @@ public class StartMultiplayerScreen implements Screen, WarpListener {
 		touchPoints = new Vector3();
 		
 		batcher = new SpriteBatch();
-
-		
-		xOffset = 80;
 		
 		WarpController.getInstance().setListener(this);
 	}
-
 	
 	@Override
 	public void show() {
@@ -180,5 +174,7 @@ public class StartMultiplayerScreen implements Screen, WarpListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+
 
 }

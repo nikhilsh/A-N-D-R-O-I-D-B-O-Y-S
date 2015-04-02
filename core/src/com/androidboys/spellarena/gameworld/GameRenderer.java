@@ -6,6 +6,7 @@ import appwarp.WarpController;
 
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.Enemy;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -31,7 +32,7 @@ public class GameRenderer {
 	private ShapeRenderer shapeRenderer;
 	
 	private Bob bob;
-	private Bob enemy;
+	private Enemy enemy;
 	
 	private TiledMap map;
 	private TiledMapRenderer mapRenderer;
@@ -196,7 +197,7 @@ public class GameRenderer {
 	private void renderEnemy(float runTime){
 		batcher.begin();
 		batcher.setColor(180/255f,0,0,1f);
-		if(enemy.getState() == enemy.STATE_ALIVE){
+		if(enemy.getState() == Bob.STATE_ALIVE){
 			switch(enemy.getDirection()){
 				case EAST:
 					batcher.draw(eastBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
@@ -225,7 +226,7 @@ public class GameRenderer {
 				default:
 					break;
 			}
-		} else if (enemy.getState() == enemy.STATE_RUNNING){
+		} else if (enemy.getState() == Bob.STATE_RUNNING){
 			switch(enemy.getDirection()){
 				case EAST:
 					batcher.draw(eastBobAnimation.getKeyFrame(runTime),
