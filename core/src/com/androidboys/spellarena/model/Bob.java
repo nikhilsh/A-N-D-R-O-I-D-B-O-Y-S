@@ -36,6 +36,7 @@ public class Bob {
 	private Vector2 position;
 	private Vector2 velocity;
 	private Direction direction;
+	private int lifeCount = 3;
 	
 	private boolean isEnemy;
 	private boolean needsUpdate;
@@ -168,7 +169,7 @@ public class Bob {
 	@Deprecated
 	private void checkBoundaries(float delta){
 		this.position.add(this.velocity.cpy().scl(delta));			
-		System.out.println("Position: "+this.position);
+//		System.out.println("Position: "+this.position);
 		if(position.x > GameWorld.WORLD_BOUND_RIGHT){
 			System.out.println("Hit Right");
 			position.x = GameWorld.WORLD_BOUND_RIGHT;
@@ -191,10 +192,10 @@ public class Bob {
 		if(getTiles() != null){
 			for(Rectangle tile: getTiles()){
 				if(tile.overlaps(this.bobRect)){
-					System.out.println("Overlap");
+//					System.out.println("Overlap");
 					switch(direction){
 					case EAST:
-						System.out.println("Colliding east");
+//						System.out.println("Colliding east");
 						newPos.x = tile.x - 40;
 						break;
 					case NORTH:
@@ -239,7 +240,7 @@ public class Bob {
 					case SOUTHWEST:
 						x = tile.x + tile.width - (newPos.x - 10);
 						y = tile.y + tile.height - (newPos.y);
-						System.out.println("x: "+x+"y: "+y);
+//						System.out.println("x: "+x+"y: "+y);
 						if(x>y){
 							newPos.x += y;
 							newPos.y += y;
@@ -325,6 +326,18 @@ public class Bob {
 		this.position = new Vector2(x,y);
 	}
 
+	public void decrementLifeCount() {
+		this.lifeCount = this.lifeCount - 1;
+	}
+
+	public void setLifeCount(int x) {
+		this.lifeCount = x;
+	}
+
+	public int getLifeCount() {
+		return this.lifeCount;
+	}
+
 	/**
 	 * Get the state of Bob.
 	 * @return state of Bob
@@ -343,7 +356,7 @@ public class Bob {
 
 	public void updateObstacles(Array<Rectangle> tiles) {
 		this.tiles = tiles;
-		System.out.println("tiles updated");
+//		System.out.println("tiles updated");
 	}
 
 	/**

@@ -72,12 +72,12 @@ public class GameWorld {
 		rectPool.freeAll(tiles);
 		tiles.clear();
 		for(MapObject obj: layer.getObjects()){
-			System.out.println("Object found");
+//			System.out.println("Object found");
 			float x = (Float) obj.getProperties().get("x");
 			float y = (Float) obj.getProperties().get("y");
 			float width = (Float) obj.getProperties().get("width");
 			float height = (Float) obj.getProperties().get("height");
-			System.out.println(x+" "+y+" "+width+" "+height);
+//			System.out.println(x+" "+y+" "+width+" "+height);
 			Rectangle rect = rectPool.obtain();
 			rect.set(x, y, width, height);
 			tiles.add(rect);

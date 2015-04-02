@@ -21,7 +21,7 @@ public class WarpController {
 	private String localUser;
 	private String roomId;
 
-	private boolean showLog = true;
+	private boolean showLog = false;
 
 	private WarpListener warpListener;
 

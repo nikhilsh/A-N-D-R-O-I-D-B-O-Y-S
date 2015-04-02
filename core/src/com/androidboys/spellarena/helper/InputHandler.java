@@ -2,6 +2,7 @@ package com.androidboys.spellarena.helper;
 
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.screens.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -13,6 +14,7 @@ public class InputHandler implements InputProcessor{
 
 	private GameWorld world;
 	private Bob bob;
+	private Spell spell;
 	
 	private GameScreen screen;
 	private Stage stage;
@@ -91,8 +93,10 @@ public class InputHandler implements InputProcessor{
 	 */
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
+		System.out.println("test this out");
+		// on tapping, call the spell generator, generate spell
+		// then send on server and synchronously cast on own screen
+		return true;
 	}
 
 	/**
