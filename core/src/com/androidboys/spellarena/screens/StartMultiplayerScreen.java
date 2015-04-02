@@ -3,6 +3,7 @@ package com.androidboys.spellarena.screens;
 import appwarp.WarpController;
 import appwarp.WarpListener;
 
+import com.androidboys.spellarena.game.SpellArena;
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -15,7 +16,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class StartMultiplayerScreen implements Screen, WarpListener {
 
-	Game game;
+	SpellArena game;
 	
 	private float width;
 	private float height;
@@ -35,7 +36,7 @@ public class StartMultiplayerScreen implements Screen, WarpListener {
 	
 	private String[] msg = tryingToConnect;
 
-	public StartMultiplayerScreen(Game game, float width, float height) {
+	public StartMultiplayerScreen(SpellArena game, float width, float height) {
 		this.game = game;
 		
 		this.width = width;
@@ -43,7 +44,6 @@ public class StartMultiplayerScreen implements Screen, WarpListener {
 		
 		cam = new OrthographicCamera(width, height);
 		cam.position.set(width/2, height/2,0);
-		
 		
 		backBounds = new Rectangle(10,10,
 				AssetLoader.swordText.getBounds("E").width,

@@ -210,7 +210,18 @@ public class MultiPlayerHelper implements RealTimeMessageReceivedListener, RoomS
 	}
 	
 	public void signIn(){
-		gameHelper.beginUserInitiatedSignIn();
+		try{
+			activity.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					gameHelper.beginUserInitiatedSignIn();
+				}
+			});
+		} catch (Exception e){
+			Log.e(TAG,e.toString());
+		}
+
 	}
 	
 	public void signOut(){

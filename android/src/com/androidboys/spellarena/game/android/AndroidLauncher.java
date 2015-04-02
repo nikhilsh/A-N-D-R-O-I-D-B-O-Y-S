@@ -6,7 +6,9 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -18,9 +20,10 @@ import com.google.example.games.basegameutils.GameHelper.GameHelperListener;
 import com.sun.xml.internal.ws.resources.ManagementMessages;
 import com.androidboys.spellarena.game.SpellArena;
 import com.androidboys.spellarena.game.android.MultiPlayerHelper.MultiPlayerUi;
+import com.androidboys.spellarena.ggps.ActionResolver;
 import com.androidboys.spellarena.ggps.IGoogleServices;
 
-public class AndroidLauncher extends AndroidApplication implements MultiPlayerUi {
+public class AndroidLauncher extends AndroidApplication implements MultiPlayerUi, ActionResolver {
 
 	private static final String TAG = "AndroidLauncher";
 
@@ -32,6 +35,10 @@ public class AndroidLauncher extends AndroidApplication implements MultiPlayerUi
 
 	private String myId;
 	
+	private SpellArena game;
+
+	private int numReadyParticpants;
+	
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,7 +49,7 @@ public class AndroidLauncher extends AndroidApplication implements MultiPlayerUi
 		}
 		
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new SpellArena(), config);
+		initialize(game = new SpellArena(this), config);
 	}
 
 	@Override
@@ -88,6 +95,11 @@ public class AndroidLauncher extends AndroidApplication implements MultiPlayerUi
 		manageMsg(participant,data);
 	}
 
+	private void manageMsg(Participant participant, byte[] data) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public void onParticipantsChanged(ArrayList<Participant> participants) {
 		Log.d(TAG, "onParticipantsChanged: "+participants.size());
@@ -97,7 +109,7 @@ public class AndroidLauncher extends AndroidApplication implements MultiPlayerUi
 	@Override
 	public void onSignInStatusChanged(boolean isSignedIn) {
 		Log.d(TAG,"onSignInStatusChanged: "+isSignedIn);
-		
+		game.onSignedIn(isSignedIn);
 	}
 
 	@Override
@@ -109,5 +121,47 @@ public class AndroidLauncher extends AndroidApplication implements MultiPlayerUi
 	public void removePlayers(List<String> peersWhoLeft) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	//ActionResolver implementation
+	
+	@Override
+	public void showToast(final CharSequence text) {
+		runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+            }
+        });
+        Log.v(TAG, "text=" + text);
+	}
+
+	@Override
+	public void broadcastMsg(byte[] msg) {
+		multiPlayerHelper.sendUpdate(msg, false);
+	}
+
+	@Override
+	public void onGameEnded() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setMeAsReady() {
+		numReadyParticpants++;
+		checkIfReady();
+	}
+
+	private void checkIfReady() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void signIn() {
+		if(!multiPlayerHelper.isSignedIn()){
+			multiPlayerHelper.signIn();
+		}
 	}
 }

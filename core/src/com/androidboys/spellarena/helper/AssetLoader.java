@@ -18,7 +18,7 @@ public class AssetLoader {
 
 	public static TextureRegion backgroundRegion;
 
-	public static Texture buttonTexture;
+	public static TextureRegion signInRegion;
 	
 	public static TextureRegion playRegion, helpRegion;
 	
@@ -38,7 +38,7 @@ public class AssetLoader {
 	public static void load(){
 		
 		backgroundRegion = new TextureRegion(new Texture(Gdx.files.internal("images/bg.jpg")));
-		
+		signInRegion = new TextureRegion(new Texture(Gdx.files.internal("buttons/signInButton.png")));
 		//buttonTexture = new Texture(Gdx.files.internal("items/textures.pack.png"));
 		
 		//playRegion = new TextureRegion(buttonTexture, 2, 2, 200, 50);
@@ -188,7 +188,6 @@ public class AssetLoader {
 	}
 	
 	public static void dispose(){
-		buttonTexture.dispose();
 		header.dispose();
 	}
 }
