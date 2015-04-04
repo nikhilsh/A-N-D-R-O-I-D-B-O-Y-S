@@ -105,6 +105,8 @@ public class Spell {
 	public void generateSpell() {
 		switch (spell) {
 		case ACID:
+			//consider changing
+
 			position = bob.getPosition();
 			remainingSeconds = 5;
 			//send position and time remaining to server
@@ -112,48 +114,59 @@ public class Spell {
 			//clear on screen
 			break;
 		case DIVINESHIELD:
-			bob.setState(Bob.STATE_INVULNERABLE);
-			remainingSeconds = 3;
-			//send time remaining and state to server
+			if (bob.getManaCount()>50){
+				bob.decrementManaCount(50);
+				bob.setState(Bob.STATE_INVULNERABLE);
+				remainingSeconds = 3;
+				//send time remaining and state to server
+			}
 			break;
 		case FORCESTAFF:
-			switch (bob.getDirection()) {
-			case EAST:
-				bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
-				break;
-			case NORTH:
-				bob.setPosition(bob.getPosition().x, bob.getPosition().y+100);
-				break;
-			case NORTHEAST:
-				bob.setPosition(bob.getPosition().x+100, bob.getPosition().y+100);
-				break;
-			case NORTHWEST:
-				bob.setPosition(bob.getPosition().x-100, bob.getPosition().y+100);
-				break;
-			case SOUTH:
-				bob.setPosition(bob.getPosition().x, bob.getPosition().y-100);
-				break;
-			case SOUTHEAST:
-				bob.setPosition(bob.getPosition().x+100, bob.getPosition().y-100);
-				break;
-			case SOUTHWEST:
-				bob.setPosition(bob.getPosition().x-100, bob.getPosition().y-100);
-				break;
-			case WEST:
-				bob.setPosition(bob.getPosition().x-100, bob.getPosition().y);
-				break;
+			if (bob.getManaCount()>30){
+				bob.decrementManaCount(30);
+				switch (bob.getDirection()) {
+				case EAST:
+					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
+					break;
+				case NORTH:
+					bob.setPosition(bob.getPosition().x, bob.getPosition().y+100);
+					break;
+				case NORTHEAST:
+					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y+100);
+					break;
+				case NORTHWEST:
+					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y+100);
+					break;
+				case SOUTH:
+					bob.setPosition(bob.getPosition().x, bob.getPosition().y-100);
+					break;
+				case SOUTHEAST:
+					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y-100);
+					break;
+				case SOUTHWEST:
+					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y-100);
+					break;
+				case WEST:
+					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y);
+					break;
 
-			default:
-				break;
+				default:
+					break;
+				}
 			}
 			break;
 
 		case ATOS:
-			enemyBob.setVelocity(100, 100);
-			remainingSeconds = 3;
+			if (bob.getManaCount()>50){
+				bob.decrementManaCount(50);
+				enemyBob.setVelocity(100, 100);
+				remainingSeconds = 3;
+			}
 			break;
 
 		case STASISTRAP:
+			//consider changing to a stun if you are near enemy, (like centaur stomp)
+
 			//insert mine at bob position
 			//if stasis trap near enemy,
 			enemyBob.setVelocity(0, 0);
@@ -161,98 +174,110 @@ public class Spell {
 			break;
 
 		case SPROUT:
+			//consider change to heal
+			//bob.setLifeCount(bob.getLifeCount()+1);
 
+			//need add new collision			
 			break;
 
 		case DARKPACT:
-			remainingSeconds = 3;
-			//so start animation 3 seconds before,
-			//then if the state is end,			
-			if (enemyBob.getPosition().x+300 > bob.getPosition().x && enemyBob.getPosition().x - 300 < bob.getPosition().x){
-				if (enemyBob.getPosition().y+300 > bob.getPosition().y && enemyBob.getPosition().y - 300 < bob.getPosition().y){
-					System.out.println("Enemy hit by dark pact");
+			if (bob.getManaCount()>80){
+				bob.decrementManaCount(80);
+				remainingSeconds = 3;
+				//so start animation 3 seconds before,
+				//then if the state is end,			
+				if (enemyBob.getPosition().x+300 > bob.getPosition().x && enemyBob.getPosition().x - 300 < bob.getPosition().x){
+					if (enemyBob.getPosition().y+300 > bob.getPosition().y && enemyBob.getPosition().y - 300 < bob.getPosition().y){
+						System.out.println("Enemy hit by dark pact");
 
-					//so if within radius of 300,
-					//reduce enemy life
-					enemyBob.decrementLifeCount();
-					//flashy graphics on server
+						//so if within radius of 300,
+						//reduce enemy life
+						enemyBob.decrementLifeCount();
+						//flashy graphics on server
+					}
 				}
 			}
 			break;
 
 		case MINE:
+			//consider change to suicide
+
 			//insert mine at bob position
 			break;
 
 		case LASER:
-			switch (bob.getDirection()) {
-			//diagonal implementations are a bit off, now its checking according to a rectangle
-			case EAST:
-				if (enemyBob.getPosition().x-bob.getPosition().x<300 && enemyBob.getPosition().x-bob.getPosition().x>0 && Math.abs(enemyBob.getPosition().y-bob.getPosition().y)<30) {
-					System.out.println("Enemy hit by laser");
-					enemyBob.decrementLifeCount();
+			if (bob.getManaCount()>80){
+				bob.decrementManaCount(80);
+				switch (bob.getDirection()) {
+				//diagonal implementations are a bit off, now its checking according to a rectangle
+				case EAST:
+					if (enemyBob.getPosition().x-bob.getPosition().x<300 && enemyBob.getPosition().x-bob.getPosition().x>0 && Math.abs(enemyBob.getPosition().y-bob.getPosition().y)<30) {
+						System.out.println("Enemy hit by laser");
+						enemyBob.decrementLifeCount();
+					}
+					break;
+				case NORTH:
+					if (enemyBob.getPosition().y-bob.getPosition().y<300 && enemyBob.getPosition().y-bob.getPosition().y>0 && Math.abs(enemyBob.getPosition().x-bob.getPosition().x)<30) {
+						System.out.println("Enemy hit by laser");
+						enemyBob.decrementLifeCount();
+					}
+					break;
+				case NORTHEAST:
+					if (enemyBob.getPosition().x-bob.getPosition().x<300 && enemyBob.getPosition().x-bob.getPosition().x>0 && enemyBob.getPosition().y-bob.getPosition().y<300 && enemyBob.getPosition().y-bob.getPosition().y>0) {
+						System.out.println("Enemy hit by laser");
+						enemyBob.decrementLifeCount();
+					}
+					break;
+				case NORTHWEST:
+					if (enemyBob.getPosition().x-bob.getPosition().x>-300 && enemyBob.getPosition().x-bob.getPosition().x<0 && enemyBob.getPosition().y-bob.getPosition().y<300 && enemyBob.getPosition().y-bob.getPosition().y>0) {
+						System.out.println("Enemy hit by laser");
+						enemyBob.decrementLifeCount();
+					}
+					break;
+				case SOUTH:
+					if (enemyBob.getPosition().y-bob.getPosition().y>-300 && enemyBob.getPosition().y-bob.getPosition().y<0 && Math.abs(enemyBob.getPosition().x-bob.getPosition().x)<30) {
+						System.out.println("Enemy hit by laser");
+						enemyBob.decrementLifeCount();
+					}			
+					break;
+				case SOUTHEAST:
+					if (enemyBob.getPosition().x-bob.getPosition().x<300 && enemyBob.getPosition().x-bob.getPosition().x>0 && enemyBob.getPosition().y-bob.getPosition().y>-300 && enemyBob.getPosition().y-bob.getPosition().y<0) {
+						System.out.println("Enemy hit by laser");
+						enemyBob.decrementLifeCount();
+					}
+					break;
+				case SOUTHWEST:
+					if (enemyBob.getPosition().x-bob.getPosition().x>-300 && enemyBob.getPosition().x-bob.getPosition().x<0 && enemyBob.getPosition().y-bob.getPosition().y>-300 && enemyBob.getPosition().y-bob.getPosition().y<0) {
+						System.out.println("Enemy hit by laser");
+						enemyBob.decrementLifeCount();
+					}
+					break;
+				case WEST:
+					if (enemyBob.getPosition().x-bob.getPosition().x>-300 && enemyBob.getPosition().x-bob.getPosition().x<0 && Math.abs(enemyBob.getPosition().y-bob.getPosition().y)<30) {
+						System.out.println("Enemy hit by laser");
+						enemyBob.decrementLifeCount();
+					}
+					break;
+				default:
+					break;
 				}
-				break;
-			case NORTH:
-				if (enemyBob.getPosition().y-bob.getPosition().y<300 && enemyBob.getPosition().y-bob.getPosition().y>0 && Math.abs(enemyBob.getPosition().x-bob.getPosition().x)<30) {
-					System.out.println("Enemy hit by laser");
-					enemyBob.decrementLifeCount();
-				}
-				break;
-			case NORTHEAST:
-				if (enemyBob.getPosition().x-bob.getPosition().x<300 && enemyBob.getPosition().x-bob.getPosition().x>0 && enemyBob.getPosition().y-bob.getPosition().y<300 && enemyBob.getPosition().y-bob.getPosition().y>0) {
-					System.out.println("Enemy hit by laser");
-					enemyBob.decrementLifeCount();
-				}
-				break;
-			case NORTHWEST:
-				if (enemyBob.getPosition().x-bob.getPosition().x>-300 && enemyBob.getPosition().x-bob.getPosition().x<0 && enemyBob.getPosition().y-bob.getPosition().y<300 && enemyBob.getPosition().y-bob.getPosition().y>0) {
-					System.out.println("Enemy hit by laser");
-					enemyBob.decrementLifeCount();
-				}
-				break;
-			case SOUTH:
-				if (enemyBob.getPosition().y-bob.getPosition().y>-300 && enemyBob.getPosition().y-bob.getPosition().y<0 && Math.abs(enemyBob.getPosition().x-bob.getPosition().x)<30) {
-					System.out.println("Enemy hit by laser");
-					enemyBob.decrementLifeCount();
-				}			
-				break;
-			case SOUTHEAST:
-				if (enemyBob.getPosition().x-bob.getPosition().x<300 && enemyBob.getPosition().x-bob.getPosition().x>0 && enemyBob.getPosition().y-bob.getPosition().y>-300 && enemyBob.getPosition().y-bob.getPosition().y<0) {
-					System.out.println("Enemy hit by laser");
-					enemyBob.decrementLifeCount();
-				}
-				break;
-			case SOUTHWEST:
-				if (enemyBob.getPosition().x-bob.getPosition().x>-300 && enemyBob.getPosition().x-bob.getPosition().x<0 && enemyBob.getPosition().y-bob.getPosition().y>-300 && enemyBob.getPosition().y-bob.getPosition().y<0) {
-					System.out.println("Enemy hit by laser");
-					enemyBob.decrementLifeCount();
-				}
-				break;
-			case WEST:
-				if (enemyBob.getPosition().x-bob.getPosition().x>-300 && enemyBob.getPosition().x-bob.getPosition().x<0 && Math.abs(enemyBob.getPosition().y-bob.getPosition().y)<30) {
-					System.out.println("Enemy hit by laser");
-					enemyBob.decrementLifeCount();
-				}
-				break;
-			default:
-				break;
 			}
 			break;
 
 		case FANOFKNIVES:
-			if (enemyBob.getPosition().x+100 > bob.getPosition().x && enemyBob.getPosition().x - 100 < bob.getPosition().x){
-				if (enemyBob.getPosition().y+100 > bob.getPosition().y && enemyBob.getPosition().y - 100 < bob.getPosition().y){
-					System.out.println("Enemy hit by fan of knives");
-					//so if within radius of 100,
-					//reduce enemy life
-					enemyBob.decrementLifeCount();
-					//flashy graphics on server
-					//no remaining count. straightaway do
+			if (bob.getManaCount()>100){
+				bob.decrementManaCount(100);
+				if (enemyBob.getPosition().x+100 > bob.getPosition().x && enemyBob.getPosition().x - 100 < bob.getPosition().x){
+					if (enemyBob.getPosition().y+100 > bob.getPosition().y && enemyBob.getPosition().y - 100 < bob.getPosition().y){
+						System.out.println("Enemy hit by fan of knives");
+						//so if within radius of 100,
+						//reduce enemy life
+						enemyBob.decrementLifeCount();
+						//flashy graphics on server
+						//no remaining count. straightaway do
+					}
 				}
 			}
-			break;
-
 		default:
 			break;
 		}

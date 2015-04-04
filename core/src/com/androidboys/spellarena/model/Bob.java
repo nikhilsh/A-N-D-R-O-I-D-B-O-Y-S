@@ -1,5 +1,9 @@
 package com.androidboys.spellarena.model;
 
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.json.JSONObject;
 
 import appwarp.WarpController;
@@ -23,32 +27,33 @@ public class Bob {
 		WEST,
 		NORTHWEST;
 	}
-	
+
 	//States
 	public static final int STATE_ALIVE = 0;
 	public static final int STATE_RUNNING = 1;
 	public static final int STATE_DEAD = 2;
 	public static final int STATE_INVULNERABLE = 3;
-	
+
 	//Speed
 	private static final float MAX_SPEED = 500f;
-	
+
 	private Vector2 position;
 	private Vector2 velocity;
 	private Direction direction;
 	private int lifeCount = 3;
-	
+	private float manaCount = 200;
+
 	private boolean isEnemy;
 	private boolean needsUpdate;
-	
+
 	private Touchpad touchpad;
 
 	private int state;
-	
+
 	private Rectangle bobRect;
-	
+
 	private Array<Rectangle> tiles;
-	
+
 	/**
 	 * Create a new Bob instance.
 	 * @param i,j		initial position
@@ -75,7 +80,7 @@ public class Bob {
 	public void onClick() {
 		position.add(1, 0);
 	}
-	
+
 	/**
 	 * Update Bob's position and state.
 	 */
@@ -92,21 +97,22 @@ public class Bob {
 			this.state = STATE_RUNNING;
 		}
 	}
-	
+
 	private void updateVelocity(){
 		Vector2 newV = null;
 		if(!isEnemy){
+			incrementManaCount();
 			float touchX = touchpad.getKnobPercentX();
 			float touchY = touchpad.getKnobPercentY();
 			if(touchX > 0.5){
 				if(touchY > 0.5){
 					this.direction = Direction.NORTHEAST;
 					newV = new Vector2(MAX_SPEED, MAX_SPEED);
-					
+
 				} else if (touchY < -0.5){
 					this.direction = Direction.SOUTHEAST;
 					newV = new Vector2(MAX_SPEED, -MAX_SPEED);
-					
+
 				} else {
 					this.direction = Direction.EAST;
 					newV = new Vector2(MAX_SPEED,	0);
@@ -164,12 +170,12 @@ public class Bob {
 			}
 		}
 	}
-	
-	
+
+
 	@Deprecated
 	private void checkBoundaries(float delta){
 		this.position.add(this.velocity.cpy().scl(delta));			
-//		System.out.println("Position: "+this.position);
+		//		System.out.println("Position: "+this.position);
 		if(position.x > GameWorld.WORLD_BOUND_RIGHT){
 			System.out.println("Hit Right");
 			position.x = GameWorld.WORLD_BOUND_RIGHT;
@@ -185,17 +191,17 @@ public class Bob {
 			position.y = GameWorld.WORLD_BOUND_BOTTOM;
 		}
 	}
-	
+
 	private void checkCollision(float delta){
 		Vector2 newPos = this.position.cpy().add(this.velocity.cpy().scl(delta));
 		this.setRect(newPos);
 		if(getTiles() != null){
 			for(Rectangle tile: getTiles()){
 				if(tile.overlaps(this.bobRect)){
-//					System.out.println("Overlap");
+					//					System.out.println("Overlap");
 					switch(direction){
 					case EAST:
-//						System.out.println("Colliding east");
+						//						System.out.println("Colliding east");
 						newPos.x = tile.x - 40;
 						break;
 					case NORTH:
@@ -240,7 +246,7 @@ public class Bob {
 					case SOUTHWEST:
 						x = tile.x + tile.width - (newPos.x - 10);
 						y = tile.y + tile.height - (newPos.y);
-//						System.out.println("x: "+x+"y: "+y);
+						//						System.out.println("x: "+x+"y: "+y);
 						if(x>y){
 							newPos.x += y;
 							newPos.y += y;
@@ -254,14 +260,14 @@ public class Bob {
 						break;
 					default:
 						break;
-					
+
 					}
 				}
 			}
 		}
 		this.position = newPos;
 	}
-	
+
 	private void setRect(Vector2 newPos) {
 		this.bobRect.set(newPos.x - 10, newPos.y, 50, 50);
 	}
@@ -273,7 +279,7 @@ public class Bob {
 	public Vector2 getVelocity(){
 		return velocity;
 	}
-	
+
 	/**
 	 * Get the direction of Bob.
 	 * @return direction of Bob
@@ -281,7 +287,7 @@ public class Bob {
 	public Direction getDirection(){
 		return direction;
 	}
-	
+
 	/**
 	 * Set the velocity of Bob.
 	 * @param vx,vy	new velocity
@@ -289,15 +295,15 @@ public class Bob {
 	public void setVelocity(float vx, float vy){
 		velocity = new Vector2(vx,vy);
 	}
-	
+
 	private void scaleAndSetVelocity(float touchX, float touchY) {
 		velocity = new Vector2(touchX*MAX_SPEED, touchY*MAX_SPEED);
 	}
-	
+
 	public void setTouchpad(Touchpad touchpad){
 		this.touchpad = touchpad;
 	}
-	
+
 	/**
 	 * Send the location of Bob with JSON.
 	 * @param state	the state of Bob
@@ -341,6 +347,21 @@ public class Bob {
 		return this.lifeCount;
 	}
 
+	public float getManaCount(){
+		return this.manaCount;
+	}
+
+	public void decrementManaCount(int x){
+		this.manaCount -= x;
+	}
+
+	public void incrementManaCount(){
+		System.out.println("mana: " + this.manaCount);
+		if (this.manaCount<200){
+			this.manaCount += 0.1;
+		}
+	}
+
 	/**
 	 * Get the state of Bob.
 	 * @return state of Bob
@@ -359,7 +380,7 @@ public class Bob {
 
 	public void updateObstacles(Array<Rectangle> tiles) {
 		this.tiles = tiles;
-//		System.out.println("tiles updated");
+		//		System.out.println("tiles updated");
 	}
 
 	/**
@@ -377,5 +398,5 @@ public class Bob {
 	public Rectangle getbobRect() {
 		return bobRect;
 	}
-	
+
 }
