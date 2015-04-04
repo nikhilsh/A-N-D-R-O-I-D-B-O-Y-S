@@ -105,24 +105,28 @@ public class GameRenderer {
 
 	private void renderBob(float runTime){
 		//Renders collision shape for debugging purposes
-		/*
-		shapeRenderer.setProjectionMatrix(cam.combined);
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(70,70,1780,940);
-		shapeRenderer.end();
 		
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(Color.RED);
-		for(Rectangle rect: bob.getTiles()){
-			shapeRenderer.rect(rect.x,rect.y,rect.width,rect.height);
-		}
-		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(bob.getPosition().x-10,bob.getPosition().y,50,50);
-		
+//		shapeRenderer.setProjectionMatrix(cam.combined);
+//		shapeRenderer.begin(ShapeType.Line);
+//		shapeRenderer.setColor(Color.BLUE);
+//		shapeRenderer.rect(70,70,1780,940);
+//		shapeRenderer.end();
+//		
+//		shapeRenderer.begin(ShapeType.Filled);
+//		shapeRenderer.setColor(Color.RED);
+//		for(Rectangle rect: bob.getTiles()){
+//			shapeRenderer.rect(rect.x,rect.y,rect.width,rect.height);
+//		}
+//		shapeRenderer.setColor(Color.BLUE);
+//		shapeRenderer.rect(bob.getPosition().x-10,bob.getPosition().y,50,50);
+//		shapeRenderer.end();
+//		
+//		//dark pact
+//		shapeRenderer.begin(ShapeType.Line);
+//		shapeRenderer.setColor(Color.BLACK);
+//		shapeRenderer.circle(bob.getPosition().x, bob.getPosition().y, 300);
+//		shapeRenderer.end();
 
-		shapeRenderer.end();
-		*/
 		
 		batcher.begin();
 		if(bob.getState() == Bob.STATE_ALIVE){

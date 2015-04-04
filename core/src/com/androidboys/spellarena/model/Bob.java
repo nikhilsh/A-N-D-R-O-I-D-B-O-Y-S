@@ -327,6 +327,9 @@ public class Bob {
 	}
 
 	public void decrementLifeCount() {
+		if (state == STATE_INVULNERABLE) {
+			return;
+		}
 		this.lifeCount = this.lifeCount - 1;
 	}
 
