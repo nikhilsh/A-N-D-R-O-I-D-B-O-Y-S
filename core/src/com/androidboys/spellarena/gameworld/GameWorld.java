@@ -1,7 +1,5 @@
 package com.androidboys.spellarena.gameworld;
 
-import appwarp.WarpController;
-
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
 import com.badlogic.gdx.maps.MapLayer;
@@ -23,7 +21,6 @@ public class GameWorld {
 	public static final float WORLD_BOUND_BOTTOM = 70;
 
 	private World physicsWorld;
-	private static GameWorld instance;
 
 	
 	//Characters
@@ -47,13 +44,6 @@ public class GameWorld {
 		this.enemy_bob = new Bob(810, 540, true);
 
 		map = AssetLoader.map;
-	}
-	
-	public static GameWorld getInstance(){
-		if(instance == null){
-			instance = new GameWorld();
-		}
-		return instance;
 	}
 	
 	/**

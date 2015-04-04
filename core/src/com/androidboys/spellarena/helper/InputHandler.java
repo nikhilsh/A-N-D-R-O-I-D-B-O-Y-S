@@ -14,7 +14,6 @@ public class InputHandler implements InputProcessor{
 
 	private GameWorld world;
 	private Bob bob;
-	private Spell spell;
 	
 	private GameScreen screen;
 	private Stage stage;
@@ -93,7 +92,8 @@ public class InputHandler implements InputProcessor{
 	 */
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		System.out.println("test this out");
+		Spell spell = new Spell(world);
+		spell.spellSettler(1, 1, 2);
 		// on tapping, call the spell generator, generate spell
 		// then send on server and synchronously cast on own screen
 		return true;

@@ -36,10 +36,10 @@ public class Spell {
 	private State state = State.COUNT_DOWN;
 
 
-	public Spell(int i, int j) {
-		this.position = new Vector2(i,j);
+	public Spell(GameWorld world) {
+		this.position = null;
 		this.spell = null;
-		this.world = GameWorld.getInstance();
+		this.world = world;
 		this.bob = this.world.getBob();
 		this.enemyBob = this.world.getEnemy();
 
@@ -99,7 +99,7 @@ public class Spell {
 		else if (index == 12) {
 			spell = Spells.LASER;
 		}
-
+		System.out.println("Spell is :" + spell);
 		generateSpell();
 	}
 
@@ -118,6 +118,7 @@ public class Spell {
 			//send time remaining and state to server
 			break;
 		case FORCESTAFF:
+			System.out.println("gonna force");
 			switch (bob.getDirection()) {
 				case EAST:
 					bob.setPosition(bob.getPosition().x+50, bob.getPosition().y);
