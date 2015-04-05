@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import appwarp.WarpController;
 import appwarp.WarpListener;
 
+import com.androidboys.spellarena.game.ButtonExample;
 import com.androidboys.spellarena.gameworld.GameRenderer;
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.helper.AssetLoader;
@@ -23,10 +24,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
@@ -53,6 +56,9 @@ public class GameScreen implements Screen, WarpListener{
 	private float runTime;
 	
 	private TiledMap map;
+
+    private ButtonExample[] commandList = new ButtonExample[3];
+    int commandCount = 0;
 	
 	//Constructor for debugging w/o multiplayer
 	public GameScreen(Game game) {
@@ -64,15 +70,109 @@ public class GameScreen implements Screen, WarpListener{
 		batcher = new SpriteBatch();
 		
 		world = new GameWorld();
-		renderer = new GameRenderer(batcher, world);	
-		
-		createTouchpad();
+		renderer = new GameRenderer(batcher, world);
+        stage = new Stage(new StretchViewport(960, 640), batcher);
+
+        Texture textureUp   = new Texture(Gdx.files.internal("images/exort.png"));
+        ButtonExample myButton   = new ButtonExample(textureUp);
+
+        myButton.setPosition(790, 70);
+        myButton.setSize(130, 130);
+        myButton.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                displayButtonCommand(0);
+            }
+
+        });
+
+        Texture textureUp2   = new Texture(Gdx.files.internal("images/quas.png"));
+
+        final ButtonExample myButton2   = new ButtonExample(textureUp2);
+
+        myButton2.setPosition(790, 235);
+        myButton2.setSize(130, 130);
+        myButton2.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                displayButtonCommand(1);
+            }
+
+        });
+
+        Texture textureUp3   = new Texture(Gdx.files.internal("images/wex.png"));
+
+        ButtonExample myButton3   = new ButtonExample(textureUp3);
+
+        myButton3.setPosition(790, 400);
+        myButton3.setSize(130, 130);
+        myButton3.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                displayButtonCommand(2);
+            }
+
+        });
+
+        stage.addActor(myButton);
+        stage.addActor(myButton2);
+        stage.addActor(myButton3);
+
+        createTouchpad();
+
 		inputHandler = new InputHandler(world,this);
 		
 		WarpController.getInstance().setListener(this);
 		
 	}
 
+    public void displayButtonCommand(int indexOfButtonPressed) {
+        if (commandCount > 2) {
+            return;
+        }
+        Texture texture;
+        switch (indexOfButtonPressed) {
+            case 0:
+                texture = new Texture(Gdx.files.internal("images/exort.png"));
+                break;
+            case 1:
+                texture = new Texture(Gdx.files.internal("images/quas.png"));
+                break;
+            case 2:
+                texture = new Texture(Gdx.files.internal("images/wex.png"));
+                break;
+            default:
+                texture = new Texture(Gdx.files.internal("images/exort.png"));
+                break;
+        }
+
+        ButtonExample newButton = new ButtonExample(texture, indexOfButtonPressed);
+        newButton.setPosition(10, 550);
+        newButton.setSize(60, 60);
+        commandList[commandCount] = newButton;
+        switch (commandCount) {
+            case 0:
+                break;
+            case 1:
+                commandList[0].setPosition(60, 550);
+                break;
+            case 2:
+                commandList[0].setPosition(110, 550);
+                commandList[1].setPosition(60, 550);
+                break;
+        }
+        commandCount += 1;
+        stage.addActor(newButton);
+        if (commandCount == 3) {
+            for (int i = 0; i < commandList.length; i++) {
+                int commandIndex = commandList[i].getCommandIndex(); //0 for red 1 for purple 2 for blue
+                //TODO use index make combos and clear buttons from stage - BY HUY
+
+            }
+            commandCount = 0; // reset state
+
+        }
+    }
 
 	public GameScreen(Game game, StartMultiplayerScreen prevScreen) {
 		
@@ -102,12 +202,14 @@ public class GameScreen implements Screen, WarpListener{
 		
 		background.dispose();
 		knob.dispose();
-		
-		stage = new Stage(new StretchViewport(960, 640), batcher);
+
+
+
 		stage.addActor(touchpad);
 		world.getBob().setTouchpad(touchpad);
 	}
-	
+
+
 	/**
 	 * Called when this screen becomes the current screen for a Game.
 	 */
