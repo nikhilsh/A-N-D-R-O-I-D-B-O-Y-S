@@ -59,49 +59,74 @@ public class Spell {
 		this.remainingSeconds = remainingSeconds;
 	}
 
-	//Quas is 1, Wex is 2, Exort is 4
-	//call method to cast spell
+	/**
+	 * Calculate the spell according to the state of x,y,z
+	 * x,y,z: Quas is 1, Wex is 2, Exort is 4
+	 * QQQ = Divine Shield
+	 * QQW = Force Staff
+	 * QQE = Mine
+	 * WWQ = Stasis Trap
+	 * WWW = Atos
+	 * WWE = Acid
+	 * EEQ = Fan of Knives
+	 * EEW = Dark Pact
+	 * EEE = Laser
+	 */
 	public void spellSettler(int x, int y, int z) {
 		index = x + y + z;
 		if (index < 3){
 			return;
 		}
-		else if (index == 3) {
+		else if (index == 3) { //QQQ
 			spell = Spells.DIVINESHIELD;
 		}
-		else if (index == 4) {
+		else if (index == 4) { //QQW
 			spell = Spells.FORCESTAFF;
 		}
-		else if (index == 5) {
+		else if (index == 5) { //WWQ
 			spell = Spells.STASISTRAP;
 		}
 		else if (index == 6) {
-			if (x == y && x == z){
+			if (x == y && x == z){ //WWW
 				spell = Spells.ATOS;
-			}
-			else {
+			} else { //QQE
 				spell = Spells.MINE;
 			}
 		}
-		else if (index == 7) {
+		else if (index == 7) { //QWE
 			spell = Spells.SPROUT;
 		}
-		else if (index == 8) {
+		else if (index == 8) { //WWE
 			spell = Spells.ACID;
 		}
-		else if (index == 9) {
+		else if (index == 9) { //EEQ
 			spell = Spells.FANOFKNIVES;
 		}
-		else if (index == 10) {
+		else if (index == 10) { //EEW
 			spell = Spells.DARKPACT;
 		}
-		else if (index == 12) {
+		else if (index == 12) { //EEE
 			spell = Spells.LASER;
 		}
 		System.out.println("Spell is: " + spell);
 		generateSpell();
 	}
-
+	
+	/**
+	 * Cast the specified spell
+	 * Acid (WWE): TODO (I don't understand this)
+	 * Divine Shield (QQQ): Invulnerable for 3 sec. Mana cost: 50
+	 * Force Staff (QQW): Pushes Bob 100 units in the direction he is facing. Mana cost: 30
+	 * Atos (WWW): Slows the enemy's movement speed. (velocity=100, 3 sec) Mana cost: 50.
+	 * Statis Trap (WWQ): Prohibit enemy's movement for 5 sec. (TODO no mana cost?)
+	 * Sprout (QWE): TODO
+	 * Dark Pact (EEW): HP-. Radius: 300. Duration: 3 sec. Mana cost: 80.
+	 * Mine (QQE): TODO
+	 * Laser (EEE): HP-. Area: 300X30. Duration: Instantaneous. Mana cost: 80.
+	 * Fan of Knives (EEQ): HP-. Radius: 100. Duration: ???(TODO). Mana cost: 100.
+	 * 
+	 * SUGGESTION: What's the difference between EEW and EEQ (only area?)
+	 */
 	public void generateSpell() {
 		switch (spell) {
 		case ACID:
