@@ -32,7 +32,7 @@ public class Bob {
 	public static final int STATE_INVULNERABLE = 3;
 
 	//Speed
-	private static float MAX_SPEED = 500f;
+	private float MAX_SPEED = 500f;
 
 	private Vector2 position;
 	private Vector2 velocity;
@@ -112,7 +112,7 @@ public class Bob {
 
 				} else {
 					this.direction = Direction.EAST;
-					newV = new Vector2(MAX_SPEED,	0);
+					newV = new Vector2(MAX_SPEED, 0);
 				}
 			}else if (touchX < -0.5){
 				if(touchY > 0.5){
@@ -394,9 +394,14 @@ public class Bob {
 	public Rectangle getbobRect() {
 		return bobRect;
 	}
-	
+
 	public void setAtosSpeed(){
-		MAX_SPEED = 100;
+		if (isEnemy){
+			MAX_SPEED = 100;
+		}
+		else {
+			MAX_SPEED = 500;
+		}
 	}
 
 }

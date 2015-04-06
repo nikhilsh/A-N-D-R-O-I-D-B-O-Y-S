@@ -149,9 +149,6 @@ public class Spell {
 		case FORCESTAFF:
 			if (bob.getManaCount()>30){
 				bob.decrementManaCount(30);
-				if (!checkCollision(bob)) {
-					System.out.println("collision");
-				}
 				switch (bob.getDirection()) {
 				case EAST:
 					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);

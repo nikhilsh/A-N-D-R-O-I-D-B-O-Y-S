@@ -76,7 +76,7 @@ public class GameScreen implements Screen, WarpListener{
 		renderer = new GameRenderer(batcher, world);
         stage = new Stage(new StretchViewport(960, 640), batcher);
 
-        Texture textureUp   = new Texture(Gdx.files.internal("images/quas.png"));
+        Texture textureUp   = new Texture(Gdx.files.internal("images/wex.png"));
         ButtonExample myButton   = new ButtonExample(textureUp);
 
         myButton.setPosition(790, 70);
@@ -89,7 +89,7 @@ public class GameScreen implements Screen, WarpListener{
 
         });
 
-        Texture textureUp2   = new Texture(Gdx.files.internal("images/wex.png"));
+        Texture textureUp2   = new Texture(Gdx.files.internal("images/quas.png"));
 
         final ButtonExample myButton2   = new ButtonExample(textureUp2);
 
@@ -136,10 +136,10 @@ public class GameScreen implements Screen, WarpListener{
         Texture texture = null;
         switch (indexOfButtonPressed) {
             case 1:
-                texture = new Texture(Gdx.files.internal("images/quas.png"));
+                texture = new Texture(Gdx.files.internal("images/wex.png"));
                 break;
             case 2:
-                texture = new Texture(Gdx.files.internal("images/wex.png"));
+                texture = new Texture(Gdx.files.internal("images/quas.png"));
                 break;
             case 4:
                 texture = new Texture(Gdx.files.internal("images/exort.png"));
