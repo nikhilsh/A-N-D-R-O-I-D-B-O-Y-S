@@ -1,6 +1,14 @@
 # Spell Arena
 Android app for 50.003 - Software Construction
 
+## Introduction
+__Spell Arena__ is an online battle arena Android game designed by ANDROIDBOYS group.
+
+## Rules
+### Players
+
+### Spells
+
 ## Plugins
 * Gradle 1.0.0
 * LibGDX 1.5.4
