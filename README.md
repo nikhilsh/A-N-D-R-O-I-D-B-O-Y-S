@@ -4,10 +4,61 @@ Android app for 50.003 - Software Construction
 ## Introduction
 __Spell Arena__ is an online battle arena Android game designed by ANDROIDBOYS group.
 
-## Rules
-### Players
+## Tutorial
+### Characters
+Two players will fight against each other with their own characters in an arena.
+
+The player can control the character with the controller located at the bottom left corner of the screen, and attack the enemy or heal self with spells. Each spell can be invoked with a unique combination of three elements -- Quas, Wex, Exort. There are 10 different spells in game.
 
 ### Spells
+* QQQ = Divine Shield
+* QQW = Force Staff
+* QQE = Mine
+* WWQ = Stasis Trap
+* WWW = Atos
+* WWE = Acid
+* EEQ = Fan of Knives
+* EEW = Dark Pact
+* EEE = Laser
+* QWE = Sprout
+
+__Divine Shield (QQQ)__
+> Invulnerable for 3 seconds.
+> Mana cost: 50
+
+__Force Staff (QQW)__
+> Pushes character 100 units in the direction he is facing.
+> Mana cost: 30
+
+__Mine (QQE)__
+> (to be completed...)
+
+__Statis Trap (WWQ)__
+> Prohibit enemy's movement for 5 seconds.
+
+__Atos (WWW)__
+> Slows the enemy's movement speed.
+> Enemy's velocity will be slowed down to 100 for 3 seconds.
+> Mana cost: 50.
+
+__Acid (WWE)__
+> (to be completed...)
+
+__Fan of Knives (EEQ)__
+> Damage.
+> Radius: 100.
+> Mana cost: 100.
+
+__Dark Pact (EEW)__
+> Damage.
+> Radius: 300.
+> Effect Delay: 3 sec.
+> Mana cost: 80.
+
+__Laser (EEE)__
+> Damage.
+> Area: 300X30.
+> Mana cost: 80.
 
 ## Plugins
 * Gradle 1.0.0
