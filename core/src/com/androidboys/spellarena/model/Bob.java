@@ -1,9 +1,6 @@
 package com.androidboys.spellarena.model;
 
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.json.JSONObject;
 
 import appwarp.WarpController;
@@ -35,7 +32,7 @@ public class Bob {
 	public static final int STATE_INVULNERABLE = 3;
 
 	//Speed
-	private static final float MAX_SPEED = 500f;
+	private static float MAX_SPEED = 500f;
 
 	private Vector2 position;
 	private Vector2 velocity;
@@ -396,6 +393,10 @@ public class Bob {
 	 */
 	public Rectangle getbobRect() {
 		return bobRect;
+	}
+	
+	public void setAtosSpeed(){
+		MAX_SPEED = 100;
 	}
 
 }

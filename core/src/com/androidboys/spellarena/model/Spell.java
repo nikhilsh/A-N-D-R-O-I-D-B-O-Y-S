@@ -23,7 +23,7 @@ public class Spell {
 	}
 
 	public static enum State {
-		COUNT_DOWN, END
+		START, END
 	}
 
 	private Spells spell;
@@ -33,7 +33,7 @@ public class Spell {
 	private Bob bob;
 	private Bob enemyBob;
 	private float remainingSeconds = 0;
-	private State state = State.COUNT_DOWN;
+	private State state = State.START;
 
 
 	public Spell(GameWorld world) {
@@ -120,7 +120,7 @@ public class Spell {
 	 * Atos (WWW): Slows the enemy's movement speed. (velocity=100, 3 sec) Mana cost: 50.
 	 * Statis Trap (WWQ): Prohibit enemy's movement for 5 sec. (TODO no mana cost?)
 	 * Sprout (QWE): TODO
-	 * Dark Pact (EEW): HP-. Radius: 300. Duration: 3 sec. Mana cost: 80.
+	 * Dark Pact (EEW): HP-. Radius: 300. Duration: 3 sec. Mana cost: 80. REPLACE
 	 * Mine (QQE): TODO
 	 * Laser (EEE): HP-. Area: 300X30. Duration: Instantaneous. Mana cost: 80.
 	 * Fan of Knives (EEQ): HP-. Radius: 100. Duration: ???(TODO). Mana cost: 100.
@@ -131,7 +131,7 @@ public class Spell {
 		switch (spell) {
 		case ACID:
 			//consider changing
-
+			//check for collision
 			position = bob.getPosition();
 			remainingSeconds = 5;
 			//send position and time remaining to server
@@ -187,7 +187,7 @@ public class Spell {
 		case ATOS:
 			if (bob.getManaCount()>50){
 				bob.decrementManaCount(50);
-				enemyBob.setVelocity(100, 100);
+				enemyBob.setAtosSpeed();
 				remainingSeconds = 3;
 			}
 			else {
@@ -196,8 +196,8 @@ public class Spell {
 			break;
 
 		case STASISTRAP:
-			//consider changing to a stun if you are near enemy, (like centaur stomp)
-
+			
+			//collision with sprite model (+100 radius)
 			//insert mine at bob position
 			//if stasis trap near enemy,
 			enemyBob.setVelocity(0, 0);
@@ -205,8 +205,8 @@ public class Spell {
 			break;
 
 		case SPROUT:
-			//consider change to heal
-			//bob.setLifeCount(bob.getLifeCount()+1);
+			//collision with sprite
+			//mana cost 40
 
 			//need add new collision			
 			break;
@@ -234,7 +234,7 @@ public class Spell {
 			break;
 
 		case MINE:
-			//consider change to suicide
+			//collision with sprite, decrement health
 
 			//insert mine at bob position
 			break;
