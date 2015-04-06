@@ -71,6 +71,7 @@ public class Spell {
 	 * EEQ = Fan of Knives
 	 * EEW = Dark Pact
 	 * EEE = Laser
+	 * QWE = Sprout
 	 */
 	public void spellSettler(int x, int y, int z) {
 		index = x + y + z;
