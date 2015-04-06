@@ -356,7 +356,6 @@ public class Bob {
 	}
 
 	public void incrementManaCount(){
-		System.out.println("mana: " + this.manaCount);
 		if (this.manaCount<200){
 			this.manaCount += 0.1;
 		}

@@ -1,5 +1,8 @@
 package com.androidboys.spellarena.helper;
 
+import java.util.ArrayList;
+
+import com.androidboys.spellarena.game.ButtonExample;
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.Spell;
@@ -14,28 +17,30 @@ public class InputHandler implements InputProcessor{
 
 	private GameWorld world;
 	private Bob bob;
-	
+
 	private GameScreen screen;
 	private Stage stage;
 	private Touchpad touchpad;
-	
+	//private int[] spellList;
+	private ButtonExample[] commandList;
 	private InputMultiplexer im;
 
-	
+
 	public InputHandler(GameWorld world, GameScreen screen) {
 		this.world = world;
 		this.bob = world.getBob();
-		
 		this.screen = screen;
 		this.stage = screen.getStage();
+		//this.spellList = screen.getSpellList();
 		this.touchpad = screen.getTouchpad();
-		
+		this.commandList = screen.getCommandList();
+
 		im = new InputMultiplexer();
 		im.addProcessor(stage);
 		im.addProcessor(this);
 		Gdx.input.setInputProcessor(im);
 	}
-	
+
 	/**
 	 * Called when a key was pressed.
 	 * @param keycode - one of the constants in Input.Keys
@@ -92,8 +97,20 @@ public class InputHandler implements InputProcessor{
 	 */
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		
+		
 		Spell spell = new Spell(world);
-		spell.spellSettler(1, 1, 2);
+		int[] spellList = new int[3];
+        for (int i = 0; i < commandList.length; i++) {
+            try {
+            	spellList[i] = commandList[i].getCommandIndex(); //1 for red 2 for purple 4 for blue
+            } catch (Exception e) {
+            	return false;
+            }
+        }
+        
+		spell.spellSettler(spellList[0], spellList[1], spellList[2]);
+		
 		// on tapping, call the spell generator, generate spell
 		// then send on server and synchronously cast on own screen
 		return true;

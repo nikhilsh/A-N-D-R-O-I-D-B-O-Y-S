@@ -1,5 +1,7 @@
 package com.androidboys.spellarena.screens;
 
+import java.util.ArrayList;
+
 import org.json.JSONObject;
 
 import appwarp.WarpController;
@@ -58,6 +60,7 @@ public class GameScreen implements Screen, WarpListener{
 	private TiledMap map;
 
     private ButtonExample[] commandList = new ButtonExample[3];
+    private int[] spellList = new int[3];
     int commandCount = 0;
 	
 	//Constructor for debugging w/o multiplayer
@@ -73,7 +76,7 @@ public class GameScreen implements Screen, WarpListener{
 		renderer = new GameRenderer(batcher, world);
         stage = new Stage(new StretchViewport(960, 640), batcher);
 
-        Texture textureUp   = new Texture(Gdx.files.internal("images/exort.png"));
+        Texture textureUp   = new Texture(Gdx.files.internal("images/quas.png"));
         ButtonExample myButton   = new ButtonExample(textureUp);
 
         myButton.setPosition(790, 70);
@@ -81,35 +84,35 @@ public class GameScreen implements Screen, WarpListener{
         myButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                displayButtonCommand(0);
-            }
-
-        });
-
-        Texture textureUp2   = new Texture(Gdx.files.internal("images/quas.png"));
-
-        final ButtonExample myButton2   = new ButtonExample(textureUp2);
-
-        myButton2.setPosition(790, 235);
-        myButton2.setSize(130, 130);
-        myButton2.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
                 displayButtonCommand(1);
             }
 
         });
 
-        Texture textureUp3   = new Texture(Gdx.files.internal("images/wex.png"));
+        Texture textureUp2   = new Texture(Gdx.files.internal("images/wex.png"));
+
+        final ButtonExample myButton2   = new ButtonExample(textureUp2);
+
+        myButton2.setPosition(630, 70);
+        myButton2.setSize(130, 130);
+        myButton2.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                displayButtonCommand(2);
+            }
+
+        });
+
+        Texture textureUp3   = new Texture(Gdx.files.internal("images/exort.png"));
 
         ButtonExample myButton3   = new ButtonExample(textureUp3);
 
-        myButton3.setPosition(790, 400);
+        myButton3.setPosition(790, 235);
         myButton3.setSize(130, 130);
         myButton3.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                displayButtonCommand(2);
+                displayButtonCommand(4);
             }
 
         });
@@ -130,48 +133,41 @@ public class GameScreen implements Screen, WarpListener{
         if (commandCount > 2) {
             return;
         }
-        Texture texture;
+        Texture texture = null;
         switch (indexOfButtonPressed) {
-            case 0:
-                texture = new Texture(Gdx.files.internal("images/exort.png"));
-                break;
             case 1:
                 texture = new Texture(Gdx.files.internal("images/quas.png"));
                 break;
             case 2:
                 texture = new Texture(Gdx.files.internal("images/wex.png"));
                 break;
-            default:
+            case 4:
                 texture = new Texture(Gdx.files.internal("images/exort.png"));
-                break;
+                break;	
         }
 
         ButtonExample newButton = new ButtonExample(texture, indexOfButtonPressed);
-        newButton.setPosition(10, 550);
+//        newButton.setPosition(10, 550);
         newButton.setSize(60, 60);
-        commandList[commandCount] = newButton;
-        switch (commandCount) {
-            case 0:
-                break;
-            case 1:
-                commandList[0].setPosition(60, 550);
-                break;
-            case 2:
-                commandList[0].setPosition(110, 550);
-                commandList[1].setPosition(60, 550);
-                break;
+        if (commandList[2] != null) {
+        	commandList[2].remove();
         }
-        commandCount += 1;
-        stage.addActor(newButton);
-        if (commandCount == 3) {
-            for (int i = 0; i < commandList.length; i++) {
-                int commandIndex = commandList[i].getCommandIndex(); //0 for red 1 for purple 2 for blue
-                //TODO use index make combos and clear buttons from stage - BY HUY
-
-            }
-            commandCount = 0; // reset state
-
+        commandList[2] = commandList[1];
+        commandList[1] = commandList[0];
+        commandList[0] = newButton;
+        int y = 550;
+        int spacing = 50;
+        int x0 = 10;
+        for (int i = 0; i < 3; i++) {
+        	int x = x0 + spacing *i;
+        	try {
+        		commandList[i].setPosition(x, y);
+        	} catch (Exception e) {
+        		break;
+        	}
         }
+        stage.addActor(commandList[0]);
+        
     }
 
 	public GameScreen(Game game, StartMultiplayerScreen prevScreen) {
@@ -202,8 +198,6 @@ public class GameScreen implements Screen, WarpListener{
 		
 		background.dispose();
 		knob.dispose();
-
-
 
 		stage.addActor(touchpad);
 		world.getBob().setTouchpad(touchpad);
@@ -336,5 +330,9 @@ public class GameScreen implements Screen, WarpListener{
 	
 	public Touchpad getTouchpad(){
 		return touchpad;
+	}
+	
+	public ButtonExample[] getCommandList() {
+		return commandList;
 	}
 }

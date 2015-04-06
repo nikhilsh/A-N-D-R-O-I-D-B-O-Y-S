@@ -179,6 +179,9 @@ public class Spell {
 					break;
 				}
 			}
+			else {
+				System.out.println("Not enough Mana!");
+			}
 			break;
 
 		case ATOS:
@@ -186,6 +189,9 @@ public class Spell {
 				bob.decrementManaCount(50);
 				enemyBob.setVelocity(100, 100);
 				remainingSeconds = 3;
+			}
+			else {
+				System.out.println("Not enough Mana!");
 			}
 			break;
 
@@ -221,6 +227,9 @@ public class Spell {
 						//flashy graphics on server
 					}
 				}
+			}
+			else {
+				System.out.println("Not enough Mana!");
 			}
 			break;
 
@@ -287,6 +296,9 @@ public class Spell {
 					break;
 				}
 			}
+			else {
+				System.out.println("Not enough Mana!");
+			}
 			break;
 
 		case FANOFKNIVES:
@@ -302,6 +314,9 @@ public class Spell {
 						//no remaining count. straightaway do
 					}
 				}
+			}
+			else {
+				System.out.println("Not enough Mana!");
 			}
 		default:
 			break;
