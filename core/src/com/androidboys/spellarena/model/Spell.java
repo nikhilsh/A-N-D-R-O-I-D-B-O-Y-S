@@ -109,7 +109,7 @@ public class Spell {
 			spell = Spells.LASER;
 		}
 		System.out.println("Spell is: " + spell);
-		generateSpell();
+		castSpell();
 	}
 	
 	/**
@@ -127,7 +127,7 @@ public class Spell {
 	 * 
 	 * SUGGESTION: What's the difference between EEW and EEQ (only area?)
 	 */
-	public void generateSpell() {
+	public void castSpell() {
 		switch (spell) {
 		case ACID:
 			//consider changing
@@ -149,6 +149,9 @@ public class Spell {
 		case FORCESTAFF:
 			if (bob.getManaCount()>30){
 				bob.decrementManaCount(30);
+				if (!checkCollision(bob)) {
+					System.out.println("collision");
+				}
 				switch (bob.getDirection()) {
 				case EAST:
 					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
@@ -338,7 +341,22 @@ public class Spell {
 		}
 	}
 
-
-
+	public Boolean checkCollision(Bob bob){
+		if(bob.getPosition().x > GameWorld.WORLD_BOUND_RIGHT){
+			bob.setPosition(GameWorld.WORLD_BOUND_RIGHT, bob.getPosition().y);
+			return false;
+		} else if (bob.getPosition().x < GameWorld.WORLD_BOUND_LEFT){
+			bob.setPosition(GameWorld.WORLD_BOUND_LEFT, bob.getPosition().y);
+			return false;
+		}
+		if(bob.getPosition().y > GameWorld.WORLD_BOUND_TOP){
+			bob.setPosition(bob.getPosition().x,GameWorld.WORLD_BOUND_TOP);
+			return false;
+		} else if (bob.getPosition().y < GameWorld.WORLD_BOUND_BOTTOM){
+			bob.setPosition(bob.getPosition().x,GameWorld.WORLD_BOUND_BOTTOM);
+			return false;
+		}
+		return true;
+	}
 
 }

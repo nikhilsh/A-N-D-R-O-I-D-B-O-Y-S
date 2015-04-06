@@ -214,10 +214,10 @@
   </data>
  </layer>
  <objectgroup name="Collidable">
-  <object id="6" x="47.1286" y="47.1286" width="1825.39" height="19.2006"/>
-  <object id="8" x="1852" y="66.3583" width="32.6397" height="967.49"/>
-  <object id="9" x="66.7009" y="1011.51" width="1787" height="27.1201"/>
-  <object id="11" x="41.7797" y="66.7009" width="24.9212" height="969.728"/>
+  <object id="6" x="37.1286" y="0" width="1865.39" height="66.3292"/>
+  <object id="8" x="1852" y="66.3583" width="66.3292" height="967.49"/>
+  <object id="9" x="40.7009" y="1011.51" width="1880" height="66.3292"/>
+  <object id="11" x="41.7797" y="66.7009" width="66.3292" height="969.728"/>
   <object id="12" x="859.463" y="420.846" width="200.444" height="199.791"/>
  </objectgroup>
 </map>

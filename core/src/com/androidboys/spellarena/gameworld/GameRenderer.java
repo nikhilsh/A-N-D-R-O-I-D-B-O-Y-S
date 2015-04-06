@@ -120,8 +120,8 @@ public class GameRenderer {
 //		shapeRenderer.setColor(Color.BLUE);
 //		shapeRenderer.rect(bob.getPosition().x-10,bob.getPosition().y,50,50);
 //		shapeRenderer.end();
-//		
-//		//dark pact
+		
+		//dark pact
 //		shapeRenderer.begin(ShapeType.Line);
 //		shapeRenderer.setColor(Color.BLACK);
 //		shapeRenderer.circle(bob.getPosition().x, bob.getPosition().y, 300);
