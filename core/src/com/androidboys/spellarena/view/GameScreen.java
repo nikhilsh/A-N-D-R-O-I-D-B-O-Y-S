@@ -186,7 +186,7 @@ public class GameScreen implements Screen{
 		LabelStyle labelStyle = new LabelStyle();
 		labelStyle.font = AssetLoader.playText;
 		labelStyle.fontColor = Color.WHITE;
-		Label popUpLabel = new Label(" You lost! Try again next time!", labelStyle);
+		Label popUpLabel = new Label("YOU LOSE\n\nTry again next time", labelStyle);
 		popUpLabel.setAlignment(1);
 		loseGamePopUp.addActor(popUpLabel);
 		popUpLabel.setBounds(0f, 
@@ -226,7 +226,7 @@ public class GameScreen implements Screen{
 		LabelStyle labelStyle = new LabelStyle();
 		labelStyle.font = AssetLoader.playText;
 		labelStyle.fontColor = Color.WHITE;
-		Label popUpLabel = new Label("You win!", labelStyle);
+		Label popUpLabel = new Label("YOU WIN", labelStyle);
 		popUpLabel.setAlignment(1);
 		winGamePopUp.addActor(popUpLabel);
 		popUpLabel.setBounds(0f, 
@@ -259,11 +259,11 @@ public class GameScreen implements Screen{
 		roomOwnerLeftPopUp.debugAll();
 		roomOwnerLeftPopUp.setVisible(false);
 		roomOwnerLeftPopUp.setBounds(160, 
-				40, 
+				100, 
 				400, 200);
 		Image panelBackground = new Image(AssetLoader.loadingTexture);
 		roomOwnerLeftPopUp.addActor(panelBackground);
-		panelBackground.setBounds(160, 40, 400, 240);
+		panelBackground.setBounds(0, 0, 400, 240);
 		LabelStyle labelStyle = new LabelStyle();
 		labelStyle.font = AssetLoader.playText;
 		labelStyle.fontColor = Color.WHITE;
