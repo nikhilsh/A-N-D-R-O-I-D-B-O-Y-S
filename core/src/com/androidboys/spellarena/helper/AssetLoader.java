@@ -22,11 +22,11 @@ public class AssetLoader {
 	
 	public static TextureRegion playRegion, helpRegion;
 	
-	public static Texture charTexture;
+	public static Texture charTexture, dustTexture;
 	public static TextureRegion northBob, eastBob, southBob, westBob, 
-		northEastBob, southEastBob, southWestBob, northWestBob;
+		northEastBob, southEastBob, southWestBob, northWestBob, dustSpell;
 	public static Animation northBobAnimation, eastBobAnimation, southBobAnimation, westBobAnimation, 
-		northEastBobAnimation, southEastBobAnimation, southWestBobAnimation, northWestBobAnimation;
+		northEastBobAnimation, southEastBobAnimation, southWestBobAnimation, northWestBobAnimation, dustSpellAnimation;
 	
 	
 	public static BitmapFont header, playText, swordText;
@@ -115,6 +115,11 @@ public class AssetLoader {
 				new TextureRegion(charTexture, 120, 125, 30, 30)
 			});
 		
+		dustSpellAnimation = new Animation(0.06f, new TextureRegion[]{
+				new TextureRegion(dustTexture, 0, 0, 128, 128),
+				new TextureRegion(dustTexture, 128, 128, 128, 128)
+		});
+		
 		northBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northEastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		eastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
@@ -123,11 +128,15 @@ public class AssetLoader {
 		southWestBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		westBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northWestBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		dustSpellAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 	}
 
 	private static void loadSprites(){
 		charTexture = new Texture(Gdx.files.internal("sprites/wizard.png"));
 		charTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		dustTexture = new Texture(Gdx.files.internal("sprites/dust.png"));
+		dustTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 		southBob = new TextureRegion(charTexture, 60, 35, 30, 30);
 		southWestBob = new TextureRegion(charTexture, 60, 65, 30, 30);
@@ -136,7 +145,8 @@ public class AssetLoader {
 		northBob = new TextureRegion(charTexture, 60, 155, 30, 30);
 		northEastBob = new TextureRegion(charTexture, 210, 125, 30, 30);		
 		eastBob = new TextureRegion(charTexture, 210, 95, 30, 30);
-		southEastBob = new TextureRegion(charTexture, 210, 65, 30, 30);		
+		southEastBob = new TextureRegion(charTexture, 210, 65, 30, 30);	
+		dustSpell = new TextureRegion(dustTexture, 0, 0, 128, 128);
 	}
 	
 	private static void loadFonts(){

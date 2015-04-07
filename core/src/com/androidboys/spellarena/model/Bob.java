@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import appwarp.WarpController;
 
 import com.androidboys.spellarena.gameworld.GameWorld;
+import com.androidboys.spellarena.model.Spell.Spells;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -393,6 +394,10 @@ public class Bob {
 	 */
 	public Rectangle getbobRect() {
 		return bobRect;
+	}
+	
+	public Spells getSpell(){
+		return Spells.FORCESTAFF;
 	}
 
 	public void setAtosSpeed(){

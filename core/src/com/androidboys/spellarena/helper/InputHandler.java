@@ -31,7 +31,6 @@ public class InputHandler implements InputProcessor{
 		this.bob = world.getBob();
 		this.screen = screen;
 		this.stage = screen.getStage();
-		//this.spellList = screen.getSpellList();
 		this.touchpad = screen.getTouchpad();
 		this.commandList = screen.getCommandList();
 

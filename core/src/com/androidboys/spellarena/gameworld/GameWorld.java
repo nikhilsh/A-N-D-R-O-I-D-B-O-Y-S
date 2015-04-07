@@ -2,6 +2,8 @@ package com.androidboys.spellarena.gameworld;
 
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.Spell;
+import com.androidboys.spellarena.model.Spell.Spells;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -20,12 +22,11 @@ public class GameWorld {
 	public static final float WORLD_BOUND_TOP = 960;
 	public static final float WORLD_BOUND_BOTTOM = 70;
 
-	private World physicsWorld;
-
 	
 	//Characters
 	private final Bob local_bob;
 	private final Bob enemy_bob;
+	private Spells spell;
 	
 	//Map
 	private TiledMap map;
@@ -91,6 +92,15 @@ public class GameWorld {
 	public void updateEnemy(float x, float y, float vx, float vy, int state) {
 		enemy_bob.setVelocity(vx, vy);
 		enemy_bob.setPosition(x, y);
+	}
+	
+	public Spells getSpell(){
+		return spell;
+	}
+	
+	public void setSpell(Spells spell){
+		this.spell = spell;
+		
 	}
 	
 	/**
