@@ -50,6 +50,8 @@ public class GameScreenMediator extends Mediator{
 							case Command.CREATE_GAME:
 								handleCreateGameCommand(command);
 								break;
+							case Command.START_GAME:
+								handleStartGameCommand(command);
 						}
 					}
 				});
@@ -90,9 +92,15 @@ public class GameScreenMediator extends Mediator{
 	}
 
 	private void handleCreateGameCommand(Command c){
-		gameScreen.startGame();
+		if(UserSession.getInstance().getUserName().equals(c.getFromUser())){
+			return;
+		}
+		gameScreen.onCreateGame();
 	}
 	
+	private void handleStartGameCommand(Command c){
+		gameScreen.startGame();
+	}
 	
 	@Override
 	protected void onScreenShow() {
@@ -138,6 +146,10 @@ public class GameScreenMediator extends Mediator{
 
 	public void setRoom(RoomModel room) {
 		this.room = room;
+	}
+
+	public void setGameServer(GameServer gameServer) {
+		this.gameServer = gameServer;
 	}
 
 }

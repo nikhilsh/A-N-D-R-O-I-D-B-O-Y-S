@@ -62,6 +62,10 @@ public class CommandFactory {
                 return ClockSyncReqCommand.build(json);
             case Command.CLOCK_SYNC_RES:
                 return ClockSyncResCommand.build(json);
+            case Command.START_GAME:
+            	return StartGameCommand.build(json);
+            case Command.CREATE_GAME:
+            	return CreateGameCommand.build(json);
             case Command.MOVE_NORTH:
                 return MoveNorth.build(json);
 

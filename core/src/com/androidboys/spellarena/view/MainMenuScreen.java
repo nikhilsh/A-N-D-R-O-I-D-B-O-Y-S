@@ -1,6 +1,5 @@
 package com.androidboys.spellarena.view;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -10,27 +9,16 @@ import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.helper.StyleLoader;
 import com.androidboys.spellarena.mediators.MainMenuMediator;
 import com.androidboys.spellarena.net.NetworkListenerAdapter;
-import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.net.model.RoomModel;
 import com.androidboys.spellarena.session.UserSession;
-import com.androidboys.spellarena.view.widgets.ChangingLabel;
 import com.androidboys.spellarena.view.widgets.LoadingWidget;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -40,19 +28,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class MainMenuScreen implements Screen {
@@ -283,16 +263,6 @@ public class MainMenuScreen implements Screen {
 				try{
 					Group group = createGameListItem(roomModel);
                     gameTable.row();
-                    group.addListener(new ClickListener(){
-                    	
-                    	@Override
-                    	public void clicked(InputEvent event, float x, float y) {
-                    		Gdx.app.log("TAG","Join Game clicked");
-                    		joinGame(roomModel);
-                    		super.clicked(event, x, y);
-                    	}
-
-                    });
                     gameTable.add(group)
                     .width(460)
                     .height(40);
@@ -345,6 +315,7 @@ public class MainMenuScreen implements Screen {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
 				Gdx.app.log(TAG, "Join game clicked");
+				joinGame(roomModel);
 				return super.touchDown(event, x, y, pointer, button);
 			}
 			
@@ -555,7 +526,7 @@ public class MainMenuScreen implements Screen {
 	
 	private void prepareJoinedRoomFailedPopUp() {
 		joinedRoomFailedPopUp = new Group();
-		joinedRoomFailedPopUp.setVisible(false);
+		joinedRoomFailedPopUp.setVisible(true);
 		joinedRoomFailedPopUp.setBounds((stage.getWidth() - 400)/2, 
 				(stage.getHeight() - 200)/2, 
 				400, 200);
