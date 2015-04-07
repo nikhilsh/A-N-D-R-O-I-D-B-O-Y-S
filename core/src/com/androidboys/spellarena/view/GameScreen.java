@@ -167,7 +167,7 @@ public class GameScreen implements Screen{
 		createSpellButtons();
 		initializeBeforeGamePanel();
 		prepareInputProcessor();
-		prepareDisconnectPopUp();
+		prepareDisconnectPopUp(); 
 		prepareRoomOwnerLeftPopUp();
 		prepareWinGamePopUp();
 		prepareLoseGamePopUp();
@@ -341,56 +341,16 @@ public class GameScreen implements Screen{
 
 
 	private void prepareInputProcessor() {
-		touchpad.addListener(new ChangeListener() {
-		
+		final String userName = UserSession.getInstance().getUserName();
+		final Bob myBob = world.getPlayerModel(userName);
+		myBob.setTouchpad(touchpad);
+		myBob.setStateChangeListener(new Bob.StateChangeListener() {
+
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				Direction direction;
-				Vector2 newV;
-				float touchX = touchpad.getKnobPercentX();
-				float touchY = touchpad.getKnobPercentY();
-				if(touchX > 0.5){
-					if(touchY > 0.5){
-						direction = Direction.NORTHEAST;
-						newV = new Vector2(MAX_SPEED, MAX_SPEED);
-						
-					} else if (touchY < -0.5){
-						direction = Direction.SOUTHEAST;
-						newV = new Vector2(MAX_SPEED, -MAX_SPEED);
-						
-					} else {
-						direction = Direction.EAST;
-						newV = new Vector2(MAX_SPEED,	0);
-					}
-				}else if (touchX < -0.5){
-					if(touchY > 0.5){
-						direction = Direction.NORTHWEST;
-						newV = new Vector2(-MAX_SPEED, MAX_SPEED);
-					} else if (touchY < -0.5){
-						direction = Direction.SOUTHWEST;
-						newV = new Vector2(-MAX_SPEED, -MAX_SPEED);
-					} else {
-						direction = Direction.WEST;
-						newV = new Vector2(-MAX_SPEED, 0);
-					}
-				} else {
-					if(touchY > 0.5){
-						direction = Direction.NORTH;
-						newV = new Vector2(0, MAX_SPEED);
-					} else if(touchY < -0.5) {
-						direction = Direction.SOUTH;
-						newV = new Vector2(0, -MAX_SPEED);
-					} else {
-						newV = new Vector2(0,0);
-					}
-				}
-				if(!newV.equals(velocity)){
-					needsUpdate = true;
-					this.setVelocity(newV.x, newV.y);
-				}
+			public void onVelocityChange(int state, Direction direction) {
+
 			}
-		})
-		
+		});
 		Gdx.input.setInputProcessor(stage);
 	}
 
@@ -441,7 +401,6 @@ public class GameScreen implements Screen{
 		if(UserSession.getInstance().isServer()){
 			setBeforeGamePanelTitle("Waiting for players");
 			roomOwner.setText("Room Owner\n\n" + UserSession.getInstance().getUserName());
-			startGameButton.setVisible(true);
 			startGameButton.addListener(new ClickListener(){
 				
 				@Override
@@ -493,13 +452,11 @@ public class GameScreen implements Screen{
 	
 
 	private void initializeGameOnServer() {
-		//GameFactory.GameModel gameModel = GameFactory.getGameModel(gameScreenMediator.getLevel());
-		
-//		Bob playerBob = addBobToWorld(UserSession.getInstance().getUserName(),1);
+		GameFactory.GameModel gameModel = GameFactory.getGameModel();
+		addPlayerModelToWorld(UserSession.getInstance().getUserName(),1);
 		
 		//world.addObstacles
 	}
-
 
 	/**
 	 * Called when the screen should render itself.
@@ -771,15 +728,16 @@ public class GameScreen implements Screen{
 	        
 	    }
 
-
-	private Bob addPlayerModelToWorld(String playerName, int gameIndex) {
-		Bob bob = new Bob();
-		bob.setPlayerName(playerName);
-		bob.setPosition(loadStartPosition(gameIndex));
-		bob.setGameIndex(gameIndex);
-		world.addPlayerModel(bob);
-		return bob;
-	}
+		private Bob addPlayerModelToWorld(String playerName, int gameIndex) {
+			Gdx.app.log(TAG, "adding Bob To World");
+			Bob bob = new Bob();
+			bob.setPlayerName(playerName);
+			bob.setPosition(loadStartPosition(gameIndex));
+			bob.setGameIndex(gameIndex);
+			world.addPlayerModel(bob);
+			renderer.initGameObjects();
+			return bob;
+		}
 
 
 	private Vector2 loadStartPosition(int gameIndex) {

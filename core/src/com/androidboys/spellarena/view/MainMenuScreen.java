@@ -234,15 +234,15 @@ public class MainMenuScreen implements Screen {
 		Table gameList = new Table();
 		stage.addActor(gameList);
 		gameList.align(Align.bottom);
-		gameList.debug();
+//		gameList.debug();
 		
 		gameTable.align(Align.bottom);
 		gameTable.setFillParent(true);
 		//gameTable.setScale(100,100);
-		gameTable.debug();
+//		gameTable.debug();
 		
 		final ScrollPane scrollPane = new ScrollPane(gameTable);
-		scrollPane.debug();
+//		scrollPane.debug();
 		scrollPane.setClamp(true);
 		scrollPane.setOverscroll(false, false);
 		scrollPane.setFillParent(true);

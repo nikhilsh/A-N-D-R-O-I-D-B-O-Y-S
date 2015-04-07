@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.net.WarpController;
+import com.androidboys.spellarena.session.UserSession;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -12,6 +13,12 @@ import com.badlogic.gdx.utils.Array;
 
 public class Bob {
 
+	public static interface StateChangeListener{
+		
+		public void onVelocityChange(int state, Direction direction);
+	
+	}
+	
 	//Directions
 	public enum Direction{
 		NORTH, 
@@ -21,7 +28,7 @@ public class Bob {
 		SOUTH,
 		SOUTHWEST,
 		WEST,
-		NORTHWEST;
+		NORTHWEST, NONE;
 	}
 
 	//States
@@ -31,7 +38,7 @@ public class Bob {
 	public static final int STATE_INVULNERABLE = 3;
 
 	//Speed
-	private float MAX_SPEED = 500f;
+	private float MAX_SPEED = 150f;
 
 	private Vector2 position;
 	private Vector2 velocity;
@@ -53,7 +60,9 @@ public class Bob {
 	private int index;
 	private String playerName;
 	private int gameIndex;
+	private StateChangeListener stateChangeListener;
 
+	
 	/**
 	 * Create a new Bob instance.
 	 * @param i,j		initial position
@@ -71,8 +80,17 @@ public class Bob {
 
 	public Bob() {
 		this.position = new Vector2();
+		this.velocity = new Vector2();
+		this.direction = Direction.SOUTH;
+		this.state = STATE_ALIVE;
+		this.bobRect = new Rectangle();
+		this.tiles = null;
 	}
 
+	public void setStateChangeListener(StateChangeListener stateChangeListener2){
+		this.stateChangeListener = stateChangeListener2;
+	}
+	
 	/**
 	 * Get the position of Bob.
 	 * @return Bob's position
@@ -96,15 +114,15 @@ public class Bob {
 
 	private void updateState(){
 		if(this.velocity.isZero()){
-			this.state = STATE_ALIVE;
+			state = STATE_ALIVE;
 		} else {
-			this.state = STATE_RUNNING;
+			state = STATE_RUNNING;
 		}
 	}
 
 	private void updateVelocity(){
 		Vector2 newV = null;
-		if(!isEnemy){
+		if(playerName.equals(UserSession.getInstance().getUserName())){
 			incrementManaCount();
 			float touchX = touchpad.getKnobPercentX();
 			float touchY = touchpad.getKnobPercentY();
@@ -144,8 +162,8 @@ public class Bob {
 				}
 			}
 			if(!newV.equals(velocity)){
-				needsUpdate = true;
 				this.setVelocity(newV.x, newV.y);
+				this.stateChangeListener.onVelocityChange(state, direction);
 			}
 			//this.scaleAndSetVelocity(touchX, touchY);
 		} else {

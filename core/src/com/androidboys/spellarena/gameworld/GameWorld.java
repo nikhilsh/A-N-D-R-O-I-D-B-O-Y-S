@@ -49,10 +49,8 @@ public class GameWorld {
 	
 	public void initialize(GameModel model){
 		//Create new characters
-		this.local_bob = new Bob(810, 540, false);
-		this.enemy_bob = new Bob(810, 540, true);
-
 		map = AssetLoader.map;
+		prepareObstacles();
 	}
 	
 	private void updatePlayerModels(float delta){
@@ -67,7 +65,7 @@ public class GameWorld {
 //		if(bob.isInvulnerable()){
 //			bob.decrementImmortalDuration(delta);
 //		}
-		bob.updateObstacles(tiles);
+
 		bob.update(delta);
 		
 	}
@@ -83,11 +81,10 @@ public class GameWorld {
 	 * Update game world.
 	 */
 	public void update(float delta) {
-		getObstacles();
-		//updatePlayerModels(delta);		
+		updatePlayerModels(delta);		
 	}
 	
-	private void getObstacles(){
+	private void prepareObstacles(){
 		//Get the "Collidable" layer of map
 		MapLayer layer = (MapLayer) map.getLayers().get("Collidable");
 		//Puts objects of "tiles" in the pool.
@@ -121,6 +118,7 @@ public class GameWorld {
 	}
 
 	public void addPlayerModel(Bob bob) {
+		bob.updateObstacles(tiles);
 		playerModels.put(bob.getPlayerName(), bob);
 	}
 	
@@ -137,5 +135,9 @@ public class GameWorld {
 	 */
 	public Bob getEnemy() {
 		return enemy_bob;
+	}
+
+	public Map<String,Bob> getPlayerModels() {
+		return playerModels;
 	}
 }

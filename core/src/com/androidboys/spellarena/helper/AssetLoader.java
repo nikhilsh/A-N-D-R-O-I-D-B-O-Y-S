@@ -132,6 +132,7 @@ public class AssetLoader {
 		if(map == null){
 			map = manager.get("maps/Dungeon.tmx",TiledMap.class);
 		}
+		loadSprites();
 		loadAnimations();
 	}
 	
@@ -230,8 +231,6 @@ public class AssetLoader {
 	}
 
 	private static void loadSprites(){
-		charTexture = new Texture(Gdx.files.internal("sprites/wizard.png"));
-		charTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 		southBob = new TextureRegion(charTexture, 60, 35, 30, 30);
 		southWestBob = new TextureRegion(charTexture, 60, 65, 30, 30);
