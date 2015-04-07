@@ -1,4 +1,4 @@
-package appwarp;
+package com.androidboys.spellarena.net;
 
 public interface WarpListener {
 

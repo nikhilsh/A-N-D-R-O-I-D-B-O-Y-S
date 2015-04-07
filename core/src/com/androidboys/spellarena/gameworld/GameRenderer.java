@@ -2,11 +2,9 @@ package com.androidboys.spellarena.gameworld;
 
 import org.json.JSONObject;
 
-import appwarp.WarpController;
-
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
-
+import com.androidboys.spellarena.net.WarpController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -54,7 +52,7 @@ public class GameRenderer {
 		shapeRenderer = new ShapeRenderer();
 		
 		initAssets();
-		initGameObjects();
+		//initGameObjects();
 	}
 
 	private void initAssets(){
@@ -80,10 +78,10 @@ public class GameRenderer {
 		southWestBobAnimation = AssetLoader.southWestBobAnimation;
 	}
 	
-	private void initGameObjects(){
-		bob = world.getBob();
-		enemy = world.getEnemy();
-	}
+//	private void initGameObjects(){
+//		bob = world.getBob();
+//		enemy = world.getEnemy();
+//	}
 	
 	public void render(float runTime) {
 		Gdx.gl.glClearColor(0,0,0,1);
@@ -95,8 +93,8 @@ public class GameRenderer {
 		mapRenderer.render();
 		
 		batcher.setProjectionMatrix(cam.combined);
-		renderBob(runTime);
-		renderEnemy(runTime);
+		//renderBob(runTime);
+		//renderEnemy(runTime);
 		
 
 
@@ -277,7 +275,7 @@ public class GameRenderer {
 	}
 	
 	public void moveCamera(){
-		cam.position.set(bob.getPosition().x,bob.getPosition().y,0);
+		//cam.position.set(bob.getPosition().x,bob.getPosition().y,0);
 		cam.update();
 	}
 	

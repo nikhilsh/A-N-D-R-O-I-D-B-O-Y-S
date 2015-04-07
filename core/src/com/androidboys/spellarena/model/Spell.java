@@ -2,9 +2,8 @@ package com.androidboys.spellarena.model;
 
 import org.json.JSONObject;
 
-import appwarp.WarpController;
-
 import com.androidboys.spellarena.gameworld.GameWorld;
+import com.androidboys.spellarena.net.WarpController;
 import com.badlogic.gdx.math.Vector2;
 
 public class Spell {
@@ -333,7 +332,6 @@ public class Spell {
 			data.put("y", position.y);
 			data.put("spell", spell);
 			data.put("remainingSeconds", remainingSeconds);
-			data.put("state", state);
 			WarpController.getInstance().sendGameUpdate(data.toString());
 		} catch (Exception e) {
 		}

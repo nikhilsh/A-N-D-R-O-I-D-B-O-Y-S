@@ -3,9 +3,8 @@ package com.androidboys.spellarena.model;
 
 import org.json.JSONObject;
 
-import appwarp.WarpController;
-
 import com.androidboys.spellarena.gameworld.GameWorld;
+import com.androidboys.spellarena.net.WarpController;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -50,6 +49,10 @@ public class Bob {
 	private Rectangle bobRect;
 
 	private Array<Rectangle> tiles;
+	private boolean invulnerable;
+	private int index;
+	private String playerName;
+	private int gameIndex;
 
 	/**
 	 * Create a new Bob instance.
@@ -64,6 +67,10 @@ public class Bob {
 		this.state = STATE_ALIVE;
 		this.bobRect = new Rectangle();
 		this.tiles = null;
+	}
+
+	public Bob() {
+		this.position = new Vector2();
 	}
 
 	/**
@@ -395,6 +402,31 @@ public class Bob {
 		return bobRect;
 	}
 
+	public boolean isInvulnerable() {
+		return invulnerable;
+	}
+
+	public int getGameIndex() {
+		return index;
+	}
+
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
+	}
+
+	public String getPlayerName() {
+		return playerName;
+	}
+
+	public void setPosition(Vector2 loadStartPosition) {
+		this.position.x = loadStartPosition.x;
+		this.position.y = loadStartPosition.y;
+	}
+
+	public void setGameIndex(int gameIndex) {
+		this.gameIndex = gameIndex;
+	}
+	
 	public void setAtosSpeed(){
 		if (isEnemy){
 			MAX_SPEED = 100;
@@ -403,5 +435,5 @@ public class Bob {
 			MAX_SPEED = 500;
 		}
 	}
-
+	
 }

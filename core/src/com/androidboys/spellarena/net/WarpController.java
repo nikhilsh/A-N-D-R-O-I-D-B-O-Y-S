@@ -1,7 +1,10 @@
-package appwarp;
+package com.androidboys.spellarena.net;
 
 import java.util.HashMap;
 
+import com.androidboys.spellarena.net.appwarp.NotificationListenerAdapter;
+import com.androidboys.spellarena.net.appwarp.RoomListenerAdapter;
+import com.androidboys.spellarena.net.appwarp.ZoneListenerAdapter;
 import com.badlogic.gdx.Gdx;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
@@ -13,12 +16,14 @@ public class WarpController {
 
 	private WarpClient warpClient;
 
-	private static String apiKey = "b00bdd0998a53bb5916349f708de074644dca88a88aa731dda20d7362a17eda8";
-	private static String pvtKey = "85a61da6f2e21775d09b45cdc02543408add69719d80b195412170026751e597";
-
+	private final static String API_KEY = "b00bdd0998a53bb5916349f708de074644dca88a88aa731dda20d7362a17eda8";
+	private final static String PVT_KEY = "85a61da6f2e21775d09b45cdc02543408add69719d80b195412170026751e597";
+	
+	private String localUser;
+	
 	private boolean isConnected = false;
 
-	private String localUser;
+
 	private String roomId;
 
 	private boolean showLog = false;
@@ -42,9 +47,9 @@ public class WarpController {
 		initAppWarp();
 		warpClient.addConnectionRequestListener(new ConnectionListener(this));
 		warpClient.addChatRequestListener(new ChatListener(this));
-		warpClient.addZoneRequestListener(new ZoneListener(this));
-		warpClient.addRoomRequestListener(new RoomListener(this));
-		warpClient.addNotificationListener(new NotificationListener(this));
+		//warpClient.addZoneRequestListener(new ZoneListenerAdapter(this));
+		//warpClient.addRoomRequestListener(new RoomListenerAdapter(this));
+		//warpClient.addNotificationListener(new NotificationListenerAdapter(this));
 	}
 	
 	public static WarpController getInstance(){
@@ -56,7 +61,7 @@ public class WarpController {
 
 	private void initAppWarp() {
 		try{
-			WarpClient.initialize(apiKey, pvtKey);
+			WarpClient.initialize(API_KEY, PVT_KEY);
 			warpClient = WarpClient.getInstance();
 		} catch (Exception e){
 			e.printStackTrace();

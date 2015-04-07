@@ -6,7 +6,7 @@ import com.androidboys.spellarena.game.ButtonExample;
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.Spell;
-import com.androidboys.spellarena.screens.GameScreen;
+import com.androidboys.spellarena.view.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -17,6 +17,7 @@ public class InputHandler implements InputProcessor{
 
 	private GameWorld world;
 	private Bob bob;
+	private Spell spell;
 
 	private GameScreen screen;
 	private Stage stage;

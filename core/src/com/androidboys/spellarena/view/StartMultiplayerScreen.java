@@ -1,9 +1,8 @@
-package com.androidboys.spellarena.screens;
-
-import appwarp.WarpController;
-import appwarp.WarpListener;
+package com.androidboys.spellarena.view;
 
 import com.androidboys.spellarena.helper.AssetLoader;
+import com.androidboys.spellarena.net.WarpController;
+import com.androidboys.spellarena.net.WarpListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -82,7 +81,7 @@ public class StartMultiplayerScreen implements Screen, WarpListener {
 		if(Gdx.input.justTouched()){
 			cam.unproject(touchPoints.set(Gdx.input.getX(),Gdx.input.getY(),0));
 			if(backBounds.contains(touchPoints.x,touchPoints.y)){
-				game.setScreen(new MainMenuScreen(game, width, height));
+//				game.setScreen(new MainMenuScreen(game, width, height));
 				WarpController.getInstance().handleLeave();
 				return;
 			}
@@ -104,9 +103,9 @@ public class StartMultiplayerScreen implements Screen, WarpListener {
 		batcher.begin();
 		float y = 230;
 		for (int i = msg.length-1; i >= 0; i--) {
-			float width = AssetLoader.playText.getBounds(msg[i]).width;
-			AssetLoader.playText.draw(batcher, msg[i], 240-width/2, y);
-			y += AssetLoader.playText.getLineHeight();
+			float width = AssetLoader.parchmentText.getBounds(msg[i]).width;
+			AssetLoader.parchmentText.draw(batcher, msg[i], 240-width/2, y);
+			y += AssetLoader.parchmentText.getLineHeight();
 		}
 
 		AssetLoader.swordText.draw(batcher, "E", 10, backBounds.height+10);

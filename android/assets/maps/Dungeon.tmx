@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="48" height="27" tilewidth="40" tileheight="40" backgroundcolor="#604b37" nextobjectid="14">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="48" height="27" tilewidth="40" tileheight="40" backgroundcolor="#604b37" nextobjectid="18">
  <tileset firstgid="1" name="FlagsMid" tilewidth="40" tileheight="40">
   <image source="../../../../Downloads/Torstan's100pxTiles/Background/Textures/FlagsMid.jpg" width="400" height="400"/>
  </tileset>
@@ -208,7 +208,7 @@
    eJzVmNtOFEEQQOtT6lPmh3bxYRcfFFNR+Y965A5vcqefBEX9B1HxggoqF3nzdFqTkUwmnd2ZZejkZAPp3j3d011VPT0RHcADeAzPRYp9OIAX8BIO4RW8hjfQVp+cMfdEbAr60EufOoSH8ASe0WcdNmATtmAbdmAX9qCtPjlj7uM8DTjbIM1F+Vtn4CnM0WceFmARlmAZVmAV1qCtPjljHuGMq7Hexp4xnocyJ+X/OgvS8Yajsc7GXjH2u7HnnOfmzN1v2y23zaV9Hs+qcl6cPefzHfG/YI9cwhX8hmu42QdXXU/uyll3zosvdMT/DN8f8BN+wXmFP666kdyVOOWcdV/siP8Jvl/hG3yH0wp/XHUzuSsx1olTvtSQ/zvO1BG8hVHGH+P7ET7BZ/hS4Y+rbiV3JT84MdaXG17/4xH9mXfB/AvWoXgPHyr8cdXt5K7kNic/+EpH9k9Ow1V3kruSl53c5qtj+p/fWO+zEdc/p+Gqu8ldqSmcvOxrDa0/cc8uW3SPDVfdS+561/PXpPyPGvyucv6qy7+cfSMGWAMxsdFWXv+6/EvsNWKwEYuNmGyjxsSmW3n96/Ivuc/IgUYuNHKinXTEv1w/1OXfGBOpQYxaxKhJbNyYePX383qcL5H/64e6/MvvGDWg/YuJFx1Z/3L9cBfzb7l+aCr/TrKV64em8+8kWrl+4A5ZcJcsuFMWsxW1XtcajqFcP3CHL7jLFzPpbh/fAcT4GmNUPOfxrMT9Fp9ZnHesPaStPjljcAy4BpwD7mGA8xCm07uV+A5GyA1CfBVilHDOhbMi7DfhmQnzlrb65IzBMeAahsk99HDuw1R6txXfgQl5TcgNQnwVYpRwzoWzIuw34ZlJW31yxuAYcA395B7+AEhq0jA=
   </data>
  </layer>
- <layer name="Lighting" width="48" height="27">
+ <layer name="Obstacles" width="48" height="27">
   <data encoding="base64" compression="zlib">
    eJzt1NdSwkAAheFgx96xd8Uuir1GwV6xYRffLI+S5yKK/t4ykoCbhL3YM3wzmexuOBe7q2kqssbStNQX/jvux1y7pPnGp813nMb9mKuiUkjYVzpnQ89+zzuTMdP/RoWFs6Fbf/TnnZkW7J/B9+9DgB9KUIoylKMClQGRf/A2VXQLoho1qEUd6tGARjRJ3L+Zbi1oRRvaEUIHOtGFbon799CtF33oxwAGMYRhjGBUsH+u8+tGxugWxjgmMIkpTGMGs5gT7J/r/Lpx/0ToNo8FRLGIJSxjBatY82j/uHH/rNNtA5vYwjZ2oGMXe4hJvP/jdNvHAQ5xhGOc4BRnOJe4/wXdLnGFBK5xg1vc4R5Jifs/0O0RT3jGC17xhnek8CHx/eNHvLx/ihk37h8VlexwJgz2leHFuNPafOfYhXNtWDbrRcad1uY7R6V4+QEg5G5j
   </data>
@@ -219,5 +219,9 @@
   <object id="9" x="11.7009" y="1011.51" width="1908" height="66.3292"/>
   <object id="11" x="12.7797" y="66.7009" width="75.3292" height="969.728"/>
   <object id="12" x="859.463" y="420.846" width="200.444" height="199.791"/>
+ </objectgroup>
+ <objectgroup name="StartPosition">
+  <object id="101" name="player0" x="1399.46" y="519.063"/>
+  <object id="102" name="player1" x="518.065" y="518.156"/>
  </objectgroup>
 </map>

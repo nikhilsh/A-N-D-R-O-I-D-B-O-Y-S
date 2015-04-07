@@ -1,5 +1,11 @@
 package com.androidboys.spellarena.gameworld;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import com.androidboys.spellarena.gameworld.GameFactory.GameModel;
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
 import com.badlogic.gdx.maps.MapLayer;
@@ -9,23 +15,26 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 
 public class GameWorld {
 
+	private Random random = new Random();
+	
 	//Boundaries
 	public static final float WORLD_BOUND_LEFT = 80;
 	public static final float WORLD_BOUND_RIGHT = 1805;
 	public static final float WORLD_BOUND_TOP = 960;
 	public static final float WORLD_BOUND_BOTTOM = 70;
-
-	private World physicsWorld;
-
 	
 	//Characters
-	private final Bob local_bob;
-	private final Bob enemy_bob;
+	private Map<String, Bob> playerModels = new HashMap<String, Bob>();
+	private ArrayList<Object> gameObjects = new ArrayList<Object>();
+	//Characters
+		private  Bob local_bob;
+		private  Bob enemy_bob;
 	
 	//Map
 	private TiledMap map;
@@ -38,7 +47,7 @@ public class GameWorld {
 	};
 	private Array<Rectangle> tiles = new Array<Rectangle>();
 	
-	public GameWorld(){
+	public void initialize(GameModel model){
 		//Create new characters
 		this.local_bob = new Bob(810, 540, false);
 		this.enemy_bob = new Bob(810, 540, true);
@@ -46,6 +55,23 @@ public class GameWorld {
 		map = AssetLoader.map;
 	}
 	
+	private void updatePlayerModels(float delta){
+		for(Bob bob: playerModels.values()){
+			if (bob.getState() != Bob.STATE_DEAD){
+				updatePlayerModel(bob, delta);
+			}
+		}
+	}
+	
+	private void updatePlayerModel(Bob bob, float delta) {
+//		if(bob.isInvulnerable()){
+//			bob.decrementImmortalDuration(delta);
+//		}
+		bob.updateObstacles(tiles);
+		bob.update(delta);
+		
+	}
+
 	/**
 	 * Get the instance of character.
 	 */
@@ -58,12 +84,7 @@ public class GameWorld {
 	 */
 	public void update(float delta) {
 		getObstacles();
-		local_bob.updateObstacles(tiles);
-		
-		local_bob.update(delta);
-		enemy_bob.update(delta);
-		local_bob.sendLocation(0);
-		
+		//updatePlayerModels(delta);		
 	}
 	
 	private void getObstacles(){
@@ -83,6 +104,24 @@ public class GameWorld {
 			rect.set(x, y, width, height);
 			tiles.add(rect);
 		}
+	}
+
+	public Bob getPlayerModel(String playerName) {
+		return playerModels.get(playerName);
+	}
+
+	public int getNextGameIndex() {
+		int max = 0;
+		for(Bob bob: playerModels.values()){
+			if(bob.getGameIndex() > max) {
+				max = bob.getGameIndex();
+			}
+		}
+		return 0;
+	}
+
+	public void addPlayerModel(Bob bob) {
+		playerModels.put(bob.getPlayerName(), bob);
 	}
 	
 	/**
