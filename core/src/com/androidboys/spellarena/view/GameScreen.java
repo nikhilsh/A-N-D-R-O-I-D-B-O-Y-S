@@ -13,6 +13,7 @@ import com.androidboys.spellarena.helper.StyleLoader;
 import com.androidboys.spellarena.mediators.GameScreenMediator;
 import com.androidboys.spellarena.mediators.Mediator;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.Bob.Direction;
 import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.net.WarpListener;
 import com.androidboys.spellarena.servers.GameServer;
@@ -57,6 +58,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 
@@ -158,6 +160,7 @@ public class GameScreen implements Screen{
 			initializeGameOnServer();
 			gameServer = new GameServer(world);
 			gameServer.initialize(game.getClient(),gameScreenMediator);
+			gameScreenMediator.setGameServer(gameServer);
 		}
 		
 		createTouchpad();
@@ -338,8 +341,57 @@ public class GameScreen implements Screen{
 
 
 	private void prepareInputProcessor() {
-		// TODO Auto-generated method stub
+		touchpad.addListener(new ChangeListener() {
 		
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Direction direction;
+				Vector2 newV;
+				float touchX = touchpad.getKnobPercentX();
+				float touchY = touchpad.getKnobPercentY();
+				if(touchX > 0.5){
+					if(touchY > 0.5){
+						direction = Direction.NORTHEAST;
+						newV = new Vector2(MAX_SPEED, MAX_SPEED);
+						
+					} else if (touchY < -0.5){
+						direction = Direction.SOUTHEAST;
+						newV = new Vector2(MAX_SPEED, -MAX_SPEED);
+						
+					} else {
+						direction = Direction.EAST;
+						newV = new Vector2(MAX_SPEED,	0);
+					}
+				}else if (touchX < -0.5){
+					if(touchY > 0.5){
+						direction = Direction.NORTHWEST;
+						newV = new Vector2(-MAX_SPEED, MAX_SPEED);
+					} else if (touchY < -0.5){
+						direction = Direction.SOUTHWEST;
+						newV = new Vector2(-MAX_SPEED, -MAX_SPEED);
+					} else {
+						direction = Direction.WEST;
+						newV = new Vector2(-MAX_SPEED, 0);
+					}
+				} else {
+					if(touchY > 0.5){
+						direction = Direction.NORTH;
+						newV = new Vector2(0, MAX_SPEED);
+					} else if(touchY < -0.5) {
+						direction = Direction.SOUTH;
+						newV = new Vector2(0, -MAX_SPEED);
+					} else {
+						newV = new Vector2(0,0);
+					}
+				}
+				if(!newV.equals(velocity)){
+					needsUpdate = true;
+					this.setVelocity(newV.x, newV.y);
+				}
+			}
+		})
+		
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	private void initializeBeforeGamePanel() {
@@ -359,31 +411,46 @@ public class GameScreen implements Screen{
 		roomOwner = new Label("", StyleLoader.smallParchmentLabel);
 		beforeGamePanel.addActor(roomOwner);
 		roomOwner.setBounds(0, 200, 300, 100);
-		
 		roomOwner.setVisible(false);
+		roomOwner.setAlignment(Align.center);
 		p2Label = new Label("", StyleLoader.smallParchmentLabel);
 		beforeGamePanel.addActor(p2Label);
 		p2Label.setBounds(300, 200, 300, 100);
 		p2Label.setVisible(false);
+		p2Label.setAlignment(Align.center);
 		p3Label = new Label("", StyleLoader.smallParchmentLabel);
 		beforeGamePanel.addActor(p3Label);
 		p3Label.setBounds(0, 100, 300, 100);
 		p3Label.setVisible(false);
+		p3Label.setAlignment(Align.center);
 		p4Label = new Label("", StyleLoader.smallParchmentLabel);
 		beforeGamePanel.addActor(p4Label);
 		p4Label.setBounds(300, 100, 300, 100);
 		p4Label.setVisible(false);
+		p4Label.setAlignment(Align.center);
 		roomName = new Label("", StyleLoader.smallParchmentLabel);
 		beforeGamePanel.addActor(roomName);
-		roomName.setBounds(0, 0, 600, 40);
+		roomName.setBounds(0, 280, 600, 40);
+		roomName.setAlignment(Align.center);
 		roomName.setText(UserSession.getInstance().getRoom().getName());
-		startGameButton = new TextButton("Start Game",StyleLoader.smallParchmentButtonStyle);
+		startGameButton = new TextButton("Start Game",StyleLoader.parchmentButtonStyle);
 		startGameButton.setVisible(false);
-		startGameButton.setBounds(100,40,400,60);
+		startGameButton.setBounds(100,20,400,60);
 		startGameButton.align(Align.center);
+		beforeGamePanel.addActor(startGameButton);
 		if(UserSession.getInstance().isServer()){
-			setBeforeGamePanelTitle("Waiting for players...");
-			roomOwner.setText("Player 1 (Room Owner) :" + UserSession.getInstance().getUserName());
+			setBeforeGamePanelTitle("Waiting for players");
+			roomOwner.setText("Room Owner\n\n" + UserSession.getInstance().getUserName());
+			startGameButton.setVisible(true);
+			startGameButton.addListener(new ClickListener(){
+				
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					Gdx.app.log(TAG,"Start game button clicked");
+					beforeGamePanel.remove();
+					gameServer.createGame();
+				}
+			});
 			roomOwner.setVisible(true);
 		} else {
 			setBeforeGamePanelTitle("Waiting for game to start");
@@ -606,15 +673,6 @@ public class GameScreen implements Screen{
 			}
 			if(UserSession.getInstance().isServer()){
 				startGameButton.setVisible(true);
-				startGameButton.addListener(new ClickListener(){
-					
-					@Override
-					public void clicked(InputEvent event, float x, float y) {
-						Gdx.app.log(TAG,"Start game button clicked");
-						beforeGamePanel.remove();
-						gameServer.createGame();
-					}
-				});
 			}
 		} else {
 			Gdx.app.log(TAG,"Player already in room");
@@ -727,8 +785,7 @@ public class GameScreen implements Screen{
 	private Vector2 loadStartPosition(int gameIndex) {
 		MapLayer layer = (MapLayer) map.getLayers().get("StartPosition");
 		for(MapObject mapObject: layer.getObjects()){
-			System.out.println("map "+mapObject.getName());
-			System.out.println("id "+"player"+gameIndex);
+
 			if(mapObject.getName().equals("player"+gameIndex)){
 				float x = (Float) mapObject.getProperties().get("x");
 				float y = (Float) mapObject.getProperties().get("y");
@@ -753,8 +810,12 @@ public class GameScreen implements Screen{
 
 	public void startGame() {
 		touchpad.setVisible(true);
-		//Set other buttons to be visible
+	}
 
+
+	public void onCreateGame() {
+		beforeGamePanel.remove();
+		world.initialize(GameFactory.getGameModel());
 	}
 
 	public ButtonExample[] getCommandList() {
