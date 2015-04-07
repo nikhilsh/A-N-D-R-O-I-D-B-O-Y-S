@@ -1,10 +1,20 @@
 package com.androidboys.spellarena.game;
 
+import java.util.Map;
+import java.util.Stack;
+
 import com.androidboys.spellarena.helper.AssetLoader;
-import com.androidboys.spellarena.screens.MainMenuScreen;
+import com.androidboys.spellarena.mediators.GameScreenMediator;
+import com.androidboys.spellarena.net.NetworkInterface;
+import com.androidboys.spellarena.net.appwarp.AppWarpClient;
+import com.androidboys.spellarena.session.UserSession;
+import com.androidboys.spellarena.view.GameScreen;
+import com.androidboys.spellarena.view.MainMenuScreen;
+import com.androidboys.spellarena.view.SplashScreen;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,7 +22,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class SpellArena extends Game {
 	
+	private static final String TAG = "SpellArena";
+	
 	FPSLogger fps;
+	final private Stack<Screen> screens = new Stack<Screen>();
+	
+    public static enum ScreenType {
+        SPLASH, PLAY, LOBBY
+    }
+	
+	private NetworkInterface client = new AppWarpClient(UserSession.getInstance().getUserName());
+
+	private Screen topScreen;
 	
 	/**
 	 * Called when the Application is first created.
@@ -20,8 +41,8 @@ public class SpellArena extends Game {
 	 */
 	@Override
 	public void create () {
-		AssetLoader.load();
-		setScreen(new MainMenuScreen(this,480,320));
+		setScreen(new SplashScreen(this));
+		Gdx.input.setCatchBackKey(true);
 		fps = new FPSLogger();
 	}
 
@@ -42,5 +63,73 @@ public class SpellArena extends Game {
 	public void dispose () {
 		super.dispose();
 		
+	}
+	
+	public void switchScreen(final ScreenType screenType) {
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                displayLoadingWidget();
+                switch (screenType) {
+                    case PLAY:
+                    	AssetLoader.setGameResources();
+                        GameScreenMediator mediator = new GameScreenMediator(SpellArena.this, client);
+                        addScreen(mediator.createScreen());
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        });
+    }
+	
+	public void addScreen(Screen screen) {
+		if(screen == null){
+			Gdx.app.log(TAG,"No screen found");
+		}
+		if(getTopScreen() != null){
+			getTopScreen().hide();
+		}
+		screens.push(screen);
+		this.topScreen = getTopScreen();
+		displayTopScreen();
+	}
+	
+	private void displayTopScreen() {
+		setScreen(this.topScreen);
+	}
+
+	private Screen getTopScreen() {
+		try{
+			return screens.peek();
+		} catch (Exception e){
+			return null;
+		}
+	}
+
+	private void displayLoadingWidget() {
+		Screen screen = getScreen();
+		if (screen instanceof GameScreen) {
+			((GameScreen) screen).displayLoadingWidget();
+		}
+		
+	}
+
+	public NetworkInterface getClient(){
+		return client;
+	}
+
+	public void backToPreviousScreen() {
+		try{
+			Screen top = screens.pop();
+			top.hide();
+			top.dispose();
+			this.topScreen = getTopScreen();
+			displayTopScreen();
+		} catch (Exception e){
+			Gdx.app.error(TAG,"No previous screen");
+		}
+
 	}
 }

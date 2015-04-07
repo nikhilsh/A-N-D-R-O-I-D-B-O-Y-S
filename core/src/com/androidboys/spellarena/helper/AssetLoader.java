@@ -2,6 +2,9 @@ package com.androidboys.spellarena.helper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,18 +12,24 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 public class AssetLoader {
 
-	public static TextureRegion backgroundRegion;
+	private static final String TAG = "AssetLoader";
 
-	public static Texture buttonTexture;
+	public static AssetManager manager = new AssetManager();
 	
-	public static TextureRegion playRegion, helpRegion;
+	public static Texture backgroundTexture;
+	public static TextureRegion backgroundRegion;
+	
+	public static Texture loadingTexture;
 	
 	public static Texture charTexture;
 	public static TextureRegion northBob, eastBob, southBob, westBob, 
@@ -28,12 +37,107 @@ public class AssetLoader {
 	public static Animation northBobAnimation, eastBobAnimation, southBobAnimation, westBobAnimation, 
 		northEastBobAnimation, southEastBobAnimation, southWestBobAnimation, northWestBobAnimation;
 	
-	
-	public static BitmapFont header, playText, swordText;
+	public static BitmapFont header, playText, playTextSmall, swordText, parchmentText, smallParchmentText;
 	
 	public static TiledMap map;
 	
 	public static Preferences prefs;
+	
+	public static void queueLoading(){
+		
+		manager.load("images/bg.jpg", Texture.class);
+		manager.load("images/ParchmentLabel.png", Texture.class);
+		TextureParameter param = new TextureParameter();
+		param.minFilter = TextureFilter.Nearest;
+		param.magFilter = TextureFilter.Nearest;
+		manager.load("sprites/wizard.png", Texture.class, param);
+		
+		manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
+		manager.load("fonts/header.TTF",FreeTypeFontGenerator.class);
+		manager.load("fonts/play.TTF",FreeTypeFontGenerator.class);
+		manager.load("fonts/Fantasy.ttf",FreeTypeFontGenerator.class);
+		
+		manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+		manager.load("maps/Dungeon.tmx",TiledMap.class);
+	}
+	
+	public static void setMainMenuResources(){
+		Gdx.app.log(TAG, "Setting main menu resources");
+		if (backgroundTexture == null){
+			backgroundTexture = manager.get("images/bg.jpg",Texture.class);
+		}
+		if (loadingTexture == null){
+			loadingTexture = manager.get("images/ParchmentLabel.png",Texture.class);
+		}
+		backgroundRegion = new TextureRegion(backgroundTexture);
+		FreeTypeFontParameter fontPars;
+		if (header == null){
+			fontPars = new FreeTypeFontParameter();
+			fontPars.size = 60;
+			fontPars.color = new Color(199/255f, 176/255f, 151/255f, 1);
+			fontPars.borderColor = Color.BLACK;
+			fontPars.borderWidth = 1;
+			header = manager.get("fonts/header.TTF",FreeTypeFontGenerator.class).generateFont(fontPars);
+			Gdx.app.log(TAG, "Setting fonts");
+		}
+		if (playText == null){
+			fontPars = new FreeTypeFontParameter();
+			fontPars.size = 32;
+			fontPars.color = Color.WHITE;
+			fontPars.borderColor = Color.BLACK;
+			fontPars.borderWidth = 1;
+			playText = manager.get("fonts/play.TTF",FreeTypeFontGenerator.class).generateFont(fontPars);
+		}
+		if (parchmentText == null){
+			fontPars = new FreeTypeFontParameter();
+			fontPars.size = 28;
+//			fontPars.color = new Color(180/255f, 122/255f, 115/255f, 1);
+			fontPars.color = Color.BLACK;
+			fontPars.borderColor = Color.GRAY;
+			fontPars.borderWidth = 1;
+			parchmentText = manager.get("fonts/play.TTF",FreeTypeFontGenerator.class).generateFont(fontPars);
+		}
+		if (playTextSmall == null){
+			fontPars = new FreeTypeFontParameter();
+			fontPars.size = 18;
+			fontPars.color = Color.WHITE;
+			fontPars.borderColor = Color.BLACK;
+			fontPars.borderWidth = 1;
+			playTextSmall = manager.get("fonts/play.TTF",FreeTypeFontGenerator.class).generateFont(fontPars);
+		}
+		if (smallParchmentText == null){
+			fontPars = new FreeTypeFontParameter();
+			fontPars.size = 18;
+//			fontPars.color = new Color(180/255f, 122/255f, 115/255f, 1);
+			fontPars.color = Color.BLACK;
+			fontPars.borderColor = Color.GRAY;
+			fontPars.borderWidth = 1;
+			smallParchmentText = manager.get("fonts/play.TTF",FreeTypeFontGenerator.class).generateFont(fontPars);
+		}
+		if (swordText == null){
+			fontPars = new FreeTypeFontParameter();
+			fontPars.size = 60;
+			fontPars.color = new Color(199/255f, 176/255f, 151/255f, 1);
+			fontPars.borderColor = Color.BLACK;
+			fontPars.borderWidth = 1;
+			swordText = manager.get("fonts/Fantasy.ttf",FreeTypeFontGenerator.class).generateFont(fontPars);
+		}
+	}
+	
+	public static void setGameResources(){
+		Gdx.app.log(TAG, "Setting game resources");
+		if(charTexture == null){
+			charTexture = manager.get("sprites/wizard.png",Texture.class);
+		}
+		if(map == null){
+			map = manager.get("maps/Dungeon.tmx",TiledMap.class);
+		}
+		loadAnimations();
+	}
+	
+	public static boolean update(){
+		return manager.update();
+	}
 	
 	public static void load(){
 		
@@ -188,7 +292,6 @@ public class AssetLoader {
 	}
 	
 	public static void dispose(){
-		buttonTexture.dispose();
 		header.dispose();
 	}
 }

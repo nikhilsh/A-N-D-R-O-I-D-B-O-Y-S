@@ -1,4 +1,4 @@
-package appwarp;
+package com.androidboys.spellarena.net;
 
 import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
 import com.shephertz.app42.gaming.multiplayer.client.events.ConnectEvent;

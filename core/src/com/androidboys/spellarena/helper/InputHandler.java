@@ -3,7 +3,7 @@ package com.androidboys.spellarena.helper;
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.Spell;
-import com.androidboys.spellarena.screens.GameScreen;
+import com.androidboys.spellarena.view.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -25,7 +25,7 @@ public class InputHandler implements InputProcessor{
 	
 	public InputHandler(GameWorld world, GameScreen screen) {
 		this.world = world;
-		this.bob = world.getBob();
+		//this.bob = world.getBob();
 		
 		this.screen = screen;
 		this.stage = screen.getStage();
