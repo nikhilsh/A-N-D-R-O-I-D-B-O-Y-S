@@ -45,7 +45,9 @@ public class GameServer {
 						case Command.MOVE:
 							
 							break;
-	
+						case Command.CLOCK_SYNC_RES:
+							handleClockSyncResponseCommand(command);
+							break;
 						default:
 							break;
 					}
@@ -56,6 +58,11 @@ public class GameServer {
 		
 //		GameFactory.GameModel gameModel = GameFactory.getGameModel(gameScreenMediator.getLevel());
 //		executorService = Executors.newScheduledThreadPool(corePoolSize) 
+	}
+
+	protected void handleClockSyncResponseCommand(Command command) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public void createGame() {

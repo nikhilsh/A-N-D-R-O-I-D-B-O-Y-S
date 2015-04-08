@@ -2,11 +2,11 @@ package com.androidboys.spellarena.helper;
 
 import java.util.ArrayList;
 
-import com.androidboys.spellarena.game.ButtonExample;
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.view.GameScreen;
+import com.androidboys.spellarena.view.widgets.ButtonWidget;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -23,7 +23,7 @@ public class InputHandler implements InputProcessor{
 	private Stage stage;
 	private Touchpad touchpad;
 	//private int[] spellList;
-	private ButtonExample[] commandList;
+	private ButtonWidget[] commandList;
 	private InputMultiplexer im;
 
 

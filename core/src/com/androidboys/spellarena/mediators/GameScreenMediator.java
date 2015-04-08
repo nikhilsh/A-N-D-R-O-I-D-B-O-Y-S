@@ -59,9 +59,6 @@ public class GameScreenMediator extends Mediator{
 							case Command.CLOCK_SYNC_REQ:
 								handleClockSyncRequestCommand(command);
 								break;
-							case Command.CLOCK_SYNC_RES:
-								handleClockSyncResponseCommand(command);
-								break;
 							case Command.MOVE:
 								handleMoveCommand(command);
 								break;

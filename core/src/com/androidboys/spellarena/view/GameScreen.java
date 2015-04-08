@@ -2,7 +2,6 @@ package com.androidboys.spellarena.view;
 
 import org.json.JSONObject;
 
-import com.androidboys.spellarena.game.ButtonExample;
 import com.androidboys.spellarena.game.SpellArena;
 import com.androidboys.spellarena.gameworld.GameFactory;
 import com.androidboys.spellarena.gameworld.GameRenderer;
@@ -18,6 +17,7 @@ import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.net.WarpListener;
 import com.androidboys.spellarena.servers.GameServer;
 import com.androidboys.spellarena.session.UserSession;
+import com.androidboys.spellarena.view.widgets.ButtonWidget;
 import com.androidboys.spellarena.view.widgets.LoadingWidget;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -121,7 +121,7 @@ public class GameScreen implements Screen{
 	private Group loseGamePopUp;
 	private TextButton startGameButton;
 	
-	private ButtonExample[] commandList = new ButtonExample[3];
+	private ButtonWidget[] commandList = new ButtonWidget[3];
     private int[] spellList = new int[3];
     int commandCount = 0;
 	private MovementChangeListener movementChangeListener;
@@ -758,7 +758,7 @@ public class GameScreen implements Screen{
 	
 	public void createSpellButtons(){
 		Texture textureUp   = new Texture(Gdx.files.internal("images/wex.png"));
-        ButtonExample myButton   = new ButtonExample(textureUp);
+        ButtonWidget myButton   = new ButtonWidget(textureUp);
 
         myButton.setPosition(790, 70);
         myButton.setSize(130, 130);
@@ -773,7 +773,7 @@ public class GameScreen implements Screen{
 
         Texture textureUp2   = new Texture(Gdx.files.internal("images/quas.png"));
 
-        final ButtonExample myButton2   = new ButtonExample(textureUp2);
+        final ButtonWidget myButton2   = new ButtonWidget(textureUp2);
 
         myButton2.setPosition(630, 70);
         myButton2.setSize(130, 130);
@@ -787,7 +787,7 @@ public class GameScreen implements Screen{
 
         Texture textureUp3   = new Texture(Gdx.files.internal("images/exort.png"));
 
-        ButtonExample myButton3   = new ButtonExample(textureUp3);
+        ButtonWidget myButton3   = new ButtonWidget(textureUp3);
 
         myButton3.setPosition(790, 235);
         myButton3.setSize(130, 130);
@@ -824,7 +824,7 @@ public class GameScreen implements Screen{
 	                break;	
 	        }
 
-	        ButtonExample newButton = new ButtonExample(texture, indexOfButtonPressed);
+	        ButtonWidget newButton = new ButtonWidget(texture, indexOfButtonPressed);
 //	        newButton.setPosition(10, 550);
 	        newButton.setSize(60, 60);
 	        if (commandList[2] != null) {
@@ -897,7 +897,7 @@ public class GameScreen implements Screen{
 		world.initialize(GameFactory.getGameModel());
 	}
 
-	public ButtonExample[] getCommandList() {
+	public ButtonWidget[] getCommandList() {
 		return commandList;
 	}
 
