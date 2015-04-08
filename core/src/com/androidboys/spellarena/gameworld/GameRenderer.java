@@ -86,6 +86,7 @@ public class GameRenderer {
 		Gdx.app.log(TAG,"Initialising game objects");
 		Map<String,Bob> bobs = world.getPlayerModels();
 		for(String name: bobs.keySet()){
+			Gdx.app.log(TAG,"initGameObjects "+name.equals(UserSession.getInstance().getUserName()));
 			if(name.equals(UserSession.getInstance().getUserName())){
 				bob = bobs.get(name);
 			}
@@ -105,8 +106,7 @@ public class GameRenderer {
 		mapRenderer.render();
 		
 		batcher.setProjectionMatrix(cam.combined);
-		if(bob!=null)
-		renderBob(runTime);
+		if(bob!=null)renderBob(runTime);
 		if(!enemies.isEmpty())renderEnemy(runTime);
 		
 
@@ -140,6 +140,7 @@ public class GameRenderer {
 
 		
 		batcher.begin();
+		batcher.setColor(Color.WHITE);
 		if(bob.getState() == Bob.STATE_ALIVE){
 			switch(bob.getDirection()){
 				case EAST:
@@ -213,9 +214,9 @@ public class GameRenderer {
 	
 	private void renderEnemy(float runTime){
 		batcher.begin();
-		batcher.setColor(180/255f,0,0,1f);
+		batcher.setColor(255/255f,128/255f,128/255f,1f);
 		for(Bob enemy: enemies){
-			if(enemy.getState() == enemy.STATE_ALIVE){
+			if(enemy.getState() == enemy.STATE_ALIVE&&enemy.getPlayerName()!=UserSession.getInstance().getUserName()){
 				switch(enemy.getDirection()){
 					case EAST:
 						batcher.draw(eastBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);

@@ -59,6 +59,9 @@ public class GameScreenMediator extends Mediator{
 							case Command.CLOCK_SYNC_REQ:
 								handleClockSyncRequestCommand(command);
 								break;
+							case Command.CLOCK_SYNC_RES:
+								handleClockSyncResponseCommand(command);
+								break;
 							case Command.MOVE:
 								handleMoveCommand(command);
 								break;
@@ -113,12 +116,15 @@ public class GameScreenMediator extends Mediator{
 	}
 	
 	private void handleClockSyncRequestCommand(Command c){
-		long requestSendTime = c.getTimeStamp();
-		long currentTime = System.currentTimeMillis();
-		Gdx.app.log(TAG, "Sync request time: "+requestSendTime+" Sync receive time: "+currentTime+" Delay: "+(currentTime - requestSendTime));
 		ClockSyncResCommand command = new ClockSyncResCommand();
 		command.setFromUser(UserSession.getInstance().getUserName());
+		command.setInitialTimeStamp(c.getTimeStamp());
 		networkInterface.sendMessageTo(c.getFromUser(), command.serialize());
+	}
+	
+	private void handleClockSyncResponseCommand(Command c){
+		long delay = ((ClockSyncResCommand)c).getInitialTimeStamp() - c.getTimeStamp();
+		Gdx.app.log(TAG,"lag: "+delay);
 	}
 	
 	private void handleMoveCommand(Command c){

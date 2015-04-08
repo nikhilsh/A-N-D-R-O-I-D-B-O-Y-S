@@ -436,6 +436,7 @@ public class MainMenuScreen implements Screen {
 	
 	protected void createNewGame() {
 		Gdx.app.log(TAG, "New game created.");
+		processingJoinRoom = true;
 		//UserSession.getInstance().setUserName(userNameLabel.getMessageText());
 		displayLoadingWidget();
 		Random random = new Random(System.currentTimeMillis());
