@@ -6,7 +6,7 @@ import com.androidboys.spellarena.net.model.RoomModel;
 
 public interface NetworkInterface {
 
-	public static final int MAX_USERS = 2;
+	public static final int MAX_USERS = 4;
 	
 	public static interface NetworkListener{
 		 public void onConnected();

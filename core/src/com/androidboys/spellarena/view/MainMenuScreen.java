@@ -138,7 +138,7 @@ public class MainMenuScreen implements Screen {
 			}
 			
 		});
-		createButton.debugActor();
+		//createButton.debugActor();
 		initializeGameList();
 		networkListenerAdapter = new NetworkListenerAdapter(){
 
@@ -257,31 +257,32 @@ public class MainMenuScreen implements Screen {
 	}
 	
 	private void reloadGameListPanels(List<RoomModel> rooms) {
-		gameTable.clearChildren();
-		gameTable.clearListeners();
-		if(rooms != null){
-			for(final RoomModel roomModel: rooms){
-				try{
-					Group group = createGameListItem(roomModel);
-                    gameTable.row();
-                    gameTable.add(group)
-                    .width(460)
-                    .height(40);
-				} catch (Exception e){
-					
+		synchronized(gameTable){
+			gameTable.clearChildren();
+			gameTable.clearListeners();
+			if(rooms != null){
+				for(final RoomModel roomModel: rooms){
+					try{
+						Group group = createGameListItem(roomModel);
+	                    gameTable.row();
+	                    gameTable.add(group)
+	                    .width(460)
+	                    .height(40);
+					} catch (Exception e){
+						
+					}
 				}
-			}
-			if(rooms.size() < 6){
-				for(int i = rooms.size(); i<6 ; i++){
-					Group group = createGameListItem(null);
-					gameTable.row();
-					gameTable.add(group)
-                    .width(460)
-                    .height(40);
+				if(rooms.size() < 6){
+					for(int i = rooms.size(); i<6 ; i++){
+						Group group = createGameListItem(null);
+						gameTable.row();
+						gameTable.add(group)
+	                    .width(460)
+	                    .height(40);
+					}
 				}
 			}
 		}
-
 	}
 
 	private Group createGameListItem(final RoomModel roomModel) {
@@ -303,7 +304,7 @@ public class MainMenuScreen implements Screen {
 		} else {
 			joinGameButton = new TextButton("Join Game", smallButtonStyle);
 		}
-		joinGameButton.debugActor();
+		//joinGameButton.debugActor();
 		group.addActor(label);
 		group.addActor(joinGameButton);
 		joinGameButton.right();
@@ -438,9 +439,11 @@ public class MainMenuScreen implements Screen {
 		//UserSession.getInstance().setUserName(userNameLabel.getMessageText());
 		displayLoadingWidget();
 		Random random = new Random(System.currentTimeMillis());
-		game.getClient().createRoom(UserSession.getInstance().getUserName()
-				+ " Room " 
-				+ random.nextInt(1000));
+		synchronized (gameTable) {
+			game.getClient().createRoom(UserSession.getInstance().getUserName()
+					+ " Room " 
+					+ random.nextInt(1000));
+		}
 	}
 	
 	private void joinGame(RoomModel roomModel) {
@@ -564,7 +567,7 @@ public class MainMenuScreen implements Screen {
 				joinedRoomFailedPopUp.setVisible(false);
 			}
 		});
-		stage.addActor(connectionErrorPopUp);
+		stage.addActor(joinedRoomFailedPopUp);
 	}
 	
 	private void updateUserInfo(){

@@ -448,6 +448,16 @@ public class GameScreen implements Screen{
 				}
 				super.touchDragged(event, x, y, pointer);
 			}
+			
+			@Override
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				if(GameScreen.this.movement!=MOVEMENT_NONE){
+					GameScreen.this.movement = MOVEMENT_NONE ;
+					movementChangeListener.onMovementChanged(movement);
+				}
+				super.touchUp(event, x, y, pointer, button);
+			}
 		});
 		Gdx.input.setInputProcessor(stage);
 	}
