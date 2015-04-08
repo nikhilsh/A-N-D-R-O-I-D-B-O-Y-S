@@ -42,7 +42,7 @@ public class GameServer {
 				Command command = commandFactory.createCommand(message);
 				if(command != null) {
 					switch (command.getCommand()) {
-						case Command.MOVE_EAST:
+						case Command.MOVE:
 							
 							break;
 	

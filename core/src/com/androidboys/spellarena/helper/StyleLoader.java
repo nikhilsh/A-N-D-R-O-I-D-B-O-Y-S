@@ -1,7 +1,9 @@
 package com.androidboys.spellarena.helper;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 
 public class StyleLoader {
 
@@ -12,6 +14,8 @@ public class StyleLoader {
 	public static TextButtonStyle buttonStyle;
 	
 	public static TextButtonStyle parchmentButtonStyle, smallParchmentButtonStyle;
+	
+	public static TextFieldStyle textFieldStyle;
 	
 	public static void prepareStyles(){
 		
@@ -30,6 +34,11 @@ public class StyleLoader {
 		parchmentButtonStyle.font = AssetLoader.parchmentText;
 		smallParchmentButtonStyle = new TextButtonStyle(buttonStyle);
 		smallParchmentButtonStyle.font = AssetLoader.smallParchmentText;
+		
+		textFieldStyle = new TextFieldStyle();
+		textFieldStyle.fontColor = Color.WHITE;
+		textFieldStyle.font = AssetLoader.playTextSmall;
+		textFieldStyle.messageFont = AssetLoader.playTextSmall;
 		
 	}
 	

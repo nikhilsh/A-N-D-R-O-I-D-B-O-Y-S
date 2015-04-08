@@ -31,8 +31,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class MainMenuScreen implements Screen {
@@ -66,7 +68,7 @@ public class MainMenuScreen implements Screen {
 	
 	private ShapeRenderer debugRenderer;
 	private NetworkListenerAdapter networkListenerAdapter;
-	private Label userNameLabel;
+	private TextField userNameLabel;
 	private Group connectionErrorPopUp;
 	private float updateCounter;
 	
@@ -116,8 +118,7 @@ public class MainMenuScreen implements Screen {
 				stage.getWidth(), 
 				spellText.getHeight());
 		
-		userNameLabel = new Label("",StyleLoader.tableLabelStyle);
-		
+		userNameLabel = new TextField("",StyleLoader.textFieldStyle);
 		stage.addActor(userNameLabel);
 		userNameLabel.setBounds(20, stage.getHeight() - 40, userNameLabel.getWidth(), 40);
 				
@@ -434,6 +435,7 @@ public class MainMenuScreen implements Screen {
 	
 	protected void createNewGame() {
 		Gdx.app.log(TAG, "New game created.");
+		//UserSession.getInstance().setUserName(userNameLabel.getMessageText());
 		displayLoadingWidget();
 		Random random = new Random(System.currentTimeMillis());
 		game.getClient().createRoom(UserSession.getInstance().getUserName()
@@ -442,6 +444,7 @@ public class MainMenuScreen implements Screen {
 	}
 	
 	private void joinGame(RoomModel roomModel) {
+		//UserSession.getInstance().setUserName(userNameLabel.getText());
 		processingJoinRoom = true;
 		displayLoadingWidget();
 		UserSession.getInstance().setRoom(roomModel);
@@ -565,7 +568,7 @@ public class MainMenuScreen implements Screen {
 	}
 	
 	private void updateUserInfo(){
-		userNameLabel.setText(UserSession.getInstance().getUserName());
+		userNameLabel.setMessageText(UserSession.getInstance().getUserName());
 	}
 	
 	

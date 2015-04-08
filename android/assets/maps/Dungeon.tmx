@@ -221,7 +221,7 @@
   <object id="12" x="859.463" y="420.846" width="200.444" height="199.791"/>
  </objectgroup>
  <objectgroup name="StartPosition">
-  <object id="101" name="player0" x="1399.46" y="519.063"/>
+  <object id="101" name="player2" x="1399.46" y="519.063"/>
   <object id="102" name="player1" x="518.065" y="518.156"/>
  </objectgroup>
 </map>

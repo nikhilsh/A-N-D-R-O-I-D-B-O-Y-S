@@ -1,6 +1,7 @@
 package com.androidboys.spellarena.session;
 
 import com.androidboys.spellarena.net.model.RoomModel;
+import com.badlogic.gdx.Gdx;
 
 public class UserSession {
 
@@ -9,6 +10,7 @@ public class UserSession {
 	private RoomModel room;
 	
 	public static final UserSession INSTANCE = new UserSession();
+	private static final String TAG = "UserSession";
 	
 	public static UserSession getInstance(){
 		return INSTANCE;
@@ -20,8 +22,8 @@ public class UserSession {
 	}
 
 	private String generateUserName() {
-//		return "haoqin";
-		return "Player "+Long.toString(userId);
+		return "haoqin";
+		//return "Player "+Long.toString(userId);
 	}
 
 	private long generateUserId() {
@@ -41,6 +43,7 @@ public class UserSession {
 	}
 
 	public void setUserName(String userName) {
+		Gdx.app.log(TAG, "User name changed: "+userName);
 		this.userName = userName;
 	}
 

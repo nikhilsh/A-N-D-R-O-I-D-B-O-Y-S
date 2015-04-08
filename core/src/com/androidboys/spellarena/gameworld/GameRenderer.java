@@ -27,7 +27,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class GameRenderer {
 
-	private static final String TAG = null;
+	private static final String TAG = "Game Renderer";
 	private GameWorld world;
 	private OrthographicCamera cam;
 	
@@ -105,6 +105,7 @@ public class GameRenderer {
 		mapRenderer.render();
 		
 		batcher.setProjectionMatrix(cam.combined);
+		if(bob!=null)
 		renderBob(runTime);
 		if(!enemies.isEmpty())renderEnemy(runTime);
 		
@@ -289,7 +290,9 @@ public class GameRenderer {
 	}
 	
 	public void moveCamera(){
-		cam.position.set(bob.getPosition().x,bob.getPosition().y,0);
+		if(bob != null){
+			cam.position.set(bob.getPosition().x,bob.getPosition().y,0);
+		}
 		cam.update();
 	}
 	

@@ -8,6 +8,8 @@ import java.util.Random;
 import com.androidboys.spellarena.gameworld.GameFactory.GameModel;
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.view.GameScreen;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -28,6 +30,8 @@ public class GameWorld {
 	public static final float WORLD_BOUND_RIGHT = 1805;
 	public static final float WORLD_BOUND_TOP = 960;
 	public static final float WORLD_BOUND_BOTTOM = 70;
+
+	private static final String TAG = "GameWorld";
 	
 	//Characters
 	private Map<String, Bob> playerModels = new HashMap<String, Bob>();
@@ -110,14 +114,17 @@ public class GameWorld {
 	public int getNextGameIndex() {
 		int max = 0;
 		for(Bob bob: playerModels.values()){
+			Gdx.app.log(TAG,"Game index: "+bob.getGameIndex());
 			if(bob.getGameIndex() > max) {
+				Gdx.app.log(TAG,"Game index: "+bob.getGameIndex());
 				max = bob.getGameIndex();
 			}
 		}
-		return 0;
+		return max + 1;
 	}
 
 	public void addPlayerModel(Bob bob) {
+		Gdx.app.log(TAG,bob.toString());
 		bob.updateObstacles(tiles);
 		playerModels.put(bob.getPlayerName(), bob);
 	}
@@ -139,5 +146,10 @@ public class GameWorld {
 
 	public Map<String,Bob> getPlayerModels() {
 		return playerModels;
+	}
+
+	public void movePlayer(String fromUser, int movement) {
+		Bob bob = playerModels.get(fromUser);
+		bob.move(movement);
 	}
 }

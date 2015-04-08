@@ -9,6 +9,8 @@ public class ClockSyncReqCommand extends Command{
 
 	private static final String TAG = "ClockSyncReqCommand";
 
+	private long time;
+	
 	public static Command build(JSONObject json){
 		ClockSyncReqCommand command = new ClockSyncReqCommand();
 		try{

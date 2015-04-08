@@ -64,6 +64,22 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class GameScreen implements Screen{
 
+	public interface MovementChangeListener{
+		
+		public void onMovementChanged(int movement);
+		
+	}
+	
+	public static final int MOVEMENT_NONE = 10000;
+	public static final int MOVEMENT_NORTH = 10001;
+	public static final int MOVEMENT_NORTHEAST = 10002;
+	public static final int MOVEMENT_EAST = 10003;
+	public static final int MOVEMENT_SOUTHEAST = 10004;
+	public static final int MOVEMENT_SOUTH = 10005;
+	public static final int MOVEMENT_SOUTHWEST = 10006;
+	public static final int MOVEMENT_WEST = 10007;
+	public static final int MOVEMENT_NORTHWEST = 10008;
+	
 	protected static final String TAG = "GameScreen";
 	private SpellArena game;
 	private Mediator mediator;
@@ -81,6 +97,7 @@ public class GameScreen implements Screen{
 
 	private TouchpadStyle touchpadStyle;
 	private Touchpad touchpad;
+	private int movement = MOVEMENT_NONE;
 	
 	private Stage stage;
 	
@@ -107,6 +124,7 @@ public class GameScreen implements Screen{
 	private ButtonExample[] commandList = new ButtonExample[3];
     private int[] spellList = new int[3];
     int commandCount = 0;
+	private MovementChangeListener movementChangeListener;
 	
 	//Constructor for debugging w/o multiplayer
 	public GameScreen(SpellArena game, Mediator mediator) {
@@ -161,6 +179,8 @@ public class GameScreen implements Screen{
 			gameServer = new GameServer(world);
 			gameServer.initialize(game.getClient(),gameScreenMediator);
 			gameScreenMediator.setGameServer(gameServer);
+		} else {
+//			initializeGameAsClient();
 		}
 		
 		createTouchpad();
@@ -341,14 +361,92 @@ public class GameScreen implements Screen{
 
 
 	private void prepareInputProcessor() {
-		final String userName = UserSession.getInstance().getUserName();
-		final Bob myBob = world.getPlayerModel(userName);
-		myBob.setTouchpad(touchpad);
-		myBob.setStateChangeListener(new Bob.StateChangeListener() {
-
+		this.movementChangeListener = new MovementChangeListener() {
+			
 			@Override
-			public void onVelocityChange(int state, Direction direction) {
+			public void onMovementChanged(int movement) {
+				gameScreenMediator.move(movement);
+			}
+		};
+		
+		touchpad.addListener(new ClickListener(){
+			
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				int movement;
+				float touchX = touchpad.getKnobPercentX();
+				float touchY = touchpad.getKnobPercentY();
+				if(touchX > 0.5){
+					if(touchY > 0.5){
+						movement = MOVEMENT_NORTHEAST;
 
+					} else if (touchY < -0.5){
+						movement = MOVEMENT_SOUTHEAST;
+					} else {
+						movement = MOVEMENT_EAST;
+					}
+				}else if (touchX < -0.5){
+					if(touchY > 0.5){
+						movement = MOVEMENT_NORTHWEST;
+					} else if (touchY < -0.5){
+						movement = MOVEMENT_SOUTHWEST;
+					} else {
+						movement = MOVEMENT_WEST;
+					}
+				} else {
+					if(touchY > 0.5){
+						movement = MOVEMENT_NORTH;
+					} else if(touchY < -0.5) {
+						movement = MOVEMENT_SOUTH;
+					} else {
+						movement = MOVEMENT_NONE;
+					}
+				}
+				if(movement!=GameScreen.this.movement){
+					GameScreen.this.movement = movement;
+					movementChangeListener.onMovementChanged(movement);
+				}
+				return super.touchDown(event, x, y, pointer, button);
+			}
+			
+			@Override
+			public void touchDragged(InputEvent event, float x, float y,
+					int pointer) {
+				int movement;
+				float touchX = touchpad.getKnobPercentX();
+				float touchY = touchpad.getKnobPercentY();
+				if(touchX > 0.5){
+					if(touchY > 0.5){
+						movement = MOVEMENT_NORTHEAST;
+
+					} else if (touchY < -0.5){
+						movement = MOVEMENT_SOUTHEAST;
+					} else {
+						movement = MOVEMENT_EAST;
+					}
+				}else if (touchX < -0.5){
+					if(touchY > 0.5){
+						movement = MOVEMENT_NORTHWEST;
+					} else if (touchY < -0.5){
+						movement = MOVEMENT_SOUTHWEST;
+					} else {
+						movement = MOVEMENT_WEST;
+					}
+				} else {
+					if(touchY > 0.5){
+						movement = MOVEMENT_NORTH;
+					} else if(touchY < -0.5) {
+						movement = MOVEMENT_SOUTH;
+					} else {
+						movement = MOVEMENT_NONE;
+					}
+				}
+				if(movement!=GameScreen.this.movement){
+					GameScreen.this.movement = movement;
+					movementChangeListener.onMovementChanged(movement);
+				}
+				super.touchDragged(event, x, y, pointer);
 			}
 		});
 		Gdx.input.setInputProcessor(stage);
@@ -452,11 +550,19 @@ public class GameScreen implements Screen{
 	
 
 	private void initializeGameOnServer() {
+		Gdx.app.log(TAG, "initializeGameOnServer");
 		GameFactory.GameModel gameModel = GameFactory.getGameModel();
 		addPlayerModelToWorld(UserSession.getInstance().getUserName(),1);
 		
 		//world.addObstacles
 	}
+	
+//	private void initializeGameAsClient() {
+//		GameFactory.GameModel gameModel = GameFactory.getGameModel();
+//		addPlayerModelToWorld(UserSession.getInstance().getUserName(),1);
+//		addPlayerModelToWorld(UserSession.getInstance().getUserName(),2);
+//		//world.addObstacles
+//	}
 
 	/**
 	 * Called when the screen should render itself.
@@ -469,7 +575,7 @@ public class GameScreen implements Screen{
 		draw();
 	}
 
-	private void update(float delta) {		
+	private void update(float delta) {
 		world.update(delta);
 		stage.act(delta);
 	}
@@ -608,11 +714,14 @@ public class GameScreen implements Screen{
 	public void onPlayerJoinedRoom(String playerName) {
 		if(!existPlayerOnWorld(playerName)) {
 			int gameIndex = world.getNextGameIndex();
-			addPlayerModelToWorld(playerName, gameIndex);
-			final Group panel = beforeGamePanel;
+			final Bob bob = addPlayerModelToWorld(playerName, gameIndex);
+			if(playerName.equals(UserSession.getInstance().getUserName())){
+				bob.setTouchpad(touchpad);
+			}
+			Gdx.app.log(TAG,"Player "+playerName+" joined with index "+gameIndex);
 			switch(gameIndex){
 				case 1:
-					roomOwner.setText(playerName);
+					roomOwner.setText("Room Owner\n\n"+playerName);
 					roomOwner.setVisible(true);
 					break;
 				case 2:
@@ -628,6 +737,7 @@ public class GameScreen implements Screen{
 					p4Label.setVisible(true);
 					break;	
 			}
+			
 			if(UserSession.getInstance().isServer()){
 				startGameButton.setVisible(true);
 			}
@@ -729,7 +839,7 @@ public class GameScreen implements Screen{
 	    }
 
 		private Bob addPlayerModelToWorld(String playerName, int gameIndex) {
-			Gdx.app.log(TAG, "adding Bob To World");
+			Gdx.app.log(TAG, "addPlayerModelToWorld: "+playerName+","+gameIndex);
 			Bob bob = new Bob();
 			bob.setPlayerName(playerName);
 			bob.setPosition(loadStartPosition(gameIndex));
@@ -757,6 +867,7 @@ public class GameScreen implements Screen{
 
 
 	private boolean existPlayerOnWorld(String playerName) {
+		Gdx.app.log(TAG,"existPlayerOnWorld: "+playerName);
 		return world.getPlayerModel(playerName) != null;
 	}
 
@@ -778,6 +889,11 @@ public class GameScreen implements Screen{
 
 	public ButtonExample[] getCommandList() {
 		return commandList;
+	}
+
+
+	public void onMove(String fromUser, int movement) {
+		world.movePlayer(fromUser, movement);
 	}
 
 	

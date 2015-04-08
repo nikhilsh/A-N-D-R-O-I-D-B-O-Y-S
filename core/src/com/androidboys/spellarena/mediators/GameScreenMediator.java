@@ -5,10 +5,13 @@ import com.androidboys.spellarena.gameworld.GameFactory;
 import com.androidboys.spellarena.net.NetworkInterface;
 import com.androidboys.spellarena.net.NetworkListenerAdapter;
 import com.androidboys.spellarena.net.model.RoomModel;
+import com.androidboys.spellarena.net.protocol.ClockSyncReqCommand;
+import com.androidboys.spellarena.net.protocol.ClockSyncResCommand;
 import com.androidboys.spellarena.net.protocol.Command;
 import com.androidboys.spellarena.net.protocol.CommandFactory;
 import com.androidboys.spellarena.net.protocol.GameEndCommand;
 import com.androidboys.spellarena.net.protocol.GameEndCommand.GameEndReason;
+import com.androidboys.spellarena.net.protocol.MoveCommand;
 import com.androidboys.spellarena.servers.GameServer;
 import com.androidboys.spellarena.session.UserSession;
 import com.androidboys.spellarena.view.GameScreen;
@@ -52,6 +55,13 @@ public class GameScreenMediator extends Mediator{
 								break;
 							case Command.START_GAME:
 								handleStartGameCommand(command);
+								break;
+							case Command.CLOCK_SYNC_REQ:
+								handleClockSyncRequestCommand(command);
+								break;
+							case Command.MOVE:
+								handleMoveCommand(command);
+								break;
 						}
 					}
 				});
@@ -60,7 +70,6 @@ public class GameScreenMediator extends Mediator{
 			@Override
 			public void onPlayerLeftRoom(RoomModel room, String playerName) {
 				super.onPlayerLeftRoom(room, playerName);
-				Gdx.app.log(TAG, "Player: "+playerName+" has left room "+room.getName());
 				if(GameScreenMediator.this.getRoom().equals(room) && !playerName.equals(UserSession.getInstance().getUserName())){
 					GameScreenMediator.this.onPlayerLeftRoom(playerName);
 				}
@@ -69,7 +78,8 @@ public class GameScreenMediator extends Mediator{
 			@Override
 			public void onPlayerJoinedRoom(RoomModel room, String playerName) {
 				super.onPlayerJoinedRoom(room, playerName);
-				if(GameScreenMediator.this.getRoom().equals(room) && !playerName.equals(UserSession.getInstance().getUserName())){
+				Gdx.app.log(TAG,""+GameScreenMediator.this.getRoom().getId().equals(room.getId()));
+				if(GameScreenMediator.this.getRoom().getId().equals(room.getId()) && !playerName.equals(UserSession.getInstance().getUserName())){
 					GameScreenMediator.this.onPlayerJoinedRoom(playerName);
 				}
 			}
@@ -102,6 +112,20 @@ public class GameScreenMediator extends Mediator{
 		gameScreen.startGame();
 	}
 	
+	private void handleClockSyncRequestCommand(Command c){
+		long requestSendTime = c.getTimeStamp();
+		long currentTime = System.currentTimeMillis();
+		Gdx.app.log(TAG, "Sync request time: "+requestSendTime+" Sync receive time: "+currentTime+" Delay: "+(currentTime - requestSendTime));
+		ClockSyncResCommand command = new ClockSyncResCommand();
+		command.setFromUser(UserSession.getInstance().getUserName());
+		networkInterface.sendMessageTo(c.getFromUser(), command.serialize());
+	}
+	
+	private void handleMoveCommand(Command c){
+		int movement = ((MoveCommand)c).getMovement();
+		gameScreen.onMove(c.getFromUser(), movement);
+	}
+	
 	@Override
 	protected void onScreenShow() {
 		super.onScreenShow();
@@ -111,9 +135,19 @@ public class GameScreenMediator extends Mediator{
 	}
 	
 	private void onPlayerJoinedRoom(String playerName) {
-		gameScreen.onPlayerJoinedRoom(playerName);		
+		Gdx.app.log(TAG, "Player: "+playerName+" has joined room "+room.getName());
+		gameScreen.onPlayerJoinedRoom(playerName);
+		if(UserSession.getInstance().isServer()){
+			checkSync(playerName);
+		}
 	}
 
+	private void checkSync(String playerName){
+		ClockSyncReqCommand command = new ClockSyncReqCommand();
+		command.setFromUser(UserSession.getInstance().getUserName());
+		networkInterface.sendMessageTo(playerName, command.serialize());
+	}
+	
 	private void onPlayerLeftRoom(String playerName) {
 		if((playerName != null)&&playerName.equals(getRoom().getOwner())){
 			onGameOwnerLeft();
@@ -121,7 +155,7 @@ public class GameScreenMediator extends Mediator{
 			gameScreen.removePlayer(playerName);
 		}
 	}
-
+	
 	private void onGameOwnerLeft() {
 		GameEndCommand gameEndCommand = new GameEndCommand();
 		gameEndCommand.setFromUser(UserSession.getInstance().getUserName());
@@ -150,6 +184,13 @@ public class GameScreenMediator extends Mediator{
 
 	public void setGameServer(GameServer gameServer) {
 		this.gameServer = gameServer;
+	}
+
+	public void move(int movement) {
+		MoveCommand command = new MoveCommand();
+		command.setMovement(movement);
+		command.setFromUser(UserSession.getInstance().getUserName());
+		networkInterface.sendMessage(command.serialize());
 	}
 
 }

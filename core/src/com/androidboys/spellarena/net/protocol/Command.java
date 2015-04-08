@@ -8,15 +8,7 @@ public abstract class Command {
 	public static final int CLOCK_SYNC_REQ = 1;
     public static final int CLOCK_SYNC_RES = 2;
     
-    public static final int MOVE_NORTH = 3;
-    public static final int MOVE_NORTHEAST = 4;
-    public static final int MOVE_EAST = 5;
-    public static final int MOVE_SOUTHEAST = 6;
-    public static final int MOVE_SOUTH = 7;
-    public static final int MOVE_SOUTHWEST = 8;
-    public static final int MOVE_WEST = 9;
-    public static final int MOVE_NORTHWEST = 10;
-    public static final int MOVE_STOP = 11;
+    public static final int MOVE = 10;
     
     public static final int START_GAME = 12;
     public static final int CREATE_GAME = 13;

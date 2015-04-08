@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.session.UserSession;
+import com.androidboys.spellarena.view.GameScreen;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -57,7 +58,6 @@ public class Bob {
 
 	private Array<Rectangle> tiles;
 	private boolean invulnerable;
-	private int index;
 	private String playerName;
 	private int gameIndex;
 	private StateChangeListener stateChangeListener;
@@ -107,8 +107,8 @@ public class Bob {
 	 * Update Bob's position and state.
 	 */
 	public void update(float delta){
+		updateDirection();
 		checkCollision(delta);
-		updateVelocity();
 		updateState();
 	}
 
@@ -120,6 +120,32 @@ public class Bob {
 		}
 	}
 
+	private void updateDirection(){
+		if(this.velocity.x > 0){
+			if(this.velocity.y > 0){
+				this.direction = Direction.NORTHEAST;
+			} else if (this.velocity.y < 0){
+				this.direction = Direction.SOUTHEAST;
+			} else {
+				this.direction = Direction.EAST;
+			}
+		} else if (this.velocity.x < 0){
+			if(this.velocity.y > 0){
+				this.direction = Direction.NORTHWEST;
+			} else if (this.velocity.y < 0){
+				this.direction = Direction.SOUTHWEST;
+			} else {
+				this.direction = Direction.WEST;
+			}
+		} else {
+			if(this.velocity.y > 0){
+				this.direction = Direction.NORTH;
+			} else if (this.velocity.y < 0){
+				this.direction = Direction.SOUTH;
+			}
+		}
+	}
+	
 	private void updateVelocity(){
 		Vector2 newV = null;
 		if(playerName.equals(UserSession.getInstance().getUserName())){
@@ -163,7 +189,7 @@ public class Bob {
 			}
 			if(!newV.equals(velocity)){
 				this.setVelocity(newV.x, newV.y);
-				this.stateChangeListener.onVelocityChange(state, direction);
+				//this.stateChangeListener.onVelocityChange(state, direction);
 			}
 			//this.scaleAndSetVelocity(touchX, touchY);
 		} else {
@@ -425,7 +451,7 @@ public class Bob {
 	}
 
 	public int getGameIndex() {
-		return index;
+		return gameIndex;
 	}
 
 	public void setPlayerName(String playerName) {
@@ -453,5 +479,38 @@ public class Bob {
 			MAX_SPEED = 500;
 		}
 	}
+
+	public void move(int movement) {
+		switch(movement){
+			case GameScreen.MOVEMENT_NONE:
+				this.velocity = new Vector2(0, 0);
+				break;
+			case GameScreen.MOVEMENT_EAST:
+				this.velocity = new Vector2(MAX_SPEED, 0);
+				break;
+			case GameScreen.MOVEMENT_NORTH:
+				this.velocity = new Vector2(0, MAX_SPEED);
+				break;
+			case GameScreen.MOVEMENT_NORTHEAST:
+				this.velocity = new Vector2(MAX_SPEED, MAX_SPEED);
+				break;
+			case GameScreen.MOVEMENT_NORTHWEST:
+				this.velocity = new Vector2(-MAX_SPEED, MAX_SPEED);
+				break;
+			case GameScreen.MOVEMENT_SOUTH:
+				this.velocity = new Vector2(0, -MAX_SPEED);
+				break;
+			case GameScreen.MOVEMENT_SOUTHEAST:
+				this.velocity = new Vector2(MAX_SPEED, -MAX_SPEED);
+				break;
+			case GameScreen.MOVEMENT_SOUTHWEST:
+				this.velocity = new Vector2(-MAX_SPEED, -MAX_SPEED);
+				break;
+			case GameScreen.MOVEMENT_WEST:
+				this.velocity = new Vector2(-MAX_SPEED, 0);
+				break;
+		}
+	}
+	
 	
 }
