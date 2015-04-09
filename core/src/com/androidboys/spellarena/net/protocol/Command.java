@@ -9,20 +9,13 @@ public abstract class Command {
     public static final int CLOCK_SYNC_RES = 2;
     
     public static final int MOVE = 10;
+    public static final int CAST = 11;
+    public static final int UPDATE = 12;
     
-    public static final int START_GAME = 12;
-    public static final int CREATE_GAME = 13;
+    public static final int START_GAME = 100;
+    public static final int CREATE_GAME = 101;
 
-    public static final int SKILL1 = 14;
-    public static final int SKILL2 = 15;
-    public static final int SKILL3 = 16;
-    public static final int SKILL4 = 17;
-    public static final int SKILL5 = 18;
-    public static final int SKILL6 = 19;
-    public static final int SKILL7 = 20;
-    public static final int SKILL8 = 21;
-    public static final int SKILL9 = 22;
-    public static final int SKILL10 = 23;
+  
     
     public static final int GAME_END = 0;
    	

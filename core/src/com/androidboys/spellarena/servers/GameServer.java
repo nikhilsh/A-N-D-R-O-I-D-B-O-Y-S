@@ -45,9 +45,6 @@ public class GameServer {
 						case Command.MOVE:
 							
 							break;
-						case Command.CLOCK_SYNC_RES:
-							handleClockSyncResponseCommand(command);
-							break;
 						default:
 							break;
 					}

@@ -39,7 +39,7 @@ public class Bob {
 	public static final int STATE_INVULNERABLE = 3;
 
 	//Speed
-	private float MAX_SPEED = 150f;
+	private float MAX_SPEED = 100f;
 
 	private Vector2 position;
 	private Vector2 velocity;
@@ -61,6 +61,9 @@ public class Bob {
 	private String playerName;
 	private int gameIndex;
 	private StateChangeListener stateChangeListener;
+	private Vector2 updatePosition;
+	private Vector2 updateVelocity;
+	private long updateTimestamp;
 
 	
 	/**
@@ -108,8 +111,17 @@ public class Bob {
 	 */
 	public void update(float delta){
 		updateDirection();
+		if(needsUpdate){
+			applyUpdate(delta);
+			needsUpdate = false;
+		}
 		checkCollision(delta);
 		updateState();
+	}
+
+	private void applyUpdate(float delta) {
+		float timeDiff = (System.currentTimeMillis() - updateTimestamp)/1000f;
+		this.position = new Vector2(updatePosition.add(updateVelocity.scl(timeDiff)));
 	}
 
 	private void updateState(){
@@ -241,7 +253,7 @@ public class Bob {
 	}
 
 	private void checkCollision(float delta){
-		Vector2 newPos = this.position.cpy().add(this.velocity.cpy().scl(delta));
+		Vector2 newPos = (this.position.cpy()).add((this.velocity.cpy()).scl(delta));
 		this.setRect(newPos);
 		if(getTiles() != null){
 			for(Rectangle tile: getTiles()){
@@ -480,7 +492,7 @@ public class Bob {
 		}
 	}
 
-	public void move(int movement) {
+	public void move(long time, int movement, float x, float y) {
 		switch(movement){
 			case GameScreen.MOVEMENT_NONE:
 				this.velocity = new Vector2(0, 0);
@@ -510,7 +522,50 @@ public class Bob {
 				this.velocity = new Vector2(-MAX_SPEED, 0);
 				break;
 		}
+		float timeDiff = (System.currentTimeMillis() - time)/1000f;
+		this.position = new Vector2(position).add(new Vector2(velocity).scl(timeDiff));
 	}
+
+	public void setUpdateDetails(long timestamp, Vector2 position, Vector2 velocity) {
+		needsUpdate = true;
+		this.updateTimestamp = timestamp;
+		this.updatePosition = position;
+		this.updateVelocity = velocity;
+	}
+
+	public void move(int movement) {
+		switch(movement){
+		case GameScreen.MOVEMENT_NONE:
+			this.velocity = new Vector2(0, 0);
+			break;
+		case GameScreen.MOVEMENT_EAST:
+			this.velocity = new Vector2(MAX_SPEED, 0);
+			break;
+		case GameScreen.MOVEMENT_NORTH:
+			this.velocity = new Vector2(0, MAX_SPEED);
+			break;
+		case GameScreen.MOVEMENT_NORTHEAST:
+			this.velocity = new Vector2(MAX_SPEED, MAX_SPEED);
+			break;
+		case GameScreen.MOVEMENT_NORTHWEST:
+			this.velocity = new Vector2(-MAX_SPEED, MAX_SPEED);
+			break;
+		case GameScreen.MOVEMENT_SOUTH:
+			this.velocity = new Vector2(0, -MAX_SPEED);
+			break;
+		case GameScreen.MOVEMENT_SOUTHEAST:
+			this.velocity = new Vector2(MAX_SPEED, -MAX_SPEED);
+			break;
+		case GameScreen.MOVEMENT_SOUTHWEST:
+			this.velocity = new Vector2(-MAX_SPEED, -MAX_SPEED);
+			break;
+		case GameScreen.MOVEMENT_WEST:
+			this.velocity = new Vector2(-MAX_SPEED, 0);
+			break;
+	}
+	}
+
+
 	
 	
 }

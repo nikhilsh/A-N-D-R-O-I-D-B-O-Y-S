@@ -68,6 +68,8 @@ public class CommandFactory {
             	return CreateGameCommand.build(json);
             case Command.MOVE:
                 return MoveCommand.build(json);
+            case Command.UPDATE:
+            	return UpdateCommand.build(json);
 
 			}
 		} catch (JSONException e){

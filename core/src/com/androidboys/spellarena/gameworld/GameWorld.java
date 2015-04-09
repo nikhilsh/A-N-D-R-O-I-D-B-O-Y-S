@@ -16,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.utils.Array;
@@ -85,7 +86,8 @@ public class GameWorld {
 	 * Update game world.
 	 */
 	public void update(float delta) {
-		updatePlayerModels(delta);		
+		updatePlayerModels(delta);
+		
 	}
 	
 	private void prepareObstacles(){
@@ -148,8 +150,18 @@ public class GameWorld {
 		return playerModels;
 	}
 
-	public void movePlayer(String fromUser, int movement) {
+	public void movePlayer(long time, String fromUser, int movement, float x, float y) {
 		Bob bob = playerModels.get(fromUser);
+		bob.move(time, movement, x, y);
+	}
+
+	public void updatePlayer(String fromUser, long timestamp, Vector2 position, Vector2 velocity) {
+		Bob bob = playerModels.get(fromUser);
+		bob.setUpdateDetails(timestamp, position, velocity);
+	}
+
+	public void movePlayer(String userName, int movement) {
+		Bob bob = playerModels.get(userName);
 		bob.move(movement);
 	}
 }

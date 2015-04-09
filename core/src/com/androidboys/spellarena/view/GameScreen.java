@@ -130,7 +130,7 @@ public class GameScreen implements Screen{
 	public GameScreen(SpellArena game, Mediator mediator) {
 		this.game = game;
 		this.mediator = mediator;
-	
+		this.gameStarted = false;
 		
 		this.gameScreenMediator = (GameScreenMediator) mediator;
 		this.gameScreenMediator.setRoom(UserSession.getInstance().getRoom());
@@ -366,6 +366,7 @@ public class GameScreen implements Screen{
 			@Override
 			public void onMovementChanged(int movement) {
 				gameScreenMediator.move(movement);
+				world.movePlayer(UserSession.getInstance().getUserName(), movement);
 			}
 		};
 		
@@ -584,10 +585,16 @@ public class GameScreen implements Screen{
 		update(delta);
 		draw();
 	}
-
+	
+	int n = 0;
+	private boolean gameStarted;
 	private void update(float delta) {
+		n++;
 		world.update(delta);
 		stage.act(delta);
+		if (gameStarted){
+			gameScreenMediator.update(world.getPlayerModel(UserSession.getInstance().getUserName()));
+		}
 	}
 
 	private void draw() {
@@ -889,6 +896,7 @@ public class GameScreen implements Screen{
 
 	public void startGame() {
 		touchpad.setVisible(true);
+		gameStarted = true;
 	}
 
 
@@ -902,9 +910,14 @@ public class GameScreen implements Screen{
 	}
 
 
-	public void onMove(String fromUser, int movement) {
-		world.movePlayer(fromUser, movement);
+	public void onMove(long time, String fromUser, int movement, float x, float y) {
+		n = 0;
+		world.movePlayer(time, fromUser, movement, x, y);
 	}
 
+
+	public void onUpdate(String fromUser, long timestamp, Vector2 position, Vector2 velocity) {
+		world.updatePlayer(fromUser, timestamp, position, velocity);
+	}
 	
 }

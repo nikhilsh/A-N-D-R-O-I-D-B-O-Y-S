@@ -278,9 +278,14 @@ public class AppWarpClient implements NetworkInterface{
 	}
 
 	@Override
-	public void sendMessageTo(String destination, String message) {
+	public void sendMessageTo(final String destination, final String message) {
 		Gdx.app.log(TAG, "Sending message "+message+" to "+destination);
-		warpClient.sendPrivateChat(destination,message);
+		new Thread(){
+			@Override
+			public void run() {
+				warpClient.sendPrivateChat(destination,message);
+			}
+		}.start();
 	}
 
 	@Override

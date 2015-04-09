@@ -2,6 +2,7 @@ package com.androidboys.spellarena.mediators;
 
 import com.androidboys.spellarena.game.SpellArena;
 import com.androidboys.spellarena.gameworld.GameFactory;
+import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.net.NetworkInterface;
 import com.androidboys.spellarena.net.NetworkListenerAdapter;
 import com.androidboys.spellarena.net.model.RoomModel;
@@ -10,6 +11,7 @@ import com.androidboys.spellarena.net.protocol.ClockSyncResCommand;
 import com.androidboys.spellarena.net.protocol.Command;
 import com.androidboys.spellarena.net.protocol.CommandFactory;
 import com.androidboys.spellarena.net.protocol.GameEndCommand;
+import com.androidboys.spellarena.net.protocol.UpdateCommand;
 import com.androidboys.spellarena.net.protocol.GameEndCommand.GameEndReason;
 import com.androidboys.spellarena.net.protocol.MoveCommand;
 import com.androidboys.spellarena.servers.GameServer;
@@ -17,6 +19,7 @@ import com.androidboys.spellarena.session.UserSession;
 import com.androidboys.spellarena.view.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.math.Vector2;
 
 public class GameScreenMediator extends Mediator{
 
@@ -59,9 +62,14 @@ public class GameScreenMediator extends Mediator{
 							case Command.CLOCK_SYNC_REQ:
 								handleClockSyncRequestCommand(command);
 								break;
+							case Command.CLOCK_SYNC_RES:
+								handleClockSyncResponseCommand(command);
+								break;
 							case Command.MOVE:
 								handleMoveCommand(command);
 								break;
+							case Command.UPDATE:
+								handleUpdateCommand(command);
 						}
 					}
 				});
@@ -125,8 +133,21 @@ public class GameScreenMediator extends Mediator{
 	}
 	
 	private void handleMoveCommand(Command c){
+		long time = c.getTimeStamp();
 		int movement = ((MoveCommand)c).getMovement();
-		gameScreen.onMove(c.getFromUser(), movement);
+		Vector2 position = ((MoveCommand)c).getPosition();
+		if(!c.getFromUser().equals(UserSession.getInstance().getUserName())){
+			gameScreen.onMove(time, c.getFromUser(), movement, position.x, position.y);
+		}
+	}
+	
+	private void handleUpdateCommand(Command c){
+		Vector2 position = ((UpdateCommand)c).getPosition();
+		Vector2 velocity = ((UpdateCommand)c).getVelocity();
+		long timestamp = c.getTimeStamp();
+		if(!c.getFromUser().equals(UserSession.getInstance().getUserName())){
+			gameScreen.onUpdate(c.getFromUser(), timestamp, position, velocity);
+		}
 	}
 	
 	@Override
@@ -194,6 +215,14 @@ public class GameScreenMediator extends Mediator{
 		command.setMovement(movement);
 		command.setFromUser(UserSession.getInstance().getUserName());
 		networkInterface.sendMessage(command.serialize());
+	}
+
+	public void update(Bob playerModel) {
+		UpdateCommand command = new UpdateCommand();
+		command.setUpdate(playerModel.getPosition(),playerModel.getVelocity());
+		command.setFromUser(UserSession.getInstance().getUserName());
+		networkInterface.sendMessage(command.serialize());
+		
 	}
 
 }
