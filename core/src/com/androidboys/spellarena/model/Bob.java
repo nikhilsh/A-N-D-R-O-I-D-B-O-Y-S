@@ -121,8 +121,9 @@ public class Bob {
 	}
 
 	private void applyUpdate(float delta) {
-		float timeDiff = (System.currentTimeMillis() - updateTimestamp)/1000f;
-		this.position = new Vector2(updatePosition.add(updateVelocity.scl(timeDiff)));
+		//float timeDiff = (System.currentTimeMillis() - updateTimestamp)/1000f;
+		this.position = new Vector2(updatePosition);
+//		this.position = new Vector2(updatePosition.add(updateVelocity.scl(timeDiff)));
 	}
 
 	private void updateState(){
@@ -563,10 +564,6 @@ public class Bob {
 		case GameScreen.MOVEMENT_WEST:
 			this.velocity = new Vector2(-MAX_SPEED, 0);
 			break;
+		}
 	}
-	}
-
-
-	
-	
 }

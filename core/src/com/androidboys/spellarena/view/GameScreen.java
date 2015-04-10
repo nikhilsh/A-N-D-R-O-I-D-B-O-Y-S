@@ -134,6 +134,7 @@ public class GameScreen implements Screen{
 	private boolean gameStarted;
 	private boolean serverReady;
 	private boolean connectedToServer;
+	private boolean prevMovementChanged;
 	
 	private String serverIp;
 	
@@ -380,7 +381,7 @@ public class GameScreen implements Screen{
 
 	private void prepareInputProcessor() {
 		this.movementChangeListener = new MovementChangeListener() {
-			
+
 			@Override
 			public void onMovementChanged(int movement) {
 				gameScreenMediator.move(movement);
@@ -422,9 +423,10 @@ public class GameScreen implements Screen{
 						movement = MOVEMENT_NONE;
 					}
 				}
-				if(movement!=GameScreen.this.movement){
+				if(movement!=GameScreen.this.movement&&!prevMovementChanged){
 					GameScreen.this.movement = movement;
 					movementChangeListener.onMovementChanged(movement);
+					prevMovementChanged = true;
 				}
 				return super.touchDown(event, x, y, pointer, button);
 			}
@@ -461,9 +463,10 @@ public class GameScreen implements Screen{
 						movement = MOVEMENT_NONE;
 					}
 				}
-				if(movement!=GameScreen.this.movement){
+				if(movement!=GameScreen.this.movement&&!prevMovementChanged){
 					GameScreen.this.movement = movement;
 					movementChangeListener.onMovementChanged(movement);
+					prevMovementChanged = true;
 				}
 				super.touchDragged(event, x, y, pointer);
 			}
@@ -471,9 +474,10 @@ public class GameScreen implements Screen{
 			@Override
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				if(GameScreen.this.movement!=MOVEMENT_NONE){
+				if(GameScreen.this.movement!=MOVEMENT_NONE&&!prevMovementChanged){
 					GameScreen.this.movement = MOVEMENT_NONE ;
 					movementChangeListener.onMovementChanged(movement);
+					prevMovementChanged = true;
 				}
 				super.touchUp(event, x, y, pointer, button);
 			}
@@ -598,6 +602,10 @@ public class GameScreen implements Screen{
 	int n = 0;
 	private void update(float delta) {
 		n++;
+		if(n%10 == 0){
+			Gdx.app.log(TAG, prevMovementChanged+"");
+			prevMovementChanged = false;
+		}
 		world.update(delta);
 		stage.act(delta);
 		if (gameStarted&&n%30 == 0){
