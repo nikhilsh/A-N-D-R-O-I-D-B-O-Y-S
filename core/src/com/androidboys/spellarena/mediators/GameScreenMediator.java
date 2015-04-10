@@ -103,6 +103,7 @@ public class GameScreenMediator extends Mediator{
 	private void handleReadyGameCommand(Command command) {
 		Gdx.app.log(TAG, "handleReadyGameCommand "+command);
 		String playerName = command.getFromUser();
+		checkSync(playerName);
 		gameScreen.onPlayerReady(playerName);
 	}
 	
@@ -151,9 +152,6 @@ public class GameScreenMediator extends Mediator{
 	private void onPlayerJoinedRoom(String playerName) {
 		Gdx.app.log(TAG, "Player: "+playerName+" has joined room "+room.getName());
 		gameScreen.onPlayerJoinedRoom(playerName);
-		if(UserSession.getInstance().isServer()){
-			checkSync(playerName);
-		}
 	}
 
 	private void checkSync(String playerName){
@@ -292,11 +290,11 @@ public class GameScreenMediator extends Mediator{
 //						Gdx.app.log(TAG, "exiting lock");
 						if(message != null){
 							Gdx.app.postRunnable(new Runnable() {
-								
 								@Override
 								public void run() {
 									Gdx.app.log(TAG,"Accepting command: "+message);
 									Command command = commandFactory.createCommand(message);
+									//Gdx.app.log(TAG, "Time difference: "+(command.getTimeStamp()-System.currentTimeMillis()));
 									if(command == null){
 										Gdx.app.log(TAG, "Waiting for split message");
 										return;
@@ -306,7 +304,6 @@ public class GameScreenMediator extends Mediator{
 											handleCreateGameCommand(command);
 											break;
 										case Command.READY:
-											Gdx.app.log(TAG, "Ready");
 											handleReadyGameCommand(command);
 											break;
 										case Command.START_GAME:

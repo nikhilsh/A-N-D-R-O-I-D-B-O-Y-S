@@ -13,6 +13,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 
+
+@Deprecated
 public class InputHandler implements InputProcessor{
 
 	private GameWorld world;
