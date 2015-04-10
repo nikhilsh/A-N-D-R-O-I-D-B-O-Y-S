@@ -3,7 +3,11 @@ package com.androidboys.spellarena.model;
 import org.json.JSONObject;
 
 import com.androidboys.spellarena.gameworld.GameWorld;
+import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.net.WarpController;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Spell {
@@ -33,7 +37,6 @@ public class Spell {
 	private Bob enemyBob;
 	private float remainingSeconds = 0;
 	private State state = State.START;
-
 
 	public Spell(GameWorld world) {
 		this.position = null;
@@ -108,7 +111,7 @@ public class Spell {
 		else if (index == 12) { //EEE
 			spell = Spells.LASER;
 		}
-		System.out.println("Spell is: " + spell);
+		this.world.setSpell(spell);
 		castSpell();
 	}
 	
@@ -127,6 +130,9 @@ public class Spell {
 	 * 
 	 * SUGGESTION: What's the difference between EEW and EEQ (only area?)
 	 */
+	
+	
+	
 	public void castSpell() {
 		switch (spell) {
 		case ACID:
@@ -335,6 +341,13 @@ public class Spell {
 			WarpController.getInstance().sendGameUpdate(data.toString());
 		} catch (Exception e) {
 		}
+	}
+	
+	public Spells getSpell(){
+		if (this.spell == null){
+			return null;
+		}
+		return this.spell;
 	}
 
 	public Boolean checkCollision(Bob bob){

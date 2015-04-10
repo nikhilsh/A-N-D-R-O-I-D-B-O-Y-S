@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.net.WarpController;
+import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.session.UserSession;
 import com.androidboys.spellarena.view.GameScreen;
 import com.badlogic.gdx.math.Rectangle;
@@ -457,6 +458,9 @@ public class Bob {
 	public Rectangle getbobRect() {
 		return bobRect;
 	}
+	
+	public Spells getSpell(){
+		return Spells.FORCESTAFF;
 
 	public boolean isInvulnerable() {
 		return invulnerable;

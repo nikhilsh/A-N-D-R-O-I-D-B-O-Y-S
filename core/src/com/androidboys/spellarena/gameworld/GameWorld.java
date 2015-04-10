@@ -8,6 +8,8 @@ import java.util.Random;
 import com.androidboys.spellarena.gameworld.GameFactory.GameModel;
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.Spell;
+import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.view.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
@@ -40,6 +42,7 @@ public class GameWorld {
 	//Characters
 		private  Bob local_bob;
 		private  Bob enemy_bob;
+	private Spells spell;
 	
 	//Map
 	private TiledMap map;
@@ -137,6 +140,15 @@ public class GameWorld {
 	public void updateEnemy(float x, float y, float vx, float vy, int state) {
 		enemy_bob.setVelocity(vx, vy);
 		enemy_bob.setPosition(x, y);
+	}
+	
+	public Spells getSpell(){
+		return spell;
+	}
+	
+	public void setSpell(Spells spell){
+		this.spell = spell;
+		
 	}
 	
 	/**
