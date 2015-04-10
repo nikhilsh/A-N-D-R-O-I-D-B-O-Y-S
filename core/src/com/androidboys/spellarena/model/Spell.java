@@ -319,6 +319,7 @@ public class Spell {
 						enemyBob.decrementLifeCount();
 						//flashy graphics on server
 						//no remaining count. straightaway do
+						sendSpell(Spells.FANOFKNIVES);
 					}
 				}
 			}
@@ -328,13 +329,13 @@ public class Spell {
 		default:
 			break;
 		}
-		//do spell everytime
-		sendSpell();
 	}
 
-	public void sendSpell(){
+	public void sendSpell(Spells spell){
 		try {
 			JSONObject data = new JSONObject();
+			//just send my position
+			//enemy will calculate
 			data.put("x", position.x);
 			data.put("y", position.y);
 			data.put("spell", spell);
