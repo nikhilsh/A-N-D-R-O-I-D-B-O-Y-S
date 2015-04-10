@@ -32,7 +32,7 @@ public class LoadingWidget extends Stack {
 	private LoadingWidget(){
 		background = new Image(AssetLoader.loadingTexture);
 		text = new ChangingLabel(
-				new String[]{"l","lo","loa","load","loadi","loadin","loading"}
+				new String[]{"loading","l","lo","loa","load","loadi","loadin"}
 		, StyleLoader.parchmentLabel);
 		text.setAlignment(1);
 		this.addActor(background);
