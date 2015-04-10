@@ -97,7 +97,6 @@ public class GameScreenMediator extends Mediator{
 
 	private void handleCreateGameCommand(Command c){
 		String ip = ((CreateGameCommand)c).getIP();
-		
 		gameScreen.connectToServer(ip);
 	}
 	

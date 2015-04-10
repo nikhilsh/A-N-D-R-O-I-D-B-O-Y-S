@@ -600,6 +600,9 @@ public class GameScreen implements Screen{
 	}
 
 	int n = 0;
+	private ButtonWidget myButton;
+	private ButtonWidget myButton2;
+	private ButtonWidget myButton3;
 	private void update(float delta) {
 		n++;
 		if(n%10 == 0){
@@ -783,25 +786,23 @@ public class GameScreen implements Screen{
 	
 	public void createSpellButtons(){
 		Texture textureUp   = new Texture(Gdx.files.internal("images/wex.png"));
-        ButtonWidget myButton   = new ButtonWidget(textureUp);
+        myButton   = new ButtonWidget(textureUp);
 
-        myButton.setPosition(790, 70);
-        myButton.setSize(130, 130);
+        myButton.setPosition(480, 40);
+        myButton.setSize(80, 80);
         myButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 displayButtonCommand(1);
             }
-
-
         });
 
         Texture textureUp2   = new Texture(Gdx.files.internal("images/quas.png"));
 
-        final ButtonWidget myButton2   = new ButtonWidget(textureUp2);
+        myButton2   = new ButtonWidget(textureUp2);
 
-        myButton2.setPosition(630, 70);
-        myButton2.setSize(130, 130);
+        myButton2.setPosition(600, 40);
+        myButton2.setSize(80, 80);
         myButton2.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
@@ -812,10 +813,10 @@ public class GameScreen implements Screen{
 
         Texture textureUp3   = new Texture(Gdx.files.internal("images/exort.png"));
 
-        ButtonWidget myButton3   = new ButtonWidget(textureUp3);
+        myButton3   = new ButtonWidget(textureUp3);
 
-        myButton3.setPosition(790, 235);
-        myButton3.setSize(130, 130);
+        myButton3.setPosition(600, 150);
+        myButton3.setSize(80, 80);
         myButton3.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
@@ -851,16 +852,16 @@ public class GameScreen implements Screen{
 
 	        ButtonWidget newButton = new ButtonWidget(texture, indexOfButtonPressed);
 //	        newButton.setPosition(10, 550);
-	        newButton.setSize(60, 60);
+	        newButton.setSize(40,40);
 	        if (commandList[2] != null) {
 	        	commandList[2].remove();
 	        }
 	        commandList[2] = commandList[1];
 	        commandList[1] = commandList[0];
 	        commandList[0] = newButton;
-	        int y = 550;
+	        int y = 420;
 	        int spacing = 50;
-	        int x0 = 10;
+	        int x0 = 30;
 	        for (int i = 0; i < 3; i++) {
 	        	int x = x0 + spacing *i;
 	        	try {
@@ -912,6 +913,9 @@ public class GameScreen implements Screen{
 	}
 
 	public void onStartGame() {
+		myButton.setVisible(true);
+		myButton2.setVisible(true);
+		myButton3.setVisible(true);
 		touchpad.setVisible(true);
 		gameStarted = true;
 		beforeGamePanel.remove();
