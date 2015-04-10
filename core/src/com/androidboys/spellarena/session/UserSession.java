@@ -23,7 +23,7 @@ public class UserSession {
 
 	private String generateUserName() {
 //		return "haohaohao";
-		return "Player "+Long.toString(userId);
+		return "haohao "+Long.toString((userId%6));
 	}
 
 	private long generateUserId() {

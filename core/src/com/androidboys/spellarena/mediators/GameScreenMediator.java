@@ -1,5 +1,9 @@
 package com.androidboys.spellarena.mediators;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.LinkedList;
+
 import com.androidboys.spellarena.game.SpellArena;
 import com.androidboys.spellarena.gameworld.GameFactory;
 import com.androidboys.spellarena.model.Bob;
@@ -10,10 +14,14 @@ import com.androidboys.spellarena.net.protocol.ClockSyncReqCommand;
 import com.androidboys.spellarena.net.protocol.ClockSyncResCommand;
 import com.androidboys.spellarena.net.protocol.Command;
 import com.androidboys.spellarena.net.protocol.CommandFactory;
+import com.androidboys.spellarena.net.protocol.CreateGameCommand;
 import com.androidboys.spellarena.net.protocol.GameEndCommand;
+import com.androidboys.spellarena.net.protocol.ReadyCommand;
+import com.androidboys.spellarena.net.protocol.StartGameCommand;
 import com.androidboys.spellarena.net.protocol.UpdateCommand;
 import com.androidboys.spellarena.net.protocol.GameEndCommand.GameEndReason;
 import com.androidboys.spellarena.net.protocol.MoveCommand;
+import com.androidboys.spellarena.servers.GameClient;
 import com.androidboys.spellarena.servers.GameServer;
 import com.androidboys.spellarena.session.UserSession;
 import com.androidboys.spellarena.view.GameScreen;
@@ -26,6 +34,7 @@ public class GameScreenMediator extends Mediator{
 	private static final String TAG = "GameScreenMediator";
 	
 	private GameServer gameServer;
+	private GameClient gameClient;
 	private NetworkInterface networkInterface;
 	private NetworkListenerAdapter networkListenerAdapter;
 	private GameScreen gameScreen;
@@ -34,6 +43,7 @@ public class GameScreenMediator extends Mediator{
 	private RoomModel room;
 	private int level = 1;
 
+	private LinkedList<String> receivedMessages = new LinkedList<String>();
 	
 	public GameScreenMediator(SpellArena game, NetworkInterface networkInterface) {
 		super(game);
@@ -43,36 +53,11 @@ public class GameScreenMediator extends Mediator{
 			
 			@Override
 			public void onMessageReceived(String from, final String message) {
-				Gdx.app.postRunnable( new Runnable() {
-					
-					@Override
-					public void run() {
-						Command command = commandFactory.createCommand(message);
-						if(command == null){
-							Gdx.app.log(TAG, "Waiting for split message");
-							return;
-						}
-						switch(command.getCommand()){
-							case Command.CREATE_GAME:
-								handleCreateGameCommand(command);
-								break;
-							case Command.START_GAME:
-								handleStartGameCommand(command);
-								break;
-							case Command.CLOCK_SYNC_REQ:
-								handleClockSyncRequestCommand(command);
-								break;
-							case Command.CLOCK_SYNC_RES:
-								handleClockSyncResponseCommand(command);
-								break;
-							case Command.MOVE:
-								handleMoveCommand(command);
-								break;
-							case Command.UPDATE:
-								handleUpdateCommand(command);
-						}
-					}
-				});
+				synchronized (receivedMessages) {
+//					Gdx.app.log(TAG, "accessing lock");
+					receivedMessages.addLast(message);
+				}
+//				Gdx.app.log(TAG, "exiting lock");
 			}
 			
 			@Override
@@ -107,24 +92,30 @@ public class GameScreenMediator extends Mediator{
 			}
 		};
 		networkInterface.addNetworkListener(networkListenerAdapter);
+		initCommandHandler();
 	}
 
 	private void handleCreateGameCommand(Command c){
-		if(UserSession.getInstance().getUserName().equals(c.getFromUser())){
-			return;
-		}
-		gameScreen.onCreateGame();
+		String ip = ((CreateGameCommand)c).getIP();
+		
+		gameScreen.connectToServer(ip);
+	}
+	
+	private void handleReadyGameCommand(Command command) {
+		Gdx.app.log(TAG, "handleReadyGameCommand "+command);
+		String playerName = command.getFromUser();
+		gameScreen.onPlayerReady(playerName);
 	}
 	
 	private void handleStartGameCommand(Command c){
-		gameScreen.startGame();
+		gameScreen.onStartGame();
 	}
 	
 	private void handleClockSyncRequestCommand(Command c){
 		ClockSyncResCommand command = new ClockSyncResCommand();
 		command.setFromUser(UserSession.getInstance().getUserName());
 		command.setInitialTimeStamp(c.getTimeStamp());
-		networkInterface.sendMessageTo(c.getFromUser(), command.serialize());
+		gameClient.sendMessage(command.serialize());
 	}
 	
 	private void handleClockSyncResponseCommand(Command c){
@@ -169,7 +160,7 @@ public class GameScreenMediator extends Mediator{
 	private void checkSync(String playerName){
 		ClockSyncReqCommand command = new ClockSyncReqCommand();
 		command.setFromUser(UserSession.getInstance().getUserName());
-		networkInterface.sendMessageTo(playerName, command.serialize());
+		gameServer.sendMessage(command.serialize());
 	}
 	
 	private void onPlayerLeftRoom(String playerName) {
@@ -210,19 +201,139 @@ public class GameScreenMediator extends Mediator{
 		this.gameServer = gameServer;
 	}
 
+	public void startGame(){
+		StartGameCommand command = new StartGameCommand();
+		command.setFromUser(UserSession.getInstance().getUserName());
+		gameServer.sendMessage(command.serialize());
+		gameScreen.onStartGame();
+	}
+	
 	public void move(int movement) {
 		MoveCommand command = new MoveCommand();
 		command.setMovement(movement);
 		command.setFromUser(UserSession.getInstance().getUserName());
-		networkInterface.sendMessage(command.serialize());
+		if(UserSession.getInstance().isServer()){
+			gameServer.sendMessage(command.serialize());
+		} 
+		else {	
+			gameClient.sendMessage(command.serialize());
+		}
 	}
 
 	public void update(Bob playerModel) {
 		UpdateCommand command = new UpdateCommand();
 		command.setUpdate(playerModel.getPosition(),playerModel.getVelocity());
 		command.setFromUser(UserSession.getInstance().getUserName());
-		networkInterface.sendMessage(command.serialize());
-		
+		if(UserSession.getInstance().isServer()){
+			gameServer.sendMessage(command.serialize());
+		} 
+		else {	
+			gameClient.sendMessage(command.serialize());
+		}
 	}
 
+	public void onServerStarted() {
+		Gdx.app.log(TAG, "onServerStarted");
+		gameScreen.onServerStarted();
+	}
+
+	public void onServerStartFail() {
+		Gdx.app.log(TAG, "onServerStartFail");
+		gameScreen.onServerStartFail();
+	}
+
+	public void sendServerAddress(String playerName) {
+		try {
+			CreateGameCommand command = new CreateGameCommand();
+			command.setIP(InetAddress.getLocalHost().getHostAddress());
+			command.setFromUser(UserSession.getInstance().getUserName());
+			networkInterface.sendMessageTo(playerName, command.serialize());
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void connectToServerSuccess(GameClient client) {
+		this.gameClient = client;
+		Gdx.app.log(TAG, "connectToServerSuccess");
+		gameScreen.connectToServerSuccess();
+		ReadyCommand command = new ReadyCommand();
+		command.setFromUser(UserSession.getInstance().getUserName());
+		gameClient.sendMessage(command.serialize());
+	}
+
+	public void connectToServerFailed() {
+		Gdx.app.log(TAG, "connectToServerFailed");
+		gameScreen.connectToServerFail();
+	}
+
+	public void processMessage(String object) {
+		synchronized (receivedMessages) {
+			receivedMessages.addLast(object);
+		}
+	}
+
+	public void initCommandHandler() {
+		new Thread( new Runnable() {
+				
+			@Override
+			public void run() {
+				while(true){
+		    		try {
+						Thread.sleep(75);
+						final String message;
+						synchronized (receivedMessages) {
+//							Gdx.app.log(TAG, "accessing lock");
+							if(!receivedMessages.isEmpty()){
+								message = receivedMessages.removeFirst();
+							} else {
+								message = null;
+							}
+						}
+//						Gdx.app.log(TAG, "exiting lock");
+						if(message != null){
+							Gdx.app.postRunnable(new Runnable() {
+								
+								@Override
+								public void run() {
+									Gdx.app.log(TAG,"Accepting command: "+message);
+									Command command = commandFactory.createCommand(message);
+									if(command == null){
+										Gdx.app.log(TAG, "Waiting for split message");
+										return;
+									}
+									switch(command.getCommand()){
+										case Command.CREATE_GAME:
+											handleCreateGameCommand(command);
+											break;
+										case Command.READY:
+											Gdx.app.log(TAG, "Ready");
+											handleReadyGameCommand(command);
+											break;
+										case Command.START_GAME:
+											handleStartGameCommand(command);
+											break;
+										case Command.CLOCK_SYNC_REQ:
+											handleClockSyncRequestCommand(command);
+											break;
+										case Command.CLOCK_SYNC_RES:
+											handleClockSyncResponseCommand(command);
+											break;
+										case Command.MOVE:
+											handleMoveCommand(command);
+											break;
+										case Command.UPDATE:
+											handleUpdateCommand(command);
+											break;
+									}
+								}
+							});
+						}
+		    		} catch (Exception e){
+		    			Gdx.app.log(TAG,"Message handling failed");
+		    		}
+				}
+			}
+		}).start();
+	}
 }

@@ -66,6 +66,8 @@ public class CommandFactory {
             	return StartGameCommand.build(json);
             case Command.CREATE_GAME:
             	return CreateGameCommand.build(json);
+            case Command.READY:
+            	return ReadyCommand.build(json);
             case Command.MOVE:
                 return MoveCommand.build(json);
             case Command.UPDATE:

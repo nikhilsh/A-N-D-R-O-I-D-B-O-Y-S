@@ -12,10 +12,9 @@ public abstract class Command {
     public static final int CAST = 11;
     public static final int UPDATE = 12;
     
-    public static final int START_GAME = 100;
-    public static final int CREATE_GAME = 101;
-
-  
+    public static final int CREATE_GAME = 100;
+    public static final int READY = 101;
+    public static final int START_GAME = 102;
     
     public static final int GAME_END = 0;
    	
