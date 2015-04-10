@@ -459,9 +459,6 @@ public class Bob {
 		return bobRect;
 	}
 	
-	public Spells getSpell(){
-		return Spells.FORCESTAFF;
-
 	public boolean isInvulnerable() {
 		return invulnerable;
 	}

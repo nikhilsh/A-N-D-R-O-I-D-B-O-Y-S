@@ -2,8 +2,6 @@ package com.androidboys.spellarena.gameworld;
 
 import java.util.ArrayList;
 import java.util.Map;
-
-import appwarp.WarpController;
 import org.json.JSONObject;
 
 import com.androidboys.spellarena.helper.AssetLoader;
