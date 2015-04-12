@@ -84,6 +84,7 @@ public class GameScreenMediator extends Mediator{
 						GameScreenMediator.this.onPlayerJoinedRoom(player);
 					}
 				}
+				GameScreenMediator.this.roomInfoProcessed();
 			}
 			
 			@Override
@@ -95,15 +96,22 @@ public class GameScreenMediator extends Mediator{
 		initCommandHandler();
 	}
 
+	protected void roomInfoProcessed() {
+		gameScreen.roomInfoProcessed();
+	}
+
 	private void handleCreateGameCommand(Command c){
 		String ip = ((CreateGameCommand)c).getIP();
+//		gameScreen.setServerReady(true);
 		gameScreen.connectToServer(ip);
 	}
 	
 	private void handleReadyGameCommand(Command command) {
 		Gdx.app.log(TAG, "handleReadyGameCommand "+command);
 		String playerName = command.getFromUser();
-		checkSync(playerName);
+		if(UserSession.getInstance().isServer()){
+			checkSync(playerName);
+		}
 		gameScreen.onPlayerReady(playerName);
 	}
 	
@@ -242,16 +250,18 @@ public class GameScreenMediator extends Mediator{
 	public void sendServerAddress(String playerName) {
 		try {
 			CreateGameCommand command = new CreateGameCommand();
-			command.setIP(InetAddress.getLocalHost().getHostAddress());
+			command.setIP(UserSession.getInstance().getIP());
 			command.setFromUser(UserSession.getInstance().getUserName());
 			networkInterface.sendMessageTo(playerName, command.serialize());
-		} catch (UnknownHostException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void connectToServerSuccess(GameClient client) {
-		this.gameClient = client;
+		if(client!=null){
+			this.gameClient = client;
+		}
 		Gdx.app.log(TAG, "connectToServerSuccess");
 		gameScreen.connectToServerSuccess();
 		ReadyCommand command = new ReadyCommand();
