@@ -226,8 +226,6 @@ public class MainMenuScreen implements Screen {
 		
 		displayLoadingWidget();
 		game.getClient().connect();
-
-		Gdx.input.setInputProcessor(stage);
 	}
 
 	private void initializeGameList() {
@@ -330,6 +328,7 @@ public class MainMenuScreen implements Screen {
 	@Override
 	public void show() {
 		game.getClient().addNetworkListener(networkListenerAdapter);
+		Gdx.input.setInputProcessor(stage);
 	}
 	
 	/**

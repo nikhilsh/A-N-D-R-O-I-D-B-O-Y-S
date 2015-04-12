@@ -160,6 +160,8 @@ public class Bob {
 		}
 	}
 	
+	
+	@Deprecated
 	private void updateVelocity(){
 		Vector2 newV = null;
 		if(playerName.equals(UserSession.getInstance().getUserName())){
@@ -524,8 +526,8 @@ public class Bob {
 				this.velocity = new Vector2(-MAX_SPEED, 0);
 				break;
 		}
-		float timeDiff = (System.currentTimeMillis() - time)/1000f;
-		this.position = new Vector2(position).add(new Vector2(velocity).scl(timeDiff));
+//		float timeDiff = (System.currentTimeMillis() - time)/1000f;
+//		this.position = new Vector2(position).add(new Vector2(velocity).scl(timeDiff));
 	}
 
 	public void setUpdateDetails(long timestamp, Vector2 position, Vector2 velocity) {

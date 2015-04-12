@@ -79,7 +79,7 @@ public class GameServer {
 	
 	public void startServer(){
 		this.server = new Server();
-		this.server.getKryo().register(String.class);
+//		this.server.getKryo().register(String.class);
 		this.server.start();
 		try {
 			this.server.bind(TCP_PORT, UDP_PORT);
@@ -90,6 +90,7 @@ public class GameServer {
 					if(object instanceof String){
 						Gdx.app.log(TAG, "Sending to all: "+object);
 						gameScreenMediator.processMessage((String) object);
+//						server.sendToAllTCP(object);
 						server.sendToAllExceptTCP(connection.getID(), object);
 					}
 				}

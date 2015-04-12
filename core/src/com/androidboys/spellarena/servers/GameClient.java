@@ -36,15 +36,15 @@ public class GameClient {
 		this.gameScreenMediator = gameScreenMediator;
 		this.client = new Client();
 		this.client.start();
-		this.client.getKryo().register(String.class);
+//		this.client.getKryo().register(String.class);
 		
 	}
 	
 	public void connectToServer(String host){
 		try {
+			initListener();
 			client.connect(5000, InetAddress.getByName(host), TCP_PORT, UDP_PORT);
 			setUpSender();
-			initListener();
 			gameScreenMediator.connectToServerSuccess(this);
 		} catch (UnknownHostException e) {
 			gameScreenMediator.connectToServerFailed();

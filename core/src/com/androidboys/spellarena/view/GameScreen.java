@@ -1,5 +1,6 @@
 package com.androidboys.spellarena.view;
 
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 
@@ -25,6 +26,7 @@ import com.androidboys.spellarena.view.widgets.ButtonWidget;
 import com.androidboys.spellarena.view.widgets.LoadingWidget;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -48,6 +50,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -139,7 +142,7 @@ public class GameScreen implements Screen{
 	private String serverIp;
 	
 	private HashMap<String,Integer> playersList = new HashMap<String, Integer>();
-	private HashMap<String,Boolean> clientsReady;
+	private HashMap<String,Boolean> clientsReady = new HashMap<String, Boolean>();
 	
 	//Constructor for debugging w/o multiplayer
 	public GameScreen(SpellArena game, Mediator mediator) {
@@ -162,7 +165,8 @@ public class GameScreen implements Screen{
 //		
 //
 		renderer = new GameRenderer(batcher, world);	
-//		
+//	
+		
 //		createTouchpad();
 //		inputHandler = new InputHandler(world,this);
 //		
@@ -194,6 +198,7 @@ public class GameScreen implements Screen{
 		createTouchpad();
 		createSpellButtons();
 		initializeBeforeGamePanel();
+		setBackKeyListener();
 		prepareInputProcessor();
 		prepareDisconnectPopUp(); 
 		prepareRoomOwnerLeftPopUp();
@@ -202,7 +207,6 @@ public class GameScreen implements Screen{
 		
 		if(UserSession.getInstance().isServer()) {
 			initializeGameOnServer();
-			this.clientsReady = new HashMap<String, Boolean>();
 			gameServer = new GameServer(world);
 			gameServer.initialize(game.getClient(),gameScreenMediator);
 			gameServer.startServer();
@@ -474,7 +478,7 @@ public class GameScreen implements Screen{
 			@Override
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				if(GameScreen.this.movement!=MOVEMENT_NONE&&!prevMovementChanged){
+				if(GameScreen.this.movement!=MOVEMENT_NONE){
 					GameScreen.this.movement = MOVEMENT_NONE ;
 					movementChangeListener.onMovementChanged(movement);
 					prevMovementChanged = true;
@@ -603,10 +607,10 @@ public class GameScreen implements Screen{
 	private ButtonWidget myButton;
 	private ButtonWidget myButton2;
 	private ButtonWidget myButton3;
+	private boolean roomInfoProcessed;
 	private void update(float delta) {
 		n++;
 		if(n%10 == 0){
-			Gdx.app.log(TAG, prevMovementChanged+"");
 			prevMovementChanged = false;
 		}
 		world.update(delta);
@@ -671,8 +675,7 @@ public class GameScreen implements Screen{
 	 */
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	/*
@@ -771,11 +774,11 @@ public class GameScreen implements Screen{
 					p4Label.setVisible(true);
 					break;	
 			}
+			clientsReady.put(playerName, false);
 			if(connectedToServer){
-				this.connectToServerSuccess();
+				gameScreenMediator.connectToServerSuccess(null);
 			}
 			if(UserSession.getInstance().isServer()){
-				clientsReady.put(playerName, false);
 				if(serverReady)gameScreenMediator.sendServerAddress(playerName);
 //				startGameButton.setVisible(true);
 			}
@@ -907,6 +910,25 @@ public class GameScreen implements Screen{
 		return world.getPlayerModel(playerName) != null;
 	}
 
+	 private void setBackKeyListener() {
+	        stage.addListener(new InputListener() {
+	            @Override
+	            public boolean keyDown(InputEvent event, int keycode) {
+	                if (keycode == Input.Keys.BACK || keycode == Input.Keys.ESCAPE) {
+                        Gdx.app.postRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (game.getNumberScreens() > 1) {
+                                    game.backToPreviousScreen();
+                                }
+                            }
+                        });
+	                }
+	                return true;
+	            }
+	        });
+	    }
+	
 
 	public void removePlayer(String playerName) {
 		//world.removePlayer(playerName);
@@ -985,51 +1007,71 @@ public class GameScreen implements Screen{
 	}
 
 	public void connectToServerSuccess() {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		connectedToServer = true;
+		if(roomInfoProcessed){
+			onPlayerReady(UserSession.getInstance().getUserName());
+		}
 		startGameButton.setVisible(false);
 	}
 
 
 	public void onPlayerReady(String playerName) {
 		Gdx.app.log(TAG, "onPlayerReady: "+playerName);
-		int playerNo = playersList.get(playerName);
-		if(UserSession.getInstance().isServer()){
+		if(!clientsReady.get(playerName)){
+			int playerNo = playersList.get(playerName);
 			clientsReady.put(playerName, true);
-		}
-		Label playerLabel = null;
-		switch(playerNo){
-			case 2:
-				playerLabel = p2Label;
-				break;
-			case 3:
-				playerLabel = p3Label;
-				break;
-			case 4:
-				playerLabel = p3Label;
-				break;
-		}
-		playerLabel.setText(playerName+"\n\nready");
-		if(UserSession.getInstance().isServer()){
-			boolean readyToStart = true;
-			for(String client: clientsReady.keySet()){
-				if(!clientsReady.get(client)){
-					readyToStart = false;
+			Label playerLabel = null;
+			switch(playerNo){
+				case 2:
+					playerLabel = p2Label;
+					break;
+				case 3:
+					playerLabel = p3Label;
+					break;
+				case 4:
+					playerLabel = p4Label;
+					break;
+			}
+			playerLabel.setText(playerName+"\n\nready");
+			if(UserSession.getInstance().isServer()){
+				boolean readyToStart = true;
+				for(String client: clientsReady.keySet()){
+					if(!clientsReady.get(client)){
+						readyToStart = false;
+					}
+				}
+				if(readyToStart){
+					startGameButton.setText("Start Game");
+					startGameButton.addListener(new ClickListener(){
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							Gdx.app.log(TAG,"Start game button clicked");
+							beforeGamePanel.remove();
+							gameScreenMediator.startGame();
+						}
+					});
+					startGameButton.setVisible(true);
 				}
 			}
-			if(readyToStart){
-				startGameButton.setText("Start Game");
-				startGameButton.addListener(new ClickListener(){
-					@Override
-					public void clicked(InputEvent event, float x, float y) {
-						Gdx.app.log(TAG,"Start game button clicked");
-						beforeGamePanel.remove();
-						gameScreenMediator.startGame();
-					}
-				});
-				startGameButton.setVisible(true);
-			}
 		}
-		
+	}
+
+
+	public void setServerReady(boolean b) {
+		this.serverReady = true;
+	}
+
+
+	public void roomInfoProcessed() {
+		this.roomInfoProcessed = true;
+		if(connectedToServer){
+			onPlayerReady(UserSession.getInstance().getUserName());
+		}
 	}	
 	
 	

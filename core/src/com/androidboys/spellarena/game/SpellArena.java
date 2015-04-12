@@ -128,8 +128,11 @@ public class SpellArena extends Game {
 			this.topScreen = getTopScreen();
 			displayTopScreen();
 		} catch (Exception e){
-			Gdx.app.error(TAG,"No previous screen");
 		}
 
+	}
+
+	public int getNumberScreens() {
+		return screens.size();
 	}
 }
