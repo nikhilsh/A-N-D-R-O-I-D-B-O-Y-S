@@ -246,14 +246,89 @@ __Laser (EEE)__
 ### core
 [Core code of the game](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/core)
 * src
- * com.androidboys.spellarena
-  * game.desktop
-   * DesktopLauncher.java
-  * utils
-   * TextureSetup.java
-* assets
- * _(See "assets" folder in "android" part)_
+ * com
+  * androidboys.spellarena
+   * game
+    * SpellArena.java
+   * gameworld
+    * GameFactory.java
+    * GameRenderer.java
+    * GameWorld.java
+   * helper
+    * AssetLoader.java
+    * InputHandler.java
+    * StyleLoader.java
+   * mediators
+    * GameScreenMediator.java
+    * MainMenuMediator.java
+    * Mediator.java
+   * model
+    * Bob.java
+    * Spell.java
+   * net
+    * appwarp
+     * AppWarpClient.java
+     * NotificationListenerAdapter.java
+     * RoomListenerAdapter.java
+     * ZoneListenerAdapter.java
+    * model
+     * RoomModel.java
+    * protocol
+     * ClockSyncReqCommand.java
+     * ClockSyncResCommand.java
+     * Command.java
+     * CommandFactory.java
+     * CreateGameCommand.java
+     * GameEndCommand.java
+     * MoveCommand.java
+     * ReadyCommand.java
+     * StartGameCommand.java
+     * UndefinedCommand.java
+     * UpdateCommand.java
+    * ChatListener.java
+    * ConnectionListener.java
+    * NetworkInterface.java
+    * NetworkListenerAdapter.java
+    * WarpController.java
+    * WarpListener.java
+   * servers
+    * GameClient.java
+    * GameServer.java
+   * session
+    * UserSession.java
+   * view
+    * widgets
+     * ButtonWidget.java
+     * ChangingLabel.java
+     * GameListWidget.java
+     * GameWidget.java
+     * LoadingWidget.java
+    * GameScreen.java
+    * MainMenuScreen.java
+    * SplashScreen.java
+    * StartMultiplayerScreen.java
+  * esotericsoftware.kryonet
+   * rmi
+    * ObjectSpace.java
+    * RemoteObject.java
+    * TimeoutException.java
+   * util
+    * InputStreamSender.java
+    * ObjectIntMap.java
+    * TcpIdleSender.java
+   * Client.java
+   * ClientDiscoveryHandler.java
+   * Connection.java
+   * EndPoint.java
+   * FrameworkMessage.java
+   * JsonSerialization.java
+   * KryoNetException.java
+   * KryoSerialization.java
+   * Listener.java
+   * Serialization.java
+   * Server.java
+   * ServerDiscoveryHandler.java
+   * TcpConnection.java
+   * UdpConnection.java
 * build
-* Users
- * _(See "users" folder in "desktop" part)_
 * build.gradle
