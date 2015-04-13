@@ -19,6 +19,7 @@ import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.Bob.Direction;
 import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.net.WarpListener;
+import com.androidboys.spellarena.net.model.RoomModel;
 import com.androidboys.spellarena.servers.GameClient;
 import com.androidboys.spellarena.servers.GameServer;
 import com.androidboys.spellarena.session.UserSession;
@@ -609,14 +610,16 @@ public class GameScreen implements Screen{
 	private ButtonWidget myButton3;
 	private boolean roomInfoProcessed;
 	private void update(float delta) {
-		n++;
-		if(n%10 == 0){
-			prevMovementChanged = false;
-		}
-		world.update(delta);
-		stage.act(delta);
-		if (gameStarted&&n%30 == 0){
-			gameScreenMediator.update(world.getPlayerModel(UserSession.getInstance().getUserName()));
+		synchronized (world.getPlayerModels()) {
+			n++;
+			if(n%10 == 0){
+				prevMovementChanged = false;
+			}
+			world.update(delta);
+			stage.act(delta);
+			if (gameStarted&&n%30 == 0){
+				gameScreenMediator.update(world.getPlayerModel(UserSession.getInstance().getUserName()));
+			}
 		}
 	}
 
@@ -666,8 +669,7 @@ public class GameScreen implements Screen{
 	 */
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
+		gameScreenMediator.leaveRoom();
 	}
 
 	/**
@@ -675,7 +677,7 @@ public class GameScreen implements Screen{
 	 */
 	@Override
 	public void dispose() {
-		
+		gameScreenMediator.disconnect(gameStarted);
 	}
 
 	/*
@@ -931,7 +933,11 @@ public class GameScreen implements Screen{
 	
 
 	public void removePlayer(String playerName) {
-		//world.removePlayer(playerName);
+		renderer.removePlayer(playerName);
+		world.removePlayer(playerName);
+		if(world.isGameEnd()){
+			displayWinGamePopup();
+		}
 	}
 
 	public void onStartGame() {
@@ -942,6 +948,16 @@ public class GameScreen implements Screen{
 		gameStarted = true;
 		beforeGamePanel.remove();
 		world.initialize(GameFactory.getGameModel());
+		if(gameScreenMediator.getNetworkListenerAdapter() != null){
+			game.getClient().removeNetworkListener(gameScreenMediator.getNetworkListenerAdapter());
+		}
+		RoomModel roomModel = UserSession.getInstance().getRoom();
+		if(roomModel != null){
+			game.getClient().leaveRoom(roomModel.getId());
+			if(UserSession.getInstance().isRoomOwner()){
+				game.getClient().deleteRoom(roomModel.getId());
+			}
+		}
 	}
 
 	public ButtonWidget[] getCommandList() {
@@ -1072,6 +1088,17 @@ public class GameScreen implements Screen{
 		if(connectedToServer){
 			onPlayerReady(UserSession.getInstance().getUserName());
 		}
+	}
+
+
+	public void displayWinGamePopup() {
+		winGamePopUp.setVisible(true);
+	}
+
+
+	public void onOwnerLeft() {
+		gameScreenMediator.disconnect(gameStarted);
+		roomOwnerLeftPopUp.setVisible(true);
 	}	
 	
 	

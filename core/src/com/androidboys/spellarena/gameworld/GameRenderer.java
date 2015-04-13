@@ -2,6 +2,7 @@ package com.androidboys.spellarena.gameworld;
 
 import java.util.ArrayList;
 import java.util.Map;
+
 import org.json.JSONObject;
 
 import com.androidboys.spellarena.helper.AssetLoader;
@@ -39,7 +40,6 @@ public class GameRenderer {
 	private Bob bob;
 	private ArrayList<Bob> enemies;
 	
-	private Bob enemy;
 	private Spells spell;
 
 	private TiledMap map;
@@ -321,6 +321,10 @@ public class GameRenderer {
 			cam.position.set(bob.getPosition().x,bob.getPosition().y,0);
 		}
 		cam.update();
+	}
+
+	public void removePlayer(String playerName) {
+		enemies.remove(world.getPlayerModel(playerName));
 	}
 
 }

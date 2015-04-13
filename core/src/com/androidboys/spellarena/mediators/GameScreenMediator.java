@@ -110,13 +110,18 @@ public class GameScreenMediator extends Mediator{
 		Gdx.app.log(TAG, "handleReadyGameCommand "+command);
 		String playerName = command.getFromUser();
 		if(UserSession.getInstance().isServer()){
+			
 			checkSync(playerName);
 		}
 		gameScreen.onPlayerReady(playerName);
 	}
 	
 	private void handleStartGameCommand(Command c){
+		networkInterface.removeNetworkListener(networkListenerAdapter);
 		gameScreen.onStartGame();
+		if(UserSession.getInstance().isServer()){
+			networkInterface.deleteRoom(UserSession.getInstance().getRoom().getId());
+		}
 	}
 	
 	private void handleClockSyncRequestCommand(Command c){
@@ -149,6 +154,14 @@ public class GameScreenMediator extends Mediator{
 		}
 	}
 	
+	private void handleGameEndCommand(GameEndCommand command) {
+        if (command.getReason() == GameEndCommand.GameEndReason.GAME_END) {
+            if (UserSession.getInstance().getUserName().equals(command.getWinner())) {
+                gameScreen.displayWinGamePopup();
+            }
+        }
+    }
+	
 	@Override
 	protected void onScreenShow() {
 		super.onScreenShow();
@@ -168,7 +181,7 @@ public class GameScreenMediator extends Mediator{
 		gameServer.sendMessage(command.serialize());
 	}
 	
-	private void onPlayerLeftRoom(String playerName) {
+	public void onPlayerLeftRoom(String playerName) {
 		if((playerName != null)&&playerName.equals(getRoom().getOwner())){
 			onGameOwnerLeft();
 		} else {
@@ -177,10 +190,7 @@ public class GameScreenMediator extends Mediator{
 	}
 	
 	private void onGameOwnerLeft() {
-		GameEndCommand gameEndCommand = new GameEndCommand();
-		gameEndCommand.setFromUser(UserSession.getInstance().getUserName());
-		gameEndCommand.setReason(GameEndReason.OWNER_LEFT);
-		networkInterface.sendMessage(gameEndCommand.serialize());
+        gameScreen.onOwnerLeft();
 	}
 
 	@Override
@@ -226,14 +236,16 @@ public class GameScreenMediator extends Mediator{
 	}
 
 	public void update(Bob playerModel) {
-		UpdateCommand command = new UpdateCommand();
-		command.setUpdate(playerModel.getPosition(),playerModel.getVelocity());
-		command.setFromUser(UserSession.getInstance().getUserName());
-		if(UserSession.getInstance().isServer()){
-			gameServer.sendMessage(command.serialize());
-		} 
-		else {	
-			gameClient.sendMessage(command.serialize());
+		if(playerModel != null){
+			UpdateCommand command = new UpdateCommand();
+			command.setUpdate(playerModel.getPosition(),playerModel.getVelocity());
+			command.setFromUser(UserSession.getInstance().getUserName());
+			if(UserSession.getInstance().isServer()){
+				gameServer.sendMessage(command.serialize());
+			} 
+			else {	
+				gameClient.sendMessage(command.serialize());
+			}
 		}
 	}
 
@@ -341,5 +353,30 @@ public class GameScreenMediator extends Mediator{
 				}
 			}
 		}).start();
+	}
+
+	public void leaveRoom() {
+		networkInterface.leaveRoom(UserSession.getInstance().getRoom().getId());
+	}
+
+	public void disconnect(boolean gameStarted) {
+		if(!gameStarted){
+			if(this.getNetworkListenerAdapter() != null){
+				game.getClient().removeNetworkListener(this.getNetworkListenerAdapter());
+			}
+			RoomModel roomModel = UserSession.getInstance().getRoom();
+			if(roomModel != null){
+				game.getClient().leaveRoom(roomModel.getId());
+				if(UserSession.getInstance().isRoomOwner()){
+					game.getClient().deleteRoom(roomModel.getId());
+				}
+			}
+		} else {
+			if(UserSession.getInstance().isServer()){
+				gameServer.close();
+			} else {
+				gameClient.close();
+			}
+		}
 	}
 }
