@@ -170,12 +170,12 @@ __Laser (EEE)__
   * images
     * androidboys.png
     * bg.jpg
-      * exort.png
-      * frame1.jpg
-      * loadingbackground.png
-      * ParchmentLabel.png
-      * quas.png
-      * wex.png
+    * exort.png
+    * frame1.jpg
+    * loadingbackground.png
+    * ParchmentLabel.png
+    * quas.png
+    * wex.png
   * maps
     * Dungeon.tmx
   * sprites
@@ -217,13 +217,26 @@ __Laser (EEE)__
 
 ### desktop ###
 [Desktop version](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/desktop)
-* src/com/androidboys/spellarena
+* src
+ * com.androidboys.spellarena
   * game/desktop
-    * DesktopLauncher.java
+   * DesktopLauncher.java
   * utils
-    * TextureSetup.java
+   * TextureSetup.java
+* assets
+ * _(See "assets" folder in "android" part)_
+* build
 * Users
   * _(Users...)_
+   * Desktop
+    * Development
+     * Spell Arena
+      * android
+       * assets
+        * items
+         * textures.pack.atlas
+         * textures.pack.png
+* build.gradle
 
 ### core ###
 [Core code of the game](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/core)
