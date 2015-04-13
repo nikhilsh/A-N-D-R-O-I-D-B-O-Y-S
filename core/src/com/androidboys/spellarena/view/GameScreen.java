@@ -30,6 +30,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -383,8 +384,7 @@ public class GameScreen implements Screen{
 	private void backToLobby() {
 		game.backToPreviousScreen();
 	}
-
-
+	
 	private void prepareInputProcessor() {
 		this.movementChangeListener = new MovementChangeListener() {
 
@@ -394,29 +394,6 @@ public class GameScreen implements Screen{
 				world.movePlayer(UserSession.getInstance().getUserName(), movement);
 			}
 		};
-		
-		
-		stage.addListener(new ClickListener(){
-			
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				Spell spell = new Spell(world);
-				int[] spellList = new int[3];
-		        for (int i = 0; i < commandList.length; i++) {
-		            try {
-		            	spellList[i] = commandList[i].getCommandIndex(); //1 for red 2 for purple 4 for blue
-		            } catch (Exception e) {
-		            	return false;
-		            }
-		        }
-		        
-				spell.spellSettler(spellList[0], spellList[1], spellList[2]);
-//				return super.touchDown(event, x, y, pointer, button);
-				return true;
-			}
-			
-		});
 		
 		touchpad.addListener(new ClickListener(){
 			
@@ -511,7 +488,73 @@ public class GameScreen implements Screen{
 				super.touchUp(event, x, y, pointer, button);
 			}
 		});
-		Gdx.input.setInputProcessor(stage);
+		InputMultiplexer multiplexer = new InputMultiplexer();
+		multiplexer.addProcessor(stage);
+
+		multiplexer.addProcessor(new InputProcessor(){
+
+			@Override
+			public boolean keyDown(int keycode) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean keyUp(int keycode) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean keyTyped(char character) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean touchDown(int screenX, int screenY, int pointer,
+					int button) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean touchUp(int screenX, int screenY, int pointer,
+					int button) {
+					Spell spell = new Spell(world);
+					int[] spellList = new int[3];
+			        for (int i = 0; i < commandList.length; i++) {
+			            try {
+			            	spellList[i] = commandList[i].getCommandIndex(); //1 for red 2 for purple 4 for blue
+			            } catch (Exception e) {
+			            	return false;
+			            }
+			        }
+			        
+					spell.spellSettler(spellList[0], spellList[1], spellList[2]);
+				return true;
+			}
+
+			@Override
+			public boolean touchDragged(int screenX, int screenY, int pointer) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean mouseMoved(int screenX, int screenY) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean scrolled(int amount) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+		});
+		Gdx.input.setInputProcessor(multiplexer);
 	}
 
 	private void initializeBeforeGamePanel() {

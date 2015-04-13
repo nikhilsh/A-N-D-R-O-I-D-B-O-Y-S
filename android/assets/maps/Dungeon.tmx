@@ -213,11 +213,11 @@
    eJzt1NdSwkAAheFgx96xd8Uuir1GwV6xYRffLI+S5yKK/t4ykoCbhL3YM3wzmexuOBe7q2kqssbStNQX/jvux1y7pPnGp813nMb9mKuiUkjYVzpnQ89+zzuTMdP/RoWFs6Fbf/TnnZkW7J/B9+9DgB9KUIoylKMClQGRf/A2VXQLoho1qEUd6tGARjRJ3L+Zbi1oRRvaEUIHOtGFbon799CtF33oxwAGMYRhjGBUsH+u8+tGxugWxjgmMIkpTGMGs5gT7J/r/Lpx/0ToNo8FRLGIJSxjBatY82j/uHH/rNNtA5vYwjZ2oGMXe4hJvP/jdNvHAQ5xhGOc4BRnOJe4/wXdLnGFBK5xg1vc4R5Jifs/0O0RT3jGC17xhnek8CHx/eNHvLx/ihk37h8VlexwJgz2leHFuNPafOfYhXNtWDbrRcad1uY7R6V4+QEg5G5j
   </data>
  </layer>
- <objectgroup name="Collidable">
-  <object id="6" x="47.1286" y="47.1286" width="1825.39" height="19.2006"/>
-  <object id="8" x="1852" y="66.3583" width="32.6397" height="967.49"/>
-  <object id="9" x="66.7009" y="1011.51" width="1787" height="27.1201"/>
-  <object id="11" x="41.7797" y="66.7009" width="24.9212" height="969.728"/>
+<objectgroup name="Collidable">
+  <object id="6" x="20.1286" y="0" width="1910.39" height="66.3292"/>
+  <object id="8" x="1852" y="66.3583" width="66.3292" height="967.49"/>
+  <object id="9" x="11.7009" y="1011.51" width="1908" height="66.3292"/>
+  <object id="11" x="0.7797" y="66.7009" width="75.3292" height="969.728"/>
   <object id="12" x="859.463" y="420.846" width="200.444" height="199.791"/>
  </objectgroup>
  <objectgroup name="StartPosition">
