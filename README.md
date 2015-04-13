@@ -241,33 +241,14 @@ __Laser (EEE)__
 ### core ###
 [Core code of the game](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/core)
 * src
-  * appwarp
-    * ChatListener.java
-    * ConnectionListener.java
-    * NotificationListener.java
-    * RoomListener.java
-    * WarpController.java
-    * WarpListener.java
-    * ZoneListener.java
-* com/androidboys/spellarena
-  * game
-    * SpellArena.java
-  * gameworld
-    * GameRenderer.java
-    * GameWorld.java
-  * helper
-    * AssetLoader.java
-    * InputHandler.java
-  * model
-    * Bob.java
-    * _(More characters to be added (maybe)...)_
-  * screens
-    * GameScreen.java
-    * LoadingScreen.java
-    * MainMenuScreen.java
-    * StartMultiplayerScreen.java
-
-### lib ###
-[Library files](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/libs)
-* App42MultiPlayerGamingSDK.jar
-  * java-json.jar
+ * com.androidboys.spellarena
+  * game.desktop
+   * DesktopLauncher.java
+  * utils
+   * TextureSetup.java
+* assets
+ * _(See "assets" folder in "android" part)_
+* build
+* Users
+ * _(See "users" folder in "desktop" part)_
+* build.gradle
