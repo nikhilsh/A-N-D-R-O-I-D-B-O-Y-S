@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import com.androidboys.spellarena.game.SpellArena;
 import com.androidboys.spellarena.gameworld.GameFactory;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.net.NetworkInterface;
 import com.androidboys.spellarena.net.NetworkListenerAdapter;
 import com.androidboys.spellarena.net.model.RoomModel;
@@ -17,6 +18,7 @@ import com.androidboys.spellarena.net.protocol.CommandFactory;
 import com.androidboys.spellarena.net.protocol.CreateGameCommand;
 import com.androidboys.spellarena.net.protocol.GameEndCommand;
 import com.androidboys.spellarena.net.protocol.ReadyCommand;
+import com.androidboys.spellarena.net.protocol.SpellCommand;
 import com.androidboys.spellarena.net.protocol.StartGameCommand;
 import com.androidboys.spellarena.net.protocol.UpdateCommand;
 import com.androidboys.spellarena.net.protocol.GameEndCommand.GameEndReason;
@@ -161,6 +163,11 @@ public class GameScreenMediator extends Mediator{
             }
         }
     }
+	
+	private void handleSpellCommand(Command command){
+		SpellCommand spellCommand = (SpellCommand)command;
+		gameScreen.castSpell(spellCommand.getPosition().x, spellCommand.getPosition().y, spellCommand.getSpell(), spellCommand.getDirection());
+	}
 	
 	@Override
 	protected void onScreenShow() {
@@ -343,6 +350,8 @@ public class GameScreenMediator extends Mediator{
 										case Command.UPDATE:
 											handleUpdateCommand(command);
 											break;
+										case Command.CAST:
+											handleSpellCommand(command);
 									}
 								}
 							});
@@ -357,6 +366,20 @@ public class GameScreenMediator extends Mediator{
 
 	public void leaveRoom() {
 		networkInterface.leaveRoom(UserSession.getInstance().getRoom().getId());
+	}
+	
+	public void spellCommand(int direction, int spell, float x, float y){
+		SpellCommand command = new SpellCommand();
+		command.setDirection(direction);
+		command.setPosition(x, y);
+		command.setSpell(spell);
+		command.setFromUser(UserSession.getInstance().getUserName());
+		if(UserSession.getInstance().isServer()){
+			gameServer.sendMessage(command.serialize());
+		} 
+		else {	
+			gameClient.sendMessage(command.serialize());
+		}
 	}
 
 	public void disconnect(boolean gameStarted) {

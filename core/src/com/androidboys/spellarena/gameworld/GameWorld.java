@@ -81,6 +81,7 @@ public class GameWorld {
 	/**
 	 * Get the instance of character.
 	 */
+	@Deprecated
 	public Bob getBob(){
 		return local_bob;
 	}
@@ -140,6 +141,7 @@ public class GameWorld {
 	/**
 	 * Update enemy bob.
 	 */
+	@Deprecated
 	public void updateEnemy(float x, float y, float vx, float vy, int state) {
 		enemy_bob.setVelocity(vx, vy);
 		enemy_bob.setPosition(x, y);
@@ -157,6 +159,7 @@ public class GameWorld {
 	/**
 	 * Get the instance of enemy.
 	 */
+	@Deprecated
 	public Bob getEnemy() {
 		return enemy_bob;
 	}

@@ -37,16 +37,15 @@ public class Spell {
 	private Vector2 position;
 	private GameWorld world;
 	private Bob bob;
-	private Bob enemyBob;
+	private int direction;
 	private float remainingSeconds = 0;
-	private State state = State.START;
 
-	public Spell(GameWorld world) {
-		this.position = null;
-		this.spell = null;
+	public Spell(GameWorld world, float x, float y, Spells spell, int direction) {
+		this.position = position.set(x, y);
+		this.spell = spell;
 		this.world = world;
 		this.bob = world.getPlayerModel(UserSession.getInstance().getUserName());
-		this.enemyBob = world.getEnemy();
+		this.direction = direction;
 	}
 
 	public void update(float deltaTime) {
@@ -141,8 +140,6 @@ public class Spell {
 		case ACID:
 			//consider changing
 			//check for collision
-			position = bob.getPosition();
-			remainingSeconds = 5;
 			//send position and time remaining to server
 			//display on UI
 			//clear on screen
@@ -151,36 +148,35 @@ public class Spell {
 			if (bob.getManaCount()>50){
 				bob.decrementManaCount(50);
 				bob.setState(Bob.STATE_INVULNERABLE);
-				remainingSeconds = 3;
 				//send time remaining and state to server
 			}
 			break;
 		case FORCESTAFF:
 			if (bob.getManaCount()>30){
 				bob.decrementManaCount(30);
-				switch (bob.getDirection()) {
-				case EAST:
+				switch (direction) {
+				case 0:
 					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
 					break;
-				case NORTH:
+				case 1:
 					bob.setPosition(bob.getPosition().x, bob.getPosition().y+100);
 					break;
-				case NORTHEAST:
+				case 2:
 					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y+100);
 					break;
-				case NORTHWEST:
+				case 3:
 					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y+100);
 					break;
-				case SOUTH:
+				case 4:
 					bob.setPosition(bob.getPosition().x, bob.getPosition().y-100);
 					break;
-				case SOUTHEAST:
+				case 5:
 					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y-100);
 					break;
-				case SOUTHWEST:
+				case 6:
 					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y-100);
 					break;
-				case WEST:
+				case 7:
 					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y);
 					break;
 
@@ -196,8 +192,6 @@ public class Spell {
 		case ATOS:
 			if (bob.getManaCount()>50){
 				bob.decrementManaCount(50);
-				enemyBob.setAtosSpeed();
-				remainingSeconds = 3;
 			}
 			else {
 				System.out.println("No enough Mana!");
@@ -205,12 +199,10 @@ public class Spell {
 			break;
 
 		case STASISTRAP:
-			
+
 			//collision with sprite model (+100 radius)
 			//insert mine at bob position
 			//if stasis trap near enemy,
-			enemyBob.setVelocity(0, 0);
-			remainingSeconds = 5;
 			break;
 
 		case SPROUT:
@@ -223,19 +215,9 @@ public class Spell {
 		case DARKPACT:
 			if (bob.getManaCount()>80){
 				bob.decrementManaCount(80);
-				remainingSeconds = 3;
 				//so start animation 3 seconds before,
 				//then if the state is end,			
-				if (enemyBob.getPosition().x+300 > bob.getPosition().x && enemyBob.getPosition().x - 300 < bob.getPosition().x){
-					if (enemyBob.getPosition().y+300 > bob.getPosition().y && enemyBob.getPosition().y - 300 < bob.getPosition().y){
-						System.out.println("Enemy hit by dark pact");
-
-						//so if within radius of 300,
-						//reduce enemy life
-						enemyBob.decrementLifeCount();
-						//flashy graphics on server
-					}
-				}
+			
 			}
 			else {
 				System.out.println("No enough Mana!");
@@ -251,59 +233,7 @@ public class Spell {
 		case LASER:
 			if (bob.getManaCount()>80){
 				bob.decrementManaCount(80);
-				switch (bob.getDirection()) {
-				//diagonal implementations are a bit off, now its checking according to a rectangle
-				case EAST:
-					if (enemyBob.getPosition().x-bob.getPosition().x<300 && enemyBob.getPosition().x-bob.getPosition().x>0 && Math.abs(enemyBob.getPosition().y-bob.getPosition().y)<30) {
-						System.out.println("Enemy hit by laser");
-						enemyBob.decrementLifeCount();
-					}
-					break;
-				case NORTH:
-					if (enemyBob.getPosition().y-bob.getPosition().y<300 && enemyBob.getPosition().y-bob.getPosition().y>0 && Math.abs(enemyBob.getPosition().x-bob.getPosition().x)<30) {
-						System.out.println("Enemy hit by laser");
-						enemyBob.decrementLifeCount();
-					}
-					break;
-				case NORTHEAST:
-					if (enemyBob.getPosition().x-bob.getPosition().x<300 && enemyBob.getPosition().x-bob.getPosition().x>0 && enemyBob.getPosition().y-bob.getPosition().y<300 && enemyBob.getPosition().y-bob.getPosition().y>0) {
-						System.out.println("Enemy hit by laser");
-						enemyBob.decrementLifeCount();
-					}
-					break;
-				case NORTHWEST:
-					if (enemyBob.getPosition().x-bob.getPosition().x>-300 && enemyBob.getPosition().x-bob.getPosition().x<0 && enemyBob.getPosition().y-bob.getPosition().y<300 && enemyBob.getPosition().y-bob.getPosition().y>0) {
-						System.out.println("Enemy hit by laser");
-						enemyBob.decrementLifeCount();
-					}
-					break;
-				case SOUTH:
-					if (enemyBob.getPosition().y-bob.getPosition().y>-300 && enemyBob.getPosition().y-bob.getPosition().y<0 && Math.abs(enemyBob.getPosition().x-bob.getPosition().x)<30) {
-						System.out.println("Enemy hit by laser");
-						enemyBob.decrementLifeCount();
-					}			
-					break;
-				case SOUTHEAST:
-					if (enemyBob.getPosition().x-bob.getPosition().x<300 && enemyBob.getPosition().x-bob.getPosition().x>0 && enemyBob.getPosition().y-bob.getPosition().y>-300 && enemyBob.getPosition().y-bob.getPosition().y<0) {
-						System.out.println("Enemy hit by laser");
-						enemyBob.decrementLifeCount();
-					}
-					break;
-				case SOUTHWEST:
-					if (enemyBob.getPosition().x-bob.getPosition().x>-300 && enemyBob.getPosition().x-bob.getPosition().x<0 && enemyBob.getPosition().y-bob.getPosition().y>-300 && enemyBob.getPosition().y-bob.getPosition().y<0) {
-						System.out.println("Enemy hit by laser");
-						enemyBob.decrementLifeCount();
-					}
-					break;
-				case WEST:
-					if (enemyBob.getPosition().x-bob.getPosition().x>-300 && enemyBob.getPosition().x-bob.getPosition().x<0 && Math.abs(enemyBob.getPosition().y-bob.getPosition().y)<30) {
-						System.out.println("Enemy hit by laser");
-						enemyBob.decrementLifeCount();
-					}
-					break;
-				default:
-					break;
-				}
+				
 			}
 			else {
 				System.out.println("No enough Mana!");
@@ -313,16 +243,7 @@ public class Spell {
 		case FANOFKNIVES:
 			if (bob.getManaCount()>100){
 				bob.decrementManaCount(100);
-				if (enemyBob.getPosition().x+100 > bob.getPosition().x && enemyBob.getPosition().x - 100 < bob.getPosition().x){
-					if (enemyBob.getPosition().y+100 > bob.getPosition().y && enemyBob.getPosition().y - 100 < bob.getPosition().y){
-						System.out.println("Enemy hit by fan of knives");
-						//so if within radius of 100,
-						//reduce enemy life
-						enemyBob.decrementLifeCount();
-						//flashy graphics on server
-						//no remaining count. straightaway do
-					}
-				}
+				
 			}
 			else {
 				System.out.println("No enough Mana!");
@@ -330,27 +251,38 @@ public class Spell {
 		default:
 			break;
 		}
-		//do spell everytime
-		sendSpell();
 	}
 
-	public void sendSpell(){
-		try {
-			JSONObject data = new JSONObject();
-			data.put("x", position.x);
-			data.put("y", position.y);
-			data.put("spell", spell);
-			data.put("remainingSeconds", remainingSeconds);
-			WarpController.getInstance().sendGameUpdate(data.toString());
-		} catch (Exception e) {
-		}
-	}
 	
-	public Spells getSpell(){
-		if (this.spell == null){
-			return null;
+	public int getSpell(){
+
+		switch (spell) {
+		case ACID:
+			return 0;
+		case DIVINESHIELD:
+			return 1;
+		case FORCESTAFF:
+			return 2;
+		case ATOS:
+			return 3;
+		case STASISTRAP:
+			return 4;
+		case SPROUT:
+			return 5;
+
+		case DARKPACT:
+			return 6;
+
+		case MINE:
+			return 7;
+		case LASER:
+			return 8;
+		case FANOFKNIVES:
+			return 9;
+		default:
+			break;
 		}
-		return this.spell;
+		return 0;
 	}
 
 	public Boolean checkCollision(Bob bob){

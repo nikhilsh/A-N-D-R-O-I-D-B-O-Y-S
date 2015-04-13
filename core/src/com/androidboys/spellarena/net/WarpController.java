@@ -97,6 +97,7 @@ public class WarpController {
 		}
 	}
 	
+	@Deprecated
 	public void sendGameUpdate(String msg){
 		if(isConnected){
 			if(isUDPEnabled){

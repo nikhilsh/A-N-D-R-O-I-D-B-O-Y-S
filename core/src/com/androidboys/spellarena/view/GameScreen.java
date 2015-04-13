@@ -18,6 +18,7 @@ import com.androidboys.spellarena.mediators.Mediator;
 import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Bob.Direction;
+import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.net.WarpListener;
 import com.androidboys.spellarena.net.model.RoomModel;
@@ -98,6 +99,7 @@ public class GameScreen implements Screen{
 	private GameScreenMediator gameScreenMediator;
 	private GameServer gameServer;
 	private GameClient gameClient;
+	private Bob bob = world.getPlayerModel(UserSession.getInstance().getUserName());
 	
 	private GameRenderer renderer;
 	
@@ -111,9 +113,7 @@ public class GameScreen implements Screen{
 	private int movement = MOVEMENT_NONE;
 	
 	private Stage stage;
-	
-	private InputHandler inputHandler;
-	
+		
 	private float runTime;
 	
 	private TiledMap map;
@@ -157,7 +157,8 @@ public class GameScreen implements Screen{
 		
 		this.gameScreenMediator = (GameScreenMediator) mediator;
 		this.gameScreenMediator.setRoom(UserSession.getInstance().getRoom());
-		
+		this.bob = world.getPlayerModel(UserSession.getInstance().getUserName());
+
 		initializeDefaultGameBoard();
 		
 		this.cam = new OrthographicCamera(480,320);
@@ -165,7 +166,6 @@ public class GameScreen implements Screen{
 		
 		this.batcher = new SpriteBatch();
 		this.stage = new Stage(new StretchViewport(720, 480));
-//		
 //
 		renderer = new GameRenderer(batcher, world);	
 //	
@@ -521,7 +521,38 @@ public class GameScreen implements Screen{
 			@Override
 			public boolean touchUp(int screenX, int screenY, int pointer,
 					int button) {
-					Spell spell = new Spell(world);
+				int direction = 0;
+				
+				System.out.println("this is bob " +bob);
+				switch (bob.getDirection()) {
+				case EAST:
+					direction = 0;
+					break;
+				case NORTH:
+					direction = 1;
+					break;
+				case NORTHEAST:
+					direction = 2;
+					break;
+				case NORTHWEST:
+					direction = 3;
+					break;
+				case SOUTH:
+					direction = 4;
+					break;
+				case SOUTHEAST:
+					direction = 5;
+					break;
+				case SOUTHWEST:
+					direction = 6;
+					break;
+				case WEST:
+					direction = 7;
+					break;
+				default:
+					break;
+				}
+					Spell spell = new Spell(world, bob.getPosition().x, bob.getPosition().y, null, direction);
 					int[] spellList = new int[3];
 			        for (int i = 0; i < commandList.length; i++) {
 			            try {
@@ -532,6 +563,7 @@ public class GameScreen implements Screen{
 			        }
 			        
 					spell.spellSettler(spellList[0], spellList[1], spellList[2]);
+					castSpell(bob.getPosition().x, bob.getPosition().y, spell.getSpell(), direction);
 				return true;
 			}
 
@@ -791,6 +823,163 @@ public class GameScreen implements Screen{
 		}
 	}
 	*/
+	
+	public void castSpell(float x, float y, int spell, int direction){
+		Spells spellEnum = null;
+		switch(spell){
+
+		case 0:
+			spellEnum =  Spells.DIVINESHIELD;
+		
+		case 1:
+			spellEnum =  Spells.FORCESTAFF;
+		
+		case 2:
+			spellEnum =  Spells.ATOS;
+
+		case 3:
+			spellEnum =  Spells.STASISTRAP;
+
+		case 4:
+			spellEnum =  Spells.SPROUT;
+
+		case 5:
+			spellEnum =  Spells.DARKPACT;
+
+		case 6:
+			spellEnum =  Spells.MINE;
+
+		case 7:
+			spellEnum =  Spells.LASER;
+
+		case 8:
+			spellEnum =  Spells.ACID;
+
+		case 9:
+			spellEnum =  Spells.FANOFKNIVES;
+
+		default:
+			break;
+		}
+
+		Spell spellInstance = new Spell(world, x, y, spellEnum, direction);
+		switch (spellEnum) {
+		case ACID:
+			//consider changing
+			//check for collision
+			//send position and time remaining to server
+			//display on UI
+			//clear on screen
+			break;
+		case DIVINESHIELD:
+			if (bob.getManaCount()>50){
+				bob.decrementManaCount(50);
+				bob.setState(Bob.STATE_INVULNERABLE);
+				//send time remaining and state to server
+			}
+			break;
+		case FORCESTAFF:
+			if (bob.getManaCount()>30){
+				bob.decrementManaCount(30);
+				switch (bob.getDirection()) {
+				case EAST:
+					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
+					break;
+				case NORTH:
+					bob.setPosition(bob.getPosition().x, bob.getPosition().y+100);
+					break;
+				case NORTHEAST:
+					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y+100);
+					break;
+				case NORTHWEST:
+					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y+100);
+					break;
+				case SOUTH:
+					bob.setPosition(bob.getPosition().x, bob.getPosition().y-100);
+					break;
+				case SOUTHEAST:
+					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y-100);
+					break;
+				case SOUTHWEST:
+					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y-100);
+					break;
+				case WEST:
+					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y);
+					break;
+
+				default:
+					break;
+				}
+			}
+			else {
+				System.out.println("No enough Mana!");
+			}
+			break;
+
+		case ATOS:
+			if (bob.getManaCount()>50){
+				bob.decrementManaCount(50);
+			}
+			else {
+				System.out.println("No enough Mana!");
+			}
+			break;
+
+		case STASISTRAP:
+
+			//collision with sprite model (+100 radius)
+			//insert mine at bob position
+			//if stasis trap near enemy,
+			break;
+
+		case SPROUT:
+			//collision with sprite
+			//mana cost 40
+
+			//need add new collision			
+			break;
+
+		case DARKPACT:
+			if (bob.getManaCount()>80){
+				bob.decrementManaCount(80);
+				//so start animation 3 seconds before,
+				//then if the state is end,			
+			
+			}
+			else {
+				System.out.println("No enough Mana!");
+			}
+			break;
+
+		case MINE:
+			//collision with sprite, decrement health
+
+			//insert mine at bob position
+			break;
+
+		case LASER:
+			if (bob.getManaCount()>80){
+				bob.decrementManaCount(80);
+				
+			}
+			else {
+				System.out.println("No enough Mana!");
+			}
+			break;
+
+		case FANOFKNIVES:
+			if (bob.getManaCount()>100){
+				bob.decrementManaCount(100);
+				
+			}
+			else {
+				System.out.println("No enough Mana!");
+			}
+		default:
+			break;
+		}
+		gameScreenMediator.spellCommand(direction, spell, x, y);
+	}
 	
 	public Stage getStage(){
 		return stage;
