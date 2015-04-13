@@ -153,7 +153,7 @@ __Laser (EEE)__
 > A ScalingViewport that uses Scaling.stretch so it does not keep the aspect ratio, the world is scaled to take the whole screen.
 
 ## Structure
-### android ###
+### android
 [Android version](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/android)
 * src
   * com.androidboys.spellarena.game.android
@@ -215,7 +215,7 @@ __Laser (EEE)__
 * proguard-project.txt
 * project.properties
 
-### desktop ###
+### desktop
 [Desktop version](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/desktop)
 * src
  * com.androidboys.spellarena
@@ -238,7 +238,7 @@ __Laser (EEE)__
          * textures.pack.png
 * build.gradle
 
-### core ###
+### core
 [Core code of the game](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/core)
 * src
  * com.androidboys.spellarena
