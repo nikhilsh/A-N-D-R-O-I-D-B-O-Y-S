@@ -153,101 +153,108 @@ __Laser (EEE)__
 > A ScalingViewport that uses Scaling.stretch so it does not keep the aspect ratio, the world is scaled to take the whole screen.
 
 ## Structure
-* [desktop](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/desktop): Desktop version
-  * src/com/androidboys/spellarena
-    * game/desktop
-      * DesktopLauncher.java
-    * utils
-      * TextureSetup.java
-  * Users
-    * _(Users...)_
-* [android](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/android): Android version
-  * src
-    * com.androidboys.spellarena.game.android
-      * AndroidLauncher.java
-  * gen: Generated Java Files
-  * assets
-    * Downloads
-      * Torstan's100pxTiles
-    * fonts
-      * Fantasy.ttf
-      * header.TTF
-      * play.TTF
-      * starttext.ttf
-    * images
-      * androidboys.png
-      * bg.jpg
-        * exort.png
-        * frame1.jpg
-        * loadingbackground.png
-        * ParchmentLabel.png
-        * quas.png
-        * wex.png
-    * maps
-      * Dungeon.tmx
-    * sprites
-      * dust.png
-      * qwe.png
-      * wizard.png
-    * badlogic.jpg
-  * bin
-    * res
-  * AndroidManifest.xml
-  * jarlist.cache
-  * build
-  * libs
-    * armeabi
-      * libgdx-box2d.so
-      * libgdx-bullet.so
-      * libgdx-freetype.so
-      * libgdx.so
-    * armeabi-v7a
-      * libgdx-box2d.so
-      * libgdx-bullet.so
-      * libgdx-freetype.so
-      * libgdx.so
-    * x86
-    	* libgdx-box2d.so
-      * libgdx-bullet.so
-      * libgdx-freetype.so
-      * libgdx.so
+### android ###
+[Android version](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/android)
+* src
+  * com.androidboys.spellarena.game.android
+    * AndroidLauncher.java
+* gen: Generated Java Files
+* assets
+  * Downloads
+    * Torstan's100pxTiles
+  * fonts
+    * Fantasy.ttf
+    * header.TTF
+    * play.TTF
+    * starttext.ttf
+  * images
+    * androidboys.png
+    * bg.jpg
+      * exort.png
+      * frame1.jpg
+      * loadingbackground.png
+      * ParchmentLabel.png
+      * quas.png
+      * wex.png
+  * maps
+    * Dungeon.tmx
+  * sprites
+    * dust.png
+    * qwe.png
+    * wizard.png
+  * badlogic.jpg
+* bin
   * res
-    * drawable-\*: Some auto-generated icon files
-    * values
-      * strings.xml
-      * styles.xml
-  * AndroidManifest.xml
-  * build.gradle
-  * ic_launcher-web.png
-  * proguard-project.txt
-  * project.properties
-* [core](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/core): Core codes of the game
-  * src
-    * appwarp
-      * ChatListener.java
-      * ConnectionListener.java
-      * NotificationListener.java
-      * RoomListener.java
-      * WarpController.java
-      * WarpListener.java
-      * ZoneListener.java
-  * com/androidboys/spellarena
-    * game
-      * SpellArena.java
-    * gameworld
-      * GameRenderer.java
-      * GameWorld.java
-    * helper
-      * AssetLoader.java
-      * InputHandler.java
-    * model
-      * Bob.java
-      * _(More characters to be added (maybe)...)_
-    * screens
-      * GameScreen.java
-      * LoadingScreen.java
-      * MainMenuScreen.java
-      * StartMultiplayerScreen.java
-* [lib](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/libs): Library files
-  * App42MultiPlayerGamingSDK.jar
+* AndroidManifest.xml
+* jarlist.cache
+* build
+* libs
+  * armeabi
+    * libgdx-box2d.so
+    * libgdx-bullet.so
+    * libgdx-freetype.so
+    * libgdx.so
+  * armeabi-v7a
+    * libgdx-box2d.so
+    * libgdx-bullet.so
+    * libgdx-freetype.so
+    * libgdx.so
+  * x86
+  	* libgdx-box2d.so
+    * libgdx-bullet.so
+    * libgdx-freetype.so
+    * libgdx.so
+* res
+  * drawable-\*: Some auto-generated icon files
+  * values
+    * strings.xml
+    * styles.xml
+* AndroidManifest.xml
+* build.gradle
+* ic_launcher-web.png
+* proguard-project.txt
+* project.properties
+
+### desktop ###
+[Desktop version](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/desktop)
+* src/com/androidboys/spellarena
+  * game/desktop
+    * DesktopLauncher.java
+  * utils
+    * TextureSetup.java
+* Users
+  * _(Users...)_
+
+### core ###
+[Core code of the game](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/core)
+* src
+  * appwarp
+    * ChatListener.java
+    * ConnectionListener.java
+    * NotificationListener.java
+    * RoomListener.java
+    * WarpController.java
+    * WarpListener.java
+    * ZoneListener.java
+* com/androidboys/spellarena
+  * game
+    * SpellArena.java
+  * gameworld
+    * GameRenderer.java
+    * GameWorld.java
+  * helper
+    * AssetLoader.java
+    * InputHandler.java
+  * model
+    * Bob.java
+    * _(More characters to be added (maybe)...)_
+  * screens
+    * GameScreen.java
+    * LoadingScreen.java
+    * MainMenuScreen.java
+    * StartMultiplayerScreen.java
+
+### lib ###
+[Library files](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/libs)
+* App42MultiPlayerGamingSDK.jar
   * java-json.jar
