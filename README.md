@@ -69,7 +69,7 @@ __Laser (EEE)__
 > Area: 300X30.
 > Mana cost: 80.
 
-## Classes and Interfaces
+## LibGDX Classes and Interfaces
 `com.badlogic.gdx.Gdx`
 > Environment class holding references to the Application, Graphics, Audio, Files and Input instances.
 
@@ -156,6 +156,134 @@ __Laser (EEE)__
 
 `com.badlogic.gdx.utils.viewport.StretchViewport`
 > A ScalingViewport that uses Scaling.stretch so it does not keep the aspect ratio, the world is scaled to take the whole screen.
+
+## Classes in core (with public methods)
+`com.androidboys.spellarena.game.SpellArena extends Game`
+* `create()`
+* `render()`
+* `dispose()`
+* `switchScreen(ScreenType)`
+* `addScreen(Screen)`
+* `getClient(): NetworkInterface`
+* `backToPreviousScreen()`
+* `getNumberScreens(): int`
+
+`com.androidboys.spellarena.gameworld.GameFactory`
+* `getGameModel(int): GameModel`
+* `getGameModel(): GameModel`
+
+`com.androidboys.spellarena.gameworld.GameRenderer`
+* `GameRenderer(SpriteBatch, GameWorld)`
+* `initGameObjects()`
+* `render(float)`
+* `moveCamera()`
+* `removePlayer(String)`
+
+`com.androidboys.spellarena.gameworld.GameWorld`
+* `initialize(GameModel)`
+* `getBob(): Bob`
+* `update(float)`
+* `getPlayerModel(String): Bob`
+* `getNextGameIndex(): int`
+* `addPlayerModel(Bob)`
+* `updateEnemy(float, float, float, float, int)`
+* `getSpell(): Spells`
+* `setSpell(Spells)`
+* `getEnemy(): Bob`
+* `getPlayerModels(): Map<String, Bob>`
+* `movePlayer(long, String, int, float, float)`
+* `updatePlayer(String, long, Vector2, Vector2)`
+* `movePlayer(String, int)`
+* `removePlayer(String)`
+* `isGameEnd(): boolean`
+
+`com.androidboys.spellarena.helper.AssetLoader`
+* `queueLoading()`
+* `setMainMenuResources()`
+* `setGameResources()`
+* `update(): boolean`
+* `load()`
+
+`com.androidboys.spellarena.helper.InputHandler (@Deprecated)`
+
+`com.androidboys.spellarena.helper.StyleLoader`
+* `prepareStyles()`
+
+`com.androidboys.spellarena.mediators.GameScreenMediator extends Mediator`
+* `GameScreenMediator(SpellArena, NetworkInterface)`
+* `onPlayerLeftRoom(String)`
+* `createScreen(): Screen`
+* `getNetworkListenerAdapter(): NetworkListenerAdapter`
+* `getRoom(): RoomModel`
+* `setRoom(RoomModel)`
+* `setGameServer(GameServer)`
+* `startGame()`
+* `move(int)`
+* `update(Bob)`
+* `onServerStarted()`
+* `onServerStartFail()`
+* `sendServerAddress(String)`
+* `connectToServerSuccess(GameClient)`
+* `connectToServerFailed()`
+* `processMessage(String)`
+* `initCommandHandler()`
+* `leaveRoom()`
+* `disconnect(boolean)`
+
+`com.androidboys.spellarena.mediators.MainMenuMediator extends Mediator`
+* `MainMenuMediator(SpellArena)`
+* `createScreen(): Screen`
+
+`com.androidboys.spellarena.mediators.Mediator`
+* `Mediator(SpellArena)`
+* `createScreen(): Screen`
+* `onScreenShowInternal()`
+
+`com.androidboys.spellarena.model.Bob`
+* `Bob(int, int, boolean)`
+* `Bob()`
+* `setStateChangeListener(StateChangeListener)`
+* `getPosition(): Vector2`
+* `onClick()`
+* `update(float)`
+* `getVelocity(): Vector2`
+* `getDirection(): Direction`
+* `setVelocity(float, float)`
+* `setTouchpad(Touchpad)`
+* `sendLocation(int)`
+* `setPosition(float, float)`
+* `decrementLifeCount()`
+* `setLifeCount(int)`
+* `getLifeCount(): int`
+* `getManaCount(): float`
+* `decrementManaCount(int)`
+* `incrementManaCount()`
+* `getState(): int`
+* `setState(int)`
+* `updateObstacles(Array<Rectangle>)`
+* `getTiles(): Array<Rectangle>`
+* `getbobRect(): Rectangle`
+* `isInvulnerable(): boolean`
+* `getGameIndex(): int`
+* `setPlayerName(String)`
+* `getPlayerName(): String`
+* `setPosition(Vector2)`
+* `setGameIndex(int)`
+* `setAtosSpeed()`
+* `move(long, int, float, float)`
+* `setUpdateDetails(long, Vector2, Vector2)`
+* `move(int)`
+
+`com.androidboys.spellarena.model.Spell`
+* `Spell(GameWorld)`
+* `update(float)`
+* `getRemainingSeconds(): float`
+* `setRemainingSeconds(float)`
+* `spellSettler(int, int, int)`
+* `castSpell()`
+* `sendSpell()`
+* `getSpell(): Spells`
+* `checkCollision(Bob): Boolean`
 
 ## Structure
 ### android
