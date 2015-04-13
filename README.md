@@ -152,7 +152,7 @@ __Laser (EEE)__
 `com.badlogic.gdx.utils.viewport.StretchViewport`
 > A ScalingViewport that uses Scaling.stretch so it does not keep the aspect ratio, the world is scaled to take the whole screen.
 
-## Directories
+## Structure
 * [desktop](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/desktop): Desktop version
   * src/com/androidboys/spellarena
     * game/desktop
@@ -162,6 +162,10 @@ __Laser (EEE)__
   * Users
     * _(Users...)_
 * [android](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/android): Android version
+  * src
+    * com.androidboys.spellarena.game.android
+	  * AndroidLauncher.java
+  * gen: Generated Java Files
   * assets
     * Downloads
       * Torstan's100pxTiles
@@ -171,22 +175,31 @@ __Laser (EEE)__
       * play.TTF
       * starttext.ttf
     * images
-      * background.jpg
-      * background.png
+	  * androidboys.png
       * bg.jpg
-      * splash.jpeg
+	  * exort.png
+	  * frame1.jpg
+	  * loadingbackground.png
+	  * ParchmentLabel.png
+	  * quas.png
+	  * wex.png
     * maps
       * Dungeon.tmx
-      * _(More maps to be added...)_
     * sprites
+	  * dust.png
+	  * qwe.png
       * wizard.png
+	* badlogic.jpg
+  * bin
+    * res
+	* AndroidManifest.xml
+	* jarlist.cache
+  * build
   * res
     * drawable-\*: Some auto-generated icon files
     * values
       * strings.xml
       * styles.xml
-  * src/com/androidboys/spellarena/game/android
-    * AndroidLauncher.java
   * AndroidManifest.xml
   * ic_launcher-web.png
   * proguard-project.txt
