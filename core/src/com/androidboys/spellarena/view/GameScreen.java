@@ -15,6 +15,7 @@ import com.androidboys.spellarena.helper.StyleLoader;
 import com.androidboys.spellarena.mediators.GameScreenMediator;
 import com.androidboys.spellarena.mediators.Mediator;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Bob.Direction;
 import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.net.WarpListener;
@@ -387,6 +388,29 @@ public class GameScreen implements Screen{
 				world.movePlayer(UserSession.getInstance().getUserName(), movement);
 			}
 		};
+		
+		
+		stage.addListener(new ClickListener(){
+			
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				Spell spell = new Spell(world);
+				int[] spellList = new int[3];
+		        for (int i = 0; i < commandList.length; i++) {
+		            try {
+		            	spellList[i] = commandList[i].getCommandIndex(); //1 for red 2 for purple 4 for blue
+		            } catch (Exception e) {
+		            	return false;
+		            }
+		        }
+		        
+				spell.spellSettler(spellList[0], spellList[1], spellList[2]);
+//				return super.touchDown(event, x, y, pointer, button);
+				return true;
+			}
+			
+		});
 		
 		touchpad.addListener(new ClickListener(){
 			

@@ -1,10 +1,13 @@
 package com.androidboys.spellarena.model;
 
+import jdk.nashorn.internal.runtime.UserAccessorProperty;
+
 import org.json.JSONObject;
 
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.net.WarpController;
+import com.androidboys.spellarena.session.UserSession;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -42,8 +45,8 @@ public class Spell {
 		this.position = null;
 		this.spell = null;
 		this.world = world;
-		this.bob = this.world.getBob();
-		this.enemyBob = this.world.getEnemy();
+		this.bob = world.getPlayerModel(UserSession.getInstance().getUserName());
+		this.enemyBob = world.getEnemy();
 	}
 
 	public void update(float deltaTime) {
