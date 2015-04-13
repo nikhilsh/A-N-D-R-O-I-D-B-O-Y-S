@@ -189,7 +189,7 @@ public class Spell {
 				}
 			}
 			else {
-				System.out.println("Not enough Mana!");
+				System.out.println("No enough Mana!");
 			}
 			break;
 
@@ -200,7 +200,7 @@ public class Spell {
 				remainingSeconds = 3;
 			}
 			else {
-				System.out.println("Not enough Mana!");
+				System.out.println("No enough Mana!");
 			}
 			break;
 
@@ -238,7 +238,7 @@ public class Spell {
 				}
 			}
 			else {
-				System.out.println("Not enough Mana!");
+				System.out.println("No enough Mana!");
 			}
 			break;
 
@@ -306,7 +306,7 @@ public class Spell {
 				}
 			}
 			else {
-				System.out.println("Not enough Mana!");
+				System.out.println("No enough Mana!");
 			}
 			break;
 
@@ -325,7 +325,7 @@ public class Spell {
 				}
 			}
 			else {
-				System.out.println("Not enough Mana!");
+				System.out.println("No enough Mana!");
 			}
 		default:
 			break;

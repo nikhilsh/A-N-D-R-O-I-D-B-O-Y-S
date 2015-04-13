@@ -11,6 +11,7 @@ import com.androidboys.spellarena.net.NetworkInterface;
 import com.androidboys.spellarena.net.NetworkListenerAdapter;
 import com.androidboys.spellarena.net.protocol.Command;
 import com.androidboys.spellarena.net.protocol.CommandFactory;
+import com.androidboys.spellarena.session.UserSession;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -36,15 +37,15 @@ public class GameClient {
 		this.gameScreenMediator = gameScreenMediator;
 		this.client = new Client();
 		this.client.start();
-		this.client.getKryo().register(String.class);
+//		this.client.getKryo().register(String.class);
 		
 	}
 	
 	public void connectToServer(String host){
 		try {
+			initListener();
 			client.connect(5000, InetAddress.getByName(host), TCP_PORT, UDP_PORT);
 			setUpSender();
-			initListener();
 			gameScreenMediator.connectToServerSuccess(this);
 		} catch (UnknownHostException e) {
 			gameScreenMediator.connectToServerFailed();
@@ -55,6 +56,11 @@ public class GameClient {
 	
 	public void initListener(){
 		this.client.addListener(new Listener(){
+			
+			@Override
+			public void disconnected(Connection connection) {
+				gameScreenMediator.onPlayerLeftRoom(UserSession.getInstance().getRoom().getOwner());
+			}
 			
 			@Override
 			public void received(Connection connection, final Object object) {
@@ -99,5 +105,9 @@ public class GameClient {
 			Gdx.app.log(TAG,"Adding message to buffer");
 			outBuffer.addLast(serialize);
 		}
+	}
+
+	public void close() {
+		client.close();
 	}
 }

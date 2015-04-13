@@ -121,8 +121,9 @@ public class Bob {
 	}
 
 	private void applyUpdate(float delta) {
-		float timeDiff = (System.currentTimeMillis() - updateTimestamp)/1000f;
-		this.position = new Vector2(updatePosition.add(updateVelocity.scl(timeDiff)));
+		//float timeDiff = (System.currentTimeMillis() - updateTimestamp)/1000f;
+		this.position = new Vector2(updatePosition);
+//		this.position = new Vector2(updatePosition.add(updateVelocity.scl(timeDiff)));
 	}
 
 	private void updateState(){
@@ -159,6 +160,8 @@ public class Bob {
 		}
 	}
 	
+	
+	@Deprecated
 	private void updateVelocity(){
 		Vector2 newV = null;
 		if(playerName.equals(UserSession.getInstance().getUserName())){
@@ -523,8 +526,8 @@ public class Bob {
 				this.velocity = new Vector2(-MAX_SPEED, 0);
 				break;
 		}
-		float timeDiff = (System.currentTimeMillis() - time)/1000f;
-		this.position = new Vector2(position).add(new Vector2(velocity).scl(timeDiff));
+//		float timeDiff = (System.currentTimeMillis() - time)/1000f;
+//		this.position = new Vector2(position).add(new Vector2(velocity).scl(timeDiff));
 	}
 
 	public void setUpdateDetails(long timestamp, Vector2 position, Vector2 velocity) {
@@ -563,10 +566,6 @@ public class Bob {
 		case GameScreen.MOVEMENT_WEST:
 			this.velocity = new Vector2(-MAX_SPEED, 0);
 			break;
+		}
 	}
-	}
-
-
-	
-	
 }

@@ -30,7 +30,7 @@ public class GameServer {
 	private LinkedList<String> inBuffer = new LinkedList<String>();
 	private LinkedList<String> outBuffer = new LinkedList<String>();
 	
-	private HashMap<Connection, LinkedList<String>> outBuffers= new HashMap<Connection,LinkedList<String>>();
+	private HashMap<Connection, String> connectionsList = new HashMap<Connection, String>();
 	
 	public static final int TCP_PORT = 4455;
 	public static final int UDP_PORT = 4456;
@@ -79,17 +79,39 @@ public class GameServer {
 	
 	public void startServer(){
 		this.server = new Server();
-		this.server.getKryo().register(String.class);
+//		this.server.getKryo().register(String.class);
 		this.server.start();
 		try {
 			this.server.bind(TCP_PORT, UDP_PORT);
 			this.server.addListener(new Listener(){
-
+				
+				@Override
+				public void connected(Connection connection) {
+					connectionsList.put(connection, null);
+				}
+				
+				@Override
+				public void disconnected(Connection connection) {
+					Gdx.app.log("GameServer", connection+" disconnected");
+					String user = connectionsList.get(connection);
+					gameScreenMediator.onPlayerLeftRoom(user);
+				}
+				
 				@Override
 				public void received(Connection connection, Object object) {
+					if(connectionsList.get(connection) == null){
+						Command command = commandFactory.createCommand((String)object);
+						if(command == null){
+							Gdx.app.log(TAG, "Waiting for split message");
+							return;
+						}
+						String user = command.getFromUser();
+						connectionsList.put(connection, user);
+					}
 					if(object instanceof String){
 						Gdx.app.log(TAG, "Sending to all: "+object);
 						gameScreenMediator.processMessage((String) object);
+//						server.sendToAllTCP(object);
 						server.sendToAllExceptTCP(connection.getID(), object);
 					}
 				}
@@ -156,5 +178,9 @@ public class GameServer {
 				}
 			}
 		}).start();
+	}
+
+	public void close() {
+		server.close();
 	}
 }

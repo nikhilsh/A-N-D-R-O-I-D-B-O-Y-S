@@ -73,7 +73,7 @@ public class GameWorld {
 //		if(bob.isInvulnerable()){
 //			bob.decrementImmortalDuration(delta);
 //		}
-
+//		Gdx.app.log(TAG, "Updating player model "+bob);
 		bob.update(delta);
 		
 	}
@@ -131,7 +131,10 @@ public class GameWorld {
 	public void addPlayerModel(Bob bob) {
 		Gdx.app.log(TAG,bob.toString());
 		bob.updateObstacles(tiles);
-		playerModels.put(bob.getPlayerName(), bob);
+		synchronized (playerModels) {
+			playerModels.put(bob.getPlayerName(), bob);
+		}
+		
 	}
 	
 	/**
@@ -176,4 +179,20 @@ public class GameWorld {
 		Bob bob = playerModels.get(userName);
 		bob.move(movement);
 	}
+
+	public void removePlayer(String playerName) {
+		synchronized (playerModels) {
+			playerModels.remove(playerName);
+		}
+	}
+	
+	public boolean isGameEnd() {
+        int playingUser = 0;
+        for (Bob playerModel : playerModels.values()) {
+            if (playerModel.getState() != Bob.STATE_DEAD) {
+                playingUser++;
+            }
+        }
+        return playingUser <= 1;
+    }
 }
