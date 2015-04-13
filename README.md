@@ -5,10 +5,19 @@ Android app for 50.003 - Software Construction
 __Spell Arena__ is an online battle arena Android game designed by ANDROIDBOYS group.
 
 ## Tutorial
+### Create Lobby
+In order to play __Spell Arena__, you need to connect your device to the Internet.
+
+Click "Create Game" to create a room. Other player can view list of rooms at the main screen. Click "Join Game" to join a room.
+
+If the room contains two players, the room owner can start game.
+
 ### Characters
 Two players will fight against each other with their own characters in an arena.
 
 The player can control the character with the controller located at the bottom left corner of the screen, and attack the enemy or heal self with spells. Each spell can be invoked with a unique combination of three elements -- Quas, Wex, Exort. There are 10 different spells in game.
+
+Touch the screen to cast a spell on enemy (or on self).
 
 ### Spells
 * QQQ = Divine Shield
@@ -59,10 +68,6 @@ __Laser (EEE)__
 > Damage.
 > Area: 300X30.
 > Mana cost: 80.
-
-## Plugins
-* Gradle 1.0.0
-* LibGDX 1.5.4
 
 ## Classes and Interfaces
 `com.badlogic.gdx.Gdx`
