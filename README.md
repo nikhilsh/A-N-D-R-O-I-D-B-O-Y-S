@@ -164,7 +164,7 @@ __Laser (EEE)__
 * [android](https://github.com/nikhilsh/A-N-D-R-O-I-D-B-O-Y-S/tree/master/android): Android version
   * src
     * com.androidboys.spellarena.game.android
-	  * AndroidLauncher.java
+      * AndroidLauncher.java
   * gen: Generated Java Files
   * assets
     * Downloads
@@ -175,32 +175,49 @@ __Laser (EEE)__
       * play.TTF
       * starttext.ttf
     * images
-	  * androidboys.png
+      * androidboys.png
       * bg.jpg
-	  * exort.png
-	  * frame1.jpg
-	  * loadingbackground.png
-	  * ParchmentLabel.png
-	  * quas.png
-	  * wex.png
+        * exort.png
+        * frame1.jpg
+        * loadingbackground.png
+        * ParchmentLabel.png
+        * quas.png
+        * wex.png
     * maps
       * Dungeon.tmx
     * sprites
-	  * dust.png
-	  * qwe.png
+      * dust.png
+      * qwe.png
       * wizard.png
-	* badlogic.jpg
+    * badlogic.jpg
   * bin
     * res
-	* AndroidManifest.xml
-	* jarlist.cache
+  * AndroidManifest.xml
+  * jarlist.cache
   * build
+  * libs
+    * armeabi
+      * libgdx-box2d.so
+      * libgdx-bullet.so
+      * libgdx-freetype.so
+      * libgdx.so
+    * armeabi-v7a
+      * libgdx-box2d.so
+      * libgdx-bullet.so
+      * libgdx-freetype.so
+      * libgdx.so
+    * x86
+    	* libgdx-box2d.so
+      * libgdx-bullet.so
+      * libgdx-freetype.so
+      * libgdx.so
   * res
     * drawable-\*: Some auto-generated icon files
     * values
       * strings.xml
       * styles.xml
   * AndroidManifest.xml
+  * build.gradle
   * ic_launcher-web.png
   * proguard-project.txt
   * project.properties
