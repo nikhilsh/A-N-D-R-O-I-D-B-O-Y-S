@@ -40,6 +40,9 @@ public class AssetLoader {
 	public static Texture tornadoTexture;
 	public static Animation tornadoAnimation;
 	
+	public static Texture shieldTexture;
+	public static Animation shieldAnimation;
+	
 	public static BitmapFont header, playText, playTextSmall, swordText, parchmentText, smallParchmentText;
 	
 	public static TiledMap map;
@@ -56,6 +59,7 @@ public class AssetLoader {
 		manager.load("sprites/wizard.png", Texture.class, param);
 		
 		manager.load("sprites/tornado.PNG", Texture.class, param);
+		manager.load("sprites/shield.png", Texture.class,param);
 		
 		manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
 		manager.load("fonts/header.TTF",FreeTypeFontGenerator.class);
@@ -136,6 +140,9 @@ public class AssetLoader {
 		}
 		if(tornadoTexture == null){
 			tornadoTexture = manager.get("sprites/tornado.PNG",Texture.class);
+		}
+		if(shieldTexture == null){
+			shieldTexture = manager.get("sprites/shield.png", Texture.class);
 		}
 		if(map == null){
 			map = manager.get("maps/Dungeon.tmx",TiledMap.class);
@@ -244,6 +251,29 @@ public class AssetLoader {
 				new TextureRegion(tornadoTexture, 462, 0, 66, 75),
 		});
 		
+		shieldAnimation = new Animation(0.06f, new TextureRegion[]{
+				new TextureRegion(shieldTexture, 0, 0, 192, 192),
+				new TextureRegion(shieldTexture, 192, 0, 192, 192),
+				new TextureRegion(shieldTexture, 384, 0, 192, 192),
+				new TextureRegion(shieldTexture, 576, 0, 192, 192),
+				new TextureRegion(shieldTexture, 768, 0, 192, 192),
+				new TextureRegion(shieldTexture, 0, 192, 192, 192),
+				new TextureRegion(shieldTexture, 192, 192, 192, 192),
+				new TextureRegion(shieldTexture, 384, 192, 192, 192),
+				new TextureRegion(shieldTexture, 576, 192, 192, 192),
+				new TextureRegion(shieldTexture, 768, 192, 192, 192),
+				new TextureRegion(shieldTexture, 0, 384, 192, 192),
+				new TextureRegion(shieldTexture, 192, 384, 192, 192),
+				new TextureRegion(shieldTexture, 384, 384, 192, 192),
+				new TextureRegion(shieldTexture, 576, 384, 192, 192),
+				new TextureRegion(shieldTexture, 768, 384, 192, 192),
+				new TextureRegion(shieldTexture, 0, 576, 192, 192),
+				new TextureRegion(shieldTexture, 192, 576, 192, 192),
+				new TextureRegion(shieldTexture, 384, 576, 192, 192),
+				new TextureRegion(shieldTexture, 576, 576, 192, 192),
+				new TextureRegion(shieldTexture, 768, 576, 192, 192),
+		});
+		
 		northBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northEastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		eastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
@@ -252,7 +282,9 @@ public class AssetLoader {
 		southWestBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		westBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northWestBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		
 		tornadoAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		dustSpellAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 	}
 

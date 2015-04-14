@@ -68,6 +68,7 @@ public class Bob {
 	private Vector2 updateVelocity;
 	private long updateTimestamp;
 	private ArrayList<Object> gameObjects;
+	private float shieldTimer;
 	
 	/**
 	 * Create a new Bob instance.
@@ -113,6 +114,12 @@ public class Bob {
 	 * Update Bob's position and state.
 	 */
 	public void update(float delta){
+		if(invulnerable){
+			shieldTimer -= delta;
+			if(shieldTimer<0){
+				invulnerable = false;
+			}
+		}
 		updateDirection();
 		if(needsUpdate){
 			applyUpdate(delta);
@@ -359,6 +366,7 @@ public class Bob {
 		velocity = new Vector2(vx,vy);
 	}
 
+	@Deprecated
 	private void scaleAndSetVelocity(float touchX, float touchY) {
 		velocity = new Vector2(touchX*MAX_SPEED, touchY*MAX_SPEED);
 	}
@@ -605,4 +613,10 @@ public class Bob {
 		}
 		return rect;
 	}
+
+	public void setInvulnerable() {
+		this.invulnerable = true;
+		this.shieldTimer = 3;
+	}
+	
 }

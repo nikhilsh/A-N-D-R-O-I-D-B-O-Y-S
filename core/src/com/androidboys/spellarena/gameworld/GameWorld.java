@@ -385,11 +385,8 @@ public class GameWorld {
 			//clear on screen
 			break;
 		case DIVINESHIELD:
-			if (bob.getManaCount()>50){
-				bob.decrementManaCount(50);
-				bob.setState(Bob.STATE_INVULNERABLE);
-				//send time remaining and state to server
-			}
+			bob.setInvulnerable();
+			//send time remaining and state to server
 			break;
 		case FORCESTAFF:
 			if (bob.getManaCount()>30){

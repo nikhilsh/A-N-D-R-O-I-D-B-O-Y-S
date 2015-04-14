@@ -65,6 +65,7 @@ public class GameRenderer {
 	private Texture light;
 	private FrameBuffer fbo;
 	private float ambientIntensity = 0.7f;
+	private Animation shieldAnimation;
 	
 	private final static Vector3 bright = new Vector3(0.7f, 0.7f, 0.9f);
 	// Load shaders from text files
@@ -131,7 +132,9 @@ public class GameRenderer {
 		westBobAnimation = AssetLoader.westBobAnimation;
 		southWestBobAnimation = AssetLoader.southWestBobAnimation;
 		dustSpellAnimation = AssetLoader.dustSpellAnimation;
+		
 		tornadoAnimation = AssetLoader.tornadoAnimation;
+		shieldAnimation = AssetLoader.shieldAnimation;
 	}
 	
 	public void initGameObjects(){
@@ -180,8 +183,8 @@ public class GameRenderer {
 		batcher.setShader(defaultShader);
 		batcher.begin();
 		light.bind(0);
-		batcher.draw(light, cam.position.x-250-150,
-				cam.position.y-250, 500f,500f);
+		batcher.draw(light, cam.position.x-(1.4f*500)/2-150,
+				cam.position.y-250, 1.4f*500,500f);
 		batcher.end();
 		fbo.end();
 	}
@@ -298,6 +301,10 @@ public class GameRenderer {
 
 			}
 		}
+		if(bob.isInvulnerable()){
+			batcher.draw(shieldAnimation.getKeyFrame(runTime),
+					bob.getPosition().x-38f,bob.getPosition().y-35f,100f,100f);
+		}
 		batcher.end();
 	}
 
@@ -372,6 +379,10 @@ public class GameRenderer {
 						break;
 				
 				}
+			}
+			if(enemy.isInvulnerable()){
+				batcher.draw(shieldAnimation.getKeyFrame(runTime),
+						enemy.getPosition().x-60f,enemy.getPosition().y-50f,100f,100f);
 			}
 		}
 		batcher.end();
