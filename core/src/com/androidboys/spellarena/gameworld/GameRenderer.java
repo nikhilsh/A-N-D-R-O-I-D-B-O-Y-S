@@ -18,9 +18,13 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -54,6 +58,19 @@ public class GameRenderer {
 	northBobAnimation, northEastBobAnimation, eastBobAnimation, southEastBobAnimation, dustSpellAnimation;
 
 	private Animation tornadoAnimation;
+	private ShaderProgram defaultShader;
+	private ShaderProgram finalShader;
+	private Vector3 ambientColor;
+	private ShaderProgram currentShader;
+	private Texture light;
+	private FrameBuffer fbo;
+	private float ambientIntensity = 0.7f;
+	
+	private final static Vector3 bright = new Vector3(0.7f, 0.7f, 0.9f);
+	// Load shaders from text files
+	private final static String vertexShader = Gdx.files.internal("data/shaders/vertexShader.glsl").readString();
+	private final static String defaultPixelShader = Gdx.files.internal("data/shaders/defaultPixelShader.glsl").readString();
+	private final static String finalPixelShader =  Gdx.files.internal("data/shaders/pixelShader.glsl").readString();
 	
 	public GameRenderer(SpriteBatch batcher, GameWorld world) {
 		this.world = world;
@@ -66,11 +83,34 @@ public class GameRenderer {
 		shapeRenderer = new ShapeRenderer();
 
 		initAssets();
+		initShaders();
+	}
+
+	private void initShaders() {
+		ShaderProgram.pedantic = false;
+		defaultShader = new ShaderProgram(vertexShader, defaultPixelShader);
+		finalShader = new ShaderProgram(vertexShader, finalPixelShader);
+		currentShader = finalShader;
+		ambientColor = bright;
+		
+		finalShader.begin();
+		finalShader.setUniformi("u_lightmap", 1);
+		finalShader.setUniformf("ambientColor", ambientColor.x, ambientColor.y, ambientColor.z, ambientIntensity );
+		finalShader.end();
+		// Image for spot light 
+		
+		light = new Texture(Gdx.files.internal("data/shaders/light.png"));
+		fbo = new FrameBuffer(Format.RGBA8888, 960, 540, false);
+
+		finalShader.begin();
+		finalShader.setUniformf("resolution", 960, 540);
+		finalShader.end();
+		
+		mapRenderer = new OrthogonalTiledMapRenderer(map,batcher);
 	}
 
 	private void initAssets(){
 		map = AssetLoader.map;
-		mapRenderer = new OrthogonalTiledMapRenderer(map);
 
 		southBob = AssetLoader.southBob;
 		southEastBob = AssetLoader.southEastBob;
@@ -114,7 +154,10 @@ public class GameRenderer {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		moveCamera();
-
+		
+		if(bob!=null)renderLight();
+		
+		batcher.setShader(currentShader);
 		mapRenderer.setView(cam);
 		mapRenderer.render();
 
@@ -131,6 +174,18 @@ public class GameRenderer {
 
 	}
 
+	private void renderLight() {
+		fbo.begin();
+		fbo.getColorBufferTexture().bind(1);
+		batcher.setShader(defaultShader);
+		batcher.begin();
+		light.bind(0);
+		batcher.draw(light, cam.position.x-250-150,
+				cam.position.y-250, 500f,500f);
+		batcher.end();
+		fbo.end();
+	}
+
 	private void renderTornado(float runTime, Tornado o) {
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Line);
@@ -138,7 +193,7 @@ public class GameRenderer {
 		shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-25,110f,100f);
 		shapeRenderer.end();
 		batcher.begin();
-		batcher.setColor(Color.WHITE);
+//		batcher.setColor(Color.WHITE);
 		batcher.draw(tornadoAnimation.getKeyFrame(runTime),
 				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
 		batcher.end();
@@ -174,7 +229,7 @@ public class GameRenderer {
 
 
 		batcher.begin();
-		batcher.setColor(Color.WHITE);
+//		batcher.setColor(Color.WHITE);
 		if(bob.getState() == Bob.STATE_ALIVE){
 			switch(bob.getDirection()){
 			case EAST:
@@ -248,7 +303,7 @@ public class GameRenderer {
 
 	private void renderEnemy(float runTime){
 		batcher.begin();
-		batcher.setColor(255/255f,128/255f,128/255f,1f);
+//		batcher.setColor(255/255f,128/255f,128/255f,1f);
 		for(Bob enemy: enemies){
 			if(enemy.getState() == enemy.STATE_ALIVE&&enemy.getPlayerName()!=UserSession.getInstance().getUserName()){
 				switch(enemy.getDirection()){
@@ -327,7 +382,7 @@ public class GameRenderer {
 	private void renderSpell(float runTime){
 		spell = world.getSpell();
 		batcher.begin();
-		batcher.setColor(180/255f,0,0,1f);
+//		batcher.setColor(180/255f,0,0,1f);
 		if(spell == null){
 			batcher.end();
 			return;
