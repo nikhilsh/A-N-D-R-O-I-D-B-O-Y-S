@@ -81,6 +81,7 @@ public class GameWorld {
 		bob.update(delta);
 		checkPlayerCollision(delta);
 		checkObjectCollision();
+		checkPlayerObjectCollision();
 	}
 
 	private void checkObjectCollision() {
@@ -91,6 +92,21 @@ public class GameWorld {
 						gameObjects.remove(object);
 					}
 				}
+			}
+		}
+	}
+	
+	private void checkPlayerObjectCollision() {
+		for(Object object: gameObjects.toArray()){
+			if(tiles != null){
+				Bob bob = getPlayerModel(UserSession.getInstance().getUserName());
+				if (bob.getCollisionEdge().overlaps(((GameObject)object).getRectangle())){
+					if (object instanceof Tornado){
+						//minus health?
+					}
+					//add rest of objects
+				}
+				
 			}
 		}
 	}
@@ -385,12 +401,17 @@ public class GameWorld {
 			//clear on screen
 			break;
 		case DIVINESHIELD:
+<<<<<<< HEAD
 			bob.setInvulnerable();
 			//send time remaining and state to server
+=======
+			
+				bob.setState(Bob.STATE_INVULNERABLE);
+				//send time remaining and state to server
+			
+>>>>>>> 61c2fb75c1b2bb51fdcf23a92654ffe663d3ca6d
 			break;
 		case FORCESTAFF:
-			if (bob.getManaCount()>30){
-				bob.decrementManaCount(30);
 				switch (bob.getDirection()) {
 				case EAST:
 					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
@@ -420,19 +441,12 @@ public class GameWorld {
 				default:
 					break;
 				}
-			}
-			else {
-				System.out.println("No enough Mana!");
-			}
+			
+
 			break;
 
 		case ATOS:
-			if (bob.getManaCount()>50){
-				bob.decrementManaCount(50);
-			}
-			else {
-				System.out.println("No enough Mana!");
-			}
+		
 			break;
 
 		case STASISTRAP:
@@ -444,21 +458,12 @@ public class GameWorld {
 
 		case SPROUT:
 			//collision with sprite
-			//mana cost 40
 
 			//need add new collision			
 			break;
 
 		case DARKPACT:
-			if (bob.getManaCount()>80){
-				bob.decrementManaCount(80);
-				//so start animation 3 seconds before,
-				//then if the state is end,			
 			
-			}
-			else {
-				System.out.println("No enough Mana!");
-			}
 			break;
 
 		case MINE:
@@ -472,13 +477,7 @@ public class GameWorld {
 			break;
 
 		case FANOFKNIVES:
-			if (bob.getManaCount()>100){
-				bob.decrementManaCount(100);
-				
-			}
-			else {
-				System.out.println("No enough Mana!");
-			}
+
 		default:
 			break;
 		}

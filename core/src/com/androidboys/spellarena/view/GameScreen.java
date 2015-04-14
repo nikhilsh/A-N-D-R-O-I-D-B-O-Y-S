@@ -91,6 +91,18 @@ public class GameScreen implements Screen{
 	public static final int MOVEMENT_WEST = 10007;
 	public static final int MOVEMENT_NORTHWEST = 10008;
 	
+	private static float TORNADO_COOLDOWN = 0;
+	private static float LASER_COOLDOWN = 0;
+	private static float BLINK_COOLDOWN = 0;
+	private static float FANOFKNIVES_COOLDOWN = 0;
+	private static float DIVINESHIELD_COOLDOWN = 0;
+	private static float STASIS_COOLDOWN = 0;
+	private static float MINE_COOLDOWN = 0;
+	private static float ACID_COOLDOWN = 0;
+	private static float DARKPACT_COOLDOWN = 0;
+	private static float SPROUT_COOLDOWN = 0;
+	private static float ATOS_COOLDOWN = 0;
+	
 	protected static final String TAG = "GameScreen";
 	private SpellArena game;
 	private Mediator mediator;
@@ -725,6 +737,8 @@ public class GameScreen implements Screen{
 				gameScreenMediator.update(world.getPlayerModel(UserSession.getInstance().getUserName()));
 			}
 		}
+		updateCooldown(delta);
+		updateSpellLabel();
 	}
 
 	private void draw() {
@@ -834,38 +848,81 @@ public class GameScreen implements Screen{
 		Spells spellEnum = null;
 		switch(spell){
 		case 0:
+			if (DIVINESHIELD_COOLDOWN > 0){
+				return;
+			}
 			spellEnum =  Spells.DIVINESHIELD;
+			DIVINESHIELD_COOLDOWN = 5;
 			break;		
 		case 1:
+			if (BLINK_COOLDOWN > 0){
+				System.out.println("cannot cast");
+				return;
+			}
 			spellEnum =  Spells.FORCESTAFF;
+			BLINK_COOLDOWN = 2;
 			break;		
 		case 2:
+			if (ATOS_COOLDOWN > 0){
+				return;
+			}
 			spellEnum =  Spells.ATOS;
+			ATOS_COOLDOWN = 5;
 			break;		
 		case 3:
+			if (STASIS_COOLDOWN > 0){
+				return;
+			}
 			spellEnum =  Spells.STASISTRAP;
+			STASIS_COOLDOWN = 5;
 			break;		
 		case 4:
+			if (SPROUT_COOLDOWN > 0){
+				return;
+			}
 			spellEnum =  Spells.SPROUT;
+			SPROUT_COOLDOWN = 5;
 			break;		
 		case 5:
+			if (DARKPACT_COOLDOWN > 0){
+				return;
+			}
 			spellEnum =  Spells.DARKPACT;
+			DARKPACT_COOLDOWN = 5;
 			break;		
 		case 6:
+			if (MINE_COOLDOWN > 0){
+				return;
+			}
 			spellEnum =  Spells.MINE;
+
+			MINE_COOLDOWN = 5;
 			break;		
 		case 7:
+			if (LASER_COOLDOWN > 0){
+				return;
+			}
 			spellEnum =  Spells.LASER;
+			LASER_COOLDOWN = 5;
 			break;		
 		case 8:
+			if (ACID_COOLDOWN > 0){
+				return;
+			}
 			spellEnum =  Spells.ACID;
+			ACID_COOLDOWN = 5;
 			break;		
 		case 9:
-			spellEnum =  Spells.FANOFKNIVES;
+			if (FANOFKNIVES_COOLDOWN > 0){
+				return;
+			}
+			spellEnum = Spells.FANOFKNIVES;
+			FANOFKNIVES_COOLDOWN = 5;
 			break;		
 		default:
 			break;
 		}
+		
 		world.castSpell(playerName,x,y,spellEnum,direction);
 		/*
 		Spell spellInstance = new Spell(world, x, y, spellEnum, direction);
@@ -1103,6 +1160,42 @@ public class GameScreen implements Screen{
         myButton3.setVisible(false);
 	}
 	
+	private void updateCooldown(float delta){
+		 if (TORNADO_COOLDOWN>0){
+			 TORNADO_COOLDOWN -= delta;
+		 }
+		 if (ACID_COOLDOWN>0){
+			 ACID_COOLDOWN -= delta;
+		 }
+		 if (ATOS_COOLDOWN>0){
+			 ATOS_COOLDOWN -= delta;
+		 }
+		 if (DIVINESHIELD_COOLDOWN>0){
+			 DIVINESHIELD_COOLDOWN -= delta;
+		 }
+		 if (STASIS_COOLDOWN>0){
+			 STASIS_COOLDOWN -= delta;
+		 }
+		 if (BLINK_COOLDOWN>0){
+			 BLINK_COOLDOWN -= delta;
+		 }
+		 if (MINE_COOLDOWN>0){
+			 MINE_COOLDOWN-= delta;
+		 }
+		 if (SPROUT_COOLDOWN>0){
+			 SPROUT_COOLDOWN -= delta;
+		 }
+		 if (FANOFKNIVES_COOLDOWN>0){
+			 FANOFKNIVES_COOLDOWN -= delta;
+		 }
+		 if (DARKPACT_COOLDOWN>0){
+			 DARKPACT_COOLDOWN -= delta;
+		 }
+		 if (LASER_COOLDOWN>0){
+			 LASER_COOLDOWN -= delta;
+		 }
+	}
+	
 	private void updateSpellLabel(){
 		int spellId = 0;
 		for(int i = 0; i< commandList.length ; i++){
@@ -1113,34 +1206,34 @@ public class GameScreen implements Screen{
 		String spellName;
 		switch(spellId){
 		case 3:
-			spellName = "Divine Shield";
+			spellName = "Divine Shield " + (int)DIVINESHIELD_COOLDOWN;
 			break;
 		case 12:
-			spellName = "Force";
+			spellName = "Force " + (int)BLINK_COOLDOWN;
 			break;
 		case 21:
-			spellName = "Stasis Trap";
+			spellName = "Stasis Trap " +  (int)STASIS_COOLDOWN;
 			break;
 		case 30:
-			spellName = "Atos";
+			spellName = "Atos " + (int)ATOS_COOLDOWN;
 			break;
 		case 102:
-			spellName = "Mine";
+			spellName = "Mine " + (int)MINE_COOLDOWN;
 			break;
 		case 111:
-			spellName = "Sprout";
+			spellName = "Sprout " +  (int)SPROUT_COOLDOWN;
 			break;
 		case 120:
-			spellName = "Acid";
+			spellName = "Acid " + (int)ACID_COOLDOWN;
 			break;
 		case 201:
-			spellName = "Fan Of Knives";
+			spellName = "Fan Of Knives " +  (int)FANOFKNIVES_COOLDOWN;
 			break;
 		case 210:
-			spellName = "Dark Pact";
+			spellName = "Dark Pact " +  (int)DARKPACT_COOLDOWN;
 			break;
 		case 300:
-			spellName = "Laser";
+			spellName = "Laser " + (int)LASER_COOLDOWN;
 			break;
 		default:
 			spellName = "";
