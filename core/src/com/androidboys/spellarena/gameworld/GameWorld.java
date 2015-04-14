@@ -274,7 +274,7 @@ public class GameWorld {
 	public void update(float delta) {
 		updatePlayerModels(delta);
 		updateGameObjects(delta);
-		
+		percentage -= 0.0005f;
 	}
 	
 	private void updateGameObjects(float delta) {
@@ -485,5 +485,10 @@ public class GameWorld {
 
 	public ArrayList<Object> getGameObjects() {
 		return gameObjects;
+	}
+
+	private float percentage = 1f;
+	public float getPercentage() {
+		return percentage;
 	}
 }

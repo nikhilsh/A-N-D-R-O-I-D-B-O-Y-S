@@ -64,8 +64,10 @@ public class GameRenderer {
 	private ShaderProgram currentShader;
 	private Texture light;
 	private FrameBuffer fbo;
-	private float ambientIntensity = 0.7f;
+	private float ambientIntensity = 0.3f;
 	private Animation shieldAnimation;
+	private int height;
+	private int width;
 	
 	private final static Vector3 bright = new Vector3(0.7f, 0.7f, 0.9f);
 	// Load shaders from text files
@@ -100,11 +102,14 @@ public class GameRenderer {
 		finalShader.end();
 		// Image for spot light 
 		
+		width = Gdx.graphics.getWidth();
+		height = Gdx.graphics.getHeight();
+		
 		light = new Texture(Gdx.files.internal("data/shaders/light.png"));
-		fbo = new FrameBuffer(Format.RGBA8888, 960, 540, false);
+		fbo = new FrameBuffer(Format.RGBA8888, width, height, false);
 
 		finalShader.begin();
-		finalShader.setUniformf("resolution", 960, 540);
+		finalShader.setUniformf("resolution", width, height);
 		finalShader.end();
 		
 		mapRenderer = new OrthogonalTiledMapRenderer(map,batcher);
@@ -158,6 +163,7 @@ public class GameRenderer {
 
 		moveCamera();
 		
+//		batcher.setProjectionMatrix(cam.combined);
 		if(bob!=null)renderLight();
 		
 		batcher.setShader(currentShader);
@@ -173,18 +179,20 @@ public class GameRenderer {
 			if(o instanceof Tornado){
 				renderTornado(runTime,(Tornado)o);
 			}
-		}
-
+		}		
 	}
 
 	private void renderLight() {
+		float percentage = world.getPercentage();
 		fbo.begin();
 		fbo.getColorBufferTexture().bind(1);
 		batcher.setShader(defaultShader);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batcher.begin();
 		light.bind(0);
-		batcher.draw(light, cam.position.x-(1.4f*500)/2-150,
-				cam.position.y-250, 1.4f*500,500f);
+		batcher.draw(light, 
+				(cam.position.x - 960*percentage),
+				(cam.position.y - 540*percentage), 1920f*percentage,1080f*percentage);
 		batcher.end();
 		fbo.end();
 	}
@@ -413,7 +421,7 @@ public class GameRenderer {
 
 	public void moveCamera(){
 		if(bob != null){
-			cam.position.set(bob.getPosition().x,bob.getPosition().y,0);
+			cam.position.set(bob.getPosition().x+15f,bob.getPosition().y+25f,0);
 		}
 		cam.update();
 	}
