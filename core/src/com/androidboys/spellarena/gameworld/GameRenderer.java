@@ -132,9 +132,15 @@ public class GameRenderer {
 	}
 
 	private void renderTornado(float runTime, Tornado o) {
+		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-25,110f,100f);
+		shapeRenderer.end();
 		batcher.begin();
+		batcher.setColor(Color.WHITE);
 		batcher.draw(tornadoAnimation.getKeyFrame(runTime),
-				o.getPosition().x,o.getPosition().y,75f,75f);
+				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
 		batcher.end();
 		
 	}

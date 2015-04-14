@@ -79,10 +79,23 @@ public class GameWorld {
 //		}
 //		Gdx.app.log(TAG, "Updating player model "+bob);
 		bob.update(delta);
-		checkCollision(delta);
+		checkPlayerCollision(delta);
+		checkObjectCollision();
 	}
 
-	private void checkCollision(float delta) {
+	private void checkObjectCollision() {
+		for(Object object: gameObjects.toArray()){
+			if(tiles != null){
+				for(Rectangle tile: tiles){
+					if(tile.overlaps(((GameObject)object).getRectangle())){
+						gameObjects.remove(object);
+					}
+				}
+			}
+		}
+	}
+
+	private void checkPlayerCollision(float delta) {
 		for(Bob bob: playerModels.values()){
 			Vector2 newPos = (bob.getPosition().cpy()).add((bob.getVelocity().cpy()).scl(delta));
 			bob.setRect(newPos);
