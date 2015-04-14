@@ -1,6 +1,8 @@
 package com.androidboys.spellarena.model;
 
 
+import java.util.ArrayList;
+
 import org.json.JSONObject;
 
 import com.androidboys.spellarena.gameworld.GameWorld;
@@ -65,7 +67,7 @@ public class Bob {
 	private Vector2 updatePosition;
 	private Vector2 updateVelocity;
 	private long updateTimestamp;
-
+	private ArrayList<Object> gameObjects;
 	
 	/**
 	 * Create a new Bob instance.
@@ -116,7 +118,6 @@ public class Bob {
 			applyUpdate(delta);
 			needsUpdate = false;
 		}
-		checkCollision(delta);
 		updateState();
 	}
 
@@ -330,7 +331,7 @@ public class Bob {
 		this.position = newPos;
 	}
 
-	private void setRect(Vector2 newPos) {
+	public void setRect(Vector2 newPos) {
 		this.bobRect.set(newPos.x - 10, newPos.y, 50, 50);
 	}
 
@@ -565,5 +566,9 @@ public class Bob {
 			this.velocity = new Vector2(-MAX_SPEED, 0);
 			break;
 		}
+	}
+
+	public void setGameObjects(ArrayList<Object> gameObjects) {
+		this.gameObjects = gameObjects;
 	}
 }

@@ -64,6 +64,7 @@ public class GameWorld {
 	private void updatePlayerModels(float delta){
 		for(Bob bob: playerModels.values()){
 			if (bob.getState() != Bob.STATE_DEAD){
+
 				updatePlayerModel(bob, delta);
 			}
 		}
@@ -75,7 +76,154 @@ public class GameWorld {
 //		}
 //		Gdx.app.log(TAG, "Updating player model "+bob);
 		bob.update(delta);
-		
+		checkCollision(delta);
+	}
+
+	private void checkCollision(float delta) {
+		for(Bob bob: playerModels.values()){
+			Vector2 newPos = (bob.getPosition().cpy()).add((bob.getVelocity().cpy()).scl(delta));
+			bob.setRect(newPos);
+			if(tiles != null){
+				for(Rectangle tile: tiles){
+					if(tile.overlaps(bob.getbobRect())){
+						switch(bob.getDirection()){
+						case EAST:
+							newPos.x = tile.x - 40;
+							break;
+						case NORTH:
+							newPos.y = tile.y - 50;
+							break;
+						case NORTHEAST:
+							float x = (newPos.x + 40) - tile.x;
+							float y = (newPos.y + 50) - tile.y;
+							if(x>y){
+								newPos.x -= y;
+								newPos.y -= y;
+							} else {
+								newPos.x -= x;
+								newPos.y -= x;
+							}
+							break;
+						case NORTHWEST:
+							x = tile.x + tile.width - (newPos.x - 10);
+							y = (newPos.y + 50) - tile.y;
+							if(x>y){
+								newPos.x += y;
+								newPos.y -= y;
+							} else {
+								newPos.x += x;
+								newPos.y -= x;
+							}
+							break;
+						case SOUTH:
+							newPos.y = tile.y + tile.height;	
+							break;
+						case SOUTHEAST:
+							x = (newPos.x + 40) - tile.x;
+							y = tile.y + tile.height - (newPos.y);
+							if(x>y){
+								newPos.x -= y;
+								newPos.y += y;
+							} else {
+								newPos.x -= x;
+								newPos.y += x;
+							}
+							break;
+						case SOUTHWEST:
+							x = tile.x + tile.width - (newPos.x - 10);
+							y = tile.y + tile.height - (newPos.y);
+							//						System.out.println("x: "+x+"y: "+y);
+							if(x>y){
+								newPos.x += y;
+								newPos.y += y;
+							} else {
+								newPos.x += x;
+								newPos.y += x;
+							}
+							break;
+						case WEST:
+							newPos.x = tile.x + tile.width + 10;
+							break;
+						default:
+							break;
+
+						}
+					}
+				}
+				if(bob.getState() == Bob.STATE_RUNNING){
+					for(Bob otherBob: playerModels.values()){
+						if(!bob.equals(otherBob)){
+							Rectangle rect = otherBob.getbobRect();
+							if(rect.overlaps(bob.getbobRect())){
+								switch(bob.getDirection()){
+								case EAST:
+									newPos.x = rect.x - 40;
+									break;
+								case NORTH:
+									newPos.y = rect.y - 50;
+									break;
+								case NORTHEAST:
+									float x = (newPos.x + 40) - rect.x;
+									float y = (newPos.y + 50) - rect.y;
+									if(x>y){
+										newPos.x -= y;
+										newPos.y -= y;
+									} else {
+										newPos.x -= x;
+										newPos.y -= x;
+									}
+									break;
+								case NORTHWEST:
+									x = rect.x + rect.width - (newPos.x - 10);
+									y = (newPos.y + 50) - rect.y;
+									if(x>y){
+										newPos.x += y;
+										newPos.y -= y;
+									} else {
+										newPos.x += x;
+										newPos.y -= x;
+									}
+									break;
+								case SOUTH:
+									newPos.y = rect.y + rect.height;	
+									break;
+								case SOUTHEAST:
+									x = (newPos.x + 40) - rect.x;
+									y = rect.y + rect.height - (newPos.y);
+									if(x>y){
+										newPos.x -= y;
+										newPos.y += y;
+									} else {
+										newPos.x -= x;
+										newPos.y += x;
+									}
+									break;
+								case SOUTHWEST:
+									x = rect.x + rect.width - (newPos.x - 10);
+									y = rect.y + rect.height - (newPos.y);
+									//						System.out.println("x: "+x+"y: "+y);
+									if(x>y){
+										newPos.x += y;
+										newPos.y += y;
+									} else {
+										newPos.x += x;
+										newPos.y += x;
+									}
+									break;
+								case WEST:
+									newPos.x = rect.x + rect.width + 10;
+									break;
+								default:
+									break;
+	
+								}
+							}
+						}
+					}
+				}
+			}
+			bob.setPosition(newPos);
+		}
 	}
 
 	/**
