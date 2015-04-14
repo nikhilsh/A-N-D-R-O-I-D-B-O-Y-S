@@ -577,10 +577,13 @@ public class GameScreen implements Screen{
 		            }
 		        }
 				spell.spellSettler(spellList[0], spellList[1], spellList[2]);
-				castSpell(UserSession.getInstance().getUserName(),
-						bob.getPosition().x, bob.getPosition().y, spell.getSpell(), direction);
-				gameScreenMediator.spellCommand(direction, spell.getSpell(), 
-						bob.getPosition().x, bob.getPosition().y);
+				if (castSpell(UserSession.getInstance().getUserName(),
+						bob.getPosition().x, bob.getPosition().y, spell.getSpell(), direction)){
+					gameScreenMediator.spellCommand(direction, spell.getSpell(), 
+							bob.getPosition().x, bob.getPosition().y);
+				}
+				
+				
 				return true;
 			}	
 			@Override
@@ -844,13 +847,13 @@ public class GameScreen implements Screen{
 	}
 	*/
 	
-	public void castSpell(String playerName, float x, float y, int spell, int direction){
+	public Boolean castSpell(String playerName, float x, float y, int spell, int direction){
 		Gdx.app.log(TAG,"Casting spell: "+spell);
 		Spells spellEnum = null;
 		switch(spell){
 		case 0:
 			if (DIVINESHIELD_COOLDOWN > 0){
-				return;
+				return false;
 			}
 			spellEnum =  Spells.DIVINESHIELD;
 			if (playerName == UserSession.getInstance().getUserName()){
@@ -860,9 +863,8 @@ public class GameScreen implements Screen{
 		case 1:
 			if (BLINK_COOLDOWN > 0){
 				System.out.println("cannot cast");
-				return;
+				return false;
 			}
-			
 			spellEnum =  Spells.FORCESTAFF;
 			if (playerName == UserSession.getInstance().getUserName()){
 				BLINK_COOLDOWN = 2;
@@ -870,7 +872,7 @@ public class GameScreen implements Screen{
 			break;		
 		case 2:
 			if (ATOS_COOLDOWN > 0){
-				return;
+				return false;
 			}
 			spellEnum =  Spells.ATOS;
 			if (playerName == UserSession.getInstance().getUserName()){
@@ -879,59 +881,73 @@ public class GameScreen implements Screen{
 			break;		
 		case 3:
 			if (STASIS_COOLDOWN > 0){
-				return;
+				return false;
 			}
 			spellEnum =  Spells.STASISTRAP;
-			STASIS_COOLDOWN = 5;
+			if (playerName == UserSession.getInstance().getUserName()){
+				STASIS_COOLDOWN = 5;
+			}
 			break;		
 		case 4:
 			if (SPROUT_COOLDOWN > 0){
-				return;
+				return false;
 			}
 			spellEnum =  Spells.SPROUT;
-			SPROUT_COOLDOWN = 5;
+			if (playerName == UserSession.getInstance().getUserName()){
+				SPROUT_COOLDOWN = 5;
+			}
 			break;		
 		case 5:
 			if (DARKPACT_COOLDOWN > 0){
-				return;
+				return false;
 			}
 			spellEnum =  Spells.DARKPACT;
-			DARKPACT_COOLDOWN = 5;
+			if (playerName == UserSession.getInstance().getUserName()){
+				DARKPACT_COOLDOWN = 5;
+			}
 			break;		
 		case 6:
 			if (MINE_COOLDOWN > 0){
-				return;
+				return false;
 			}
 			spellEnum =  Spells.MINE;
-
-			MINE_COOLDOWN = 5;
+			if (playerName == UserSession.getInstance().getUserName()){
+				MINE_COOLDOWN = 5;
+			}
 			break;		
 		case 7:
 			if (LASER_COOLDOWN > 0){
-				return;
+				return false;
 			}
 			spellEnum =  Spells.LASER;
-			LASER_COOLDOWN = 5;
+			if (playerName == UserSession.getInstance().getUserName()){
+				LASER_COOLDOWN = 5;
+			}
 			break;		
 		case 8:
 			if (ACID_COOLDOWN > 0){
-				return;
+				return false;
 			}
 			spellEnum =  Spells.ACID;
-			ACID_COOLDOWN = 5;
+			if (playerName == UserSession.getInstance().getUserName()){
+				ACID_COOLDOWN = 5;
+			}
 			break;		
 		case 9:
 			if (FANOFKNIVES_COOLDOWN > 0){
-				return;
+				return false;
 			}
 			spellEnum = Spells.FANOFKNIVES;
-			FANOFKNIVES_COOLDOWN = 5;
+			if (playerName == UserSession.getInstance().getUserName()){
+				FANOFKNIVES_COOLDOWN = 5;
+			}
 			break;		
 		default:
 			break;
 		}
 		
 		world.castSpell(playerName,x,y,spellEnum,direction);
+		return true;
 		/*
 		Spell spellInstance = new Spell(world, x, y, spellEnum, direction);
 		switch (spellEnum) {

@@ -100,8 +100,10 @@ public class GameWorld {
 		for(Object object: gameObjects.toArray()){
 			if(tiles != null){
 				Bob bob = getPlayerModel(UserSession.getInstance().getUserName());
-				if (bob.getCollisionEdge().overlaps(((GameObject)object).getRectangle())){
+				GameObject gameObject = (GameObject)object;
+				if (bob.getCollisionEdge().overlaps(gameObject.getRectangle()) && UserSession.getInstance().getUserName() != gameObject.getUsername()){
 					if (object instanceof Tornado){
+						System.out.println("TORNADO HIT!!");
 						//minus health?
 					}
 					//add rest of objects
@@ -477,7 +479,7 @@ public class GameWorld {
 	}
 
 	private void createTornado(Bob bob) {
-		Tornado tornado = new Tornado(bob.getPosition().x, bob.getPosition().y, bob.getDirection());
+		Tornado tornado = new Tornado(bob.getPosition().x, bob.getPosition().y, bob.getDirection(), UserSession.getInstance().getUserName());
 		gameObjects.add(tornado);
 	}
 

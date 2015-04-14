@@ -8,8 +8,8 @@ public class Tornado extends GameObject {
 
 	private static final float MAX_SPEED = 300f;
 	
-	public Tornado(float x, float y, Direction direction) {
-		super(x, y);
+	public Tornado(float x, float y, Direction direction, String playerName) {
+		super(x, y, playerName);
 		switch(direction){
 			case EAST:
 				this.getPosition().add(25, 0);

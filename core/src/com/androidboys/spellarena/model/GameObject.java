@@ -21,15 +21,17 @@ public abstract class GameObject {
 
 	private Vector2 position;
 	private Vector2 velocity;
+	private String playerName;
 	
 	/**
 	 * Create a new Bob instance.
 	 * @param i,j		initial position
 	 * @param isEnemy	whether it is enemy
 	 */
-	public GameObject(float x, float y) {
+	public GameObject(float x, float y, String playerName) {
 		this.position = new Vector2(x,y);
-		this.setVelocity(new Vector2());		
+		this.setVelocity(new Vector2());
+		this.playerName = UserSession.getInstance().getUserName();
 	}
 
 	/**
@@ -53,6 +55,10 @@ public abstract class GameObject {
 
 	public void setVelocity(Vector2 velocity) {
 		this.velocity = velocity;
+	}
+	
+	public String getUsername(){
+		return playerName;
 	}
 
 	public abstract Rectangle getRectangle();
