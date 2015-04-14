@@ -401,15 +401,8 @@ public class GameWorld {
 			//clear on screen
 			break;
 		case DIVINESHIELD:
-<<<<<<< HEAD
 			bob.setInvulnerable();
-			//send time remaining and state to server
-=======
-			
-				bob.setState(Bob.STATE_INVULNERABLE);
-				//send time remaining and state to server
-			
->>>>>>> 61c2fb75c1b2bb51fdcf23a92654ffe663d3ca6d
+			//send time remaining and state to server			
 			break;
 		case FORCESTAFF:
 				switch (bob.getDirection()) {
