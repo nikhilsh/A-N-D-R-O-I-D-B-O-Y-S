@@ -214,10 +214,10 @@
   </data>
  </layer>
 <objectgroup name="Collidable">
-  <object id="6" x="20.1286" y="0" width="1910.39" height="66.3292"/>
-  <object id="8" x="1852" y="66.3583" width="66.3292" height="967.49"/>
-  <object id="9" x="11.7009" y="1011.51" width="1908" height="66.3292"/>
-  <object id="11" x="0.7797" y="66.7009" width="75.3292" height="969.728"/>
+  <object id="6" x="20.1286" y="-60" width="2000" height="122.3292"/>
+  <object id="8" x="1855" y="66.3583" width="140" height="967.49"/>
+  <object id="9" x="11.7009" y="1011.51" width="2000" height="120.3292"/>
+  <object id="11" x="-80" y="-60.7009" width="140" height="1200.728"/>
   <object id="12" x="859.463" y="420.846" width="200.444" height="199.791"/>
  </objectgroup>
  <objectgroup name="StartPosition">

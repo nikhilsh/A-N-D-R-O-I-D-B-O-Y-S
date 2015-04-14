@@ -725,6 +725,7 @@ public class GameScreen implements Screen{
 	private ButtonWidget myButton3;
 	private boolean roomInfoProcessed;
 	private Label spellLabel;
+	
 	private void update(float delta) {
 		synchronized (world.getPlayerModels()) {
 			n++;
@@ -852,22 +853,29 @@ public class GameScreen implements Screen{
 				return;
 			}
 			spellEnum =  Spells.DIVINESHIELD;
-			DIVINESHIELD_COOLDOWN = 5;
+			if (playerName == UserSession.getInstance().getUserName()){
+				DIVINESHIELD_COOLDOWN = 5;
+			}
 			break;		
 		case 1:
 			if (BLINK_COOLDOWN > 0){
 				System.out.println("cannot cast");
 				return;
 			}
+			
 			spellEnum =  Spells.FORCESTAFF;
-			BLINK_COOLDOWN = 2;
+			if (playerName == UserSession.getInstance().getUserName()){
+				BLINK_COOLDOWN = 2;
+			}
 			break;		
 		case 2:
 			if (ATOS_COOLDOWN > 0){
 				return;
 			}
 			spellEnum =  Spells.ATOS;
-			ATOS_COOLDOWN = 5;
+			if (playerName == UserSession.getInstance().getUserName()){
+				ATOS_COOLDOWN = 5;
+			}
 			break;		
 		case 3:
 			if (STASIS_COOLDOWN > 0){
@@ -1204,36 +1212,47 @@ public class GameScreen implements Screen{
 			}
 		}
 		String spellName;
+		String spellCountdown;
 		switch(spellId){
 		case 3:
-			spellName = "Divine Shield " + (int)DIVINESHIELD_COOLDOWN;
+			spellCountdown = ((DIVINESHIELD_COOLDOWN <= 0) ? "Ready" : ""+((int)DIVINESHIELD_COOLDOWN+1));
+			spellName = "Divine Shield " + spellCountdown;
 			break;
 		case 12:
-			spellName = "Force " + (int)BLINK_COOLDOWN;
+			spellCountdown = ((BLINK_COOLDOWN <= 0) ? "Ready" : ""+((int)BLINK_COOLDOWN+1));
+			spellName = "Force " + spellCountdown;
 			break;
 		case 21:
-			spellName = "Stasis Trap " +  (int)STASIS_COOLDOWN;
+			spellCountdown = ((STASIS_COOLDOWN <= 0) ? "Ready" : ""+((int)STASIS_COOLDOWN+1));
+			spellName = "Stasis Trap " +  spellCountdown;
 			break;
 		case 30:
-			spellName = "Atos " + (int)ATOS_COOLDOWN;
+			spellCountdown = ((ATOS_COOLDOWN <= 0) ? "Ready" : ""+((int)ATOS_COOLDOWN+1));
+			spellName = "Atos " + spellCountdown;
 			break;
 		case 102:
-			spellName = "Mine " + (int)MINE_COOLDOWN;
+			spellCountdown = ((MINE_COOLDOWN <= 0) ? "Ready" : ""+((int)MINE_COOLDOWN+1));
+			spellName = "Mine " + spellCountdown;
 			break;
 		case 111:
-			spellName = "Sprout " +  (int)SPROUT_COOLDOWN;
+			spellCountdown = ((SPROUT_COOLDOWN <= 0) ? "Ready" : ""+((int)SPROUT_COOLDOWN+1));
+			spellName = "Sprout " +  spellCountdown;
 			break;
 		case 120:
-			spellName = "Acid " + (int)ACID_COOLDOWN;
+			spellCountdown = ((ACID_COOLDOWN <= 0) ? "Ready" : ""+((int)ACID_COOLDOWN+1));
+			spellName = "Acid " + spellCountdown;
 			break;
 		case 201:
-			spellName = "Fan Of Knives " +  (int)FANOFKNIVES_COOLDOWN;
+			spellCountdown = ((FANOFKNIVES_COOLDOWN <= 0) ? "Ready" : ""+((int)FANOFKNIVES_COOLDOWN+1));
+			spellName = "Fan Of Knives " +  spellCountdown;
 			break;
 		case 210:
-			spellName = "Dark Pact " +  (int)DARKPACT_COOLDOWN;
+			spellCountdown = ((DARKPACT_COOLDOWN <= 0) ? "Ready" : ""+((int)DARKPACT_COOLDOWN+1));
+			spellName = "Dark Pact " +  spellCountdown;
 			break;
 		case 300:
-			spellName = "Laser " + (int)LASER_COOLDOWN;
+			spellCountdown = ((LASER_COOLDOWN <= 0) ? "Ready" : ""+((int)LASER_COOLDOWN+1));
+			spellName = "Laser " + spellCountdown;
 			break;
 		default:
 			spellName = "";

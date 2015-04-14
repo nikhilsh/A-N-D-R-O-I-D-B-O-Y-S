@@ -32,7 +32,8 @@ public class Bob {
 		SOUTH,
 		SOUTHWEST,
 		WEST,
-		NORTHWEST, NONE;
+		NORTHWEST, 
+		NONE;
 	}
 
 	//States
@@ -418,14 +419,17 @@ public class Bob {
 		return this.lifeCount;
 	}
 
+	@Deprecated
 	public float getManaCount(){
 		return this.manaCount;
 	}
 
+	@Deprecated
 	public void decrementManaCount(int x){
 		this.manaCount -= x;
 	}
 
+	@Deprecated
 	public void incrementManaCount(){
 		if (this.manaCount<200){
 			this.manaCount += 0.1;

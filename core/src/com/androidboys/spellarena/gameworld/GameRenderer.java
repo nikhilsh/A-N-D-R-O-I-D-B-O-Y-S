@@ -228,7 +228,7 @@ public class GameRenderer {
 		//		shapeRenderer.begin(ShapeType.Line);
 		//		shapeRenderer.setColor(Color.BLACK);
 		//		shapeRenderer.circle(bob.getPosition().x, bob.getPosition().y, 300);
-		//		shapeRenderer.end();
+//				shapeRenderer.end();
 
 
 		batcher.begin();
