@@ -37,6 +37,9 @@ public class AssetLoader {
 	public static Animation northBobAnimation, eastBobAnimation, southBobAnimation, westBobAnimation, 
 		northEastBobAnimation, southEastBobAnimation, southWestBobAnimation, northWestBobAnimation, dustSpellAnimation;
 	
+	public static Texture tornadoTexture;
+	public static Animation tornadoAnimation;
+	
 	public static BitmapFont header, playText, playTextSmall, swordText, parchmentText, smallParchmentText;
 	
 	public static TiledMap map;
@@ -51,6 +54,8 @@ public class AssetLoader {
 		param.minFilter = TextureFilter.Nearest;
 		param.magFilter = TextureFilter.Nearest;
 		manager.load("sprites/wizard.png", Texture.class, param);
+		
+		manager.load("sprites/tornado.PNG", Texture.class, param);
 		
 		manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
 		manager.load("fonts/header.TTF",FreeTypeFontGenerator.class);
@@ -128,6 +133,9 @@ public class AssetLoader {
 		Gdx.app.log(TAG, "Setting game resources");
 		if(charTexture == null){
 			charTexture = manager.get("sprites/wizard.png",Texture.class);
+		}
+		if(tornadoTexture == null){
+			tornadoTexture = manager.get("sprites/tornado.PNG",Texture.class);
 		}
 		if(map == null){
 			map = manager.get("maps/Dungeon.tmx",TiledMap.class);
@@ -225,6 +233,17 @@ public class AssetLoader {
 				new TextureRegion(dustTexture, 128, 128, 128, 128)
 		});
 		
+		tornadoAnimation = new Animation(0.06f, new TextureRegion[]{
+				new TextureRegion(tornadoTexture, 0, 0, 66, 75),
+				new TextureRegion(tornadoTexture, 66, 0, 66, 75),
+				new TextureRegion(tornadoTexture, 132, 0, 66, 75),
+				new TextureRegion(tornadoTexture, 198, 0, 66, 75),
+				new TextureRegion(tornadoTexture, 264, 0, 66, 75),
+				new TextureRegion(tornadoTexture, 330, 0, 66, 75),
+				new TextureRegion(tornadoTexture, 396, 0, 66, 75),
+				new TextureRegion(tornadoTexture, 462, 0, 66, 75),
+		});
+		
 		northBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northEastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		eastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
@@ -233,6 +252,7 @@ public class AssetLoader {
 		southWestBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		westBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northWestBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		tornadoAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		dustSpellAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 	}
 

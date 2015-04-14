@@ -21,6 +21,8 @@ public class SpellCommand extends Command {
 			command.parseCommonFields(json);
 			command.x = (float) json.getDouble("x");
 			command.y = (float) json.getDouble("y");
+			command.spell = (int) json.getInt("spell");
+			command.direction = (int) json.getInt("direction");
 		} catch (JSONException e){
 			Gdx.app.log(TAG, e.toString());
 		}

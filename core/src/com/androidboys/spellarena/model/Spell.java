@@ -253,25 +253,23 @@ public class Spell {
 	public int getSpell(){
 
 		switch (spell) {
-		case ACID:
-			return 0;
 		case DIVINESHIELD:
-			return 1;
+			return 0;
 		case FORCESTAFF:
-			return 2;
+			return 1;
 		case ATOS:
-			return 3;
+			return 2;
 		case STASISTRAP:
-			return 4;
+			return 3;
 		case SPROUT:
-			return 5;
-
+			return 4;
 		case DARKPACT:
-			return 6;
-
+			return 5;
 		case MINE:
-			return 7;
+			return 6;
 		case LASER:
+			return 7;
+		case ACID:
 			return 8;
 		case FANOFKNIVES:
 			return 9;

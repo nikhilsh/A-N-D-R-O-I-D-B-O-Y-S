@@ -571,4 +571,38 @@ public class Bob {
 	public void setGameObjects(ArrayList<Object> gameObjects) {
 		this.gameObjects = gameObjects;
 	}
+	
+	public Rectangle getCollisionEdge(){
+		Rectangle rect;
+		switch(direction){
+		case EAST:
+			rect = new Rectangle(position.x + 40, position.y, 1, 50);
+			break;
+		case NORTH:
+			rect = new Rectangle(position.x - 10, position.y + 49, 50, 1);
+			break;
+		case NORTHEAST:
+			rect = new Rectangle(position.x + 35, position.y + 45, 5, 5);
+			break;
+		case NORTHWEST:
+			rect = new Rectangle(position.x - 10, position.y + 45, 5, 5);
+			break;
+		case SOUTH:
+			rect = new Rectangle(position.x - 10, position.y - 1, 50, 1);
+			break;
+		case SOUTHEAST:
+			rect = new Rectangle(position.x + 35, position.y, 5, 5);
+			break;
+		case SOUTHWEST:
+			rect = new Rectangle(position.x - 10, position.y, 5, 5);
+			break;
+		case WEST:
+			rect = new Rectangle(position.x - 11, position.y, 1, 50);
+			break;
+		default:
+			rect = null;
+			break;
+		}
+		return rect;
+	}
 }

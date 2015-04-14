@@ -7,8 +7,10 @@ import org.json.JSONObject;
 
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.GameObject;
 import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Spell.Spells;
+import com.androidboys.spellarena.model.Tornado;
 import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.session.UserSession;
 import com.badlogic.gdx.Gdx;
@@ -51,6 +53,8 @@ public class GameRenderer {
 	private Animation southBobAnimation, southWestBobAnimation, westBobAnimation, northWestBobAnimation,
 	northBobAnimation, northEastBobAnimation, eastBobAnimation, southEastBobAnimation, dustSpellAnimation;
 
+	private Animation tornadoAnimation;
+	
 	public GameRenderer(SpriteBatch batcher, GameWorld world) {
 		this.world = world;
 		//Create a new camera
@@ -87,6 +91,7 @@ public class GameRenderer {
 		westBobAnimation = AssetLoader.westBobAnimation;
 		southWestBobAnimation = AssetLoader.southWestBobAnimation;
 		dustSpellAnimation = AssetLoader.dustSpellAnimation;
+		tornadoAnimation = AssetLoader.tornadoAnimation;
 	}
 	
 	public void initGameObjects(){
@@ -102,6 +107,7 @@ public class GameRenderer {
 			}
 		}
 	}
+	
 
 	public void render(float runTime) {
 		Gdx.gl.glClearColor(0,0,0,1);
@@ -116,12 +122,26 @@ public class GameRenderer {
 		if(bob!=null)renderBob(runTime);
 		if(!enemies.isEmpty())renderEnemy(runTime);
 		renderSpell(runTime);
+		
+		for(Object o: world.getGameObjects()){
+			if(o instanceof Tornado){
+				renderTornado(runTime,(Tornado)o);
+			}
+		}
 
+	}
+
+	private void renderTornado(float runTime, Tornado o) {
+		batcher.begin();
+		batcher.draw(tornadoAnimation.getKeyFrame(runTime),
+				o.getPosition().x,o.getPosition().y,75f,75f);
+		batcher.end();
+		
 	}
 
 	private void renderBob(float runTime){
 		//Renders collision shape for debugging purposes
-
+//
 //				shapeRenderer.setProjectionMatrix(cam.combined);
 //				shapeRenderer.begin(ShapeType.Line);
 //				shapeRenderer.setColor(Color.BLUE);
@@ -134,7 +154,10 @@ public class GameRenderer {
 //					shapeRenderer.rect(rect.x,rect.y,rect.width,rect.height);
 //				}
 //				shapeRenderer.setColor(Color.BLUE);
-//				shapeRenderer.rect(bob.getPosition().x-10,bob.getPosition().y,50,50);
+//				shapeRenderer.rect(bob.getCollisionEdge().x,
+//						bob.getCollisionEdge().y,
+//						bob.getCollisionEdge().width,
+//						bob.getCollisionEdge().height);
 //				shapeRenderer.end();
 
 		//dark pact

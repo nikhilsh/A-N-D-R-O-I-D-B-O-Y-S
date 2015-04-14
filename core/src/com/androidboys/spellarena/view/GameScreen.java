@@ -148,6 +148,7 @@ public class GameScreen implements Screen{
 	
 	private HashMap<String,Integer> playersList = new HashMap<String, Integer>();
 	private HashMap<String,Boolean> clientsReady = new HashMap<String, Boolean>();
+	private InputMultiplexer multiplexer;
 	
 	//Constructor for debugging w/o multiplayer
 	public GameScreen(SpellArena game, Mediator mediator) {
@@ -491,7 +492,7 @@ public class GameScreen implements Screen{
 				super.touchUp(event, x, y, pointer, button);
 			}
 		});
-		InputMultiplexer multiplexer = new InputMultiplexer();
+		multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(stage);
 
 		multiplexer.addProcessor(new InputProcessor(){
@@ -589,7 +590,7 @@ public class GameScreen implements Screen{
 			}
 			
 		});
-		Gdx.input.setInputProcessor(multiplexer);
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	private void initializeBeforeGamePanel() {
@@ -829,39 +830,39 @@ public class GameScreen implements Screen{
 	*/
 	
 	public void castSpell(String playerName, float x, float y, int spell, int direction){
+		Gdx.app.log(TAG,"Casting spell: "+spell);
 		Spells spellEnum = null;
 		switch(spell){
-
 		case 0:
 			spellEnum =  Spells.DIVINESHIELD;
-		
+			break;		
 		case 1:
 			spellEnum =  Spells.FORCESTAFF;
-		
+			break;		
 		case 2:
 			spellEnum =  Spells.ATOS;
-
+			break;		
 		case 3:
 			spellEnum =  Spells.STASISTRAP;
-
+			break;		
 		case 4:
 			spellEnum =  Spells.SPROUT;
-
+			break;		
 		case 5:
 			spellEnum =  Spells.DARKPACT;
-
+			break;		
 		case 6:
 			spellEnum =  Spells.MINE;
-
+			break;		
 		case 7:
 			spellEnum =  Spells.LASER;
-
+			break;		
 		case 8:
 			spellEnum =  Spells.ACID;
-
+			break;		
 		case 9:
 			spellEnum =  Spells.FANOFKNIVES;
-
+			break;		
 		default:
 			break;
 		}
@@ -1264,6 +1265,7 @@ public class GameScreen implements Screen{
 		spellLabel.setVisible(true);
 		gameStarted = true;
 		beforeGamePanel.remove();
+		Gdx.input.setInputProcessor(multiplexer);
 		world.initialize(GameFactory.getGameModel());
 		if(gameScreenMediator.getNetworkListenerAdapter() != null){
 			game.getClient().removeNetworkListener(gameScreenMediator.getNetworkListenerAdapter());

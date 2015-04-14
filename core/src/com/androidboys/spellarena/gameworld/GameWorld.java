@@ -8,8 +8,11 @@ import java.util.Random;
 import com.androidboys.spellarena.gameworld.GameFactory.GameModel;
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.GameObject;
 import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Spell.Spells;
+import com.androidboys.spellarena.model.Tornado;
+import com.androidboys.spellarena.session.UserSession;
 import com.androidboys.spellarena.view.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
@@ -85,7 +88,7 @@ public class GameWorld {
 			bob.setRect(newPos);
 			if(tiles != null){
 				for(Rectangle tile: tiles){
-					if(tile.overlaps(bob.getbobRect())){
+					if(tile.overlaps(bob.getCollisionEdge())){
 						switch(bob.getDirection()){
 						case EAST:
 							newPos.x = tile.x - 40;
@@ -154,7 +157,7 @@ public class GameWorld {
 					for(Bob otherBob: playerModels.values()){
 						if(!bob.equals(otherBob)){
 							Rectangle rect = otherBob.getbobRect();
-							if(rect.overlaps(bob.getbobRect())){
+							if(rect.overlaps(bob.getCollisionEdge())){
 								switch(bob.getDirection()){
 								case EAST:
 									newPos.x = rect.x - 40;
@@ -239,9 +242,18 @@ public class GameWorld {
 	 */
 	public void update(float delta) {
 		updatePlayerModels(delta);
+		updateGameObjects(delta);
 		
 	}
 	
+	private void updateGameObjects(float delta) {
+		for(Object o: gameObjects){
+			if(o instanceof GameObject){
+				((GameObject) o).update(delta);
+			}
+		}
+	}
+
 	private void prepareObstacles(){
 		//Get the "Collidable" layer of map
 		MapLayer layer = (MapLayer) map.getLayers().get("Collidable");
@@ -349,6 +361,7 @@ public class GameWorld {
 
 	public void castSpell(String playerName, float x, float y, Spells spellEnum,
 			int direction) {
+		Gdx.app.log(TAG, "Casting spell "+spellEnum);
 		Bob bob = getPlayerModel(playerName);
 		switch (spellEnum) {
 		case ACID:
@@ -445,13 +458,7 @@ public class GameWorld {
 			break;
 
 		case LASER:
-			if (bob.getManaCount()>80){
-				bob.decrementManaCount(80);
-				
-			}
-			else {
-				System.out.println("No enough Mana!");
-			}
+			createTornado(bob);
 			break;
 
 		case FANOFKNIVES:
@@ -465,5 +472,14 @@ public class GameWorld {
 		default:
 			break;
 		}
+	}
+
+	private void createTornado(Bob bob) {
+		Tornado tornado = new Tornado(bob.getPosition().x, bob.getPosition().y, bob.getDirection());
+		gameObjects.add(tornado);
+	}
+
+	public ArrayList<Object> getGameObjects() {
+		return gameObjects;
 	}
 }
