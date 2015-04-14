@@ -142,6 +142,8 @@ public class GameScreen implements Screen{
 	private boolean connectedToServer;
 	private boolean prevMovementChanged;
 	
+	private float[] cooldown;
+	
 	private String serverIp;
 	
 	private HashMap<String,Integer> playersList = new HashMap<String, Integer>();
@@ -200,6 +202,7 @@ public class GameScreen implements Screen{
 		
 		createTouchpad();
 		createSpellButtons();
+		createSpellLabel();
 		initializeBeforeGamePanel();
 		setBackKeyListener();
 		prepareInputProcessor();
@@ -708,6 +711,7 @@ public class GameScreen implements Screen{
 	private ButtonWidget myButton2;
 	private ButtonWidget myButton3;
 	private boolean roomInfoProcessed;
+	private Label spellLabel;
 	private void update(float delta) {
 		synchronized (world.getPlayerModels()) {
 			n++;
@@ -1056,6 +1060,7 @@ public class GameScreen implements Screen{
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 displayButtonCommand(1);
+                updateSpellLabel();
             }
         });
 
@@ -1068,7 +1073,8 @@ public class GameScreen implements Screen{
         myButton2.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                displayButtonCommand(2);
+                displayButtonCommand(10);
+                updateSpellLabel();
             }
 
         });
@@ -1082,7 +1088,8 @@ public class GameScreen implements Screen{
         myButton3.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                displayButtonCommand(4);
+                displayButtonCommand(100);
+                updateSpellLabel();
             }
 
         });
@@ -1095,6 +1102,59 @@ public class GameScreen implements Screen{
         myButton3.setVisible(false);
 	}
 	
+	private void updateSpellLabel(){
+		int spellId = 0;
+		for(int i = 0; i< commandList.length ; i++){
+			if (commandList[i] != null){
+				spellId += commandList[i].getCommandIndex();
+			}
+		}
+		String spellName;
+		switch(spellId){
+		case 3:
+			spellName = "Divine Shield";
+			break;
+		case 12:
+			spellName = "Force";
+			break;
+		case 21:
+			spellName = "Stasis Trap";
+			break;
+		case 30:
+			spellName = "Atos";
+			break;
+		case 102:
+			spellName = "Mine";
+			break;
+		case 111:
+			spellName = "Sprout";
+			break;
+		case 120:
+			spellName = "Acid";
+			break;
+		case 201:
+			spellName = "Fan Of Knives";
+			break;
+		case 210:
+			spellName = "Dark Pact";
+			break;
+		case 300:
+			spellName = "Laser";
+			break;
+		default:
+			spellName = "";
+		}
+		spellLabel.setText(spellName);
+	}
+	
+	private void createSpellLabel(){
+		spellLabel = new Label("", StyleLoader.tableLabelStyle);
+		stage.addActor(spellLabel);
+		spellLabel.setBounds(0, 420, 640, 60);
+		spellLabel.setVisible(false);
+		spellLabel.setAlignment(Align.right);
+	}
+	
 	 public void displayButtonCommand(int indexOfButtonPressed) {
 	        if (commandCount > 2) {
 	            return;
@@ -1104,10 +1164,10 @@ public class GameScreen implements Screen{
 	            case 1:
 	                texture = new Texture(Gdx.files.internal("images/wex.png"));
 	                break;
-	            case 2:
+	            case 10:
 	                texture = new Texture(Gdx.files.internal("images/quas.png"));
 	                break;
-	            case 4:
+	            case 100:
 	                texture = new Texture(Gdx.files.internal("images/exort.png"));
 	                break;	
 	        }
@@ -1133,7 +1193,6 @@ public class GameScreen implements Screen{
 	        	}
 	        }
 	        stage.addActor(commandList[0]);
-	        
 	    }
 
 		private Bob addPlayerModelToWorld(String playerName, int gameIndex) {
@@ -1202,6 +1261,7 @@ public class GameScreen implements Screen{
 		myButton2.setVisible(true);
 		myButton3.setVisible(true);
 		touchpad.setVisible(true);
+		spellLabel.setVisible(true);
 		gameStarted = true;
 		beforeGamePanel.remove();
 		world.initialize(GameFactory.getGameModel());

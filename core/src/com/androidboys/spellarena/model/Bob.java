@@ -262,10 +262,8 @@ public class Bob {
 		if(getTiles() != null){
 			for(Rectangle tile: getTiles()){
 				if(tile.overlaps(this.bobRect)){
-					//					System.out.println("Overlap");
 					switch(direction){
 					case EAST:
-						//						System.out.println("Colliding east");
 						newPos.x = tile.x - 40;
 						break;
 					case NORTH:

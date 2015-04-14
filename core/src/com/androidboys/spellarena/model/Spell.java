@@ -77,39 +77,37 @@ public class Spell {
 	 */
 	public void spellSettler(int x, int y, int z) {
 		index = x + y + z;
-		if (index < 3){
-			return;
-		}
-		else if (index == 3) { //QQQ
+		if (index == 3) { //QQQ
 			spell = Spells.DIVINESHIELD;
 		}
-		else if (index == 4) { //QQW
+		else if (index == 12) { //QQW
 			spell = Spells.FORCESTAFF;
 		}
-		else if (index == 5) { //WWQ
+		else if (index == 21) { //WWQ
 			spell = Spells.STASISTRAP;
 		}
-		else if (index == 6) {
-			if (x == y && x == z){ //WWW
-				spell = Spells.ATOS;
-			} else { //QQE
-				spell = Spells.MINE;
-			}
+		else if (index == 30) { //WWW
+			spell = Spells.ATOS;
+		} 
+		else if (index == 102) { //QQE
+			spell = Spells.MINE;
 		}
-		else if (index == 7) { //QWE
+		else if (index == 111) { //QWE
 			spell = Spells.SPROUT;
 		}
-		else if (index == 8) { //WWE
+		else if (index == 120) { //WWE
 			spell = Spells.ACID;
 		}
-		else if (index == 9) { //EEQ
+		else if (index == 201) { //EEQ
 			spell = Spells.FANOFKNIVES;
 		}
-		else if (index == 10) { //EEW
+		else if (index == 210) { //EEW
 			spell = Spells.DARKPACT;
 		}
-		else if (index == 12) { //EEE
+		else if (index == 300) { //EEE
 			spell = Spells.LASER;
+		} else {
+			return;
 		}
 		this.world.setSpell(spell);
 		castSpell();
