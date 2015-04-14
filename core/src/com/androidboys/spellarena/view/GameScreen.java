@@ -522,8 +522,7 @@ public class GameScreen implements Screen{
 			public boolean touchUp(int screenX, int screenY, int pointer,
 					int button) {
 				int direction = 0;
-				
-				System.out.println("this is bob " +bob);
+				Bob bob = world.getPlayerModel(UserSession.getInstance().getUserName());
 				switch (bob.getDirection()) {
 				case EAST:
 					direction = 0;
@@ -552,21 +551,22 @@ public class GameScreen implements Screen{
 				default:
 					break;
 				}
-					Spell spell = new Spell(world, bob.getPosition().x, bob.getPosition().y, null, direction);
-					int[] spellList = new int[3];
-			        for (int i = 0; i < commandList.length; i++) {
-			            try {
-			            	spellList[i] = commandList[i].getCommandIndex(); //1 for red 2 for purple 4 for blue
-			            } catch (Exception e) {
-			            	return false;
-			            }
-			        }
-			        
-					spell.spellSettler(spellList[0], spellList[1], spellList[2]);
-					castSpell(bob.getPosition().x, bob.getPosition().y, spell.getSpell(), direction);
+				Spell spell = new Spell(world, bob.getPosition().x, bob.getPosition().y, null, direction);
+				int[] spellList = new int[3];
+		        for (int i = 0; i < commandList.length; i++) {
+		            try {
+		            	spellList[i] = commandList[i].getCommandIndex(); //1 for red 2 for purple 4 for blue
+		            } catch (Exception e) {
+		            	return false;
+		            }
+		        }
+				spell.spellSettler(spellList[0], spellList[1], spellList[2]);
+				castSpell(UserSession.getInstance().getUserName(),
+						bob.getPosition().x, bob.getPosition().y, spell.getSpell(), direction);
+				gameScreenMediator.spellCommand(direction, spell.getSpell(), 
+						bob.getPosition().x, bob.getPosition().y);
 				return true;
-			}
-
+			}	
 			@Override
 			public boolean touchDragged(int screenX, int screenY, int pointer) {
 				// TODO Auto-generated method stub
@@ -824,7 +824,7 @@ public class GameScreen implements Screen{
 	}
 	*/
 	
-	public void castSpell(float x, float y, int spell, int direction){
+	public void castSpell(String playerName, float x, float y, int spell, int direction){
 		Spells spellEnum = null;
 		switch(spell){
 
@@ -861,7 +861,8 @@ public class GameScreen implements Screen{
 		default:
 			break;
 		}
-
+		world.castSpell(playerName,x,y,spellEnum,direction);
+		/*
 		Spell spellInstance = new Spell(world, x, y, spellEnum, direction);
 		switch (spellEnum) {
 		case ACID:
@@ -978,7 +979,7 @@ public class GameScreen implements Screen{
 		default:
 			break;
 		}
-		gameScreenMediator.spellCommand(direction, spell, x, y);
+		*/
 	}
 	
 	public Stage getStage(){

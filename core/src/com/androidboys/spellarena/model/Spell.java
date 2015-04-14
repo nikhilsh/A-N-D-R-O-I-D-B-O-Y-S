@@ -1,7 +1,5 @@
 package com.androidboys.spellarena.model;
 
-import jdk.nashorn.internal.runtime.UserAccessorProperty;
-
 import org.json.JSONObject;
 
 import com.androidboys.spellarena.gameworld.GameWorld;
@@ -34,7 +32,7 @@ public class Spell {
 
 	private Spells spell;
 	private int index = 0;
-	private Vector2 position;
+	private Vector2 position = new Vector2();
 	private GameWorld world;
 	private Bob bob;
 	private int direction;

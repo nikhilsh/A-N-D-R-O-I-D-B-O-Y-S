@@ -166,7 +166,8 @@ public class GameScreenMediator extends Mediator{
 	
 	private void handleSpellCommand(Command command){
 		SpellCommand spellCommand = (SpellCommand)command;
-		gameScreen.castSpell(spellCommand.getPosition().x, spellCommand.getPosition().y, spellCommand.getSpell(), spellCommand.getDirection());
+		String playerName = command.getFromUser();
+		gameScreen.castSpell(playerName, spellCommand.getPosition().x, spellCommand.getPosition().y, spellCommand.getSpell(), spellCommand.getDirection());
 	}
 	
 	@Override

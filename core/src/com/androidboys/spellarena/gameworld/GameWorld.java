@@ -198,4 +198,124 @@ public class GameWorld {
         }
         return playingUser <= 1;
     }
+
+	public void castSpell(String playerName, float x, float y, Spells spellEnum,
+			int direction) {
+		Bob bob = getPlayerModel(playerName);
+		switch (spellEnum) {
+		case ACID:
+			//consider changing
+			//check for collision
+			//send position and time remaining to server
+			//display on UI
+			//clear on screen
+			break;
+		case DIVINESHIELD:
+			if (bob.getManaCount()>50){
+				bob.decrementManaCount(50);
+				bob.setState(Bob.STATE_INVULNERABLE);
+				//send time remaining and state to server
+			}
+			break;
+		case FORCESTAFF:
+			if (bob.getManaCount()>30){
+				bob.decrementManaCount(30);
+				switch (bob.getDirection()) {
+				case EAST:
+					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
+					break;
+				case NORTH:
+					bob.setPosition(bob.getPosition().x, bob.getPosition().y+100);
+					break;
+				case NORTHEAST:
+					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y+100);
+					break;
+				case NORTHWEST:
+					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y+100);
+					break;
+				case SOUTH:
+					bob.setPosition(bob.getPosition().x, bob.getPosition().y-100);
+					break;
+				case SOUTHEAST:
+					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y-100);
+					break;
+				case SOUTHWEST:
+					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y-100);
+					break;
+				case WEST:
+					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y);
+					break;
+
+				default:
+					break;
+				}
+			}
+			else {
+				System.out.println("No enough Mana!");
+			}
+			break;
+
+		case ATOS:
+			if (bob.getManaCount()>50){
+				bob.decrementManaCount(50);
+			}
+			else {
+				System.out.println("No enough Mana!");
+			}
+			break;
+
+		case STASISTRAP:
+
+			//collision with sprite model (+100 radius)
+			//insert mine at bob position
+			//if stasis trap near enemy,
+			break;
+
+		case SPROUT:
+			//collision with sprite
+			//mana cost 40
+
+			//need add new collision			
+			break;
+
+		case DARKPACT:
+			if (bob.getManaCount()>80){
+				bob.decrementManaCount(80);
+				//so start animation 3 seconds before,
+				//then if the state is end,			
+			
+			}
+			else {
+				System.out.println("No enough Mana!");
+			}
+			break;
+
+		case MINE:
+			//collision with sprite, decrement health
+
+			//insert mine at bob position
+			break;
+
+		case LASER:
+			if (bob.getManaCount()>80){
+				bob.decrementManaCount(80);
+				
+			}
+			else {
+				System.out.println("No enough Mana!");
+			}
+			break;
+
+		case FANOFKNIVES:
+			if (bob.getManaCount()>100){
+				bob.decrementManaCount(100);
+				
+			}
+			else {
+				System.out.println("No enough Mana!");
+			}
+		default:
+			break;
+		}
+	}
 }
