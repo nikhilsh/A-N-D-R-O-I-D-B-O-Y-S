@@ -17,12 +17,12 @@ public class Spell {
 		DIVINESHIELD, 
 		FORCESTAFF,
 		BOOST,
-		STASISTRAP,
+		FIREWALL,
 		BLADEFURY,
-		DARKPACT,
+		THUNDERSTORM,
 		MINE,
 		LASER,
-		ACID,
+		SPARK,
 		FANOFKNIVES;
 	}
 
@@ -81,31 +81,31 @@ public class Spell {
 			spell = Spells.DIVINESHIELD;
 		}
 		else if (index == 12) { //QQW
-			spell = Spells.FORCESTAFF;
+			spell = Spells.BOOST;
 		}
 		else if (index == 21) { //WWQ
-			spell = Spells.STASISTRAP;
+			spell = Spells.FANOFKNIVES;
 		}
 		else if (index == 30) { //WWW
-			spell = Spells.BOOST;
+			spell = Spells.THUNDERSTORM;
 		} 
 		else if (index == 102) { //QQE
-			spell = Spells.MINE;
+			spell = Spells.FORCESTAFF;
 		}
 		else if (index == 111) { //QWE
 			spell = Spells.BLADEFURY;
 		}
 		else if (index == 120) { //WWE
-			spell = Spells.ACID;
+			spell = Spells.SPARK;
 		}
 		else if (index == 201) { //EEQ
-			spell = Spells.FANOFKNIVES;
+			spell = Spells.MINE;
 		}
 		else if (index == 210) { //EEW
-			spell = Spells.DARKPACT;
+			spell = Spells.LASER;
 		}
 		else if (index == 300) { //EEE
-			spell = Spells.LASER;
+			spell = Spells.FIREWALL;
 		} else {
 			return;
 		}
@@ -224,17 +224,17 @@ public class Spell {
 			return 1;
 		case BOOST:
 			return 2;
-		case STASISTRAP:
+		case FIREWALL:
 			return 3;
 		case BLADEFURY:
 			return 4;
-		case DARKPACT:
+		case THUNDERSTORM:
 			return 5;
 		case MINE:
 			return 6;
 		case LASER:
 			return 7;
-		case ACID:
+		case SPARK:
 			return 8;
 		case FANOFKNIVES:
 			return 9;

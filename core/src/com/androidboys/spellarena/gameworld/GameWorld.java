@@ -14,6 +14,7 @@ import com.androidboys.spellarena.model.GameObject;
 import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.model.Sword;
+import com.androidboys.spellarena.model.Thunderstorm;
 import com.androidboys.spellarena.model.Tornado;
 import com.androidboys.spellarena.session.UserSession;
 import com.androidboys.spellarena.view.GameScreen;
@@ -94,7 +95,6 @@ public class GameWorld {
 	}
 	
 	private void checkPlayerObjectCollision(float delta) {
-		Gdx.app.log("TAG",""+delta);
 		Bob bob = getPlayerModel(UserSession.getInstance().getUserName());
 		if(!bob.isInvulnerable()){
 			float damage = 0;
@@ -395,7 +395,7 @@ public class GameWorld {
 		Gdx.app.log(TAG, "Casting spell "+spellEnum);
 		Bob bob = getPlayerModel(playerName);
 		switch (spellEnum) {
-		case ACID:
+		case SPARK:
 			//consider changing
 			//check for collision
 			//send position and time remaining to server
@@ -415,7 +415,7 @@ public class GameWorld {
 			
 			break;
 
-		case STASISTRAP:
+		case FIREWALL:
 
 			//collision with sprite model (+100 radius)
 			//insert mine at bob position
@@ -429,8 +429,8 @@ public class GameWorld {
 			//need add new collision			
 			break;
 
-		case DARKPACT:
-			
+		case THUNDERSTORM:
+			createThunderstorm(bob);
 			break;
 
 		case MINE:
@@ -449,6 +449,20 @@ public class GameWorld {
 			break;
 		}
 	}
+	private void createThunderstorm(Bob bob) {
+		final Thunderstorm thunderstorm = new Thunderstorm(bob.getPosition().x, bob.getPosition().y, bob.getDirection(), bob.getPlayerName());
+		gameObjects.add(thunderstorm);
+		new java.util.Timer().schedule( 
+		        new java.util.TimerTask() {
+		            @Override
+		            public void run() {
+		        		gameObjects.remove(thunderstorm);
+		            }
+		        }, 
+		        1500 
+		);
+	}
+
 	private void blinkBob(Bob bob){
 		final DummyBlinkObject blinkObject = new DummyBlinkObject(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName());
 		gameObjects.add(blinkObject);

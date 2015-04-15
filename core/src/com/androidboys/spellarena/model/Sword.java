@@ -27,7 +27,7 @@ public class Sword extends GameObject{
 	
 	@Override
 	public void update(float delta) {
-		this.radius += 5*delta;
+		this.radius += 2*delta;
 		this.rotation += ANGULAR_VELOCITY*delta;
 		Vector2 parallelVector = new Vector2((float)Math.cos(rotation),
 				(float) Math.sin(rotation));

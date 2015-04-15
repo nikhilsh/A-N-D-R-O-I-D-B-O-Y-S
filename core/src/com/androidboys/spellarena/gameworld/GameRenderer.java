@@ -12,6 +12,7 @@ import com.androidboys.spellarena.model.GameObject;
 import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.model.Sword;
+import com.androidboys.spellarena.model.Thunderstorm;
 import com.androidboys.spellarena.model.Tornado;
 import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.session.UserSession;
@@ -60,7 +61,9 @@ public class GameRenderer {
 	northBobAnimation, northEastBobAnimation, eastBobAnimation, southEastBobAnimation;
 	private Animation bobDeathAnimation;	
 
-	private Animation tornadoAnimation, shieldAnimation, swordAnimation, dustAnimation, reverseDustAnimation;
+	private Animation tornadoAnimation, shieldAnimation, swordAnimation, dustAnimation, 
+	reverseDustAnimation;
+	TextureRegion[] thunderstormAnimation;
 
 	private ShaderProgram defaultShader;
 	private ShaderProgram finalShader;
@@ -73,6 +76,7 @@ public class GameRenderer {
 	private int width;
 	private Texture greenHealthBar;
 	private Texture redHealthBar;
+
 
 	private final static Vector3 bright = new Vector3(0.7f, 0.7f, 0.9f);
 	// Load shaders from text files
@@ -151,6 +155,7 @@ public class GameRenderer {
 		tornadoAnimation = AssetLoader.tornadoAnimation;
 		shieldAnimation = AssetLoader.shieldAnimation;
 		swordAnimation = AssetLoader.swordAnimation;
+		thunderstormAnimation = AssetLoader.thunderstormAnimation;
 	}
 
 	public void initGameObjects(){
@@ -195,7 +200,24 @@ public class GameRenderer {
 			else if(o instanceof DummyBlinkObject){
 				renderBlink(runTime, (DummyBlinkObject)o);
 			}
+			else if(o instanceof Thunderstorm){
+				renderThunderstorm(runTime, (Thunderstorm)o);
+			}
 		}		
+	}
+
+	private void renderThunderstorm(float runTime, Thunderstorm o) {
+		batcher.begin();
+		//		batcher.setColor(Color.WHITE);
+		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
+				o.getPosition().x-50,o.getPosition().y-50,50f,100f);
+		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
+				o.getPosition().x-100,o.getPosition().y-50,50f,100f);
+		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
+				o.getPosition().x,o.getPosition().y-50,50f,100f);
+		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
+				o.getPosition().x+50,o.getPosition().y-50,50f,100f);
+		batcher.end();
 	}
 
 	private void renderSword(float runTime, Sword o) {

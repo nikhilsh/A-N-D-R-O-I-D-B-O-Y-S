@@ -264,21 +264,14 @@ public class GameScreen implements Screen{
 		Image panelBackground = new Image(AssetLoader.loadingTexture);
 		winGamePopUp.addActor(panelBackground);
 		panelBackground.setBounds(0, 0, 400, 240);
-		LabelStyle labelStyle = new LabelStyle();
-		labelStyle.font = AssetLoader.playText;
-		labelStyle.fontColor = Color.WHITE;
-		Label popUpLabel = new Label("YOU WIN", labelStyle);
+		Label popUpLabel = new Label("YOU WIN", StyleLoader.parchmentLabel);
 		popUpLabel.setAlignment(1);
 		winGamePopUp.addActor(popUpLabel);
 		popUpLabel.setBounds(0f, 
 				0.33f*winGamePopUp.getHeight(), 
 				winGamePopUp.getWidth(), 
 				0.67f*winGamePopUp.getHeight());
-		TextButtonStyle popUpButtonStyle = new TextButtonStyle();
-		popUpButtonStyle.font = AssetLoader.playTextSmall;
-		popUpButtonStyle.pressedOffsetX = 5;
-		popUpButtonStyle.pressedOffsetY = -5;
-		TextButton reconnectButton = new TextButton("Back to lobby", popUpButtonStyle);
+		TextButton reconnectButton = new TextButton("Back to lobby", StyleLoader.smallParchmentButtonStyle);
 		winGamePopUp.addActor(reconnectButton);
 		reconnectButton.setBounds(0f, 
 				0.33f*winGamePopUp.getHeight(), 
@@ -869,7 +862,7 @@ public class GameScreen implements Screen{
 			if (STASIS_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum =  Spells.STASISTRAP;
+			spellEnum =  Spells.FIREWALL;
 			if (playerName == UserSession.getInstance().getUserName()){
 				STASIS_COOLDOWN = 5;
 			}
@@ -887,7 +880,7 @@ public class GameScreen implements Screen{
 			if (DARKPACT_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum =  Spells.DARKPACT;
+			spellEnum =  Spells.THUNDERSTORM;
 			if (playerName == UserSession.getInstance().getUserName()){
 				DARKPACT_COOLDOWN = 5;
 			}
@@ -914,7 +907,7 @@ public class GameScreen implements Screen{
 			if (ACID_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum =  Spells.ACID;
+			spellEnum =  Spells.SPARK;
 			if (playerName == UserSession.getInstance().getUserName()){
 				ACID_COOLDOWN = 5;
 			}

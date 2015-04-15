@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
@@ -53,6 +54,9 @@ public class AssetLoader {
 	public static Animation dustAnimation;
 	public static Animation reverseDustAnimation;
 
+	public static Texture thunderstormTexture;
+	public static TextureRegion[] thunderstormAnimation;
+	
 	public static Texture greenTexture, redTexture;
 
 	public static BitmapFont header, playText, playTextSmall, swordText, parchmentText, smallParchmentText;
@@ -77,6 +81,7 @@ public class AssetLoader {
 		manager.load("sprites/sword.png", Texture.class, param);
 		manager.load("sprites/laser.png", Texture.class, param);
 		manager.load("sprites/explode.png", Texture.class, param);
+		manager.load("sprites/lightning.png", Texture.class, param);
 		
 		manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
 		manager.load("fonts/header.TTF",FreeTypeFontGenerator.class);
@@ -166,6 +171,9 @@ public class AssetLoader {
 		}
 		if(dustTexture == null){
 			dustTexture = manager.get("sprites/explode.png",Texture.class);
+		}
+		if(thunderstormTexture == null){
+			thunderstormTexture = manager.get("sprites/lightning.png",Texture.class);
 		}
 		if(map == null){
 			map = manager.get("maps/Dungeon.tmx",TiledMap.class);
@@ -329,6 +337,13 @@ public class AssetLoader {
 				new TextureRegion(swordTexture, 300, 0, 100, 100),
 				new TextureRegion(swordTexture, 200, 300, 100, 100),
 		});
+		
+		thunderstormAnimation = new TextureRegion[]{
+				new TextureRegion(thunderstormTexture, 0, 0, 43, 213),
+				new TextureRegion(thunderstormTexture, 43, 0, 43, 213),
+				new TextureRegion(thunderstormTexture, 86, 0, 43, 213),
+				new TextureRegion(thunderstormTexture, 129, 0, 43, 213),
+		};
 		
 		northBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northEastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
