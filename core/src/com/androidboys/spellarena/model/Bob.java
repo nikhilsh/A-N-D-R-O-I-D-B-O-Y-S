@@ -46,10 +46,14 @@ public class Bob {
 
 	//Speed
 	private float MAX_SPEED = 100f;
+	//Max HP
 	public static final float MAX_HEALTH = 500f;
 
+	//Position
 	private Vector2 position;
+	//Velocity ((0,0) means at rest)
 	private Vector2 velocity;
+	//Direction
 	private Direction direction;
 	
 	@Deprecated
@@ -59,16 +63,20 @@ public class Bob {
 
 	@Deprecated
 	private boolean isEnemy;
+	//Whether the Bob needs update (for position, direction or velocity)
 	private boolean needsUpdate;
 
 	private Touchpad touchpad;
 
 	private int state;
 
+	//Rectangle area that symbolizes Bob
 	private Rectangle bobRect;
 
 	private Array<Rectangle> tiles;
+	//Invulnerable state
 	private boolean invulnerable;
+	//Player Name
 	private String playerName;
 	private int gameIndex;
 	private StateChangeListener stateChangeListener;
@@ -77,27 +85,31 @@ public class Bob {
 	private long updateTimestamp;
 	private ArrayList<Object> gameObjects;
 	private float shieldTimer;
+	//HP
 	private float health = 500f;
 	private float boostTimer;
+	//Boosted buff
 	private boolean boosted;
 	
 	/**
-	 * Create a new Bob instance.
+	 * Create a new Bob instance, with initial position
 	 * @param i,j		initial position
-	 * @param isEnemy	whether it is enemy
 	 */
 	public Bob(int i, int j, boolean isEnemy) {
 		this.position = new Vector2(i,j);
-		this.velocity = new Vector2();		
+		this.velocity = new Vector2(); //Velocity is (0,0)
 		this.isEnemy = isEnemy;
-		this.direction = Direction.SOUTH;
-		this.state = STATE_ALIVE;
+		this.direction = Direction.SOUTH; //Face to south (bottom of screen)
+		this.state = STATE_ALIVE; //Alive
 		this.bobRect = new Rectangle();
 		this.tiles = null;
 	}
 
+	/**
+	 * Create a new Bob instance with default initial position
+	 */
 	public Bob() {
-		this.position = new Vector2();
+		this.position = new Vector2(); //Spawn at (0,0)
 		this.velocity = new Vector2();
 		this.direction = Direction.SOUTH;
 		this.state = STATE_ALIVE;
@@ -125,17 +137,20 @@ public class Bob {
 	 * Update Bob's position and state.
 	 */
 	public void update(float delta){
+		//Invulnerable state
 		if(invulnerable){
-			shieldTimer -= delta;
+			shieldTimer -= delta; //Decrease the duration of invulnerable buff
 			if(shieldTimer<0){
-				invulnerable = false;
+				invulnerable = false; //Remove buff
 			}
 		}
+		//Boosted state
 		if (boosted){
-			boostTimer -= delta;
+			boostTimer -= delta; //Decrease the duration of invulnerable buff
 			if(boostTimer<=0){
-				this.MAX_SPEED = 100f;
-				boosted = false;
+				this.MAX_SPEED = 100f; //Restore the speed
+				boosted = false; //Remove buff
+				//Calculate new velocity
 				this.velocity = new Vector2((Math.abs(getVelocity().x) == 100 ? 100 : getVelocity().x/3), (Math.abs(getVelocity().y) == 100 ? 100 : getVelocity().y/3));
 			}
 		}
@@ -153,6 +168,9 @@ public class Bob {
 //		this.position = new Vector2(updatePosition.add(updateVelocity.scl(timeDiff)));
 	}
 
+	/**
+	 * Update state between alive and running
+	 */
 	private void updateState(){
 		if(this.velocity.isZero()){
 			state = STATE_ALIVE;
@@ -161,27 +179,30 @@ public class Bob {
 		}
 	}
 
+	/**
+	 * Update direction of Bob
+	 */
 	private void updateDirection(){
-		if(this.velocity.x > 0){
-			if(this.velocity.y > 0){
+		if(this.velocity.x > 0){ //Right
+			if(this.velocity.y > 0){ //Top right
 				this.direction = Direction.NORTHEAST;
-			} else if (this.velocity.y < 0){
+			} else if (this.velocity.y < 0){ //Bottom right
 				this.direction = Direction.SOUTHEAST;
-			} else {
+			} else { //Right only
 				this.direction = Direction.EAST;
 			}
-		} else if (this.velocity.x < 0){
-			if(this.velocity.y > 0){
+		} else if (this.velocity.x < 0){ //Left
+			if(this.velocity.y > 0){ //Top left
 				this.direction = Direction.NORTHWEST;
-			} else if (this.velocity.y < 0){
+			} else if (this.velocity.y < 0){ //Bottom left
 				this.direction = Direction.SOUTHWEST;
-			} else {
+			} else { //Left only
 				this.direction = Direction.WEST;
 			}
-		} else {
-			if(this.velocity.y > 0){
+		} else { //No speed on x-axis
+			if(this.velocity.y > 0){ //Top only
 				this.direction = Direction.NORTH;
-			} else if (this.velocity.y < 0){
+			} else if (this.velocity.y < 0){ //Bottom only
 				this.direction = Direction.SOUTH;
 			}
 		}
@@ -283,6 +304,10 @@ public class Bob {
 		}
 	}
 
+	/**
+	 * Check whether a collision happens
+	 * @param delta
+	 */
 	private void checkCollision(float delta){
 		Vector2 newPos = (this.position.cpy()).add((this.velocity.cpy()).scl(delta));
 		this.setRect(newPos);
@@ -533,11 +558,19 @@ public class Bob {
 		}
 	}
 
+	/**
+	 * Move Bob towards a specified direction
+	 * @param time
+	 * @param movement
+	 * @param x
+	 * @param y
+	 */
 	public void move(long time, int movement, float x, float y) {
 		switch(movement){
 			case GameScreen.MOVEMENT_NONE:
-				this.velocity = new Vector2(0, 0);
+				this.velocity = new Vector2(0, 0); //Stop
 				break;
+			//For other case, set the velocity to that direction with max speed
 			case GameScreen.MOVEMENT_EAST:
 				this.velocity = new Vector2(MAX_SPEED, 0);
 				break;
@@ -574,6 +607,10 @@ public class Bob {
 		this.updateVelocity = velocity;
 	}
 
+	/**
+	 * Move Bob (with a specified direction only)
+	 * @param movement
+	 */
 	public void move(int movement) {
 		switch(movement){
 		case GameScreen.MOVEMENT_NONE:
@@ -644,37 +681,66 @@ public class Bob {
 		return rect;
 	}
 
+	/**
+	 * Set an invulnerable buff
+	 * Duration: 1.5
+	 */
 	public void setInvulnerable() {
 		this.invulnerable = true;
 		this.shieldTimer = 1.5f;
 	}
 	
+	/**
+	 * Set a boosted buff
+	 * Duration: 1
+	 * Max speed increases to 300
+	 */
 	public void setBoosted(){
 		this.boosted = true;
 		this.boostTimer = 1f;
 		this.MAX_SPEED = 300f;
 	}
 
+	/**
+	 * Receive damage
+	 * @param f: amount of damage
+	 * @return: whether Bob is alive
+	 */
 	public boolean takeDamage(float f) {
 		if(state != STATE_DEAD){
-			health  -= f;
-			if(health < 0){
-				health = 0;
-				state = STATE_DEAD;
+			health  -= f; //Remove HP
+			if(health < 0){ //HP is lower than 0
+				health = 0; //HP becomes 0
+				state = STATE_DEAD; //Dead
 				return false;
 			}
 		}
 		return true;
 	}
 	
+	/**
+	 * Get light radius
+	 * Radius = HP / MAX_HP
+	 * If HP=0, radius will be 1
+	 * @return light radius
+	 */
 	public float getLightRadius(){
 		return health/MAX_HEALTH > 0 ? health/MAX_HEALTH : 1;
 	}
 	
+	/**
+	 * Get HP value
+	 * @return HP value
+	 */
 	public float getHealth(){
 		return health;
 	}
 
+	/**
+	 * Set HP value
+	 * @param health: new HP
+	 * @return whether Bob is alive
+	 */
 	public boolean updateHealth(float health) {
 		this.health = health;
 		if(this.health == 0){

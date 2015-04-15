@@ -5,10 +5,12 @@ import org.json.JSONObject;
 
 import com.badlogic.gdx.Gdx;
 
+//"Server is ready" command
 public class ReadyCommand extends Command{
 
 	private static final String TAG = "ServerReadyCommand";
 	
+	//Format: {"t":timestamp_of_command, "command":101, "fromUser":user_name}
 	@Override
 	protected void serializeCustomFields(JSONObject json) throws JSONException {	
 

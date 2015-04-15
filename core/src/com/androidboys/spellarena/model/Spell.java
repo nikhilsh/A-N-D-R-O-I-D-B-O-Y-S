@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Spell {
 
+	//List of spells
 	public enum Spells{
 		DIVINESHIELD, 
 		FORCESTAFF,
@@ -30,6 +31,7 @@ public class Spell {
 		START, END
 	}
 
+	//Type of spell
 	private Spells spell;
 	private int index = 0;
 	private Vector2 position = new Vector2();
@@ -47,8 +49,8 @@ public class Spell {
 	}
 
 	public void update(float deltaTime) {
-		this.remainingSeconds -= deltaTime;
-		if (remainingSeconds <= 0) {
+		this.remainingSeconds -= deltaTime; //Decrease duration of spell
+		if (remainingSeconds <= 0) { //End
 
 		}
 	}
@@ -63,7 +65,7 @@ public class Spell {
 
 	/**
 	 * Calculate the spell according to the state of x,y,z
-	 * x,y,z: Quas is 1, Wex is 2, Exort is 4
+	 * x,y,z: Quas is 1, Wex is 10, Exort is 100
 	 * QQQ = Divine Shield
 	 * QQW = Force Staff
 	 * QQE = Mine

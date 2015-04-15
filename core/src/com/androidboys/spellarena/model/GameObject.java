@@ -42,21 +42,30 @@ public abstract class GameObject {
 		return position;
 	}
 
-	/**
-	 * Update Bob's position and state.
-	 */
 	public void update(float delta){
 		this.position.add((this.getVelocity().cpy()).scl(delta));
 	}
 
+	/**
+	 * Get the velocity of Bob
+	 * @return Bob's velocity
+	 */
 	public Vector2 getVelocity() {
 		return velocity;
 	}
 
+	/**
+	 * Set the velocity of Bob
+	 * @param velocity: Bob's new velocity
+	 */
 	public void setVelocity(Vector2 velocity) {
 		this.velocity = velocity;
 	}
 	
+	/**
+	 * Get the username (readonly)
+	 * @return username
+	 */
 	public String getUsername(){
 		return playerName;
 	}
