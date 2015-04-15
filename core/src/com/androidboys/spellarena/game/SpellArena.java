@@ -89,6 +89,10 @@ public class SpellArena extends Game {
         });
     }
 	
+	/**
+	 * Add a new screen
+	 * @param screen
+	 */
 	public void addScreen(Screen screen) {
 		if(screen == null){
 			Gdx.app.log(TAG,"No screen found");
@@ -101,10 +105,17 @@ public class SpellArena extends Game {
 		displayTopScreen();
 	}
 	
+	/**
+	 * Display the screen on the top
+	 */
 	private void displayTopScreen() {
 		setScreen(this.topScreen);
 	}
 
+	/**
+	 * Get the topmost screen of the screen stack
+	 * @return
+	 */
 	private Screen getTopScreen() {
 		try{
 			return screens.peek();
@@ -129,7 +140,7 @@ public class SpellArena extends Game {
 		try{
 			Screen top = screens.pop();
 			top.hide();
-			top.dispose();
+			top.dispose(); //remove the topmost screen
 			this.topScreen = getTopScreen();
 			displayTopScreen();
 		} catch (Exception e){
