@@ -48,15 +48,13 @@ public class AssetLoader {
 	
 	public static Texture swordTexture;
 	public static Animation swordAnimation;
-	
-<<<<<<< HEAD
-	public static Texture greenTexture, redTexture;
-=======
+		
 	public static Texture dustTexture;
 	public static Animation dustAnimation;
 	public static Animation reverseDustAnimation;
->>>>>>> a695259041f2028e64158932cfe3687e7da25701
-	
+
+	public static Texture greenTexture, redTexture;
+
 	public static BitmapFont header, playText, playTextSmall, swordText, parchmentText, smallParchmentText;
 	
 	public static TiledMap map;

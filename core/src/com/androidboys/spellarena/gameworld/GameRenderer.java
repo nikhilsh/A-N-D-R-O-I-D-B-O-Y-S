@@ -142,18 +142,12 @@ public class GameRenderer {
 		southWestBobAnimation = AssetLoader.southWestBobAnimation;
 
 		bobDeathAnimation = AssetLoader.bobDeathAnimation;
-<<<<<<< HEAD
 		
 		greenHealthBar = AssetLoader.greenTexture;
 		redHealthBar = AssetLoader.redTexture;
-		
-		dustSpellAnimation = AssetLoader.dustSpellAnimation;
-		
-=======
 
 		dustAnimation = AssetLoader.dustAnimation;
 		reverseDustAnimation = AssetLoader.reverseDustAnimation;
->>>>>>> a695259041f2028e64158932cfe3687e7da25701
 		tornadoAnimation = AssetLoader.tornadoAnimation;
 		shieldAnimation = AssetLoader.shieldAnimation;
 		swordAnimation = AssetLoader.swordAnimation;

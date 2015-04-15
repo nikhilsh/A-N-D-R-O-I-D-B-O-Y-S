@@ -85,7 +85,7 @@ public class GameWorld {
 		for(Object object: gameObjects.toArray()){
 			if(tiles != null){
 				for(Rectangle tile: tiles){
-					if(tile.overlaps(((GameObject)object).getRectangle())){
+					if(tile.overlaps(((GameObject)object).getRectangle()) && !(object instanceof DummyBlinkObject)){
 						gameObjects.remove(object);
 					}
 				}
