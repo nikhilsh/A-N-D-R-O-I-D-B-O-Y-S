@@ -74,14 +74,9 @@ public class GameWorld {
 	}
 	
 	private void updatePlayerModel(Bob bob, float delta) {
-//		if(bob.isInvulnerable()){
-//			bob.decrementImmortalDuration(delta);
-//		}
-//		Gdx.app.log(TAG, "Updating player model "+bob);
+
 		bob.update(delta);
 		checkPlayerCollision(delta);
-		checkObjectCollision();
-		checkPlayerObjectCollision();
 	}
 
 	private void checkObjectCollision() {
@@ -97,18 +92,18 @@ public class GameWorld {
 	}
 	
 	private void checkPlayerObjectCollision() {
-		for(Object object: gameObjects.toArray()){
-			if(tiles != null){
-				Bob bob = getPlayerModel(UserSession.getInstance().getUserName());
+		Bob bob = getPlayerModel(UserSession.getInstance().getUserName());
+		if(!bob.isInvulnerable()){
+			for(Object object: gameObjects.toArray()){
+				Gdx.app.log(TAG,"Checking object collision: "+object);
 				GameObject gameObject = (GameObject)object;
-				if (bob.getCollisionEdge().overlaps(gameObject.getRectangle()) && UserSession.getInstance().getUserName() != gameObject.getUsername()){
+				if (bob.getbobRect().overlaps(gameObject.getRectangle()) && !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
+					Gdx.app.log(TAG,"Colliding");
 					if (object instanceof Tornado){
-						System.out.println("TORNADO HIT!!");
-						//minus health?
+						bob.takeDamage(20f);
+						Gdx.app.log(TAG,"Taking damage from tornado");
 					}
-					//add rest of objects
 				}
-				
 			}
 		}
 	}
@@ -119,7 +114,7 @@ public class GameWorld {
 			bob.setRect(newPos);
 			if(tiles != null){
 				for(Rectangle tile: tiles){
-					if(tile.overlaps(bob.getCollisionEdge())){
+					if(tile.overlaps(bob.getbobRect())){
 						switch(bob.getDirection()){
 						case EAST:
 							newPos.x = tile.x - 40;
@@ -274,7 +269,7 @@ public class GameWorld {
 	public void update(float delta) {
 		updatePlayerModels(delta);
 		updateGameObjects(delta);
-		percentage -= 0.0005f;
+		checkPlayerObjectCollision();
 	}
 	
 	private void updateGameObjects(float delta) {
@@ -283,6 +278,7 @@ public class GameWorld {
 				((GameObject) o).update(delta);
 			}
 		}
+		checkObjectCollision();
 	}
 
 	private void prepareObstacles(){
@@ -479,7 +475,7 @@ public class GameWorld {
 	}
 
 	private void createTornado(Bob bob) {
-		Tornado tornado = new Tornado(bob.getPosition().x, bob.getPosition().y, bob.getDirection(), UserSession.getInstance().getUserName());
+		Tornado tornado = new Tornado(bob.getPosition().x, bob.getPosition().y, bob.getDirection(), bob.getPlayerName());
 		gameObjects.add(tornado);
 	}
 
@@ -487,8 +483,4 @@ public class GameWorld {
 		return gameObjects;
 	}
 
-	private float percentage = 1f;
-	public float getPercentage() {
-		return percentage;
-	}
 }

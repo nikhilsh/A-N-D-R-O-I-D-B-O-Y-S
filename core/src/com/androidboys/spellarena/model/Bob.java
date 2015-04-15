@@ -44,6 +44,7 @@ public class Bob {
 
 	//Speed
 	private float MAX_SPEED = 100f;
+	private static final float MAX_HEALTH = 2000f;
 
 	private Vector2 position;
 	private Vector2 velocity;
@@ -70,6 +71,7 @@ public class Bob {
 	private long updateTimestamp;
 	private ArrayList<Object> gameObjects;
 	private float shieldTimer;
+	private float health = 2000f;
 	
 	/**
 	 * Create a new Bob instance.
@@ -621,6 +623,14 @@ public class Bob {
 	public void setInvulnerable() {
 		this.invulnerable = true;
 		this.shieldTimer = 3;
+	}
+
+	public void takeDamage(float f) {
+		health  -= f;
+	}
+	
+	public float getLightRadius(){
+		return health/MAX_HEALTH > 0 ? health/MAX_HEALTH: 0;
 	}
 	
 }

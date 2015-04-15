@@ -53,6 +53,9 @@ public class Tornado extends GameObject {
 	public Rectangle getRectangle() {
 		return new Rectangle(getPosition().x-50,getPosition().y-50,150f,150f);
 	}
-
 	
+	@Override
+	public String toString() {
+		return "Tornado created by "+getUsername();
+	}
 }

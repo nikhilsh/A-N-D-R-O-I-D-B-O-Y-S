@@ -31,7 +31,7 @@ public abstract class GameObject {
 	public GameObject(float x, float y, String playerName) {
 		this.position = new Vector2(x,y);
 		this.setVelocity(new Vector2());
-		this.playerName = UserSession.getInstance().getUserName();
+		this.playerName = playerName;
 	}
 
 	/**

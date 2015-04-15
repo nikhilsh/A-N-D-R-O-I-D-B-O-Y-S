@@ -183,7 +183,6 @@ public class GameRenderer {
 	}
 
 	private void renderLight() {
-		float percentage = world.getPercentage();
 		fbo.begin();
 		fbo.getColorBufferTexture().bind(1);
 		batcher.setShader(defaultShader);
@@ -191,8 +190,8 @@ public class GameRenderer {
 		batcher.begin();
 		light.bind(0);
 		batcher.draw(light, 
-				(cam.position.x - 960*percentage),
-				(cam.position.y - 540*percentage), 1920f*percentage,1080f*percentage);
+				(cam.position.x - 960*bob.getLightRadius()),
+				(cam.position.y - 540*bob.getLightRadius()), 1920f*bob.getLightRadius(),1080f*bob.getLightRadius());
 		batcher.end();
 		fbo.end();
 	}
@@ -320,7 +319,7 @@ public class GameRenderer {
 		batcher.begin();
 //		batcher.setColor(255/255f,128/255f,128/255f,1f);
 		for(Bob enemy: enemies){
-			if(enemy.getState() == enemy.STATE_ALIVE&&enemy.getPlayerName()!=UserSession.getInstance().getUserName()){
+			if(enemy.getState() == Bob.STATE_ALIVE&&enemy.getPlayerName()!=UserSession.getInstance().getUserName()){
 				switch(enemy.getDirection()){
 					case EAST:
 						batcher.draw(eastBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
@@ -349,7 +348,7 @@ public class GameRenderer {
 					default:
 						break;
 				}
-			} else if (enemy.getState() == enemy.STATE_RUNNING){
+			} else if (enemy.getState() == Bob.STATE_RUNNING){
 				switch(enemy.getDirection()){
 					case EAST:
 						batcher.draw(eastBobAnimation.getKeyFrame(runTime),
@@ -390,7 +389,7 @@ public class GameRenderer {
 			}
 			if(enemy.isInvulnerable()){
 				batcher.draw(shieldAnimation.getKeyFrame(runTime),
-						enemy.getPosition().x-60f,enemy.getPosition().y-50f,100f,100f);
+						enemy.getPosition().x-38f,enemy.getPosition().y-35f,100f,100f);
 			}
 		}
 		batcher.end();
