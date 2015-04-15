@@ -391,8 +391,11 @@ __Laser (EEE)__
     * MainMenuMediator.java
     * Mediator.java
    * model
+    * Acid.java
     * Bob.java
+    * GameObject.java
     * Spell.java
+    * Tornado.java
    * net
     * appwarp
      * AppWarpClient.java
@@ -410,6 +413,7 @@ __Laser (EEE)__
      * GameEndCommand.java
      * MoveCommand.java
      * ReadyCommand.java
+     * SpellCommand.java
      * StartGameCommand.java
      * UndefinedCommand.java
      * UpdateCommand.java
