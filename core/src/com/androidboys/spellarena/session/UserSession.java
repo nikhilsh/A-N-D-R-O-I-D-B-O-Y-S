@@ -28,7 +28,7 @@ public class UserSession {
 
 	private String generateUserName() {
 //		return "haohaohao";
-		return "nik "+Long.toString((userId%6));
+		return "nik "+Long.toString((userId%20));
 	}
 
 	private long generateUserId() {

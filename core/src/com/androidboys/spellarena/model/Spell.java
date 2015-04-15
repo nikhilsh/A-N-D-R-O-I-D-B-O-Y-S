@@ -16,7 +16,7 @@ public class Spell {
 	public enum Spells{
 		DIVINESHIELD, 
 		FORCESTAFF,
-		ATOS,
+		BOOST,
 		STASISTRAP,
 		BLADEFURY,
 		DARKPACT,
@@ -68,7 +68,7 @@ public class Spell {
 	 * QQW = Force Staff
 	 * QQE = Mine
 	 * WWQ = Stasis Trap
-	 * WWW = Atos
+	 * WWW = Boost
 	 * WWE = Acid
 	 * EEQ = Fan of Knives
 	 * EEW = Dark Pact
@@ -87,7 +87,7 @@ public class Spell {
 			spell = Spells.STASISTRAP;
 		}
 		else if (index == 30) { //WWW
-			spell = Spells.ATOS;
+			spell = Spells.BOOST;
 		} 
 		else if (index == 102) { //QQE
 			spell = Spells.MINE;
@@ -222,7 +222,7 @@ public class Spell {
 			return 0;
 		case FORCESTAFF:
 			return 1;
-		case ATOS:
+		case BOOST:
 			return 2;
 		case STASISTRAP:
 			return 3;

@@ -101,7 +101,7 @@ public class GameScreen implements Screen{
 	private static float ACID_COOLDOWN = 0;
 	private static float DARKPACT_COOLDOWN = 0;
 	private static float SPROUT_COOLDOWN = 0;
-	private static float ATOS_COOLDOWN = 0;
+	private static float BOOST_COOLDOWN = 0;
 	
 	protected static final String TAG = "GameScreen";
 	private SpellArena game;
@@ -864,7 +864,6 @@ public class GameScreen implements Screen{
 			break;		
 		case 1:
 			if (BLINK_COOLDOWN > 0){
-				System.out.println("cannot cast");
 				return false;
 			}
 			spellEnum =  Spells.FORCESTAFF;
@@ -873,12 +872,12 @@ public class GameScreen implements Screen{
 			}
 			break;		
 		case 2:
-			if (ATOS_COOLDOWN > 0){
+			if (BOOST_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum =  Spells.ATOS;
+			spellEnum =  Spells.BOOST;
 			if (playerName == UserSession.getInstance().getUserName()){
-				ATOS_COOLDOWN = 5;
+				BOOST_COOLDOWN = 5;
 			}
 			break;		
 		case 3:
@@ -1193,8 +1192,8 @@ public class GameScreen implements Screen{
 		 if (ACID_COOLDOWN>0){
 			 ACID_COOLDOWN -= delta;
 		 }
-		 if (ATOS_COOLDOWN>0){
-			 ATOS_COOLDOWN -= delta;
+		 if (BOOST_COOLDOWN>0){
+			 BOOST_COOLDOWN -= delta;
 		 }
 		 if (DIVINESHIELD_COOLDOWN>0){
 			 DIVINESHIELD_COOLDOWN -= delta;
@@ -1238,15 +1237,15 @@ public class GameScreen implements Screen{
 			break;
 		case 12:
 			spellCountdown = ((BLINK_COOLDOWN <= 0) ? "Ready" : ""+((int)BLINK_COOLDOWN+1));
-			spellName = "Force " + spellCountdown;
+			spellName = "Blink " + spellCountdown;
 			break;
 		case 21:
 			spellCountdown = ((STASIS_COOLDOWN <= 0) ? "Ready" : ""+((int)STASIS_COOLDOWN+1));
 			spellName = "Stasis Trap " +  spellCountdown;
 			break;
 		case 30:
-			spellCountdown = ((ATOS_COOLDOWN <= 0) ? "Ready" : ""+((int)ATOS_COOLDOWN+1));
-			spellName = "Atos " + spellCountdown;
+			spellCountdown = ((BOOST_COOLDOWN <= 0) ? "Ready" : ""+((int)BOOST_COOLDOWN+1));
+			spellName = "Boost " + spellCountdown;
 			break;
 		case 102:
 			spellCountdown = ((MINE_COOLDOWN <= 0) ? "Ready" : ""+((int)MINE_COOLDOWN+1));

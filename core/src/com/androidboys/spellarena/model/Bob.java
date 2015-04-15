@@ -133,9 +133,10 @@ public class Bob {
 		}
 		if (boosted){
 			boostTimer -= delta;
-			if(boostTimer<0){
+			if(boostTimer<=0){
 				this.MAX_SPEED = 100f;
 				boosted = false;
+				this.velocity = new Vector2((Math.abs(getVelocity().x) == 100 ? 100 : getVelocity().x/3), (Math.abs(getVelocity().y) == 100 ? 100 : getVelocity().y/3));
 			}
 		}
 		updateDirection();
@@ -650,8 +651,8 @@ public class Bob {
 	
 	public void setBoosted(){
 		this.boosted = true;
-		this.boostTimer = 3f;
-		this.MAX_SPEED = 300;
+		this.boostTimer = 1f;
+		this.MAX_SPEED = 300f;
 	}
 
 	public void takeDamage(float f) {
