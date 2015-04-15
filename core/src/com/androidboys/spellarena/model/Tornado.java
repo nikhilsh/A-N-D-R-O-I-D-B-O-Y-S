@@ -4,6 +4,7 @@ import com.androidboys.spellarena.model.Bob.Direction;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+//Tornado object
 public class Tornado extends GameObject {
 
 	private static final float MAX_SPEED = 300f;

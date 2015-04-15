@@ -25,9 +25,10 @@ public class Sword extends GameObject{
 		return new Rectangle(getPosition().x-50,getPosition().y-50,100f,100f);
 	}
 	
+	//Sword will rotate with an angular velocity of 3
 	@Override
 	public void update(float delta) {
-		this.radius += 5*delta;
+		this.radius += 2*delta;
 		this.rotation += ANGULAR_VELOCITY*delta;
 		Vector2 parallelVector = new Vector2((float)Math.cos(rotation),
 				(float) Math.sin(rotation));

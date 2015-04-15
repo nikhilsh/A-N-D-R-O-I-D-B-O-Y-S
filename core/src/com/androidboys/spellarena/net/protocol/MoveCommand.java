@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
+//Movement of Bob
 public class MoveCommand extends Command{
 
 	private static final String TAG = "MoveCommand";
@@ -26,6 +27,7 @@ public class MoveCommand extends Command{
 		return command;
 	}
 
+	//Format: {"t":timestamp_of_command, "command":10, "fromUser":user_name, "movement":movement, "x":x, "y":y}
 	@Override
 	protected void serializeCustomFields(JSONObject json) throws JSONException {
 		json.put("movement", movement);

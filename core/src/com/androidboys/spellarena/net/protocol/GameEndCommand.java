@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import com.badlogic.gdx.Gdx;
 
+//"Game is end" command
 public class GameEndCommand extends Command{
 
 	public static enum GameEndReason{
@@ -31,6 +32,7 @@ public class GameEndCommand extends Command{
 		return command;
 	}
 	
+	//Format: {"t":timestamp_of_command, "command": 0, "fromUser":user_name, "reason": reason, "winner": winner}
 	@Override
 	protected void serializeCustomFields(JSONObject json) throws JSONException {
 		json.put("reason", reason);

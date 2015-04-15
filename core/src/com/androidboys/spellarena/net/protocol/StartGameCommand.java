@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import com.badlogic.gdx.Gdx;
 
+//"Game start" command
 public class StartGameCommand extends Command{
 
 	private static final String TAG = null;
@@ -20,7 +21,7 @@ public class StartGameCommand extends Command{
 		return command;
 	}
 	
-	
+	//Format: {"t":timestamp_of_command, "command":102, "fromUser":user_name}
 	@Override
 	protected void serializeCustomFields(JSONObject json) throws JSONException {
 		

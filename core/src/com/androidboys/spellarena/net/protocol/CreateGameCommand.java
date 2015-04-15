@@ -11,7 +11,7 @@ public class CreateGameCommand extends Command{
 	private static String ip;
 	private boolean serverReady;
 	
-	
+	//Format: {"t":timestamp_of_command, "command": 100, "fromUser":user_name, "ip": ip}
 	@Override
 	protected void serializeCustomFields(JSONObject json) throws JSONException {	
 		json.put("ip", ip);

@@ -3,6 +3,7 @@ package com.androidboys.spellarena.model;
 import com.androidboys.spellarena.model.Bob.Direction;
 import com.badlogic.gdx.math.Rectangle;
 
+//Laser object
 public class Laser extends GameObject {
 	
 	private Direction direction;

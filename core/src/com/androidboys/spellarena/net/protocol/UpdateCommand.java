@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
+//"Update" command
 public class UpdateCommand extends Command{
 
 	private static final String TAG = "UpdateCommand";
@@ -15,6 +16,7 @@ public class UpdateCommand extends Command{
 	private float vy;
 	private float health;
 	
+	//Format: {"t":timestamp_of_command, "command":12, "fromUser":user_name, "x":x, "y":y, "vx":x_velocity, "vy":y_velocity, "health":hp}
 	@Override
 	protected void serializeCustomFields(JSONObject json) throws JSONException {
 		json.put("x", x);
