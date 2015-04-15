@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import com.badlogic.gdx.Gdx;
 
+//Request for synchronizing clock
 public class ClockSyncReqCommand extends Command{
 
 	private static final String TAG = "ClockSyncReqCommand";
@@ -20,6 +21,7 @@ public class ClockSyncReqCommand extends Command{
 		return command;
 	}
 	
+	//Format: {"t":timestamp_of_command, "command": 1, "fromUser":user_name}
 	@Override
 	protected void serializeCustomFields(JSONObject json) throws JSONException {
 	}

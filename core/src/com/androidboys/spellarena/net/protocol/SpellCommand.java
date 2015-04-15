@@ -8,6 +8,7 @@ import com.androidboys.spellarena.model.Spell.Spells;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
+//Casting a spell
 public class SpellCommand extends Command {
 	private static final String TAG = "SpellCommand";
 	private int spell;
@@ -29,6 +30,7 @@ public class SpellCommand extends Command {
 		return command;
 	}
 
+	//Format: {"t":timestamp_of_command, "command":11, "fromUser":user_name, "spell":spell, "x":x, "y":y, "direction":direction}
 	@Override
 	protected void serializeCustomFields(JSONObject json) throws JSONException {
 		json.put("spell", spell);
