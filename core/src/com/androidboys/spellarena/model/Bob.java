@@ -622,7 +622,7 @@ public class Bob {
 
 	public void setInvulnerable() {
 		this.invulnerable = true;
-		this.shieldTimer = 3;
+		this.shieldTimer = 1.5f;
 	}
 
 	public void takeDamage(float f) {

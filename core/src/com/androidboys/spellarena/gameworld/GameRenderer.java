@@ -10,6 +10,7 @@ import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.GameObject;
 import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Spell.Spells;
+import com.androidboys.spellarena.model.Sword;
 import com.androidboys.spellarena.model.Tornado;
 import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.session.UserSession;
@@ -57,7 +58,8 @@ public class GameRenderer {
 	private Animation southBobAnimation, southWestBobAnimation, westBobAnimation, northWestBobAnimation,
 	northBobAnimation, northEastBobAnimation, eastBobAnimation, southEastBobAnimation, dustSpellAnimation;
 
-	private Animation tornadoAnimation;
+	private Animation tornadoAnimation, shieldAnimation, swordAnimation;
+
 	private ShaderProgram defaultShader;
 	private ShaderProgram finalShader;
 	private Vector3 ambientColor;
@@ -65,7 +67,6 @@ public class GameRenderer {
 	private Texture light;
 	private FrameBuffer fbo;
 	private float ambientIntensity = 0.3f;
-	private Animation shieldAnimation;
 	private int height;
 	private int width;
 	
@@ -140,6 +141,7 @@ public class GameRenderer {
 		
 		tornadoAnimation = AssetLoader.tornadoAnimation;
 		shieldAnimation = AssetLoader.shieldAnimation;
+		swordAnimation = AssetLoader.swordAnimation;
 	}
 	
 	public void initGameObjects(){
@@ -179,7 +181,23 @@ public class GameRenderer {
 			if(o instanceof Tornado){
 				renderTornado(runTime,(Tornado)o);
 			}
+			else if(o instanceof Sword){
+				renderSword(runTime,(Sword)o);
+			}
 		}		
+	}
+
+	private void renderSword(float runTime, Sword o) {
+		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-15,105f,90f);
+		shapeRenderer.end();
+		batcher.begin();
+//		batcher.setColor(Color.WHITE);
+		batcher.draw(swordAnimation.getKeyFrame(runTime),
+				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
+		batcher.end();
 	}
 
 	private void renderLight() {

@@ -43,11 +43,16 @@ public class AssetLoader {
 	public static Texture shieldTexture;
 	public static Animation shieldAnimation;
 	
+	public static Texture swordTexture;
+	public static Animation swordAnimation;
+	
 	public static BitmapFont header, playText, playTextSmall, swordText, parchmentText, smallParchmentText;
 	
 	public static TiledMap map;
 	
 	public static Preferences prefs;
+
+
 	
 	public static void queueLoading(){
 		
@@ -59,7 +64,8 @@ public class AssetLoader {
 		manager.load("sprites/wizard.png", Texture.class, param);
 		
 		manager.load("sprites/tornado.PNG", Texture.class, param);
-		manager.load("sprites/shield.png", Texture.class,param);
+		manager.load("sprites/shield.png", Texture.class, param);
+		manager.load("sprites/sword.png", Texture.class, param);
 		
 		manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
 		manager.load("fonts/header.TTF",FreeTypeFontGenerator.class);
@@ -143,6 +149,9 @@ public class AssetLoader {
 		}
 		if(shieldTexture == null){
 			shieldTexture = manager.get("sprites/shield.png", Texture.class);
+		}
+		if(swordTexture == null){
+			swordTexture = manager.get("sprites/sword.png",Texture.class);
 		}
 		if(map == null){
 			map = manager.get("maps/Dungeon.tmx",TiledMap.class);
@@ -274,6 +283,14 @@ public class AssetLoader {
 				new TextureRegion(shieldTexture, 768, 576, 192, 192),
 		});
 		
+		swordAnimation = new Animation(0.06f, new TextureRegion[]{
+				new TextureRegion(swordTexture, 0, 0, 100, 100),
+				new TextureRegion(swordTexture, 100, 0, 100, 100),
+				new TextureRegion(swordTexture, 200, 0, 100, 100),
+				new TextureRegion(swordTexture, 300, 0, 100, 100),
+				new TextureRegion(swordTexture, 200, 300, 100, 100),
+		});
+		
 		northBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northEastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		eastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
@@ -285,6 +302,8 @@ public class AssetLoader {
 		
 		tornadoAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		swordAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		
 		dustSpellAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 	}
 

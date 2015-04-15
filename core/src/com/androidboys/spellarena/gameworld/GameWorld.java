@@ -11,6 +11,7 @@ import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.GameObject;
 import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Spell.Spells;
+import com.androidboys.spellarena.model.Sword;
 import com.androidboys.spellarena.model.Tornado;
 import com.androidboys.spellarena.session.UserSession;
 import com.androidboys.spellarena.view.GameScreen;
@@ -95,13 +96,14 @@ public class GameWorld {
 		Bob bob = getPlayerModel(UserSession.getInstance().getUserName());
 		if(!bob.isInvulnerable()){
 			for(Object object: gameObjects.toArray()){
-				Gdx.app.log(TAG,"Checking object collision: "+object);
+//				Gdx.app.log(TAG,"Checking object collision: "+object);
 				GameObject gameObject = (GameObject)object;
 				if (bob.getbobRect().overlaps(gameObject.getRectangle()) && !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
-					Gdx.app.log(TAG,"Colliding");
+//					Gdx.app.log(TAG,"Colliding");
 					if (object instanceof Tornado){
 						bob.takeDamage(20f);
-						Gdx.app.log(TAG,"Taking damage from tornado");
+					} else if (object instanceof Sword){
+						bob.takeDamage(30f);
 					}
 				}
 			}
@@ -447,7 +449,8 @@ public class GameWorld {
 			//if stasis trap near enemy,
 			break;
 
-		case SPROUT:
+		case BLADEFURY:
+			createFlyingSword(bob);
 			//collision with sprite
 
 			//need add new collision			
@@ -472,6 +475,11 @@ public class GameWorld {
 		default:
 			break;
 		}
+	}
+
+	private void createFlyingSword(Bob bob) {
+		Sword sword = new Sword(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName());
+		gameObjects.add(sword);
 	}
 
 	private void createTornado(Bob bob) {

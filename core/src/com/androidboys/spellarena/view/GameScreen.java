@@ -735,7 +735,9 @@ public class GameScreen implements Screen{
 			if(n%10 == 0){
 				prevMovementChanged = false;
 			}
-			world.update(delta);
+			if(gameStarted){
+				world.update(delta);
+			}
 			stage.act(delta);
 			if (gameStarted&&n%30 == 0){
 				gameScreenMediator.update(world.getPlayerModel(UserSession.getInstance().getUserName()));
@@ -892,7 +894,7 @@ public class GameScreen implements Screen{
 			if (SPROUT_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum =  Spells.SPROUT;
+			spellEnum =  Spells.BLADEFURY;
 			if (playerName == UserSession.getInstance().getUserName()){
 				SPROUT_COOLDOWN = 5;
 			}
@@ -1252,7 +1254,7 @@ public class GameScreen implements Screen{
 			break;
 		case 111:
 			spellCountdown = ((SPROUT_COOLDOWN <= 0) ? "Ready" : ""+((int)SPROUT_COOLDOWN+1));
-			spellName = "Sprout " +  spellCountdown;
+			spellName = "Blade fury " +  spellCountdown;
 			break;
 		case 120:
 			spellCountdown = ((ACID_COOLDOWN <= 0) ? "Ready" : ""+((int)ACID_COOLDOWN+1));

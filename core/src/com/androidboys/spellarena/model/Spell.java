@@ -18,7 +18,7 @@ public class Spell {
 		FORCESTAFF,
 		ATOS,
 		STASISTRAP,
-		SPROUT,
+		BLADEFURY,
 		DARKPACT,
 		MINE,
 		LASER,
@@ -93,7 +93,7 @@ public class Spell {
 			spell = Spells.MINE;
 		}
 		else if (index == 111) { //QWE
-			spell = Spells.SPROUT;
+			spell = Spells.BLADEFURY;
 		}
 		else if (index == 120) { //WWE
 			spell = Spells.ACID;
@@ -226,7 +226,7 @@ public class Spell {
 			return 2;
 		case STASISTRAP:
 			return 3;
-		case SPROUT:
+		case BLADEFURY:
 			return 4;
 		case DARKPACT:
 			return 5;

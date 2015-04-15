@@ -3,6 +3,10 @@ package com.androidboys.spellarena.mediators;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.androidboys.spellarena.game.SpellArena;
 import com.androidboys.spellarena.gameworld.GameFactory;
@@ -30,6 +34,7 @@ import com.androidboys.spellarena.view.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.async.AsyncExecutor;
 
 public class GameScreenMediator extends Mediator{
 
@@ -45,6 +50,8 @@ public class GameScreenMediator extends Mediator{
 	private RoomModel room;
 	private int level = 1;
 
+	ExecutorService executor = Executors.newCachedThreadPool(Executors.defaultThreadFactory());
+	
 	private LinkedList<String> receivedMessages = new LinkedList<String>();
 	
 	public GameScreenMediator(SpellArena game, NetworkInterface networkInterface) {
@@ -319,7 +326,7 @@ public class GameScreenMediator extends Mediator{
 						}
 //						Gdx.app.log(TAG, "exiting lock");
 						if(message != null){
-							Gdx.app.postRunnable(new Runnable() {
+							executor.execute(new Runnable() {
 								@Override
 								public void run() {
 									Gdx.app.log(TAG,"Accepting command: "+message);
