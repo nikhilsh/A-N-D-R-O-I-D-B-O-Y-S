@@ -92,7 +92,8 @@ public class GameWorld {
 		}
 	}
 	
-	private void checkPlayerObjectCollision() {
+	private void checkPlayerObjectCollision(float delta) {
+		Gdx.app.log("TAG",""+delta);
 		Bob bob = getPlayerModel(UserSession.getInstance().getUserName());
 		if(!bob.isInvulnerable()){
 			float damage = 0;
@@ -102,13 +103,13 @@ public class GameWorld {
 				if (bob.getbobRect().overlaps(gameObject.getRectangle()) && !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
 //					Gdx.app.log(TAG,"Colliding");
 					if (object instanceof Tornado){
-						damage += 20f;
+						damage += 200f;
 					} else if (object instanceof Sword){
-						damage += 30f;
+						damage += 300f;
 					}
 				}
 			}
-			if(!bob.takeDamage(damage)){
+			if(!bob.takeDamage(damage*delta)){
 				if(UserSession.getInstance().isServer()){
 					if(this.isGameEnd()){
 						mediator.endGame(getWinner());
@@ -271,7 +272,7 @@ public class GameWorld {
 	public void update(float delta) {
 		updatePlayerModels(delta);
 		updateGameObjects(delta);
-		checkPlayerObjectCollision();
+		checkPlayerObjectCollision(delta);
 	}
 	
 	private void updateGameObjects(float delta) {

@@ -70,6 +70,8 @@ public class GameRenderer {
 	private float ambientIntensity = 0.3f;
 	private int height;
 	private int width;
+	private Texture greenHealthBar;
+	private Texture redHealthBar;
 
 	
 	private final static Vector3 bright = new Vector3(0.7f, 0.7f, 0.9f);
@@ -140,6 +142,9 @@ public class GameRenderer {
 		westBobAnimation = AssetLoader.westBobAnimation;
 		southWestBobAnimation = AssetLoader.southWestBobAnimation;
 		bobDeathAnimation = AssetLoader.bobDeathAnimation;
+		
+		greenHealthBar = AssetLoader.greenTexture;
+		redHealthBar = AssetLoader.redTexture;
 		
 		dustSpellAnimation = AssetLoader.dustSpellAnimation;
 		
@@ -340,19 +345,16 @@ public class GameRenderer {
 		}
 		batcher.end();
 		float healthPercentage = bob.getHealth()/Bob.MAX_HEALTH;
-		shapeRenderer.setProjectionMatrix(cam.combined);
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(Color.GREEN);
-		shapeRenderer.rect(
+		batcher.begin();
+		batcher.draw(greenHealthBar,
 				bob.getPosition().x-10f,
 				bob.getPosition().y+50f,
 				50*healthPercentage,5);
-		shapeRenderer.setColor(Color.RED);
-		shapeRenderer.rect(
+		batcher.draw(redHealthBar,
 				bob.getPosition().x-10f + 50*healthPercentage,
 				bob.getPosition().y+50f,
 				50*(1-healthPercentage),5);
-		shapeRenderer.end();
+		batcher.end();
 	}
 
 	private void renderEnemy(float runTime){
@@ -437,19 +439,16 @@ public class GameRenderer {
 			}
 			batcher.end();
 			float healthPercentage = enemy.getHealth()/Bob.MAX_HEALTH;
-			shapeRenderer.setProjectionMatrix(cam.combined);
-			shapeRenderer.begin(ShapeType.Filled);
-			shapeRenderer.setColor(Color.GREEN);
-			shapeRenderer.rect(
+			batcher.begin();
+			batcher.draw(greenHealthBar,
 					enemy.getPosition().x-10f,
 					enemy.getPosition().y+50f,
 					50*healthPercentage,5);
-			shapeRenderer.setColor(Color.RED);
-			shapeRenderer.rect(
+			batcher.draw(redHealthBar,
 					enemy.getPosition().x-10f + 50*healthPercentage,
 					enemy.getPosition().y+50f,
 					50*(1-healthPercentage),5);
-			shapeRenderer.end();
+			batcher.end();
 		}
 
 		

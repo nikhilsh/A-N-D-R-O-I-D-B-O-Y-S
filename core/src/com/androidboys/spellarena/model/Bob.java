@@ -46,7 +46,7 @@ public class Bob {
 
 	//Speed
 	private float MAX_SPEED = 100f;
-	public static final float MAX_HEALTH = 2000f;
+	public static final float MAX_HEALTH = 500f;
 
 	private Vector2 position;
 	private Vector2 velocity;
@@ -77,7 +77,7 @@ public class Bob {
 	private long updateTimestamp;
 	private ArrayList<Object> gameObjects;
 	private float shieldTimer;
-	private float health = 2000f;
+	private float health = 500f;
 	private float boostTimer;
 	private boolean boosted;
 	

@@ -7,6 +7,8 @@ import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -46,6 +48,8 @@ public class AssetLoader {
 	
 	public static Texture swordTexture;
 	public static Animation swordAnimation;
+	
+	public static Texture greenTexture, redTexture;
 	
 	public static BitmapFont header, playText, playTextSmall, swordText, parchmentText, smallParchmentText;
 	
@@ -157,6 +161,14 @@ public class AssetLoader {
 		if(map == null){
 			map = manager.get("maps/Dungeon.tmx",TiledMap.class);
 		}
+		Pixmap greenPixmap = new Pixmap(5, 5, Format.RGBA8888);
+		greenPixmap.setColor(Color.GREEN);
+		greenPixmap.fill();
+		greenTexture = new Texture(greenPixmap);
+		Pixmap redPixmap = new Pixmap(5, 5, Format.RGBA8888);
+		redPixmap.setColor(Color.RED);
+		redPixmap.fill();
+		redTexture = new Texture(redPixmap);
 		loadSprites();
 		loadAnimations();
 	}
