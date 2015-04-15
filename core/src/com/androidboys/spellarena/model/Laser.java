@@ -4,6 +4,7 @@ import com.androidboys.spellarena.model.Bob.Direction;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+//Laser object
 public class Laser extends GameObject {
 
 	public Laser(float x, float y, Direction direction, float width, float height, String playerName) {
