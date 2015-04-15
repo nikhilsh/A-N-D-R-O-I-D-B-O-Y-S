@@ -439,7 +439,7 @@ public class GameWorld {
 			break;
 
 		case ATOS:
-		
+			bob.setBoosted();
 			break;
 
 		case STASISTRAP:

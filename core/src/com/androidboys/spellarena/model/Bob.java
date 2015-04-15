@@ -40,6 +40,8 @@ public class Bob {
 	public static final int STATE_ALIVE = 0;
 	public static final int STATE_RUNNING = 1;
 	public static final int STATE_DEAD = 2;
+	
+	@Deprecated
 	public static final int STATE_INVULNERABLE = 3;
 
 	//Speed
@@ -49,9 +51,13 @@ public class Bob {
 	private Vector2 position;
 	private Vector2 velocity;
 	private Direction direction;
+	
+	@Deprecated
 	private int lifeCount = 3;
+	@Deprecated
 	private float manaCount = 200;
 
+	@Deprecated
 	private boolean isEnemy;
 	private boolean needsUpdate;
 
@@ -72,6 +78,8 @@ public class Bob {
 	private ArrayList<Object> gameObjects;
 	private float shieldTimer;
 	private float health = 2000f;
+	private float boostTimer;
+	private boolean boosted;
 	
 	/**
 	 * Create a new Bob instance.
@@ -121,6 +129,13 @@ public class Bob {
 			shieldTimer -= delta;
 			if(shieldTimer<0){
 				invulnerable = false;
+			}
+		}
+		if (boosted){
+			boostTimer -= delta;
+			if(boostTimer<0){
+				this.MAX_SPEED = 100f;
+				boosted = false;
 			}
 		}
 		updateDirection();
@@ -406,6 +421,7 @@ public class Bob {
 		this.position = new Vector2(x,y);
 	}
 
+	@Deprecated
 	public void decrementLifeCount() {
 		if (state == STATE_INVULNERABLE) {
 			return;
@@ -413,10 +429,12 @@ public class Bob {
 		this.lifeCount = this.lifeCount - 1;
 	}
 
+	@Deprecated
 	public void setLifeCount(int x) {
 		this.lifeCount = x;
 	}
 
+	@Deprecated
 	public int getLifeCount() {
 		return this.lifeCount;
 	}
@@ -478,6 +496,10 @@ public class Bob {
 	public boolean isInvulnerable() {
 		return invulnerable;
 	}
+	
+	public boolean isBoosted(){
+		return boosted;
+	}
 
 	public int getGameIndex() {
 		return gameIndex;
@@ -500,6 +522,7 @@ public class Bob {
 		this.gameIndex = gameIndex;
 	}
 	
+	@Deprecated
 	public void setAtosSpeed(){
 		if (isEnemy){
 			MAX_SPEED = 100;
@@ -623,6 +646,12 @@ public class Bob {
 	public void setInvulnerable() {
 		this.invulnerable = true;
 		this.shieldTimer = 1.5f;
+	}
+	
+	public void setBoosted(){
+		this.boosted = true;
+		this.boostTimer = 3f;
+		this.MAX_SPEED = 300;
 	}
 
 	public void takeDamage(float f) {
