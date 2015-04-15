@@ -157,16 +157,20 @@ public class GameScreenMediator extends Mediator{
 	private void handleUpdateCommand(Command c){
 		Vector2 position = ((UpdateCommand)c).getPosition();
 		Vector2 velocity = ((UpdateCommand)c).getVelocity();
+		float health = ((UpdateCommand)c).getHealth();
 		long timestamp = c.getTimeStamp();
 		if(!c.getFromUser().equals(UserSession.getInstance().getUserName())){
-			gameScreen.onUpdate(c.getFromUser(), timestamp, position, velocity);
+			gameScreen.onUpdate(c.getFromUser(), timestamp, position, velocity, health);
 		}
 	}
 	
-	private void handleGameEndCommand(GameEndCommand command) {
-        if (command.getReason() == GameEndCommand.GameEndReason.GAME_END) {
-            if (UserSession.getInstance().getUserName().equals(command.getWinner())) {
+	private void handleGameEndCommand(Command command) {
+        if (((GameEndCommand)command).getReason() == GameEndCommand.GameEndReason.GAME_END) {
+        	String winnerName = ((GameEndCommand)command).getWinner();
+            if (UserSession.getInstance().getUserName().equals(winnerName)) {
                 gameScreen.displayWinGamePopup();
+            } else {
+            	gameScreen.displayLoseGamePopup(winnerName);
             }
         }
     }
@@ -254,6 +258,7 @@ public class GameScreenMediator extends Mediator{
 		if(playerModel != null){
 			UpdateCommand command = new UpdateCommand();
 			command.setUpdate(playerModel.getPosition(),playerModel.getVelocity());
+			command.setHealth(playerModel.getHealth());
 			command.setFromUser(UserSession.getInstance().getUserName());
 			if(UserSession.getInstance().isServer()){
 				gameServer.sendMessage(command.serialize());
@@ -294,6 +299,15 @@ public class GameScreenMediator extends Mediator{
 		ReadyCommand command = new ReadyCommand();
 		command.setFromUser(UserSession.getInstance().getUserName());
 		gameClient.sendMessage(command.serialize());
+	}
+	
+	public void endGame(String winner) {
+		GameEndCommand command = new GameEndCommand();
+		command.setFromUser(UserSession.getInstance().getUserName());
+		command.setReason(GameEndReason.GAME_END);
+		command.setWinner(winner);
+		gameServer.sendMessage(command.serialize());
+		handleGameEndCommand(command);
 	}
 
 	public void connectToServerFailed() {
@@ -360,6 +374,10 @@ public class GameScreenMediator extends Mediator{
 											break;
 										case Command.CAST:
 											handleSpellCommand(command);
+											break;
+										case Command.GAME_END:
+											handleGameEndCommand(command);
+											break;
 									}
 								}
 							});
@@ -410,4 +428,6 @@ public class GameScreenMediator extends Mediator{
 			}
 		}
 	}
+
+	
 }

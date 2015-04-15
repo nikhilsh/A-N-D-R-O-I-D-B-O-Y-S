@@ -13,6 +13,7 @@ public class UpdateCommand extends Command{
 	private float y;
 	private float vx;
 	private float vy;
+	private float health;
 	
 	@Override
 	protected void serializeCustomFields(JSONObject json) throws JSONException {
@@ -20,6 +21,7 @@ public class UpdateCommand extends Command{
 		json.put("y", y);
 		json.put("vx", vx);
 		json.put("vy", vy);
+		json.put("health", getHealth());
 	}
 
 	@Override
@@ -50,10 +52,19 @@ public class UpdateCommand extends Command{
 			command.y = (float) json.getDouble("y");
 			command.vx = (float) json.getDouble("vx");
 			command.vy = (float) json.getDouble("vy");
+			command.health = (float) json.getDouble("health");
 		} catch (JSONException e){
 			Gdx.app.log(TAG, e.toString());
 		}
 		return command;
+	}
+
+	public float getHealth() {
+		return health;
+	}
+
+	public void setHealth(float health) {
+		this.health = health;
 	}
 
 }

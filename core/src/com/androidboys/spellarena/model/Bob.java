@@ -46,7 +46,7 @@ public class Bob {
 
 	//Speed
 	private float MAX_SPEED = 100f;
-	private static final float MAX_HEALTH = 2000f;
+	public static final float MAX_HEALTH = 2000f;
 
 	private Vector2 position;
 	private Vector2 velocity;
@@ -654,12 +654,32 @@ public class Bob {
 		this.MAX_SPEED = 300;
 	}
 
-	public void takeDamage(float f) {
-		health  -= f;
+	public boolean takeDamage(float f) {
+		if(state != STATE_DEAD){
+			health  -= f;
+			if(health < 0){
+				health = 0;
+				state = STATE_DEAD;
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public float getLightRadius(){
-		return health/MAX_HEALTH > 0 ? health/MAX_HEALTH: 0;
+		return health/MAX_HEALTH > 0 ? health/MAX_HEALTH : 1;
 	}
 	
+	public float getHealth(){
+		return health;
+	}
+
+	public boolean updateHealth(float health) {
+		this.health = health;
+		if(this.health == 0){
+			this.state = STATE_DEAD;
+			return false;
+		}
+		return true;
+	}
 }

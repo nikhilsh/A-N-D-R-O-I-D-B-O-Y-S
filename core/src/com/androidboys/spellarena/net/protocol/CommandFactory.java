@@ -74,6 +74,8 @@ public class CommandFactory {
             	return UpdateCommand.build(json);
             case Command.CAST:
             	return SpellCommand.build(json);
+            case Command.GAME_END:
+            	return GameEndCommand.build(json);
 			}
 		} catch (JSONException e){
 			Gdx.app.error(TAG,e.toString());
