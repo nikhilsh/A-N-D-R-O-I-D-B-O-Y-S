@@ -27,6 +27,7 @@ public class SpellArena extends Game {
 	FPSLogger fps;
 	final private Stack<Screen> screens = new Stack<Screen>();
 	
+	//Three types of screens
     public static enum ScreenType {
         SPLASH, PLAY, LOBBY
     }
@@ -65,6 +66,10 @@ public class SpellArena extends Game {
 		
 	}
 	
+	/**
+	 * Change screen
+	 * @param screenType: new screen
+	 */
 	public void switchScreen(final ScreenType screenType) {
         Gdx.app.postRunnable(new Runnable() {
             @Override
