@@ -21,7 +21,7 @@ Touch the screen to cast a spell on enemy (or on self).
 
 ### Spells
 * QQQ = Divine Shield
-* QQW = Force Staff
+* QQW = Blink
 * QQE = Mine
 * WWQ = Stasis Trap
 * WWW = Atos
@@ -34,40 +34,51 @@ Touch the screen to cast a spell on enemy (or on self).
 __Divine Shield (QQQ)__
 > Invulnerable for 3 seconds.
 > Mana cost: 50
+> Cooldown: 5
 
-__Force Staff (QQW)__
+__Blink (QQW)__
 > Pushes character 100 units in the direction he is facing.
 > Mana cost: 30
+> Cooldown: 2
 
 __Mine (QQE)__
 > (to be completed...)
+> Cooldown: 5
 
 __Statis Trap (WWQ)__
 > Prohibit enemy's movement for 5 seconds.
+> Cooldown: 5
 
 __Atos (WWW)__
 > Slows the enemy's movement speed.
 > Enemy's velocity will be slowed down to 100 for 3 seconds.
-> Mana cost: 50.
+> Mana cost: 50
+> Cooldown: 5
 
 __Acid (WWE)__
 > (to be completed...)
 
 __Fan of Knives (EEQ)__
 > Damage.
-> Radius: 100.
-> Mana cost: 100.
+> Radius: 100
+> Mana cost: 100
+> Cooldown: 5
 
 __Dark Pact (EEW)__
 > Damage.
 > Radius: 300.
 > Effect Delay: 3 sec.
-> Mana cost: 80.
+> Mana cost: 80
+> Cooldown: 5
 
 __Laser (EEE)__
 > Damage.
-> Area: 300X30.
-> Mana cost: 80.
+> Area: 300X30
+> Mana cost: 80
+> Cooldown: 5
+
+__Sprout (QWE)__
+> Cooldown: 5
 
 ## LibGDX Classes and Interfaces
 `com.badlogic.gdx.Gdx`
@@ -196,6 +207,9 @@ __Laser (EEE)__
 * `movePlayer(String, int)`
 * `removePlayer(String)`
 * `isGameEnd(): boolean`
+* `castSpell(String, float, float, Spells, int)`
+* `getGameObjects(): ArrayList<Object>`
+* `getPercentage(): float`
 
 `com.androidboys.spellarena.helper.AssetLoader`
 * `queueLoading()`
@@ -273,6 +287,23 @@ __Laser (EEE)__
 * `move(long, int, float, float)`
 * `setUpdateDetails(long, Vector2, Vector2)`
 * `move(int)`
+
+`com.androidboys.spellarena.model.Acid extends GameObject`
+* `Acid(float, float, String)`
+* `getRectangle(): Rectangle`
+
+`com.androidboys.spellarena.model.GameObject`
+* `GameObject(float, float, String)`
+* `getPosition(): Vector2`
+* `update(float)`
+* `getVelocity(): Vector2`
+* `setVelocity(Vector2)`
+* `getUsername(): String`
+* `getRectangle(): Rectangle`
+
+`com.androidboys.spellarena.model.Tornado extends GameObject`
+* `Tornado(float, float, Direction, String)`
+* `getRectangle(): Rectangle`
 
 `com.androidboys.spellarena.model.Spell`
 * `Spell(GameWorld)`
@@ -391,8 +422,11 @@ __Laser (EEE)__
     * MainMenuMediator.java
     * Mediator.java
    * model
+    * Acid.java
     * Bob.java
+    * GameObject.java
     * Spell.java
+    * Tornado.java
    * net
     * appwarp
      * AppWarpClient.java
@@ -410,6 +444,7 @@ __Laser (EEE)__
      * GameEndCommand.java
      * MoveCommand.java
      * ReadyCommand.java
+     * SpellCommand.java
      * StartGameCommand.java
      * UndefinedCommand.java
      * UpdateCommand.java
