@@ -196,6 +196,9 @@ __Laser (EEE)__
 * `movePlayer(String, int)`
 * `removePlayer(String)`
 * `isGameEnd(): boolean`
+* `castSpell(String, float, float, Spells, int)`
+* `getGameObjects(): ArrayList<Object>`
+* `getPercentage(): float`
 
 `com.androidboys.spellarena.helper.AssetLoader`
 * `queueLoading()`
@@ -273,6 +276,23 @@ __Laser (EEE)__
 * `move(long, int, float, float)`
 * `setUpdateDetails(long, Vector2, Vector2)`
 * `move(int)`
+
+`com.androidboys.spellarena.model.Acid extends GameObject`
+* `Acid(float, float, String)`
+* `getRectangle(): Rectangle`
+
+`com.androidboys.spellarena.model.GameObject`
+* `GameObject(float, float, String)`
+* `getPosition(): Vector2`
+* `update(float)`
+* `getVelocity(): Vector2`
+* `setVelocity(Vector2)`
+* `getUsername(): String`
+* `getRectangle(): Rectangle`
+
+`com.androidboys.spellarena.model.Tornado extends GameObject`
+* `Tornado(float, float, Direction, String)`
+* `getRectangle(): Rectangle`
 
 `com.androidboys.spellarena.model.Spell`
 * `Spell(GameWorld)`
