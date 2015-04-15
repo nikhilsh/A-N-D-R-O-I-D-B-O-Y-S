@@ -33,11 +33,11 @@ public class AssetLoader {
 	
 	public static Texture loadingTexture;
 	
-	public static Texture charTexture, dustTexture;
+	public static Texture charTexture;
 	public static TextureRegion northBob, eastBob, southBob, westBob, 
-		northEastBob, southEastBob, southWestBob, northWestBob, dustSpell;
+		northEastBob, southEastBob, southWestBob, northWestBob;
 	public static Animation northBobAnimation, eastBobAnimation, southBobAnimation, westBobAnimation, 
-		northEastBobAnimation, southEastBobAnimation, southWestBobAnimation, northWestBobAnimation, dustSpellAnimation;
+		northEastBobAnimation, southEastBobAnimation, southWestBobAnimation, northWestBobAnimation;
 	public static Animation bobDeathAnimation;
 	
 	public static Texture tornadoTexture;
@@ -49,7 +49,13 @@ public class AssetLoader {
 	public static Texture swordTexture;
 	public static Animation swordAnimation;
 	
+<<<<<<< HEAD
 	public static Texture greenTexture, redTexture;
+=======
+	public static Texture dustTexture;
+	public static Animation dustAnimation;
+	public static Animation reverseDustAnimation;
+>>>>>>> a695259041f2028e64158932cfe3687e7da25701
 	
 	public static BitmapFont header, playText, playTextSmall, swordText, parchmentText, smallParchmentText;
 	
@@ -71,6 +77,8 @@ public class AssetLoader {
 		manager.load("sprites/tornado.PNG", Texture.class, param);
 		manager.load("sprites/shield.png", Texture.class, param);
 		manager.load("sprites/sword.png", Texture.class, param);
+		manager.load("sprites/laser.png", Texture.class, param);
+		manager.load("sprites/explode.png", Texture.class, param);
 		
 		manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
 		manager.load("fonts/header.TTF",FreeTypeFontGenerator.class);
@@ -157,6 +165,9 @@ public class AssetLoader {
 		}
 		if(swordTexture == null){
 			swordTexture = manager.get("sprites/sword.png",Texture.class);
+		}
+		if(dustTexture == null){
+			dustTexture = manager.get("sprites/explode.png",Texture.class);
 		}
 		if(map == null){
 			map = manager.get("maps/Dungeon.tmx",TiledMap.class);
@@ -262,11 +273,21 @@ public class AssetLoader {
 				new TextureRegion(charTexture, 90, 275, 30, 30),
 				new TextureRegion(charTexture, 60, 275, 30, 30),
 				new TextureRegion(charTexture, 30, 275, 30, 30)
-			});
+        });
+		dustAnimation = new Animation(0.06f, new TextureRegion[]{
+				new TextureRegion(dustTexture, 0, 0, 180, 180),
+				new TextureRegion(dustTexture, 180, 0, 180, 180),
+				new TextureRegion(dustTexture, 360, 0, 180, 180),
+				new TextureRegion(dustTexture, 540, 0, 180, 180),
+				new TextureRegion(dustTexture, 720, 0, 180, 180)
+	    });
 		
-		dustSpellAnimation = new Animation(0.06f, new TextureRegion[]{
-				new TextureRegion(dustTexture, 0, 0, 128, 128),
-				new TextureRegion(dustTexture, 128, 128, 128, 128)
+		reverseDustAnimation = new Animation(0.06f, new TextureRegion[]{
+				new TextureRegion(dustTexture, 720, 0, 180, 180),
+				new TextureRegion(dustTexture, 540, 0, 180, 180),
+				new TextureRegion(dustTexture, 360, 0, 180, 180),
+				new TextureRegion(dustTexture, 180, 0, 180, 180),
+				new TextureRegion(dustTexture, 0, 0, 180, 180)
 		});
 		
 		tornadoAnimation = new Animation(0.06f, new TextureRegion[]{
@@ -324,14 +345,11 @@ public class AssetLoader {
 		tornadoAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		swordAnimation.setPlayMode(Animation.PlayMode.LOOP);
-		
-		dustSpellAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+		dustAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		reverseDustAnimation.setPlayMode(Animation.PlayMode.LOOP);
 	}
 
 	private static void loadSprites(){
-		
-		dustTexture = new Texture(Gdx.files.internal("sprites/dust.png"));
-		dustTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 		southBob = new TextureRegion(charTexture, 60, 35, 30, 30);
 		southWestBob = new TextureRegion(charTexture, 60, 65, 30, 30);
@@ -341,7 +359,6 @@ public class AssetLoader {
 		northEastBob = new TextureRegion(charTexture, 210, 125, 30, 30);		
 		eastBob = new TextureRegion(charTexture, 210, 95, 30, 30);
 		southEastBob = new TextureRegion(charTexture, 210, 65, 30, 30);	
-		dustSpell = new TextureRegion(dustTexture, 0, 0, 128, 128);
 	}
 	
 	private static void loadFonts(){

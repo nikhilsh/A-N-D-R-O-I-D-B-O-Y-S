@@ -9,6 +9,7 @@ import com.androidboys.spellarena.gameworld.GameFactory.GameModel;
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.mediators.GameScreenMediator;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.DummyBlinkObject;
 import com.androidboys.spellarena.model.GameObject;
 import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Spell.Spells;
@@ -406,41 +407,12 @@ public class GameWorld {
 			//send time remaining and state to server			
 			break;
 		case FORCESTAFF:
-				switch (bob.getDirection()) {
-				case EAST:
-					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
-					break;
-				case NORTH:
-					bob.setPosition(bob.getPosition().x, bob.getPosition().y+100);
-					break;
-				case NORTHEAST:
-					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y+100);
-					break;
-				case NORTHWEST:
-					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y+100);
-					break;
-				case SOUTH:
-					bob.setPosition(bob.getPosition().x, bob.getPosition().y-100);
-					break;
-				case SOUTHEAST:
-					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y-100);
-					break;
-				case SOUTHWEST:
-					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y-100);
-					break;
-				case WEST:
-					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y);
-					break;
-
-				default:
-					break;
-				}
-			
-
+			blinkBob(bob);
 			break;
 
-		case ATOS:
+		case BOOST:
 			bob.setBoosted();
+			
 			break;
 
 		case STASISTRAP:
@@ -476,6 +448,50 @@ public class GameWorld {
 		default:
 			break;
 		}
+	}
+	private void blinkBob(Bob bob){
+		final DummyBlinkObject blinkObject = new DummyBlinkObject(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName());
+		gameObjects.add(blinkObject);
+		
+		switch (bob.getDirection()) {
+		case EAST:
+			bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
+			break;
+		case NORTH:
+			bob.setPosition(bob.getPosition().x, bob.getPosition().y+100);
+			break;
+		case NORTHEAST:
+			bob.setPosition(bob.getPosition().x+100, bob.getPosition().y+100);
+			break;
+		case NORTHWEST:
+			bob.setPosition(bob.getPosition().x-100, bob.getPosition().y+100);
+			break;
+		case SOUTH:
+			bob.setPosition(bob.getPosition().x, bob.getPosition().y-100);
+			break;
+		case SOUTHEAST:
+			bob.setPosition(bob.getPosition().x+100, bob.getPosition().y-100);
+			break;
+		case SOUTHWEST:
+			bob.setPosition(bob.getPosition().x-100, bob.getPosition().y-100);
+			break;
+		case WEST:
+			bob.setPosition(bob.getPosition().x-100, bob.getPosition().y);
+			break;
+
+		default:
+			break;
+		}
+		new java.util.Timer().schedule( 
+		        new java.util.TimerTask() {
+		            @Override
+		            public void run() {
+		        		gameObjects.remove(blinkObject);
+		            }
+		        }, 
+		        200 
+		);
+		
 	}
 
 	private void createFlyingSword(Bob bob) {

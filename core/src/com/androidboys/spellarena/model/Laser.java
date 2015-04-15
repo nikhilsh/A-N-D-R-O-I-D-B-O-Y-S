@@ -2,9 +2,9 @@ package com.androidboys.spellarena.model;
 
 import com.badlogic.gdx.math.Rectangle;
 
-public class Acid extends GameObject {
+public class Laser extends GameObject {
 
-	public Acid(float x, float y, String playerName) {
+	public Laser(float x, float y, String playerName) {
 		super(x, y, playerName);
 		// TODO Auto-generated constructor stub
 		
