@@ -7,6 +7,7 @@ import java.util.Random;
 
 import com.androidboys.spellarena.gameworld.GameFactory.GameModel;
 import com.androidboys.spellarena.helper.AssetLoader;
+import com.androidboys.spellarena.mediators.GameScreenMediator;
 import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.DummyBlinkObject;
 import com.androidboys.spellarena.model.GameObject;
@@ -44,9 +45,7 @@ public class GameWorld {
 	//Characters
 	private Map<String, Bob> playerModels = new HashMap<String, Bob>();
 	private ArrayList<Object> gameObjects = new ArrayList<Object>();
-	//Characters
-		private  Bob local_bob;
-		private  Bob enemy_bob;
+	
 	private Spells spell;
 	
 	//Map
@@ -59,6 +58,8 @@ public class GameWorld {
 		}
 	};
 	private Array<Rectangle> tiles = new Array<Rectangle>();
+	
+	private GameScreenMediator mediator;
 	
 	public void initialize(GameModel model){
 		//Create new characters
@@ -76,7 +77,6 @@ public class GameWorld {
 	}
 	
 	private void updatePlayerModel(Bob bob, float delta) {
-
 		bob.update(delta);
 		checkPlayerCollision(delta);
 	}
@@ -96,15 +96,23 @@ public class GameWorld {
 	private void checkPlayerObjectCollision() {
 		Bob bob = getPlayerModel(UserSession.getInstance().getUserName());
 		if(!bob.isInvulnerable()){
+			float damage = 0;
 			for(Object object: gameObjects.toArray()){
 //				Gdx.app.log(TAG,"Checking object collision: "+object);
 				GameObject gameObject = (GameObject)object;
 				if (bob.getbobRect().overlaps(gameObject.getRectangle()) && !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
 //					Gdx.app.log(TAG,"Colliding");
 					if (object instanceof Tornado){
-						bob.takeDamage(20f);
+						damage += 20f;
 					} else if (object instanceof Sword){
-						bob.takeDamage(30f);
+						damage += 30f;
+					}
+				}
+			}
+			if(!bob.takeDamage(damage)){
+				if(UserSession.getInstance().isServer()){
+					if(this.isGameEnd()){
+						mediator.endGame(getWinner());
 					}
 				}
 			}
@@ -259,14 +267,6 @@ public class GameWorld {
 	}
 
 	/**
-	 * Get the instance of character.
-	 */
-	@Deprecated
-	public Bob getBob(){
-		return local_bob;
-	}
-
-	/**
 	 * Update game world.
 	 */
 	public void update(float delta) {
@@ -328,15 +328,6 @@ public class GameWorld {
 		
 	}
 	
-	/**
-	 * Update enemy bob.
-	 */
-	@Deprecated
-	public void updateEnemy(float x, float y, float vx, float vy, int state) {
-		enemy_bob.setVelocity(vx, vy);
-		enemy_bob.setPosition(x, y);
-	}
-	
 	public Spells getSpell(){
 		return spell;
 	}
@@ -344,14 +335,6 @@ public class GameWorld {
 	public void setSpell(Spells spell){
 		this.spell = spell;
 		
-	}
-	
-	/**
-	 * Get the instance of enemy.
-	 */
-	@Deprecated
-	public Bob getEnemy() {
-		return enemy_bob;
 	}
 
 	public Map<String,Bob> getPlayerModels() {
@@ -363,9 +346,24 @@ public class GameWorld {
 		bob.move(time, movement, x, y);
 	}
 
-	public void updatePlayer(String fromUser, long timestamp, Vector2 position, Vector2 velocity) {
+	public void updatePlayer(String fromUser, long timestamp, Vector2 position, Vector2 velocity, float health) {
 		Bob bob = playerModels.get(fromUser);
 		bob.setUpdateDetails(timestamp, position, velocity);
+		if((!bob.updateHealth(health))&&UserSession.getInstance().isServer()){
+			if(isGameEnd()){
+				mediator.endGame(getWinner());
+			}
+		};
+		
+	}
+
+	private String getWinner() {
+		for(String playerName: playerModels.keySet()){
+			if(playerModels.get(playerName).getState() == Bob.STATE_ALIVE){
+				return playerName;
+			}
+		}
+		return null;
 	}
 
 	public void movePlayer(String userName, int movement) {
@@ -380,12 +378,14 @@ public class GameWorld {
 	}
 	
 	public boolean isGameEnd() {
+
         int playingUser = 0;
         for (Bob playerModel : playerModels.values()) {
             if (playerModel.getState() != Bob.STATE_DEAD) {
                 playingUser++;
             }
         }
+		Gdx.app.log(TAG,"isGameEnd: "+(playingUser <= 1));
         return playingUser <= 1;
     }
 
@@ -505,6 +505,10 @@ public class GameWorld {
 
 	public ArrayList<Object> getGameObjects() {
 		return gameObjects;
+	}
+
+	public void setMediator(GameScreenMediator mediator) {
+		this.mediator = mediator;
 	}
 
 }

@@ -58,6 +58,7 @@ public class GameRenderer {
 	northBob, northEastBob, eastBob, southEastBob;
 	private Animation southBobAnimation, southWestBobAnimation, westBobAnimation, northWestBobAnimation,
 	northBobAnimation, northEastBobAnimation, eastBobAnimation, southEastBobAnimation;
+	private Animation bobDeathAnimation;	
 
 	private Animation tornadoAnimation, shieldAnimation, swordAnimation, dustAnimation, reverseDustAnimation;
 
@@ -137,6 +138,8 @@ public class GameRenderer {
 		northWestBobAnimation = AssetLoader.northWestBobAnimation;
 		westBobAnimation = AssetLoader.westBobAnimation;
 		southWestBobAnimation = AssetLoader.southWestBobAnimation;
+
+		bobDeathAnimation = AssetLoader.bobDeathAnimation;
 
 		dustAnimation = AssetLoader.dustAnimation;
 		reverseDustAnimation = AssetLoader.reverseDustAnimation;
@@ -272,6 +275,7 @@ public class GameRenderer {
 
 
 		batcher.begin();
+//		batcher.setColor(1f,1f,1f,0.5f);
 		//		batcher.setColor(Color.WHITE);
 		if(bob.getState() == Bob.STATE_ALIVE){
 			switch(bob.getDirection()){
@@ -340,18 +344,36 @@ public class GameRenderer {
 				break;
 
 			}
+		} else if(bob.getState() == Bob.STATE_DEAD){
+			batcher.draw(bobDeathAnimation.getKeyFrame(runTime),
+					bob.getPosition().x-25f,bob.getPosition().y-25f,75f,75f);
 		}
 		if(bob.isInvulnerable()){
 			batcher.draw(shieldAnimation.getKeyFrame(runTime),
 					bob.getPosition().x-38f,bob.getPosition().y-35f,100f,100f);
 		}
 		batcher.end();
+		float healthPercentage = bob.getHealth()/Bob.MAX_HEALTH;
+		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(Color.GREEN);
+		shapeRenderer.rect(
+				bob.getPosition().x-10f,
+				bob.getPosition().y+50f,
+				50*healthPercentage,5);
+		shapeRenderer.setColor(Color.RED);
+		shapeRenderer.rect(
+				bob.getPosition().x-10f + 50*healthPercentage,
+				bob.getPosition().y+50f,
+				50*(1-healthPercentage),5);
+		shapeRenderer.end();
 	}
 
 	private void renderEnemy(float runTime){
-		batcher.begin();
-		//		batcher.setColor(255/255f,128/255f,128/255f,1f);
+
+//		batcher.setColor(255/255f,128/255f,128/255f,1f);
 		for(Bob enemy: enemies){
+			batcher.begin();
 			if(enemy.getState() == Bob.STATE_ALIVE&&enemy.getPlayerName()!=UserSession.getInstance().getUserName()){
 				switch(enemy.getDirection()){
 				case EAST:
@@ -419,13 +441,32 @@ public class GameRenderer {
 					break;
 
 				}
+			} else if(enemy.getState() == Bob.STATE_DEAD){
+				batcher.draw(bobDeathAnimation.getKeyFrame(runTime),
+						enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
 			}
 			if(enemy.isInvulnerable()){
 				batcher.draw(shieldAnimation.getKeyFrame(runTime),
 						enemy.getPosition().x-38f,enemy.getPosition().y-35f,100f,100f);
 			}
+			batcher.end();
+			float healthPercentage = enemy.getHealth()/Bob.MAX_HEALTH;
+			shapeRenderer.setProjectionMatrix(cam.combined);
+			shapeRenderer.begin(ShapeType.Filled);
+			shapeRenderer.setColor(Color.GREEN);
+			shapeRenderer.rect(
+					enemy.getPosition().x-10f,
+					enemy.getPosition().y+50f,
+					50*healthPercentage,5);
+			shapeRenderer.setColor(Color.RED);
+			shapeRenderer.rect(
+					enemy.getPosition().x-10f + 50*healthPercentage,
+					enemy.getPosition().y+50f,
+					50*(1-healthPercentage),5);
+			shapeRenderer.end();
 		}
-		batcher.end();
+
+		
 		//shapeRenderer.setColor(Color.RED);
 		//shapeRenderer.rect(enemy.getPosition().x,enemy.getPosition().y,50,50);
 	}

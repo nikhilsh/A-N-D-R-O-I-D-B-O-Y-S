@@ -28,23 +28,23 @@ public class Sword extends GameObject{
 	@Override
 	public void update(float delta) {
 		this.radius += 5*delta;
-		Gdx.app.log(TAG,radius+"");
+
 		this.rotation += ANGULAR_VELOCITY*delta;
 		Vector2 parallelVector = new Vector2((float)Math.cos(rotation),
 				(float) Math.sin(rotation));
-		Gdx.app.log(TAG,"Parallel Vector: "+parallelVector);
+
 		Vector2 perpendicularVector = new Vector2(parallelVector);
-		Gdx.app.log(TAG,"Perpendicular Vector: "+perpendicularVector);
+
 		perpendicularVector.rotate(90);
 		parallelVector.scl(radius);
-		Gdx.app.log(TAG,"Parallel Vector: "+parallelVector);
-		Gdx.app.log(TAG,"Perpendicular Vector: "+perpendicularVector);
+
+
 		perpendicularVector.scl(ROTATIONAL_SPEED);
 		parallelVector.scl(SPIRAL_SPEED);
-		Gdx.app.log(TAG,"Parallel Vector: "+parallelVector);
-		Gdx.app.log(TAG,"Perpendicular Vector: "+perpendicularVector);
+
+
 		Vector2 finalVelocity = parallelVector.add(perpendicularVector);
-		Gdx.app.log(TAG,"Final Vector: "+finalVelocity);
+
 		this.setVelocity(finalVelocity);
 		super.update(delta);
 	}

@@ -1,26 +1,18 @@
 package com.androidboys.spellarena.view;
 
-import java.net.NetworkInterface;
-import java.net.UnknownHostException;
 import java.util.HashMap;
-
-import org.json.JSONObject;
 
 import com.androidboys.spellarena.game.SpellArena;
 import com.androidboys.spellarena.gameworld.GameFactory;
 import com.androidboys.spellarena.gameworld.GameRenderer;
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.helper.AssetLoader;
-import com.androidboys.spellarena.helper.InputHandler;
 import com.androidboys.spellarena.helper.StyleLoader;
 import com.androidboys.spellarena.mediators.GameScreenMediator;
 import com.androidboys.spellarena.mediators.Mediator;
 import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.Spell;
-import com.androidboys.spellarena.model.Bob.Direction;
 import com.androidboys.spellarena.model.Spell.Spells;
-import com.androidboys.spellarena.net.WarpController;
-import com.androidboys.spellarena.net.WarpListener;
 import com.androidboys.spellarena.net.model.RoomModel;
 import com.androidboys.spellarena.servers.GameClient;
 import com.androidboys.spellarena.servers.GameServer;
@@ -43,33 +35,26 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 
@@ -166,6 +151,7 @@ public class GameScreen implements Screen{
 	public GameScreen(SpellArena game, Mediator mediator) {
 		this.game = game;
 		this.mediator = mediator;
+		world.setMediator((GameScreenMediator)mediator);
 		this.gameStarted = false;
 		this.serverReady = false;
 		this.connectedToServer = false;
@@ -406,8 +392,11 @@ public class GameScreen implements Screen{
 
 			@Override
 			public void onMovementChanged(int movement) {
-				gameScreenMediator.move(movement);
-				world.movePlayer(UserSession.getInstance().getUserName(), movement);
+				if(world.getPlayerModel(UserSession.getInstance().getUserName())
+						.getState() != Bob.STATE_DEAD){
+					gameScreenMediator.move(movement);
+					world.movePlayer(UserSession.getInstance().getUserName(), movement);
+				}
 			}
 		};
 		
@@ -539,6 +528,9 @@ public class GameScreen implements Screen{
 					int button) {
 				int direction = 0;
 				Bob bob = world.getPlayerModel(UserSession.getInstance().getUserName());
+				if(bob.getState() == Bob.STATE_DEAD){
+					return false;
+				}
 				switch (bob.getDirection()) {
 				case EAST:
 					direction = 0;
@@ -1418,8 +1410,8 @@ public class GameScreen implements Screen{
 	}
 
 
-	public void onUpdate(String fromUser, long timestamp, Vector2 position, Vector2 velocity) {
-		world.updatePlayer(fromUser, timestamp, position, velocity);
+	public void onUpdate(String fromUser, long timestamp, Vector2 position, Vector2 velocity, float health) {
+		world.updatePlayer(fromUser, timestamp, position, velocity, health);
 	}
 
 
@@ -1543,6 +1535,9 @@ public class GameScreen implements Screen{
 		winGamePopUp.setVisible(true);
 	}
 
+	public void displayLoseGamePopup(String winnerName) {
+		loseGamePopUp.setVisible(true);
+	}
 
 	public void onOwnerLeft() {
 		gameScreenMediator.disconnect(gameStarted);

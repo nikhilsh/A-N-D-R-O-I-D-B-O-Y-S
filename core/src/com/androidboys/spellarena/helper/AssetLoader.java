@@ -36,6 +36,7 @@ public class AssetLoader {
 		northEastBob, southEastBob, southWestBob, northWestBob;
 	public static Animation northBobAnimation, eastBobAnimation, southBobAnimation, westBobAnimation, 
 		northEastBobAnimation, southEastBobAnimation, southWestBobAnimation, northWestBobAnimation;
+	public static Animation bobDeathAnimation;
 	
 	public static Texture tornadoTexture;
 	public static Animation tornadoAnimation;
@@ -253,13 +254,19 @@ public class AssetLoader {
 				new TextureRegion(charTexture, 120, 125, 30, 30)
 			});
 		
+		bobDeathAnimation = new Animation(0.06f,new TextureRegion[]{
+				new TextureRegion(charTexture, 120, 275, 30, 30),
+				new TextureRegion(charTexture, 90, 275, 30, 30),
+				new TextureRegion(charTexture, 60, 275, 30, 30),
+				new TextureRegion(charTexture, 30, 275, 30, 30)
+        });
 		dustAnimation = new Animation(0.06f, new TextureRegion[]{
 				new TextureRegion(dustTexture, 0, 0, 180, 180),
 				new TextureRegion(dustTexture, 180, 0, 180, 180),
 				new TextureRegion(dustTexture, 360, 0, 180, 180),
 				new TextureRegion(dustTexture, 540, 0, 180, 180),
 				new TextureRegion(dustTexture, 720, 0, 180, 180)
-		});
+	    });
 		
 		reverseDustAnimation = new Animation(0.06f, new TextureRegion[]{
 				new TextureRegion(dustTexture, 720, 0, 180, 180),
@@ -319,6 +326,7 @@ public class AssetLoader {
 		southWestBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		westBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northWestBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		bobDeathAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 		
 		tornadoAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
