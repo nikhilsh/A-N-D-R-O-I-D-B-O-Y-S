@@ -49,6 +49,9 @@ public class AssetLoader {
 	
 	public static Texture swordTexture;
 	public static Animation swordAnimation;
+	
+	public static Texture laserTexture;
+	public static Animation laserAnimation;
 		
 	public static Texture dustTexture;
 	public static Animation dustAnimation;
@@ -171,6 +174,9 @@ public class AssetLoader {
 		}
 		if(dustTexture == null){
 			dustTexture = manager.get("sprites/explode.png",Texture.class);
+		}
+		if(laserTexture == null){
+			laserTexture = manager.get("sprites/laser.png", Texture.class);
 		}
 		if(thunderstormTexture == null){
 			thunderstormTexture = manager.get("sprites/lightning.png",Texture.class);
@@ -338,13 +344,26 @@ public class AssetLoader {
 				new TextureRegion(swordTexture, 200, 300, 100, 100),
 		});
 		
-		thunderstormAnimation = new TextureRegion[]{
-				new TextureRegion(thunderstormTexture, 0, 0, 43, 213),
-				new TextureRegion(thunderstormTexture, 43, 0, 43, 213),
-				new TextureRegion(thunderstormTexture, 86, 0, 43, 213),
-				new TextureRegion(thunderstormTexture, 129, 0, 43, 213),
-		};
-		
+
+         laserAnimation = new Animation(0.06f, new TextureRegion[]{
+				new TextureRegion(laserTexture, 0, 200, 198, 25),
+				new TextureRegion(laserTexture, 0, 175, 198, 25),
+                new TextureRegion(laserTexture, 0, 150, 198, 25),
+				new TextureRegion(laserTexture, 0, 125, 198, 25),
+                new TextureRegion(laserTexture, 0, 100, 198, 25),
+				new TextureRegion(laserTexture, 0, 75, 198, 25),
+                new TextureRegion(laserTexture, 0, 50, 198, 25),
+				new TextureRegion(laserTexture, 0, 25, 198, 25),
+		});
+
+        thunderstormAnimation = new TextureRegion[]{
+              new TextureRegion(thunderstormTexture, 0, 0, 43, 213),
+              new TextureRegion(thunderstormTexture, 43, 0, 43, 213),
+		      new TextureRegion(thunderstormTexture, 86, 0, 43, 213),
+              new TextureRegion(thunderstormTexture, 129, 0, 43, 213),
+
+         };
+
 		northBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northEastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		eastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
@@ -360,6 +379,7 @@ public class AssetLoader {
 		swordAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		dustAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		reverseDustAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		laserAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 	}
 
 	private static void loadSprites(){

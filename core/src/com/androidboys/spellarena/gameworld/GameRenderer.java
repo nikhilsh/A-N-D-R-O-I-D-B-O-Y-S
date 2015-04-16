@@ -9,6 +9,7 @@ import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.DummyBlinkObject;
 import com.androidboys.spellarena.model.GameObject;
+import com.androidboys.spellarena.model.Laser;
 import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.model.Sword;
@@ -61,8 +62,7 @@ public class GameRenderer {
 	northBobAnimation, northEastBobAnimation, eastBobAnimation, southEastBobAnimation;
 	private Animation bobDeathAnimation;	
 
-	private Animation tornadoAnimation, shieldAnimation, swordAnimation, dustAnimation, 
-	reverseDustAnimation;
+	private Animation tornadoAnimation, shieldAnimation, swordAnimation, dustAnimation, reverseDustAnimation, laserAnimation;
 	TextureRegion[] thunderstormAnimation;
 
 	private ShaderProgram defaultShader;
@@ -107,7 +107,7 @@ public class GameRenderer {
 
 		finalShader.begin();
 		finalShader.setUniformi("u_lightmap", 1);
-		finalShader.setUniformf("ambientColor", ambientColor.x, ambientColor.y, ambientColor.z, ambientIntensity );
+		finalShader.setUniformf("ambientColor", ambientColor.x, ambientColor.y, ambientColor.z, ambientIntensity);
 		finalShader.end();
 		// Image for spot light 
 
@@ -146,7 +146,7 @@ public class GameRenderer {
 		southWestBobAnimation = AssetLoader.southWestBobAnimation;
 
 		bobDeathAnimation = AssetLoader.bobDeathAnimation;
-		
+
 		greenHealthBar = AssetLoader.greenTexture;
 		redHealthBar = AssetLoader.redTexture;
 
@@ -155,6 +155,7 @@ public class GameRenderer {
 		tornadoAnimation = AssetLoader.tornadoAnimation;
 		shieldAnimation = AssetLoader.shieldAnimation;
 		swordAnimation = AssetLoader.swordAnimation;
+		laserAnimation = AssetLoader.laserAnimation;
 		thunderstormAnimation = AssetLoader.thunderstormAnimation;
 	}
 
@@ -199,6 +200,9 @@ public class GameRenderer {
 			}
 			else if(o instanceof DummyBlinkObject){
 				renderBlink(runTime, (DummyBlinkObject)o);
+			}
+			else if(o instanceof Laser){
+				renderLaser(runTime, (Laser)o);
 			}
 			else if(o instanceof Thunderstorm){
 				renderThunderstorm(runTime, (Thunderstorm)o);
@@ -262,12 +266,51 @@ public class GameRenderer {
 	}
 
 	private void renderBlink(float runTime, DummyBlinkObject o){
-		
+
 		if (bob.getPlayerName() == o.getUsername()){
 			batcher.begin();
 
 			batcher.draw(dustAnimation.getKeyFrame(runTime), bob.getPosition().x-25f,bob.getPosition().y-25f,75f,75f);
-			batcher.draw(dustAnimation.getKeyFrame(runTime), o.getPosition().x-25f,o.getPosition().y-25f,75f,75f);
+			batcher.draw(reverseDustAnimation.getKeyFrame(runTime), o.getPosition().x-25f,o.getPosition().y-25f,75f,75f);
+
+			batcher.end();
+		}
+	}
+
+	private void renderLaser(float runTime, Laser o){
+		if (bob.getPlayerName() == o.getUsername()){
+
+			int sum = 0;
+			batcher.begin();
+			sum += Gdx.graphics.getDeltaTime();
+			switch(bob.getDirection()){
+			case EAST:
+				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x+25f,bob.getPosition().y,198f,25f);
+				break;
+			case NORTH:
+				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x+25f,bob.getPosition().y+42f, 0, 0, 198f, 25f, 1, 1, 90);
+				break;
+			case NORTHEAST:
+				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x+30f,bob.getPosition().y, 0, 0, 198f, 25f, 1, 1, 45);
+				break;
+			case NORTHWEST:
+				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x+12.5f,bob.getPosition().y+22f, 0, 0, 198f, 25f, 1, 1, 135);
+				break;
+			case SOUTH:
+				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x,bob.getPosition().y+12f, 0, 0, 198f, 25f, 1, 1, 270);
+				break;
+			case SOUTHEAST:
+				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x+5f,bob.getPosition().y+8f, 0, 0, 198f, 25f, 1, 1, 315);
+				break;
+			case SOUTHWEST:
+				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x+5f,bob.getPosition().y+28f, 0, 0, 198f, 25f, 1, 1, 225);
+				break;
+			case WEST:
+				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x,bob.getPosition().y+22f, 0, 0, 198f, 25f, 1, 1, 180);
+				break;
+			default:
+				break;
+			}
 
 			batcher.end();
 		}
@@ -302,7 +345,7 @@ public class GameRenderer {
 
 
 		batcher.begin();
-//		batcher.setColor(1f,1f,1f,0.5f);
+		//		batcher.setColor(1f,1f,1f,0.5f);
 		//		batcher.setColor(Color.WHITE);
 		if(bob.getState() == Bob.STATE_ALIVE){
 			switch(bob.getDirection()){
@@ -395,7 +438,7 @@ public class GameRenderer {
 
 	private void renderEnemy(float runTime){
 
-//		batcher.setColor(255/255f,128/255f,128/255f,1f);
+		//		batcher.setColor(255/255f,128/255f,128/255f,1f);
 		for(Bob enemy: enemies){
 			batcher.begin();
 			if(enemy.getState() == Bob.STATE_ALIVE&&enemy.getPlayerName()!=UserSession.getInstance().getUserName()){
@@ -487,7 +530,7 @@ public class GameRenderer {
 			batcher.end();
 		}
 
-		
+
 		//shapeRenderer.setColor(Color.RED);
 		//shapeRenderer.rect(enemy.getPosition().x,enemy.getPosition().y,50,50);
 	}

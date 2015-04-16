@@ -11,6 +11,7 @@ import com.androidboys.spellarena.mediators.GameScreenMediator;
 import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.DummyBlinkObject;
 import com.androidboys.spellarena.model.GameObject;
+import com.androidboys.spellarena.model.Laser;
 import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.model.Sword;
@@ -107,6 +108,8 @@ public class GameWorld {
 						damage += 200f;
 					} else if (object instanceof Sword){
 						damage += 300f;
+					} else if (object instanceof Laser){
+						damage += 200f;
 					}
 				}
 			}
@@ -404,15 +407,18 @@ public class GameWorld {
 			break;
 		case DIVINESHIELD:
 			bob.setInvulnerable();
-			//send time remaining and state to server			
 			break;
+<<<<<<< HEAD
 		case BLINK:
+=======
+			
+		case FORCESTAFF:
+>>>>>>> deed21e886e6cc8a6c9880605616d63a7dd29ad8
 			blinkBob(bob);
 			break;
 
 		case HASTE:
 			bob.setBoosted();
-			
 			break;
 
 		case FIREWALL:
@@ -440,11 +446,18 @@ public class GameWorld {
 			break;
 
 		case LASER:
-			createTornado(bob);
+			createLaser(bob);
 			break;
 
+<<<<<<< HEAD
 		case TORNADO:
 
+=======
+		case FANOFKNIVES:
+			createTornado(bob);
+			break;
+			
+>>>>>>> deed21e886e6cc8a6c9880605616d63a7dd29ad8
 		default:
 			break;
 		}
@@ -506,6 +519,20 @@ public class GameWorld {
 		        200 
 		);
 		
+	}
+	
+	private void createLaser(Bob bob){
+		final Laser laser = new Laser(bob.getPosition().x, bob.getPosition().y, bob.getDirection(), bob.getPlayerName());
+		gameObjects.add(laser);
+		new java.util.Timer().schedule( 
+		        new java.util.TimerTask() {
+		            @Override
+		            public void run() {
+		        		gameObjects.remove(laser);
+		            }
+		        }, 
+		        2000 
+		);
 	}
 
 	private void createFlyingSword(Bob bob) {
