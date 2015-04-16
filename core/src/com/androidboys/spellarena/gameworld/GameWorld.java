@@ -513,8 +513,7 @@ public class GameWorld {
 		            }
 		        }, 
 		        200 
-		);
-		
+		);	
 	}
 	
 	private void createLaser(Bob bob){

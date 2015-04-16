@@ -246,7 +246,7 @@ public class GameRenderer {
 		shapeRenderer.end();
 		batcher.begin();
 		//		batcher.setColor(Color.WHITE);
-		batcher.draw(swordAnimation.getKeyFrame(runTime),
+		batcher.draw(tornadoAnimation.getKeyFrame(runTime),
 				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
 		batcher.end();
 	}
@@ -273,7 +273,7 @@ public class GameRenderer {
 		shapeRenderer.end();
 		batcher.begin();
 		//		batcher.setColor(Color.WHITE);
-		batcher.draw(tornadoAnimation.getKeyFrame(runTime),
+		batcher.draw(swordAnimation.getKeyFrame(runTime),
 				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
 		batcher.end();
 
