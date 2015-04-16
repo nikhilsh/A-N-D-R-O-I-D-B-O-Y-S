@@ -6,36 +6,51 @@ import com.badlogic.gdx.math.Rectangle;
 //Laser object
 public class Laser extends GameObject {
 	
-	private Direction direction;
+	private Bob bob;
+	private Rectangle rectangle;
 
-	public Laser(float x, float y, Direction direction,String playerName) {
+	public Laser(float x, float y, String playerName, Bob bob) {
 		super(x, y, playerName);
-		this.direction = direction;
+		this.bob = bob;
+		this.rectangle = new Rectangle(bob.getPosition().x+12.5f,bob.getPosition().y,200f,50f);
 	}
 
 	@Override
-	public Rectangle getRectangle() {
-		switch(direction){
+	public void update(float delta) {
+		switch(bob.getDirection()){
 		case EAST:
-			return new Rectangle(getPosition().x+25f,getPosition().y,200f,50f);
+			rectangle.set(bob.getPosition().x+12.5f,bob.getPosition().y-5f,210f,35f);
+			break;
 		case NORTH:
-			return new Rectangle(getPosition().x+25f,getPosition().y+42,200f,50f);
+			rectangle.set(bob.getPosition().x-5f,bob.getPosition().y+28f,35f,210f);
+			break;
 		case NORTHEAST:
-			return new Rectangle(getPosition().x+30f,getPosition().y,200f,50f);
+			rectangle.set(bob.getPosition().x+15f,bob.getPosition().y,200f,50f);
+			break;
 		case NORTHWEST:
-			return new Rectangle(getPosition().x+12.5f,getPosition().y+22,200f,50f);
+			rectangle.set(bob.getPosition().x+7.25f,bob.getPosition().y+22,200f,50f);
+			break;
 		case SOUTH:
-			return new Rectangle(getPosition().x,getPosition().y+12f,200f,50f);
+			rectangle.set(bob.getPosition().x-5f,bob.getPosition().y-190f,35f,200f);
+			break;
 		case SOUTHEAST:
-			return new Rectangle(getPosition().x+5f,getPosition().y+8f,200f,50f);
+			rectangle.set(bob.getPosition().x+12.5f,bob.getPosition().y+8f,200f,50f);
+			break;
 		case SOUTHWEST:
-			return new Rectangle(getPosition().x+5f,getPosition().y+28f,200f,50f);
+			rectangle.set(bob.getPosition().x+12.5f,bob.getPosition().y+28f,200f,50f);
+			break;
 		case WEST:
-			return new Rectangle(getPosition().x,getPosition().y+22f,200f,50f);
+			rectangle.set(bob.getPosition().x-200f,bob.getPosition().y-7f,190f,35f);
+			break;
 		default:
-			return new Rectangle(getPosition().x+25f,getPosition().y,200f,50f);
+			rectangle.set(bob.getPosition().x+12.5f,bob.getPosition().y,200f,50f);
+			break;
 		}
-
+	}
+	
+	@Override
+	public Rectangle getRectangle() {
+		return rectangle;
 	}
 
 }

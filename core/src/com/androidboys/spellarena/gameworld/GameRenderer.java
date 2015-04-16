@@ -267,53 +267,65 @@ public class GameRenderer {
 
 	private void renderBlink(float runTime, DummyBlinkObject o){
 
-		if (bob.getPlayerName() == o.getUsername()){
-			batcher.begin();
+		Bob blinkOwner = world.getPlayerModel(o.getUsername());
 
-			batcher.draw(dustAnimation.getKeyFrame(runTime), bob.getPosition().x-25f,bob.getPosition().y-25f,75f,75f);
-			batcher.draw(reverseDustAnimation.getKeyFrame(runTime), o.getPosition().x-25f,o.getPosition().y-25f,75f,75f);
+		batcher.begin();
 
-			batcher.end();
-		}
+		batcher.draw(dustAnimation.getKeyFrame(runTime), blinkOwner.getPosition().x-25f,blinkOwner.getPosition().y-25f,75f,75f);
+		batcher.draw(reverseDustAnimation.getKeyFrame(runTime), o.getPosition().x-25f,o.getPosition().y-25f,75f,75f);
+
+		batcher.end();
+
 	}
 
 	private void renderLaser(float runTime, Laser o){
-		if (bob.getPlayerName() == o.getUsername()){
+		Bob laserOwner = world.getPlayerModel(o.getUsername());
+//		shapeRenderer.setProjectionMatrix(cam.combined);
+//		shapeRenderer.begin(ShapeType.Line);
+//		shapeRenderer.setColor(Color.BLUE);
+//		shapeRenderer.rect(laserOwner.getPosition().x-200f,laserOwner.getPosition().y-7f,190f,35f);
+//		shapeRenderer.end();
+		int sum = 0;
+		batcher.begin();
+		sum += Gdx.graphics.getDeltaTime();
+		switch(laserOwner.getDirection()){
+		case EAST:
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+25f,laserOwner.getPosition().y,198f,25f);
+			break;
+		case NORTH:
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+25f,laserOwner.getPosition().y+42f, 0, 0, 198f, 25f, 1, 1, 90);
+	
+			break;
+		case NORTHEAST:
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+30f,laserOwner.getPosition().y, 0, 0, 198f, 25f, 1, 1, 45);
 
-			int sum = 0;
-			batcher.begin();
-			sum += Gdx.graphics.getDeltaTime();
-			switch(bob.getDirection()){
-			case EAST:
-				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x+25f,bob.getPosition().y,198f,25f);
-				break;
-			case NORTH:
-				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x+25f,bob.getPosition().y+42f, 0, 0, 198f, 25f, 1, 1, 90);
-				break;
-			case NORTHEAST:
-				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x+30f,bob.getPosition().y, 0, 0, 198f, 25f, 1, 1, 45);
-				break;
-			case NORTHWEST:
-				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x+12.5f,bob.getPosition().y+22f, 0, 0, 198f, 25f, 1, 1, 135);
-				break;
-			case SOUTH:
-				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x,bob.getPosition().y+12f, 0, 0, 198f, 25f, 1, 1, 270);
-				break;
-			case SOUTHEAST:
-				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x+5f,bob.getPosition().y+8f, 0, 0, 198f, 25f, 1, 1, 315);
-				break;
-			case SOUTHWEST:
-				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x+5f,bob.getPosition().y+28f, 0, 0, 198f, 25f, 1, 1, 225);
-				break;
-			case WEST:
-				batcher.draw(laserAnimation.getKeyFrame(sum), bob.getPosition().x,bob.getPosition().y+22f, 0, 0, 198f, 25f, 1, 1, 180);
-				break;
-			default:
-				break;
-			}
+			break;
+		case NORTHWEST:
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+12.5f,laserOwner.getPosition().y+22f, 0, 0, 198f, 25f, 1, 1, 135);
 
-			batcher.end();
+			break;
+		case SOUTH:
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x,laserOwner.getPosition().y+12f, 0, 0, 198f, 25f, 1, 1, 270);
+
+			break;
+		case SOUTHEAST:
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+5f,laserOwner.getPosition().y+8f, 0, 0, 198f, 25f, 1, 1, 315);
+
+			break;
+		case SOUTHWEST:
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+5f,laserOwner.getPosition().y+28f, 0, 0, 198f, 25f, 1, 1, 225);
+
+			break;
+		case WEST:
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x,laserOwner.getPosition().y+22f, 0, 0, 198f, 25f, 1, 1, 180);
+
+			break;
+		default:
+			break;
 		}
+
+		batcher.end();
+
 	}
 
 	private void renderBob(float runTime){

@@ -514,17 +514,17 @@ public class GameWorld {
 	}
 	
 	private void createLaser(Bob bob){
-		final Laser laser = new Laser(bob.getPosition().x, bob.getPosition().y, bob.getDirection(), bob.getPlayerName());
+		final Laser laser = new Laser(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName(), bob);
 		gameObjects.add(laser);
-		new java.util.Timer().schedule( 
-		        new java.util.TimerTask() {
-		            @Override
-		            public void run() {
-		        		gameObjects.remove(laser);
-		            }
-		        }, 
-		        2000 
-		);
+//		new java.util.Timer().schedule( 
+//		        new java.util.TimerTask() {
+//		            @Override
+//		            public void run() {
+//		        		gameObjects.remove(laser);
+//		            }
+//		        }, 
+//		        2000 
+//		);
 	}
 
 	private void createFlyingSword(Bob bob) {
