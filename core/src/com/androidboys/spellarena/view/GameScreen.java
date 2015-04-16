@@ -25,6 +25,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -39,6 +40,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -548,13 +550,26 @@ public class GameScreen implements Screen{
 		            }
 		        }
 				spell.spellSettler(spellList[0], spellList[1], spellList[2]);
-				if (castSpell(UserSession.getInstance().getUserName(),
-						bob.getPosition().x, bob.getPosition().y, spell.getSpell(), direction)){
-					gameScreenMediator.spellCommand(direction, spell.getSpell(), 
-							bob.getPosition().x, bob.getPosition().y);
+				if (spell.getSpell() == 6){
+					Vector3 touchPoint = new Vector3(screenX, screenY, 0);
+					Vector3 touch = cam.unproject(touchPoint, 0, 0, 720, 480);
+				    System.out.println("VECTORX: " +touch.x);
+					System.out.println("VECTORY: " +touch.y);
+					if (castSpell(UserSession.getInstance().getUserName(),
+							touchPoint.x, touchPoint.y, spell.getSpell(), direction)){
+						gameScreenMediator.spellCommand(direction, spell.getSpell(), 
+								touchPoint.x, touchPoint.y);
+					}
 				}
-				
-				
+				else {
+					if (castSpell(UserSession.getInstance().getUserName(),
+							bob.getPosition().x, bob.getPosition().y, spell.getSpell(), direction)){
+						gameScreenMediator.spellCommand(direction, spell.getSpell(), 
+								bob.getPosition().x, bob.getPosition().y);
+					}
+				}
+
+
 				return true;
 			}	
 			@Override

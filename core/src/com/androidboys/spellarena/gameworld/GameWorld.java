@@ -13,6 +13,7 @@ import com.androidboys.spellarena.model.DummyBlinkObject;
 import com.androidboys.spellarena.model.GameObject;
 import com.androidboys.spellarena.model.Laser;
 import com.androidboys.spellarena.model.Spell;
+import com.androidboys.spellarena.model.Sunstrike;
 import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.model.Sword;
 import com.androidboys.spellarena.model.Thunderstorm;
@@ -35,7 +36,7 @@ import com.badlogic.gdx.utils.Pool;
 public class GameWorld {
 
 	private Random random = new Random();
-	
+
 	//Boundaries
 	public static final float WORLD_BOUND_LEFT = 80;
 	public static final float WORLD_BOUND_RIGHT = 1805;
@@ -43,16 +44,16 @@ public class GameWorld {
 	public static final float WORLD_BOUND_BOTTOM = 70;
 
 	private static final String TAG = "GameWorld";
-	
+
 	//Characters
 	private Map<String, Bob> playerModels = new HashMap<String, Bob>();
 	private ArrayList<Object> gameObjects = new ArrayList<Object>();
-	
+
 	private Spells spell;
-	
+
 	//Map
 	private TiledMap map;
-	
+
 	private Pool<Rectangle> rectPool = new Pool<Rectangle>() {
 		@Override
 		protected Rectangle newObject () {
@@ -60,15 +61,15 @@ public class GameWorld {
 		}
 	};
 	private Array<Rectangle> tiles = new Array<Rectangle>();
-	
+
 	private GameScreenMediator mediator;
-	
+
 	public void initialize(GameModel model){
 		//Create new characters
 		map = AssetLoader.map;
 		prepareObstacles();
 	}
-	
+
 	private void updatePlayerModels(float delta){
 		for(Bob bob: playerModels.values()){
 			if (bob.getState() != Bob.STATE_DEAD){
@@ -77,7 +78,7 @@ public class GameWorld {
 			}
 		}
 	}
-	
+
 	private void updatePlayerModel(Bob bob, float delta) {
 		bob.update(delta);
 		checkPlayerCollision(delta);
@@ -87,29 +88,44 @@ public class GameWorld {
 		for(Object object: gameObjects.toArray()){
 			if(tiles != null){
 				for(Rectangle tile: tiles){
-					if(tile.overlaps(((GameObject)object).getRectangle()) && !(object instanceof DummyBlinkObject)){
+					if(tile.overlaps(((GameObject)object).getRectangle()) && !((object instanceof DummyBlinkObject) || (object instanceof  Laser))){
 						gameObjects.remove(object);
 					}
 				}
 			}
 		}
 	}
-	
+
 	private void checkPlayerObjectCollision(float delta) {
 		Bob bob = getPlayerModel(UserSession.getInstance().getUserName());
 		if(!bob.isInvulnerable()){
 			float damage = 0;
 			for(Object object: gameObjects.toArray()){
-//				Gdx.app.log(TAG,"Checking object collision: "+object);
+				//				Gdx.app.log(TAG,"Checking object collision: "+object);
 				GameObject gameObject = (GameObject)object;
-				if (bob.getbobRect().overlaps(gameObject.getRectangle()) && !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
-//					Gdx.app.log(TAG,"Colliding");
-					if (object instanceof Tornado){
-						damage += 200f;
-					} else if (object instanceof Sword){
-						damage += 300f;
-					} else if (object instanceof Laser){
-						damage += 200f;
+				if (!UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
+					if (gameObject instanceof Laser){
+						boolean isHit = false;
+						for (Rectangle rectangle : ((Laser) gameObject).getRectangleArray()){
+							if (bob.getbobRect().overlaps(rectangle)){
+								isHit = true;
+								break;
+							}
+						}
+						if (isHit){
+							damage += 200f;
+						}
+					}
+					if (bob.getbobRect().overlaps(gameObject.getRectangle()) && !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
+						//					Gdx.app.log(TAG,"Colliding");
+						if (object instanceof Tornado){
+							damage += 200f;
+						} else if (object instanceof Sword){
+							damage += 300f;
+						} else if (object instanceof Sunstrike){
+							damage += 500f;
+							gameObjects.remove(object);
+						}
 					}
 				}
 			}
@@ -259,7 +275,7 @@ public class GameWorld {
 									break;
 								default:
 									break;
-	
+
 								}
 							}
 						}
@@ -278,7 +294,7 @@ public class GameWorld {
 		updateGameObjects(delta);
 		checkPlayerObjectCollision(delta);
 	}
-	
+
 	private void updateGameObjects(float delta) {
 		for(Object o: gameObjects.toArray()){
 			if(o instanceof GameObject){
@@ -295,12 +311,12 @@ public class GameWorld {
 		rectPool.freeAll(tiles);
 		tiles.clear();
 		for(MapObject obj: layer.getObjects()){
-//			System.out.println("Object found");
+			//			System.out.println("Object found");
 			float x = (Float) obj.getProperties().get("x");
 			float y = (Float) obj.getProperties().get("y");
 			float width = (Float) obj.getProperties().get("width");
 			float height = (Float) obj.getProperties().get("height");
-//			System.out.println(x+" "+y+" "+width+" "+height);
+			//			System.out.println(x+" "+y+" "+width+" "+height);
 			Rectangle rect = rectPool.obtain();
 			rect.set(x, y, width, height);
 			tiles.add(rect);
@@ -329,16 +345,16 @@ public class GameWorld {
 		synchronized (playerModels) {
 			playerModels.put(bob.getPlayerName(), bob);
 		}
-		
+
 	}
-	
+
 	public Spells getSpell(){
 		return spell;
 	}
-	
+
 	public void setSpell(Spells spell){
 		this.spell = spell;
-		
+
 	}
 
 	public Map<String,Bob> getPlayerModels() {
@@ -358,7 +374,7 @@ public class GameWorld {
 				mediator.endGame(getWinner());
 			}
 		};
-		
+
 	}
 
 	private String getWinner() {
@@ -380,18 +396,18 @@ public class GameWorld {
 			playerModels.remove(playerName);
 		}
 	}
-	
+
 	public boolean isGameEnd() {
 
-        int playingUser = 0;
-        for (Bob playerModel : playerModels.values()) {
-            if (playerModel.getState() != Bob.STATE_DEAD) {
-                playingUser++;
-            }
-        }
+		int playingUser = 0;
+		for (Bob playerModel : playerModels.values()) {
+			if (playerModel.getState() != Bob.STATE_DEAD) {
+				playingUser++;
+			}
+		}
 		Gdx.app.log(TAG,"isGameEnd: "+(playingUser <= 1));
-        return playingUser <= 1;
-    }
+		return playingUser <= 1;
+	}
 
 	public void castSpell(String playerName, float x, float y, Spells spellEnum,
 			int direction) {
@@ -436,9 +452,7 @@ public class GameWorld {
 			break;
 
 		case MINE:
-			//collision with sprite, decrement health
-
-			//insert mine at bob position
+			createSunstrike(bob, x, y);
 			break;
 
 		case LASER:
@@ -449,31 +463,37 @@ public class GameWorld {
 		case TORNADO:
 			createTornado(bob);
 			break;
-			
+
 		default:
 			break;
 		}
 	}
+
+	private void createSunstrike(Bob bob, float x, float y){
+		Sunstrike sunstrike = new Sunstrike(x, y, bob.getPlayerName());
+		gameObjects.add(sunstrike);
+	}
+
 	private void createThunderstorm(Bob bob) {
 		final Thunderstorm thunderstorm = new Thunderstorm(bob.getPosition().x, bob.getPosition().y, bob.getDirection(), bob.getPlayerName());
 		gameObjects.add(thunderstorm);
 		new java.util.Timer().schedule( 
-		        new java.util.TimerTask() {
-		            @Override
-		            public void run() {
-		            	synchronized (gameObjects) {
-			        		gameObjects.remove(thunderstorm);
+				new java.util.TimerTask() {
+					@Override
+					public void run() {
+						synchronized (gameObjects) {
+							gameObjects.remove(thunderstorm);
 						}
-		            }
-		        }, 
-		        1500 
-		);
+					}
+				}, 
+				1500 
+				);
 	}
 
 	private void blinkBob(Bob bob){
 		final DummyBlinkObject blinkObject = new DummyBlinkObject(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName());
 		gameObjects.add(blinkObject);
-		
+
 		switch (bob.getDirection()) {
 		case EAST:
 			bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
@@ -504,31 +524,31 @@ public class GameWorld {
 			break;
 		}
 		new java.util.Timer().schedule( 
-		        new java.util.TimerTask() {
-		            @Override
-		            public void run() {
-		            	synchronized (gameObjects) {
-			        		gameObjects.remove(blinkObject);
-		            	}
-		            }
-		        }, 
-		        200 
-		);
-		
+				new java.util.TimerTask() {
+					@Override
+					public void run() {
+						synchronized (gameObjects) {
+							gameObjects.remove(blinkObject);
+						}
+					}
+				}, 
+				200 
+				);
+
 	}
-	
+
 	private void createLaser(Bob bob){
 		final Laser laser = new Laser(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName(), bob);
 		gameObjects.add(laser);
-//		new java.util.Timer().schedule( 
-//		        new java.util.TimerTask() {
-//		            @Override
-//		            public void run() {
-//		        		gameObjects.remove(laser);
-//		            }
-//		        }, 
-//		        2000 
-//		);
+		new java.util.Timer().schedule( 
+				new java.util.TimerTask() {
+					@Override
+					public void run() {
+						gameObjects.remove(laser);
+					}
+				}, 
+				2000 
+				);
 	}
 
 	private void createFlyingSword(Bob bob) {

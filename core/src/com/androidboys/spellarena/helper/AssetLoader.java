@@ -345,7 +345,7 @@ public class AssetLoader {
 		});
 		
 
-         laserAnimation = new Animation(0.06f, new TextureRegion[]{
+         laserAnimation = new Animation(0.1f, new TextureRegion[]{
 				new TextureRegion(laserTexture, 0, 200, 198, 25),
 				new TextureRegion(laserTexture, 0, 175, 198, 25),
                 new TextureRegion(laserTexture, 0, 150, 198, 25),
