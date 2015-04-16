@@ -34,29 +34,36 @@ Touch the screen to cast a spell on enemy (or on self).
 __Divine Shield (QQQ)__
 > Invulnerable.
 > Duration: 1.5s
+> Cooldown: 5s
 
 __Haste (QQW)__
 > Increase speed to 300.
 > Duration: 1s
+> Cooldown: 5s
 
 __Blink (QQE)__
 > Push Bob 100 distance ahead.
+> Cooldown: 2s
 
 __Tornado (WWQ)__
 > Create a tornado, with speed 300.
 > Damage: 200.
+> Cooldown: 5s? (The CD in game seems faster)
 
 __Thunderstorm (WWW)__
-> Create a thunderstorm with at the distance of 150.
+> Create a thunderstorm at the distance of 150.
 > Damage: ?
 > Duration: 1.5s
+> Cooldown: 5s
 
 __Spark (WWE)__
 > Create a boomerang, with speed 300.
 > Damage: 200
+> Cooldown: 5s
 
 __Mine (EEQ)__
 > (TODO)
+> Cooldown: 5s
 
 __Laser (EEW)__
 > Create a laser.
@@ -65,12 +72,14 @@ __Laser (EEW)__
 > Duration: ?
 
 __Firewall (EEE)__
-> Create a firewall in front of Bob.
+> Create a firewall in front of Bob, with speed 85
 > Damage: ?
+> Cooldown: 5s
 
 __Bladestorm (QWE)__
-> Create three flying swords around Bob, with angular velocity of 3
+> Create three flying swords around Bob, with angular velocity of 3 and an increasing radius
 > Damage: 300
+> Cooldown: 5s
 
 ## LibGDX Classes and Interfaces
 `com.badlogic.gdx.Gdx`
