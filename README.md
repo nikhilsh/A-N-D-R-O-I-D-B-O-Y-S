@@ -17,7 +17,9 @@ Two players will fight against each other with their own characters in an arena.
 
 The player can control the character with the controller located at the bottom left corner of the screen, and attack the enemy or heal self with spells. Each spell can be invoked with a unique combination of three elements -- Quas, Wex, Exort. There are 10 different spells in game.
 
-Touch the screen to cast a spell on enemy (or on self).
+When a combination of Quas, Wex and Exort is valid, the corresponding ability will be displayed on the top right corner of the screen. If the ability is not ready, cooldown will be displayed at the same place.
+
+Touch the screen to cast a spell on enemy.
 
 ### Spells
 * QQQ = Divine Shield
