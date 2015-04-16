@@ -21,64 +21,56 @@ Touch the screen to cast a spell on enemy (or on self).
 
 ### Spells
 * QQQ = Divine Shield
-* QQW = Blink
-* QQE = Mine
-* WWQ = Stasis Trap
-* WWW = Atos
-* WWE = Acid
-* EEQ = Fan of Knives
-* EEW = Dark Pact
-* EEE = Laser
-* QWE = Sprout
+* QQW = Haste
+* QQE = Blink
+* WWQ = Tornado
+* WWW = Thunderstorm
+* WWE = Spark
+* EEQ = Mine
+* EEW = Laser
+* EEE = Firewall
+* QWE = Bladestorm
 
 __Divine Shield (QQQ)__
-> Invulnerable for 3 seconds.
-> Mana cost: 50
-> Cooldown: 5
+> Invulnerable.
+> Duration: 1.5s
 
-__Blink (QQW)__
-> Pushes character 100 units in the direction he is facing.
-> Mana cost: 30
-> Cooldown: 2
+__Haste (QQW)__
+> Increase speed to 300.
+> Duration: 1s
 
-__Mine (QQE)__
-> (to be completed...)
-> Cooldown: 5
+__Blink (QQE)__
+> Push Bob 100 distance ahead.
 
-__Statis Trap (WWQ)__
-> Prohibit enemy's movement for 5 seconds.
-> Cooldown: 5
+__Tornado (WWQ)__
+> Create a tornado, with speed 300.
+> Damage: 200.
 
-__Atos (WWW)__
-> Slows the enemy's movement speed.
-> Enemy's velocity will be slowed down to 100 for 3 seconds.
-> Mana cost: 50
-> Cooldown: 5
+__Thunderstorm (WWW)__
+> Create a thunderstorm with at the distance of 150.
+> Damage: ?
+> Duration: 1.5s
 
-__Acid (WWE)__
-> (to be completed...)
+__Spark (WWE)__
+> Create a boomerang, with speed 300.
+> Damage: 200
 
-__Fan of Knives (EEQ)__
-> Damage.
-> Radius: 100
-> Mana cost: 100
-> Cooldown: 5
+__Mine (EEQ)__
+> (TODO)
 
-__Dark Pact (EEW)__
-> Damage.
-> Radius: 300.
-> Effect Delay: 3 sec.
-> Mana cost: 80
-> Cooldown: 5
+__Laser (EEW)__
+> Create a laser.
+> Area: 210x35
+> Damage: 200
+> Duration: ?
 
-__Laser (EEE)__
-> Damage.
-> Area: 300X30
-> Mana cost: 80
-> Cooldown: 5
+__Firewall (EEE)__
+> Create a firewall in front of Bob.
+> Damage: ?
 
-__Sprout (QWE)__
-> Cooldown: 5
+__Bladestorm (QWE)__
+> Create three flying swords around Bob, with angular velocity of 3
+> Damage: 300
 
 ## LibGDX Classes and Interfaces
 `com.badlogic.gdx.Gdx`
