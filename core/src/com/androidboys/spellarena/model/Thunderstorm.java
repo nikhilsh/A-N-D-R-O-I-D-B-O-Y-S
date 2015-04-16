@@ -10,22 +10,22 @@ public class Thunderstorm extends GameObject{
 		super(x, y, playerName);
 		switch(direction){
 			case EAST:
-				this.getPosition().add(100, 0);
+				this.getPosition().add(150, 0);
 				break;
 			case NORTH:
-				this.getPosition().add(0, 100);
+				this.getPosition().add(0, 150);
 				break;
 			case NORTHEAST:
-				this.getPosition().add(71, 71);
+				this.getPosition().add(121, 121);
 				break;
 			case NORTHWEST:
-				this.getPosition().add(-71, 71);
+				this.getPosition().add(-71, 121);
 				break;
 			case SOUTH:
 				this.getPosition().add(0, -100);
 				break;
 			case SOUTHEAST:
-				this.getPosition().add(71, -71);
+				this.getPosition().add(121, -71);
 				break;
 			case SOUTHWEST:
 				this.getPosition().add(-71, -71);
