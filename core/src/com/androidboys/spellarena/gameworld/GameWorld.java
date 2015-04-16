@@ -280,7 +280,7 @@ public class GameWorld {
 	}
 	
 	private void updateGameObjects(float delta) {
-		for(Object o: gameObjects){
+		for(Object o: gameObjects.toArray()){
 			if(o instanceof GameObject){
 				((GameObject) o).update(delta);
 			}
@@ -461,7 +461,9 @@ public class GameWorld {
 		        new java.util.TimerTask() {
 		            @Override
 		            public void run() {
-		        		gameObjects.remove(thunderstorm);
+		            	synchronized (gameObjects) {
+			        		gameObjects.remove(thunderstorm);
+						}
 		            }
 		        }, 
 		        1500 
@@ -505,7 +507,9 @@ public class GameWorld {
 		        new java.util.TimerTask() {
 		            @Override
 		            public void run() {
-		        		gameObjects.remove(blinkObject);
+		            	synchronized (gameObjects) {
+			        		gameObjects.remove(blinkObject);
+		            	}
 		            }
 		        }, 
 		        200 
@@ -528,8 +532,12 @@ public class GameWorld {
 	}
 
 	private void createFlyingSword(Bob bob) {
-		Sword sword = new Sword(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName());
-		gameObjects.add(sword);
+		Sword sword0 = new Sword(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName(),(float) Math.toRadians(0));
+		Sword sword1 = new Sword(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName(),(float) Math.toRadians(120));
+		Sword sword2 = new Sword(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName(),(float) Math.toRadians(240));
+		gameObjects.add(sword0);
+		gameObjects.add(sword1);
+		gameObjects.add(sword2);
 	}
 
 	private void createTornado(Bob bob) {

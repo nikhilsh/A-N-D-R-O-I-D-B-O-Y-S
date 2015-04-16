@@ -298,21 +298,14 @@ public class GameScreen implements Screen{
 		Image panelBackground = new Image(AssetLoader.loadingTexture);
 		roomOwnerLeftPopUp.addActor(panelBackground);
 		panelBackground.setBounds(0, 0, 400, 240);
-		LabelStyle labelStyle = new LabelStyle();
-		labelStyle.font = AssetLoader.playText;
-		labelStyle.fontColor = Color.WHITE;
-		Label popUpLabel = new Label("Host has disconnected", labelStyle);
+		Label popUpLabel = new Label("Host has disconnected", StyleLoader.parchmentLabel);
 		popUpLabel.setAlignment(1);
 		roomOwnerLeftPopUp.addActor(popUpLabel);
 		popUpLabel.setBounds(0f, 
 				0.33f*roomOwnerLeftPopUp.getHeight(), 
 				roomOwnerLeftPopUp.getWidth(), 
 				0.67f*roomOwnerLeftPopUp.getHeight());
-		TextButtonStyle popUpButtonStyle = new TextButtonStyle();
-		popUpButtonStyle.font = AssetLoader.playTextSmall;
-		popUpButtonStyle.pressedOffsetX = 5;
-		popUpButtonStyle.pressedOffsetY = -5;
-		TextButton reconnectButton = new TextButton("Back to lobby", popUpButtonStyle);
+		TextButton reconnectButton = new TextButton("Back to lobby", StyleLoader.smallParchmentButtonStyle);
 		roomOwnerLeftPopUp.addActor(reconnectButton);
 		reconnectButton.setBounds(0f, 
 				0.33f*roomOwnerLeftPopUp.getHeight(), 
@@ -1527,7 +1520,9 @@ public class GameScreen implements Screen{
 
 	public void onOwnerLeft() {
 		gameScreenMediator.disconnect(gameStarted);
-		roomOwnerLeftPopUp.setVisible(true);
+		if(world.isGameEnd()){
+			roomOwnerLeftPopUp.setVisible(true);
+		}
 	}	
 	
 	

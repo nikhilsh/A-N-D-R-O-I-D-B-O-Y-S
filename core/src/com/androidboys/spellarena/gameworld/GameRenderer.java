@@ -190,37 +190,51 @@ public class GameRenderer {
 		batcher.setProjectionMatrix(cam.combined);
 		if(bob!=null)renderBob(runTime);
 		if(!enemies.isEmpty())renderEnemy(runTime);
-
-		for(Object o: world.getGameObjects()){
-			if(o instanceof Tornado){
-				renderTornado(runTime,(Tornado)o);
+		
+		synchronized (world.getGameObjects()) {
+			for(Object o: world.getGameObjects()){
+				if(o instanceof Tornado){
+					renderTornado(runTime,(Tornado)o);
+				}
+				else if(o instanceof Sword){
+					renderSword(runTime,(Sword)o);
+				}
+				else if(o instanceof DummyBlinkObject){
+					renderBlink(runTime, (DummyBlinkObject)o);
+				}
+				else if(o instanceof Laser){
+					renderLaser(runTime, (Laser)o);
+				}
+				else if(o instanceof Thunderstorm){
+					renderThunderstorm(runTime, (Thunderstorm)o);
+				}
 			}
-			else if(o instanceof Sword){
-				renderSword(runTime,(Sword)o);
-			}
-			else if(o instanceof DummyBlinkObject){
-				renderBlink(runTime, (DummyBlinkObject)o);
-			}
-			else if(o instanceof Laser){
-				renderLaser(runTime, (Laser)o);
-			}
-			else if(o instanceof Thunderstorm){
-				renderThunderstorm(runTime, (Thunderstorm)o);
-			}
-		}		
+		}
 	}
 
 	private void renderThunderstorm(float runTime, Thunderstorm o) {
+		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.rect(o.getPosition().x-100,o.getPosition().y-50,200f,100f);
+		shapeRenderer.end();
 		batcher.begin();
-		//		batcher.setColor(Color.WHITE);
+		//FIRST LAYER
+//		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
+//				o.getPosition().x-150,o.getPosition().y-50,100f,200f);
+//		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
+//				o.getPosition().x-50,o.getPosition().y-50,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-				o.getPosition().x-50,o.getPosition().y-50,50f,100f);
+				o.getPosition().x+50,o.getPosition().y-50,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-				o.getPosition().x-100,o.getPosition().y-50,50f,100f);
+				o.getPosition().x+150,o.getPosition().y-50,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-				o.getPosition().x,o.getPosition().y-50,50f,100f);
+				o.getPosition().x+75,o.getPosition().y,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-				o.getPosition().x+50,o.getPosition().y-50,50f,100f);
+				o.getPosition().x+50,o.getPosition().y+50,100f,200f);
+		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
+				o.getPosition().x+150,o.getPosition().y+50,100f,200f);
+
 		batcher.end();
 	}
 
@@ -275,7 +289,6 @@ public class GameRenderer {
 		batcher.draw(reverseDustAnimation.getKeyFrame(runTime), o.getPosition().x-25f,o.getPosition().y-25f,75f,75f);
 
 		batcher.end();
-
 	}
 
 	private void renderLaser(float runTime, Laser o){
@@ -314,11 +327,9 @@ public class GameRenderer {
 			break;
 		case SOUTHWEST:
 			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+5f,laserOwner.getPosition().y+28f, 0, 0, 198f, 25f, 1, 1, 225);
-
 			break;
 		case WEST:
 			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x,laserOwner.getPosition().y+22f, 0, 0, 198f, 25f, 1, 1, 180);
-
 			break;
 		default:
 			break;

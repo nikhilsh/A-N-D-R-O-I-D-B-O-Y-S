@@ -12,12 +12,13 @@ public class Sword extends GameObject{
 	private static final String TAG = "Sword";
 	
 	private float radius = 1;
-	private double rotation = 0;
+	private float rotation;
 //	private float radius = 0;
 	
-	public Sword(float x, float y, String playerName) {
+	public Sword(float x, float y, String playerName, float rotation) {
 		super(x, y, playerName);
-		this.getPosition().add(100, 0);
+		this.rotation = rotation;
+		this.getPosition().add(new Vector2(100, 0).rotate((float) Math.toDegrees(this.rotation)));
 	}
 
 	@Override
