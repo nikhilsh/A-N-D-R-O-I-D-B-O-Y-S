@@ -406,11 +406,11 @@ public class GameWorld {
 			bob.setInvulnerable();
 			//send time remaining and state to server			
 			break;
-		case FORCESTAFF:
+		case BLINK:
 			blinkBob(bob);
 			break;
 
-		case BOOST:
+		case HASTE:
 			bob.setBoosted();
 			
 			break;
@@ -422,7 +422,7 @@ public class GameWorld {
 			//if stasis trap near enemy,
 			break;
 
-		case BLADEFURY:
+		case BLADESTORM:
 			createFlyingSword(bob);
 			//collision with sprite
 
@@ -443,7 +443,7 @@ public class GameWorld {
 			createTornado(bob);
 			break;
 
-		case FANOFKNIVES:
+		case TORNADO:
 
 		default:
 			break;

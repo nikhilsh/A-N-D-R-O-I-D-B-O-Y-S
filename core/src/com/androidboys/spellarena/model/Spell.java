@@ -16,15 +16,15 @@ public class Spell {
 	//List of spells
 	public enum Spells{
 		DIVINESHIELD, 
-		FORCESTAFF,
-		BOOST,
+		BLINK,
+		HASTE,
 		FIREWALL,
-		BLADEFURY,
+		BLADESTORM,
 		THUNDERSTORM,
 		MINE,
 		LASER,
 		SPARK,
-		FANOFKNIVES;
+		TORNADO;
 	}
 
 	public static enum State {
@@ -83,19 +83,19 @@ public class Spell {
 			spell = Spells.DIVINESHIELD;
 		}
 		else if (index == 12) { //QQW
-			spell = Spells.BOOST;
+			spell = Spells.HASTE;
 		}
 		else if (index == 21) { //WWQ
-			spell = Spells.FANOFKNIVES;
+			spell = Spells.TORNADO;
 		}
 		else if (index == 30) { //WWW
 			spell = Spells.THUNDERSTORM;
 		} 
 		else if (index == 102) { //QQE
-			spell = Spells.FORCESTAFF;
+			spell = Spells.BLINK;
 		}
 		else if (index == 111) { //QWE
-			spell = Spells.BLADEFURY;
+			spell = Spells.BLADESTORM;
 		}
 		else if (index == 120) { //WWE
 			spell = Spells.SPARK;
@@ -222,13 +222,13 @@ public class Spell {
 		switch (spell) {
 		case DIVINESHIELD:
 			return 0;
-		case FORCESTAFF:
+		case BLINK:
 			return 1;
-		case BOOST:
+		case HASTE:
 			return 2;
 		case FIREWALL:
 			return 3;
-		case BLADEFURY:
+		case BLADESTORM:
 			return 4;
 		case THUNDERSTORM:
 			return 5;
@@ -238,7 +238,7 @@ public class Spell {
 			return 7;
 		case SPARK:
 			return 8;
-		case FANOFKNIVES:
+		case TORNADO:
 			return 9;
 		default:
 			break;

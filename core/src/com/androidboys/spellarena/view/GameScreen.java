@@ -76,17 +76,17 @@ public class GameScreen implements Screen{
 	public static final int MOVEMENT_WEST = 10007;
 	public static final int MOVEMENT_NORTHWEST = 10008;
 	
-	private static float TORNADO_COOLDOWN = 0;
+
 	private static float LASER_COOLDOWN = 0;
 	private static float BLINK_COOLDOWN = 0;
-	private static float FANOFKNIVES_COOLDOWN = 0;
+	private static float TORNADO_COOLDOWN = 0;
 	private static float DIVINESHIELD_COOLDOWN = 0;
-	private static float STASIS_COOLDOWN = 0;
+	private static float FIREWALL_COOLDOWN = 0;
 	private static float MINE_COOLDOWN = 0;
-	private static float ACID_COOLDOWN = 0;
-	private static float DARKPACT_COOLDOWN = 0;
-	private static float SPROUT_COOLDOWN = 0;
-	private static float BOOST_COOLDOWN = 0;
+	private static float SPARK_COOLDOWN = 0;
+	private static float THUNDERSTORM_COOLDOWN = 0;
+	private static float BLADESTORM_COOLDOWN = 0;
+	private static float HASTE_COOLDOWN = 0;
 	
 	protected static final String TAG = "GameScreen";
 	private SpellArena game;
@@ -844,45 +844,45 @@ public class GameScreen implements Screen{
 			if (BLINK_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum =  Spells.FORCESTAFF;
+			spellEnum =  Spells.BLINK;
 			if (playerName == UserSession.getInstance().getUserName()){
 				BLINK_COOLDOWN = 2;
 			}
 			break;		
 		case 2:
-			if (BOOST_COOLDOWN > 0){
+			if (HASTE_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum =  Spells.BOOST;
+			spellEnum =  Spells.HASTE;
 			if (playerName == UserSession.getInstance().getUserName()){
-				BOOST_COOLDOWN = 5;
+				HASTE_COOLDOWN = 5;
 			}
 			break;		
 		case 3:
-			if (STASIS_COOLDOWN > 0){
+			if (FIREWALL_COOLDOWN > 0){
 				return false;
 			}
 			spellEnum =  Spells.FIREWALL;
 			if (playerName == UserSession.getInstance().getUserName()){
-				STASIS_COOLDOWN = 5;
+				FIREWALL_COOLDOWN = 5;
 			}
 			break;		
 		case 4:
-			if (SPROUT_COOLDOWN > 0){
+			if (BLADESTORM_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum =  Spells.BLADEFURY;
+			spellEnum =  Spells.BLADESTORM;
 			if (playerName == UserSession.getInstance().getUserName()){
-				SPROUT_COOLDOWN = 5;
+				BLADESTORM_COOLDOWN = 5;
 			}
 			break;		
 		case 5:
-			if (DARKPACT_COOLDOWN > 0){
+			if (THUNDERSTORM_COOLDOWN > 0){
 				return false;
 			}
 			spellEnum =  Spells.THUNDERSTORM;
 			if (playerName == UserSession.getInstance().getUserName()){
-				DARKPACT_COOLDOWN = 5;
+				THUNDERSTORM_COOLDOWN = 5;
 			}
 			break;		
 		case 6:
@@ -904,21 +904,21 @@ public class GameScreen implements Screen{
 			}
 			break;		
 		case 8:
-			if (ACID_COOLDOWN > 0){
+			if (SPARK_COOLDOWN > 0){
 				return false;
 			}
 			spellEnum =  Spells.SPARK;
 			if (playerName == UserSession.getInstance().getUserName()){
-				ACID_COOLDOWN = 5;
+				SPARK_COOLDOWN = 5;
 			}
 			break;		
 		case 9:
-			if (FANOFKNIVES_COOLDOWN > 0){
+			if (TORNADO_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum = Spells.FANOFKNIVES;
+			spellEnum = Spells.TORNADO;
 			if (playerName == UserSession.getInstance().getUserName()){
-				FANOFKNIVES_COOLDOWN = 5;
+				TORNADO_COOLDOWN = 5;
 			}
 			break;		
 		default:
@@ -1167,17 +1167,17 @@ public class GameScreen implements Screen{
 		 if (TORNADO_COOLDOWN>0){
 			 TORNADO_COOLDOWN -= delta;
 		 }
-		 if (ACID_COOLDOWN>0){
-			 ACID_COOLDOWN -= delta;
+		 if (SPARK_COOLDOWN>0){
+			 SPARK_COOLDOWN -= delta;
 		 }
-		 if (BOOST_COOLDOWN>0){
-			 BOOST_COOLDOWN -= delta;
+		 if (HASTE_COOLDOWN>0){
+			 HASTE_COOLDOWN -= delta;
 		 }
 		 if (DIVINESHIELD_COOLDOWN>0){
 			 DIVINESHIELD_COOLDOWN -= delta;
 		 }
-		 if (STASIS_COOLDOWN>0){
-			 STASIS_COOLDOWN -= delta;
+		 if (FIREWALL_COOLDOWN>0){
+			 FIREWALL_COOLDOWN -= delta;
 		 }
 		 if (BLINK_COOLDOWN>0){
 			 BLINK_COOLDOWN -= delta;
@@ -1185,14 +1185,14 @@ public class GameScreen implements Screen{
 		 if (MINE_COOLDOWN>0){
 			 MINE_COOLDOWN-= delta;
 		 }
-		 if (SPROUT_COOLDOWN>0){
-			 SPROUT_COOLDOWN -= delta;
+		 if (BLADESTORM_COOLDOWN>0){
+			 BLADESTORM_COOLDOWN -= delta;
 		 }
-		 if (FANOFKNIVES_COOLDOWN>0){
-			 FANOFKNIVES_COOLDOWN -= delta;
+		 if (TORNADO_COOLDOWN>0){
+			 TORNADO_COOLDOWN -= delta;
 		 }
-		 if (DARKPACT_COOLDOWN>0){
-			 DARKPACT_COOLDOWN -= delta;
+		 if (THUNDERSTORM_COOLDOWN>0){
+			 THUNDERSTORM_COOLDOWN -= delta;
 		 }
 		 if (LASER_COOLDOWN>0){
 			 LASER_COOLDOWN -= delta;
@@ -1214,40 +1214,40 @@ public class GameScreen implements Screen{
 			spellName = "Divine Shield " + spellCountdown;
 			break;
 		case 12:
+			spellCountdown = ((HASTE_COOLDOWN <= 0) ? "Ready" : ""+((int)HASTE_COOLDOWN+1));
+			spellName = "Haste " + spellCountdown;
+			break;
+		case 21:
+			spellCountdown = ((TORNADO_COOLDOWN <= 0) ? "Ready" : ""+((int)TORNADO_COOLDOWN+1));
+			spellName = "Tornado " +  spellCountdown;
+			break;
+		case 30:
+			spellCountdown = ((THUNDERSTORM_COOLDOWN <= 0) ? "Ready" : ""+((int)THUNDERSTORM_COOLDOWN+1));
+			spellName = "Thunderstorm " + spellCountdown;
+			break;
+		case 102:
 			spellCountdown = ((BLINK_COOLDOWN <= 0) ? "Ready" : ""+((int)BLINK_COOLDOWN+1));
 			spellName = "Blink " + spellCountdown;
 			break;
-		case 21:
-			spellCountdown = ((STASIS_COOLDOWN <= 0) ? "Ready" : ""+((int)STASIS_COOLDOWN+1));
-			spellName = "Stasis Trap " +  spellCountdown;
-			break;
-		case 30:
-			spellCountdown = ((BOOST_COOLDOWN <= 0) ? "Ready" : ""+((int)BOOST_COOLDOWN+1));
-			spellName = "Boost " + spellCountdown;
-			break;
-		case 102:
-			spellCountdown = ((MINE_COOLDOWN <= 0) ? "Ready" : ""+((int)MINE_COOLDOWN+1));
-			spellName = "Mine " + spellCountdown;
-			break;
 		case 111:
-			spellCountdown = ((SPROUT_COOLDOWN <= 0) ? "Ready" : ""+((int)SPROUT_COOLDOWN+1));
-			spellName = "Blade fury " +  spellCountdown;
+			spellCountdown = ((BLADESTORM_COOLDOWN <= 0) ? "Ready" : ""+((int)BLADESTORM_COOLDOWN+1));
+			spellName = "Bladestorm" +  spellCountdown;
 			break;
 		case 120:
-			spellCountdown = ((ACID_COOLDOWN <= 0) ? "Ready" : ""+((int)ACID_COOLDOWN+1));
-			spellName = "Acid " + spellCountdown;
+			spellCountdown = ((SPARK_COOLDOWN <= 0) ? "Ready" : ""+((int)SPARK_COOLDOWN+1));
+			spellName = "Spark " + spellCountdown;
 			break;
 		case 201:
-			spellCountdown = ((FANOFKNIVES_COOLDOWN <= 0) ? "Ready" : ""+((int)FANOFKNIVES_COOLDOWN+1));
-			spellName = "Fan Of Knives " +  spellCountdown;
+			spellCountdown = ((MINE_COOLDOWN <= 0) ? "Ready" : ""+((int)MINE_COOLDOWN+1));
+			spellName = "Mine " +  spellCountdown;
 			break;
 		case 210:
-			spellCountdown = ((DARKPACT_COOLDOWN <= 0) ? "Ready" : ""+((int)DARKPACT_COOLDOWN+1));
-			spellName = "Dark Pact " +  spellCountdown;
+			spellCountdown = ((LASER_COOLDOWN <= 0) ? "Ready" : ""+((int)LASER_COOLDOWN+1));
+			spellName = "Laser " +  spellCountdown;
 			break;
 		case 300:
-			spellCountdown = ((LASER_COOLDOWN <= 0) ? "Ready" : ""+((int)LASER_COOLDOWN+1));
-			spellName = "Laser " + spellCountdown;
+			spellCountdown = ((FIREWALL_COOLDOWN <= 0) ? "Ready" : ""+((int)FIREWALL_COOLDOWN+1));
+			spellName = "Firewall " + spellCountdown;
 			break;
 		default:
 			spellName = "";
