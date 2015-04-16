@@ -408,12 +408,8 @@ public class GameWorld {
 		case DIVINESHIELD:
 			bob.setInvulnerable();
 			break;
-<<<<<<< HEAD
+
 		case BLINK:
-=======
-			
-		case FORCESTAFF:
->>>>>>> deed21e886e6cc8a6c9880605616d63a7dd29ad8
 			blinkBob(bob);
 			break;
 
@@ -449,15 +445,11 @@ public class GameWorld {
 			createLaser(bob);
 			break;
 
-<<<<<<< HEAD
-		case TORNADO:
 
-=======
-		case FANOFKNIVES:
+		case TORNADO:
 			createTornado(bob);
 			break;
 			
->>>>>>> deed21e886e6cc8a6c9880605616d63a7dd29ad8
 		default:
 			break;
 		}
