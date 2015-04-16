@@ -9,7 +9,9 @@ import com.androidboys.spellarena.gameworld.GameFactory.GameModel;
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.mediators.GameScreenMediator;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.Bob.Direction;
 import com.androidboys.spellarena.model.DummyBlinkObject;
+import com.androidboys.spellarena.model.Firewall;
 import com.androidboys.spellarena.model.GameObject;
 import com.androidboys.spellarena.model.Laser;
 import com.androidboys.spellarena.model.Spell;
@@ -17,6 +19,7 @@ import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.model.Sword;
 import com.androidboys.spellarena.model.Thunderstorm;
 import com.androidboys.spellarena.model.Tornado;
+import com.androidboys.spellarena.model.Boomerang;
 import com.androidboys.spellarena.session.UserSession;
 import com.androidboys.spellarena.view.GameScreen;
 import com.badlogic.gdx.Gdx;
@@ -92,6 +95,13 @@ public class GameWorld {
 					}
 				}
 			}
+			if(object instanceof Boomerang) {
+				if(((Boomerang) object).checkFinished()){
+					synchronized (gameObjects) {
+						gameObjects.remove(object);
+					}
+				}
+			}
 		}
 	}
 	
@@ -102,7 +112,8 @@ public class GameWorld {
 			for(Object object: gameObjects.toArray()){
 //				Gdx.app.log(TAG,"Checking object collision: "+object);
 				GameObject gameObject = (GameObject)object;
-				if (bob.getbobRect().overlaps(gameObject.getRectangle()) && !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
+				if (bob.getbobRect().overlaps(gameObject.getRectangle()) 
+						&& !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
 //					Gdx.app.log(TAG,"Colliding");
 					if (object instanceof Tornado){
 						damage += 200f;
@@ -110,8 +121,10 @@ public class GameWorld {
 						damage += 300f;
 					} else if (object instanceof Laser){
 						damage += 200f;
+					} else if (object instanceof Boomerang){
+						damage += 200f;
 					}
-				}
+				} 
 			}
 			if(!bob.takeDamage(damage*delta)){
 				if(UserSession.getInstance().isServer()){
@@ -399,11 +412,7 @@ public class GameWorld {
 		Bob bob = getPlayerModel(playerName);
 		switch (spellEnum) {
 		case SPARK:
-			//consider changing
-			//check for collision
-			//send position and time remaining to server
-			//display on UI
-			//clear on screen
+			castSpark(bob);
 			break;
 		case DIVINESHIELD:
 			bob.setInvulnerable();
@@ -418,10 +427,7 @@ public class GameWorld {
 			break;
 
 		case FIREWALL:
-
-			//collision with sprite model (+100 radius)
-			//insert mine at bob position
-			//if stasis trap near enemy,
+			castFirewall(bob);
 			break;
 
 		case BLADESTORM:
@@ -454,6 +460,59 @@ public class GameWorld {
 			break;
 		}
 	}
+	private void castFirewall(Bob bob) {
+		Direction direction = bob.getDirection();
+		float rotation = 0;
+		switch(direction){
+		case EAST:
+			rotation = 0;
+			break;
+		case NORTH:
+			rotation = 90;
+			break;
+		case NORTHEAST:
+			rotation = 45;
+			break;
+		case NORTHWEST:
+			rotation = 135;
+			break;
+		case SOUTH:
+			rotation = 90;
+			break;
+		case SOUTHEAST:
+			rotation = 135;
+			break;
+		case SOUTHWEST:
+			rotation = 45;
+			break;
+		case WEST:
+			rotation = 0;
+			break;
+		default:
+			break;	
+		}
+		Vector2 vect = new Vector2(0,250).rotate(rotation).scl(1/6f);
+		synchronized (gameObjects) {
+			gameObjects.add(new Firewall(bob.getPosition().x, bob.getPosition().y, 
+					bob.getDirection(), bob.getPlayerName()));
+			for(int i = 1; i<4 ; i++){
+				gameObjects.add(new Firewall(bob.getPosition().x+i*vect.x, bob.getPosition().y+i*vect.y, 
+						bob.getDirection(), bob.getPlayerName()));
+				gameObjects.add(new Firewall(bob.getPosition().x-i*vect.x, bob.getPosition().y-i*vect.y, 
+						bob.getDirection(), bob.getPlayerName()));
+			}
+		}
+
+	}
+
+	private void castSpark(Bob bob) {
+		Boomerang boomerang = new Boomerang(bob.getPosition().x, 
+				bob.getPosition().y, bob.getDirection(), bob.getPlayerName(), bob);
+		synchronized (gameObjects) {
+			gameObjects.add(boomerang);
+		}
+	}
+
 	private void createThunderstorm(Bob bob) {
 		final Thunderstorm thunderstorm = new Thunderstorm(bob.getPosition().x, bob.getPosition().y, bob.getDirection(), bob.getPlayerName());
 		gameObjects.add(thunderstorm);

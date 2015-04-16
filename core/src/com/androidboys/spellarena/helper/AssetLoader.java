@@ -60,6 +60,9 @@ public class AssetLoader {
 	public static Texture thunderstormTexture;
 	public static TextureRegion[] thunderstormAnimation;
 	
+	public static Texture fireTexture;
+	public static Animation fireAnimation;
+	
 	public static Texture greenTexture, redTexture;
 
 	public static BitmapFont header, playText, playTextSmall, swordText, parchmentText, smallParchmentText;
@@ -85,6 +88,7 @@ public class AssetLoader {
 		manager.load("sprites/laser.png", Texture.class, param);
 		manager.load("sprites/explode.png", Texture.class, param);
 		manager.load("sprites/lightning.png", Texture.class, param);
+		manager.load("sprites/fire.GIF", Texture.class, param);
 		
 		manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
 		manager.load("fonts/header.TTF",FreeTypeFontGenerator.class);
@@ -180,6 +184,9 @@ public class AssetLoader {
 		}
 		if(thunderstormTexture == null){
 			thunderstormTexture = manager.get("sprites/lightning.png",Texture.class);
+		}
+		if(fireTexture == null){
+			fireTexture = manager.get("sprites/fire.GIF",Texture.class);
 		}
 		if(map == null){
 			map = manager.get("maps/Dungeon.tmx",TiledMap.class);
@@ -361,9 +368,15 @@ public class AssetLoader {
               new TextureRegion(thunderstormTexture, 43, 0, 43, 213),
 		      new TextureRegion(thunderstormTexture, 86, 0, 43, 213),
               new TextureRegion(thunderstormTexture, 129, 0, 43, 213),
-
          };
 
+        fireAnimation = new Animation(0.06f, new TextureRegion[]{
+				new TextureRegion(fireTexture, 0, 0, 49, 94),
+				new TextureRegion(fireTexture, 49, 0, 49, 94),
+				new TextureRegion(fireTexture, 98, 0, 49, 94),
+				new TextureRegion(fireTexture, 147, 0, 49, 94),
+		});
+        
 		northBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northEastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		eastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
@@ -380,6 +393,7 @@ public class AssetLoader {
 		dustAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		reverseDustAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		laserAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+		fireAnimation.setPlayMode(Animation.PlayMode.LOOP);
 	}
 
 	private static void loadSprites(){
