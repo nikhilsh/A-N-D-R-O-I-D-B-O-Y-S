@@ -8,13 +8,14 @@ import com.badlogic.gdx.Gdx;
 public class CreateGameCommand extends Command{
 
 	private static final String TAG = "CreateGameCommand";
-	private static String ip;
-	private boolean serverReady;
+	private String ip;
+	private long random;
 	
 	//Format: {"t":timestamp_of_command, "command": 100, "fromUser":user_name, "ip": ip}
 	@Override
 	protected void serializeCustomFields(JSONObject json) throws JSONException {	
 		json.put("ip", ip);
+		json.put("random", getRandom());
 	}
 
 	@Override
@@ -27,6 +28,7 @@ public class CreateGameCommand extends Command{
 		try{
 			command.parseCommonFields(json);
 			command.ip = json.getString("ip");
+			command.setRandom(json.getLong("random"));
 		} catch (JSONException e){
 			Gdx.app.log(TAG, e.toString());
 			return new UndefinedCommand(json.toString());
@@ -40,5 +42,13 @@ public class CreateGameCommand extends Command{
 
 	public String getIP() {
 		return ip;
+	}
+
+	public long getRandom() {
+		return random;
+	}
+
+	public void setRandom(long random) {
+		this.random = random;
 	}
 }

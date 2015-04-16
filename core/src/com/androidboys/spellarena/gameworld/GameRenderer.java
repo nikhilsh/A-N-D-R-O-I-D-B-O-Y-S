@@ -8,9 +8,11 @@ import org.json.JSONObject;
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.DummyBlinkObject;
+import com.androidboys.spellarena.model.Firewall;
 import com.androidboys.spellarena.model.GameObject;
 import com.androidboys.spellarena.model.Laser;
 import com.androidboys.spellarena.model.Spell;
+import com.androidboys.spellarena.model.Boomerang;
 import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.model.Sunstrike;
 import com.androidboys.spellarena.model.Sword;
@@ -63,7 +65,8 @@ public class GameRenderer {
 	northBobAnimation, northEastBobAnimation, eastBobAnimation, southEastBobAnimation;
 	private Animation bobDeathAnimation;	
 
-	private Animation tornadoAnimation, shieldAnimation, swordAnimation, dustAnimation, reverseDustAnimation, laserAnimation;
+	private Animation tornadoAnimation, shieldAnimation, swordAnimation, dustAnimation, 
+	reverseDustAnimation, laserAnimation, fireAnimation;
 	TextureRegion[] thunderstormAnimation;
 
 	private ShaderProgram defaultShader;
@@ -158,6 +161,7 @@ public class GameRenderer {
 		swordAnimation = AssetLoader.swordAnimation;
 		laserAnimation = AssetLoader.laserAnimation;
 		thunderstormAnimation = AssetLoader.thunderstormAnimation;
+		fireAnimation = AssetLoader.fireAnimation;
 	}
 
 	public void initGameObjects(){
@@ -195,7 +199,7 @@ public class GameRenderer {
 		synchronized (world.getGameObjects()) {
 			for(Object o: world.getGameObjects()){
 				if(o instanceof Tornado){
-					renderTornado(runTime,(Tornado)o);
+					renderProjectile(runTime,(Tornado)o);
 				}
 				else if(o instanceof Sword){
 					renderSword(runTime,(Sword)o);
@@ -210,10 +214,48 @@ public class GameRenderer {
 					renderThunderstorm(runTime, (Thunderstorm)o);
 				}
 				else if(o instanceof Sunstrike){
-					renderSunstrike(runTime, (Sunstrike)o);
+renderSunstrike(runTime, (Sunstrike)o);
+}
+				else if(o instanceof Boomerang){
+					renderBoomerang(runTime, (Boomerang)o);
+				}
+				else if(o instanceof Firewall){
+					renderFirewall(runTime, (Firewall)o);
 				}
 			}
 		}
+	}
+
+	private void renderFirewall(float runTime, Firewall o) {
+		batcher.begin();
+		batcher.draw(fireAnimation.getKeyFrame(runTime),
+				o.getPosition().x,o.getPosition().y,50f,100f);
+		batcher.end();
+		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.rect(o.getRectangle().x,
+				o.getRectangle().y,
+				o.getRectangle().width,
+				o.getRectangle().height);
+		shapeRenderer.end();
+	}
+
+	private void renderBoomerang(float runTime, Boomerang o) {
+		batcher.begin();
+		batcher.draw(swordAnimation.getKeyFrame(runTime),
+				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
+		batcher.end();
+		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-25,110f,100f);
+		shapeRenderer.end();
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.rect(o.getDestination().x,o.getDestination().y,5,5);
+		shapeRenderer.end();
+		
 	}
 
 	private void renderThunderstorm(float runTime, Thunderstorm o) {
@@ -250,7 +292,7 @@ public class GameRenderer {
 		shapeRenderer.end();
 		batcher.begin();
 		//		batcher.setColor(Color.WHITE);
-		batcher.draw(swordAnimation.getKeyFrame(runTime),
+		batcher.draw(tornadoAnimation.getKeyFrame(runTime),
 				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
 		batcher.end();
 	}
@@ -269,7 +311,7 @@ public class GameRenderer {
 		fbo.end();
 	}
 
-	private void renderTornado(float runTime, Tornado o) {
+	private void renderProjectile(float runTime, Tornado o) {
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLUE);
@@ -277,7 +319,7 @@ public class GameRenderer {
 		shapeRenderer.end();
 		batcher.begin();
 		//		batcher.setColor(Color.WHITE);
-		batcher.draw(tornadoAnimation.getKeyFrame(runTime),
+		batcher.draw(swordAnimation.getKeyFrame(runTime),
 				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
 		batcher.end();
 

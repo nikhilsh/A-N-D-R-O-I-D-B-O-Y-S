@@ -17,68 +17,71 @@ Two players will fight against each other with their own characters in an arena.
 
 The player can control the character with the controller located at the bottom left corner of the screen, and attack the enemy or heal self with spells. Each spell can be invoked with a unique combination of three elements -- Quas, Wex, Exort. There are 10 different spells in game.
 
-Touch the screen to cast a spell on enemy (or on self).
+When a combination of Quas, Wex and Exort is valid, the corresponding ability will be displayed on the top right corner of the screen. If the ability is not ready, cooldown will be displayed at the same place.
+
+Touch the screen to cast a spell on enemy.
 
 ### Spells
 * QQQ = Divine Shield
-* QQW = Blink
-* QQE = Mine
-* WWQ = Stasis Trap
-* WWW = Atos
-* WWE = Acid
-* EEQ = Fan of Knives
-* EEW = Dark Pact
-* EEE = Laser
-* QWE = Sprout
+* QQW = Haste
+* QQE = Blink
+* WWQ = Tornado
+* WWW = Thunderstorm
+* WWE = Spark
+* EEQ = Mine
+* EEW = Laser
+* EEE = Firewall
+* QWE = Bladestorm
 
 __Divine Shield (QQQ)__
-> Invulnerable for 3 seconds.
-> Mana cost: 50
-> Cooldown: 5
+> Invulnerable.
+> Duration: 1.5s
+> Cooldown: 5s
 
-__Blink (QQW)__
-> Pushes character 100 units in the direction he is facing.
-> Mana cost: 30
-> Cooldown: 2
+__Haste (QQW)__
+> Increase speed to 300.
+> Duration: 1s
+> Cooldown: 5s
 
-__Mine (QQE)__
-> (to be completed...)
-> Cooldown: 5
+__Blink (QQE)__
+> Push Bob 100 distance ahead.
+> Cooldown: 2s
 
-__Statis Trap (WWQ)__
-> Prohibit enemy's movement for 5 seconds.
-> Cooldown: 5
+__Tornado (WWQ)__
+> Create a tornado, with speed 300.
+> Damage: 200.
+> Cooldown: 5s? (The CD in game seems faster)
 
-__Atos (WWW)__
-> Slows the enemy's movement speed.
-> Enemy's velocity will be slowed down to 100 for 3 seconds.
-> Mana cost: 50
-> Cooldown: 5
+__Thunderstorm (WWW)__
+> Create a thunderstorm at the distance of 150.
+> Damage: ?
+> Duration: 1.5s
+> Cooldown: 5s
 
-__Acid (WWE)__
-> (to be completed...)
+__Spark (WWE)__
+> Create a boomerang, with speed 300.
+> Damage: 200
+> Cooldown: 5s
 
-__Fan of Knives (EEQ)__
-> Damage.
-> Radius: 100
-> Mana cost: 100
-> Cooldown: 5
+__Mine (EEQ)__
+> (TODO)
+> Cooldown: 5s
 
-__Dark Pact (EEW)__
-> Damage.
-> Radius: 300.
-> Effect Delay: 3 sec.
-> Mana cost: 80
-> Cooldown: 5
+__Laser (EEW)__
+> Create a laser.
+> Area: 210x35
+> Damage: 200
+> Duration: ?
 
-__Laser (EEE)__
-> Damage.
-> Area: 300X30
-> Mana cost: 80
-> Cooldown: 5
+__Firewall (EEE)__
+> Create a firewall in front of Bob, with speed 85
+> Damage: ?
+> Cooldown: 5s
 
-__Sprout (QWE)__
-> Cooldown: 5
+__Bladestorm (QWE)__
+> Create three flying swords around Bob, with angular velocity of 3 and an increasing radius
+> Damage: 300
+> Cooldown: 5s
 
 ## LibGDX Classes and Interfaces
 `com.badlogic.gdx.Gdx`

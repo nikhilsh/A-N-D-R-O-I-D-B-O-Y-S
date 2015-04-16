@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.Random;
 
 import com.androidboys.spellarena.net.model.RoomModel;
 import com.badlogic.gdx.Gdx;
@@ -13,6 +14,8 @@ public class UserSession {
 	private long userId;
 	private String userName;
 	private RoomModel room;
+	private long randomSeed;
+	private Random rng;
 	
 	public static final UserSession INSTANCE = new UserSession();
 	private static final String TAG = "UserSession";
@@ -24,8 +27,14 @@ public class UserSession {
 	private UserSession(){
 		this.userId = generateUserId();
 		this.userName = generateUserName();
+		randomSeed = System.nanoTime();
+		rng = new Random(randomSeed);
 	}
 
+	public void setRandom(long seed){
+		this.rng = new Random(seed);
+	}
+	
 	private String generateUserName() {
 //		return "haohaohao";
 		return "nik "+Long.toString((userId%20));

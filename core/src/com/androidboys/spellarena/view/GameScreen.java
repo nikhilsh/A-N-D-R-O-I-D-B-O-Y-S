@@ -1516,7 +1516,6 @@ public class GameScreen implements Screen{
 		this.serverReady = true;
 	}
 
-
 	public void roomInfoProcessed() {
 		this.roomInfoProcessed = true;
 		if(connectedToServer){
@@ -1535,7 +1534,7 @@ public class GameScreen implements Screen{
 
 	public void onOwnerLeft() {
 		gameScreenMediator.disconnect(gameStarted);
-		if(world.isGameEnd()){
+		if(!world.isGameEnd()){
 			roomOwnerLeftPopUp.setVisible(true);
 		}
 	}	
