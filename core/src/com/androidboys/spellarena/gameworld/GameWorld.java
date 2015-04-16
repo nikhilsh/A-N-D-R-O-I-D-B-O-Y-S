@@ -114,9 +114,7 @@ public class GameWorld {
 				//				Gdx.app.log(TAG,"Checking object collision: "+object);
 				GameObject gameObject = (GameObject)object;
 				if (!UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
-				if (bob.getbobRect().overlaps(gameObject.getRectangle()) 
-						&& !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
-//					Gdx.app.log(TAG,"Colliding");
+					//					Gdx.app.log(TAG,"Colliding");
 					if (gameObject instanceof Laser){
 						boolean isHit = false;
 						for (Rectangle rectangle : ((Laser) gameObject).getRectangleArray()){
@@ -126,13 +124,8 @@ public class GameWorld {
 							}
 						}
 						if (isHit){
-
 							damage += 200f;
 						}
-					} else if (object instanceof Laser){
-						damage += 200f;
-					} else if (object instanceof Boomerang){
-						damage += 300f;
 					}
 					if (bob.getbobRect().overlaps(gameObject.getRectangle()) && !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
 						//					Gdx.app.log(TAG,"Colliding");
@@ -143,6 +136,8 @@ public class GameWorld {
 						} else if (object instanceof Sunstrike){
 							damage += 500f;
 							gameObjects.remove(object);
+						} else if (object instanceof Boomerang){
+							damage += 300f;
 						}
 					}
 				}
@@ -532,11 +527,10 @@ public class GameWorld {
 		}
 	}
 
-private void createSunstrike(Bob bob, float x, float y){
+	private void createSunstrike(Bob bob, float x, float y){
 		Sunstrike sunstrike = new Sunstrike(x, y, bob.getPlayerName());
 		synchronized (gameObjects) {
-		gameObjects.add(sunstrike);
-			gameObjects.add(boomerang);
+			gameObjects.add(sunstrike);
 		}
 	}
 
@@ -591,16 +585,16 @@ private void createSunstrike(Bob bob, float x, float y){
 			break;
 		}
 		new java.util.Timer().schedule( 
-		        new java.util.TimerTask() {
-		            @Override
-		            public void run() {
-		            	synchronized (gameObjects) {
-			        		gameObjects.remove(blinkObject);
-		            	}
-		            }
-		        }, 
-		        200 
-		);	
+				new java.util.TimerTask() {
+					@Override
+					public void run() {
+						synchronized (gameObjects) {
+							gameObjects.remove(blinkObject);
+						}
+					}
+				}, 
+				200 
+				);	
 	}
 
 	private void createLaser(Bob bob){
