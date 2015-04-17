@@ -21,7 +21,7 @@ public class Spell {
 		FIREWALL,
 		BLADESTORM,
 		THUNDERSTORM,
-		MINE,
+		SUNSTRIKE,
 		LASER,
 		SPARK,
 		TORNADO;
@@ -101,7 +101,7 @@ public class Spell {
 			spell = Spells.SPARK;
 		}
 		else if (index == 201) { //EEQ
-			spell = Spells.MINE;
+			spell = Spells.SUNSTRIKE;
 		}
 		else if (index == 210) { //EEW
 			spell = Spells.LASER;
@@ -232,7 +232,7 @@ public class Spell {
 			return 4;
 		case THUNDERSTORM:
 			return 5;
-		case MINE:
+		case SUNSTRIKE:
 			return 6;
 		case LASER:
 			return 7;

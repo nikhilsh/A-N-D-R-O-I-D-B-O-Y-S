@@ -47,7 +47,7 @@ public class Bob {
 	//Speed
 	private float MAX_SPEED = 100f;
 	//Max HP
-	public static final float MAX_HEALTH = 500f;
+	public static final float MAX_HEALTH = 2000f;
 
 	//Position
 	private Vector2 position;
@@ -86,7 +86,7 @@ public class Bob {
 	private ArrayList<Object> gameObjects;
 	private float shieldTimer;
 	//HP
-	private float health = 500f;
+	private float health = 2000f;
 	private float boostTimer;
 	//Boosted buff
 	private boolean boosted;
@@ -172,10 +172,16 @@ public class Bob {
 	 * Update state between alive and running
 	 */
 	private void updateState(){
-		if(this.velocity.isZero()){
-			state = STATE_ALIVE;
-		} else {
-			state = STATE_RUNNING;
+		if(state != STATE_DEAD){
+			if(this.velocity.isZero()){
+				synchronized (this) {
+					state = STATE_ALIVE;
+				}
+			} else {
+				synchronized (this) {
+					state = STATE_RUNNING;
+				}
+			}
 		}
 	}
 
@@ -695,7 +701,7 @@ public class Bob {
 	 * Duration: 1
 	 * Max speed increases to 300
 	 */
-	public void setBoosted(){
+	public void setHasted(){
 		this.boosted = true;
 		this.boostTimer = 1f;
 		this.MAX_SPEED = 300f;
@@ -711,7 +717,9 @@ public class Bob {
 			health  -= f; //Remove HP
 			if(health < 0){ //HP is lower than 0
 				health = 0; //HP becomes 0
-				state = STATE_DEAD; //Dead
+				synchronized (this) {
+					state = STATE_DEAD; //Dead
+				}
 				return false;
 			}
 		}

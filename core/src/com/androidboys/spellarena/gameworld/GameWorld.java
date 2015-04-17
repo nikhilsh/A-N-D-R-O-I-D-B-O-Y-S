@@ -18,7 +18,7 @@ import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.model.Sword;
 import com.androidboys.spellarena.model.Thunderstorm;
-import com.androidboys.spellarena.model.Tornado;
+import com.androidboys.spellarena.model.Projectile;
 import com.androidboys.spellarena.model.Boomerang;
 import com.androidboys.spellarena.session.UserSession;
 import com.androidboys.spellarena.view.GameScreen;
@@ -75,7 +75,6 @@ public class GameWorld {
 	private void updatePlayerModels(float delta){
 		for(Bob bob: playerModels.values()){
 			if (bob.getState() != Bob.STATE_DEAD){
-
 				updatePlayerModel(bob, delta);
 			}
 		}
@@ -115,7 +114,7 @@ public class GameWorld {
 				if (bob.getbobRect().overlaps(gameObject.getRectangle()) 
 						&& !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
 //					Gdx.app.log(TAG,"Colliding");
-					if (object instanceof Tornado){
+					if (object instanceof Projectile){
 						damage += 200f;
 					} else if (object instanceof Sword){
 						damage += 300f;
@@ -123,12 +122,17 @@ public class GameWorld {
 						damage += 200f;
 					} else if (object instanceof Boomerang){
 						damage += 200f;
+					} else if (object instanceof Firewall){
+						damage += 500f;
+					} else if (object instanceof Thunderstorm){
+						damage += 500f;
 					}
 				} 
 			}
 			if(!bob.takeDamage(damage*delta)){
 				if(UserSession.getInstance().isServer()){
 					if(this.isGameEnd()){
+						Gdx.app.log(TAG, "Host dead, game is lost");
 						mediator.endGame(getWinner());
 					}
 				}
@@ -368,6 +372,7 @@ public class GameWorld {
 		bob.setUpdateDetails(timestamp, position, velocity);
 		if((!bob.updateHealth(health))&&UserSession.getInstance().isServer()){
 			if(isGameEnd()){
+				Gdx.app.log("TAG", "Enemy died");
 				mediator.endGame(getWinner());
 			}
 		};
@@ -376,8 +381,10 @@ public class GameWorld {
 
 	private String getWinner() {
 		for(String playerName: playerModels.keySet()){
-			if(playerModels.get(playerName).getState() == Bob.STATE_ALIVE){
-				return playerName;
+			synchronized (playerModels.get(playerName)) {
+				if(playerModels.get(playerName).getState() != Bob.STATE_ALIVE){
+					return playerName;
+				}
 			}
 		}
 		return null;
@@ -395,12 +402,13 @@ public class GameWorld {
 	}
 	
 	public boolean isGameEnd() {
-
         int playingUser = 0;
         for (Bob playerModel : playerModels.values()) {
-            if (playerModel.getState() != Bob.STATE_DEAD) {
-                playingUser++;
-            }
+        	synchronized (playerModel) {
+                if (playerModel.getState() != Bob.STATE_DEAD) {
+                    playingUser++;
+                }
+			}
         }
 		Gdx.app.log(TAG,"isGameEnd: "+(playingUser <= 1));
         return playingUser <= 1;
@@ -412,39 +420,28 @@ public class GameWorld {
 		Bob bob = getPlayerModel(playerName);
 		switch (spellEnum) {
 		case SPARK:
-			castSpark(bob);
+			castSpectralThrow(bob);
 			break;
 		case DIVINESHIELD:
 			bob.setInvulnerable();
 			break;
-
 		case BLINK:
 			blinkBob(bob);
 			break;
-
 		case HASTE:
-			bob.setBoosted();
+			bob.setHasted();
 			break;
-
 		case FIREWALL:
 			castFirewall(bob);
 			break;
-
 		case BLADESTORM:
 			createFlyingSword(bob);
-			//collision with sprite
-
-			//need add new collision			
 			break;
-
 		case THUNDERSTORM:
 			createThunderstorm(bob);
 			break;
+		case SUNSTRIKE:
 
-		case MINE:
-			//collision with sprite, decrement health
-
-			//insert mine at bob position
 			break;
 
 		case LASER:
@@ -505,7 +502,7 @@ public class GameWorld {
 
 	}
 
-	private void castSpark(Bob bob) {
+	private void castSpectralThrow(Bob bob) {
 		Boomerang boomerang = new Boomerang(bob.getPosition().x, 
 				bob.getPosition().y, bob.getDirection(), bob.getPlayerName(), bob);
 		synchronized (gameObjects) {
@@ -525,7 +522,7 @@ public class GameWorld {
 						}
 		            }
 		        }, 
-		        1500 
+		        4000 
 		);
 	}
 
@@ -599,8 +596,40 @@ public class GameWorld {
 	}
 
 	private void createTornado(Bob bob) {
-		Tornado tornado = new Tornado(bob.getPosition().x, bob.getPosition().y, bob.getDirection(), bob.getPlayerName());
-		gameObjects.add(tornado);
+		float rotation = 0;
+		switch(bob.getDirection()){
+			case NORTH:
+				rotation = 90;
+				break;
+			case NORTHEAST:
+				rotation = 45;
+				break;
+			case NORTHWEST:
+				rotation = 135;
+				break;
+			case SOUTH:
+				rotation = 270;
+				break;
+			case SOUTHEAST:
+				rotation = 325;
+				break;
+			case SOUTHWEST:
+				rotation = 225;
+				break;
+			case WEST:
+				rotation = 180;
+				break;
+			default:
+				break;
+		}
+		Projectile tornado0 = new Projectile(bob.getPosition().x, bob.getPosition().y, rotation-15, bob.getPlayerName());
+		Projectile tornado1 = new Projectile(bob.getPosition().x, bob.getPosition().y, rotation, bob.getPlayerName());
+		Projectile tornado2 = new Projectile(bob.getPosition().x, bob.getPosition().y, rotation+15, bob.getPlayerName());
+		synchronized (gameObjects) {
+			gameObjects.add(tornado0);
+			gameObjects.add(tornado1);
+			gameObjects.add(tornado2);
+		}
 	}
 
 	public ArrayList<Object> getGameObjects() {

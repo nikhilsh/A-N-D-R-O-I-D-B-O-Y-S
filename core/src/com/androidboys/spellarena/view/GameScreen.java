@@ -882,7 +882,7 @@ public class GameScreen implements Screen{
 			if (MINE_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum =  Spells.MINE;
+			spellEnum =  Spells.SUNSTRIKE;
 			if (playerName == UserSession.getInstance().getUserName()){
 				MINE_COOLDOWN = 5;
 			}
@@ -1511,10 +1511,12 @@ public class GameScreen implements Screen{
 
 	public void displayWinGamePopup() {
 		winGamePopUp.setVisible(true);
+		gameStarted = false;
 	}
 
 	public void displayLoseGamePopup(String winnerName) {
 		loseGamePopUp.setVisible(true);
+		gameStarted = false;
 	}
 
 	public void onOwnerLeft() {

@@ -16,7 +16,7 @@ import com.androidboys.spellarena.model.Boomerang;
 import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.model.Sword;
 import com.androidboys.spellarena.model.Thunderstorm;
-import com.androidboys.spellarena.model.Tornado;
+import com.androidboys.spellarena.model.Projectile;
 import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.session.UserSession;
 import com.badlogic.gdx.Gdx;
@@ -198,8 +198,8 @@ public class GameRenderer {
 		
 		synchronized (world.getGameObjects()) {
 			for(Object o: world.getGameObjects()){
-				if(o instanceof Tornado){
-					renderProjectile(runTime,(Tornado)o);
+				if(o instanceof Projectile){
+					renderProjectile(runTime,(Projectile)o);
 				}
 				else if(o instanceof Sword){
 					renderSword(runTime,(Sword)o);
@@ -259,7 +259,7 @@ public class GameRenderer {
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(o.getPosition().x-100,o.getPosition().y-50,200f,100f);
+		shapeRenderer.rect(o.getPosition().x-100,o.getPosition().y-75,200f,112f);
 		shapeRenderer.end();
 		batcher.begin();
 		//FIRST LAYER
@@ -268,15 +268,15 @@ public class GameRenderer {
 //		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
 //				o.getPosition().x-50,o.getPosition().y-50,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-				o.getPosition().x+50,o.getPosition().y-50,100f,200f);
+				o.getPosition().x-125,o.getPosition().y-75,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-				o.getPosition().x+150,o.getPosition().y-50,100f,200f);
+				o.getPosition().x+25,o.getPosition().y-75,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-				o.getPosition().x+75,o.getPosition().y,100f,200f);
+				o.getPosition().x-50,o.getPosition().y-25,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-				o.getPosition().x+50,o.getPosition().y+50,100f,200f);
+				o.getPosition().x+25,o.getPosition().y+25,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-				o.getPosition().x+150,o.getPosition().y+50,100f,200f);
+				o.getPosition().x-125,o.getPosition().y+25,100f,200f);
 
 		batcher.end();
 	}
@@ -308,7 +308,7 @@ public class GameRenderer {
 		fbo.end();
 	}
 
-	private void renderProjectile(float runTime, Tornado o) {
+	private void renderProjectile(float runTime, Projectile o) {
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLUE);

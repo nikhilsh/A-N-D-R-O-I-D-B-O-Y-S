@@ -8,30 +8,31 @@ public class Thunderstorm extends GameObject{
 
 	public Thunderstorm(float x, float y, Direction direction, String playerName) {
 		super(x, y, playerName);
+		float rotation = 0;
 		switch(direction){
 			case EAST:
-				this.getPosition().add(150, 0);
+				this.getPosition().add(300, 25);
 				break;
 			case NORTH:
-				this.getPosition().add(0, 150);
+				this.getPosition().add(15, 300);
 				break;
 			case NORTHEAST:
-				this.getPosition().add(121, 121);
+				this.getPosition().add(212, 212);
 				break;
 			case NORTHWEST:
-				this.getPosition().add(-71, 121);
+				this.getPosition().add(-187, 212);
 				break;
 			case SOUTH:
-				this.getPosition().add(0, -100);
+				this.getPosition().add(15, -275);
 				break;
 			case SOUTHEAST:
-				this.getPosition().add(121, -71);
+				this.getPosition().add(212, -187);
 				break;
 			case SOUTHWEST:
-				this.getPosition().add(-71, -71);
+				this.getPosition().add(-187, -187);
 				break;
 			case WEST:
-				this.getPosition().add(-100, 0);
+				this.getPosition().add(-275, 25);
 				break;
 			default:
 				break;
@@ -41,9 +42,9 @@ public class Thunderstorm extends GameObject{
 	
 	@Override
 	public Rectangle getRectangle() {
-		return new Rectangle(getPosition().x,
-				getPosition().y,
-				50,50);
+		return new Rectangle(getPosition().x-100,
+				getPosition().y-75,
+				200,112);
 	}
 
 }
