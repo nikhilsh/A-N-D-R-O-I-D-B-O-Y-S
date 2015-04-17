@@ -395,7 +395,7 @@ public class GameWorld {
 	private String getWinner() {
 		for(String playerName: playerModels.keySet()){
 			synchronized (playerModels.get(playerName)) {
-				if(playerModels.get(playerName).getState() != Bob.STATE_ALIVE){
+				if(playerModels.get(playerName).getState() != Bob.STATE_DEAD){
 					return playerName;
 				}
 			}
