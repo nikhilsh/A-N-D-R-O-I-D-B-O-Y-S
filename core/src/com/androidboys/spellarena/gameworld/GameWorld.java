@@ -91,7 +91,9 @@ public class GameWorld {
 			if(tiles != null){
 				for(Rectangle tile: tiles){
 					if(tile.overlaps(((GameObject)object).getRectangle()) && !((object instanceof DummyBlinkObject) || (object instanceof  Laser))){
-						gameObjects.remove(object);
+						synchronized (gameObjects) {
+							gameObjects.remove(object);
+						}
 					}
 				}
 			}
@@ -138,7 +140,9 @@ public class GameWorld {
 						damage += 500f;
 					} else if (object instanceof Sunstrike){
 						damage += 500f;
-						gameObjects.remove(object);
+						synchronized (gameObject) {
+							gameObjects.remove(object);
+						}
 					} 
 				}
 			}
@@ -533,7 +537,9 @@ public class GameWorld {
 
 	private void createThunderstorm(Bob bob) {
 		final Thunderstorm thunderstorm = new Thunderstorm(bob.getPosition().x, bob.getPosition().y, bob.getDirection(), bob.getPlayerName());
-		gameObjects.add(thunderstorm);
+		synchronized (gameObjects) {
+			gameObjects.add(thunderstorm);			
+		}
 		new java.util.Timer().schedule( 
 				new java.util.TimerTask() {
 					@Override
@@ -549,8 +555,9 @@ public class GameWorld {
 
 	private void blinkBob(Bob bob){
 		final DummyBlinkObject blinkObject = new DummyBlinkObject(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName());
-		gameObjects.add(blinkObject);
-
+		synchronized (gameObjects) {
+			gameObjects.add(blinkObject);
+		}
 		switch (bob.getDirection()) {
 		case EAST:
 			bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
@@ -595,12 +602,16 @@ public class GameWorld {
 
 	private void createLaser(Bob bob){
 		final Laser laser = new Laser(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName(), bob);
-		gameObjects.add(laser);
+		synchronized (gameObjects) {
+			gameObjects.add(laser);
+		}
 		new java.util.Timer().schedule( 
 				new java.util.TimerTask() {
 					@Override
 					public void run() {
-						gameObjects.remove(laser);
+						synchronized (gameObjects) {
+							gameObjects.remove(laser);
+						}
 					}
 				}, 
 				2000 
@@ -611,9 +622,11 @@ public class GameWorld {
 		Sword sword0 = new Sword(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName(),(float) Math.toRadians(0));
 		Sword sword1 = new Sword(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName(),(float) Math.toRadians(120));
 		Sword sword2 = new Sword(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName(),(float) Math.toRadians(240));
-		gameObjects.add(sword0);
-		gameObjects.add(sword1);
-		gameObjects.add(sword2);
+		synchronized (gameObjects) {
+			gameObjects.add(sword0);
+			gameObjects.add(sword1);
+			gameObjects.add(sword2);
+		}
 	}
 
 	private void createTornado(Bob bob) {
