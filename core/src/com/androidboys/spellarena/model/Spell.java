@@ -67,15 +67,15 @@ public class Spell {
 	 * Calculate the spell according to the state of x,y,z
 	 * x,y,z: Quas is 1, Wex is 10, Exort is 100
 	 * QQQ = Divine Shield
-	 * QQW = Force Staff
-	 * QQE = Mine
-	 * WWQ = Stasis Trap
-	 * WWW = Boost
-	 * WWE = Acid
-	 * EEQ = Fan of Knives
-	 * EEW = Dark Pact
-	 * EEE = Laser
-	 * QWE = Sprout
+	 * QQW = Haste
+	 * QQE = Blink
+	 * WWQ = Tornado
+	 * WWW = Thunderstorm
+	 * WWE = Spark
+	 * EEQ = Mine
+	 * EEW = Laser
+	 * EEE = Firewall
+	 * QWE = Bladestorm
 	 */
 	public void spellSettler(int x, int y, int z) {
 		index = x + y + z;
@@ -112,25 +112,7 @@ public class Spell {
 			return;
 		}
 		this.world.setSpell(spell);
-	}
-	
-	/**
-	 * Cast the specified spell
-	 * Acid (WWE): TODO (I don't understand this)
-	 * Divine Shield (QQQ): Invulnerable for 3 sec. Mana cost: 50
-	 * Force Staff (QQW): Pushes Bob 100 units in the direction he is facing. Mana cost: 30
-	 * Atos (WWW): Slows the enemy's movement speed. (velocity=100, 3 sec) Mana cost: 50.
-	 * Statis Trap (WWQ): Prohibit enemy's movement for 5 sec. (TODO no mana cost?)
-	 * Sprout (QWE): TODO
-	 * Dark Pact (EEW): HP-. Radius: 300. Duration: 3 sec. Mana cost: 80. REPLACE
-	 * Mine (QQE): TODO
-	 * Laser (EEE): HP-. Area: 300X30. Duration: Instantaneous. Mana cost: 80.
-	 * Fan of Knives (EEQ): HP-. Radius: 100. Duration: ???(TODO). Mana cost: 100.
-	 * 
-	 * SUGGESTION: What's the difference between EEW and EEQ (only area?)
-	 */
-	
-	
+	}	
 	
 //	public void castSpell() {
 //		switch (spell) {

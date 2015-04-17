@@ -14,6 +14,7 @@ import com.androidboys.spellarena.model.Laser;
 import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Boomerang;
 import com.androidboys.spellarena.model.Spell.Spells;
+import com.androidboys.spellarena.model.Sunstrike;
 import com.androidboys.spellarena.model.Sword;
 import com.androidboys.spellarena.model.Thunderstorm;
 import com.androidboys.spellarena.model.Projectile;
@@ -79,7 +80,6 @@ public class GameRenderer {
 	private int width;
 	private Texture greenHealthBar;
 	private Texture redHealthBar;
-
 
 
 	private final static Vector3 bright = new Vector3(0.7f, 0.7f, 0.9f);
@@ -213,6 +213,9 @@ public class GameRenderer {
 				else if(o instanceof Thunderstorm){
 					renderThunderstorm(runTime, (Thunderstorm)o);
 				}
+				else if(o instanceof Sunstrike){
+renderSunstrike(runTime, (Sunstrike)o);
+}
 				else if(o instanceof Boomerang){
 					renderBoomerang(runTime, (Boomerang)o);
 				}
@@ -333,46 +336,55 @@ public class GameRenderer {
 
 		batcher.end();
 	}
+	
+	private void renderSunstrike(float runTime, Sunstrike o){
+		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.rect(o.getPosition().x-100,o.getPosition().y-100,200f,200f);
+		shapeRenderer.end();
+	}
 
 	private void renderLaser(float runTime, Laser o){
 		Bob laserOwner = world.getPlayerModel(o.getUsername());
 //		shapeRenderer.setProjectionMatrix(cam.combined);
 //		shapeRenderer.begin(ShapeType.Line);
 //		shapeRenderer.setColor(Color.BLUE);
-//		shapeRenderer.rect(laserOwner.getPosition().x-200f,laserOwner.getPosition().y-7f,190f,35f);
+//		shapeRenderer.rect(laserOwner.getPosition().x+20,laserOwner.getPosition().y-10,20f,25f);
+//		shapeRenderer.rect(laserOwner.getPosition().x+35,laserOwner.getPosition().y-25f,20f,25f);
+//		shapeRenderer.rect(laserOwner.getPosition().x+52,laserOwner.getPosition().y-42.5f,20f,25f);
+//		shapeRenderer.rect(laserOwner.getPosition().x+70,laserOwner.getPosition().y-65.5f,20f,25f);
+//		shapeRenderer.rect(laserOwner.getPosition().x+90,laserOwner.getPosition().y-84f,20f,25f);
+//		shapeRenderer.rect(laserOwner.getPosition().x+110,laserOwner.getPosition().y-107.5f,20f,25f);
+//		shapeRenderer.rect(laserOwner.getPosition().x+130,laserOwner.getPosition().y-120f,20f,25f);
 //		shapeRenderer.end();
 		int sum = 0;
 		batcher.begin();
 		sum += Gdx.graphics.getDeltaTime();
 		switch(laserOwner.getDirection()){
 		case EAST:
-			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+25f,laserOwner.getPosition().y,198f,25f);
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+25f,laserOwner.getPosition().y, 0, 0, 198f, 25f, 1, 1.5f, 0);
 			break;
 		case NORTH:
-			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+25f,laserOwner.getPosition().y+42f, 0, 0, 198f, 25f, 1, 1, 90);
-	
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+25f,laserOwner.getPosition().y+42f, 0, 0, 198f, 25f, 1, 1.5f, 90);
 			break;
 		case NORTHEAST:
-			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+30f,laserOwner.getPosition().y, 0, 0, 198f, 25f, 1, 1, 45);
-
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+30f,laserOwner.getPosition().y, 0, 0, 198f, 25f, 1, 1.5f, 45);
 			break;
 		case NORTHWEST:
-			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+12.5f,laserOwner.getPosition().y+22f, 0, 0, 198f, 25f, 1, 1, 135);
-
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+12.5f,laserOwner.getPosition().y+22f, 0, 0, 198f, 25f, 1, 1.5f, 135);
 			break;
 		case SOUTH:
-			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x,laserOwner.getPosition().y+12f, 0, 0, 198f, 25f, 1, 1, 270);
-
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x,laserOwner.getPosition().y+12f, 0, 0, 198f, 25f, 1, 1.5f, 270);
 			break;
 		case SOUTHEAST:
-			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+5f,laserOwner.getPosition().y+8f, 0, 0, 198f, 25f, 1, 1, 315);
-
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+5f,laserOwner.getPosition().y+8f, 0, 0, 198f, 25f, 1, 1.5f, 315);
 			break;
 		case SOUTHWEST:
-			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+5f,laserOwner.getPosition().y+28f, 0, 0, 198f, 25f, 1, 1, 225);
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x+5f,laserOwner.getPosition().y+28f, 0, 0, 198f, 25f, 1, 1.5f, 225);
 			break;
 		case WEST:
-			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x,laserOwner.getPosition().y+22f, 0, 0, 198f, 25f, 1, 1, 180);
+			batcher.draw(laserAnimation.getKeyFrame(sum), laserOwner.getPosition().x,laserOwner.getPosition().y+28f, 0, 0, 198f, 25f, 1, 1.5f, 180);
 			break;
 		default:
 			break;
