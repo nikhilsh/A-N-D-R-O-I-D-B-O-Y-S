@@ -112,7 +112,6 @@ public class GameWorld {
 			for(Object object: gameObjects.toArray()){
 				//				Gdx.app.log(TAG,"Checking object collision: "+object);
 				GameObject gameObject = (GameObject)object;
-<<<<<<< HEAD
 				if (bob.getbobRect().overlaps(gameObject.getRectangle()) 
 						&& !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
 //					Gdx.app.log(TAG,"Colliding");
@@ -120,18 +119,7 @@ public class GameWorld {
 						damage += 200f;
 					} else if (object instanceof Sword){
 						damage += 300f;
-					} else if (object instanceof Laser){
-						damage += 200f;
-					} else if (object instanceof Boomerang){
-						damage += 200f;
-					} else if (object instanceof Firewall){
-						damage += 500f;
-					} else if (object instanceof Thunderstorm){
-						damage += 500f;
-=======
-				if (!UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
-					//					Gdx.app.log(TAG,"Colliding");
-					if (gameObject instanceof Laser){
+					} else if (gameObject instanceof Laser){
 						boolean isHit = false;
 						for (Rectangle rectangle : ((Laser) gameObject).getRectangleArray()){
 							if (bob.getbobRect().overlaps(rectangle)){
@@ -142,21 +130,16 @@ public class GameWorld {
 						if (isHit){
 							damage += 200f;
 						}
->>>>>>> 90ebcfa409b593a3bacddfc1758c982210bac079
-					}
-					if (bob.getbobRect().overlaps(gameObject.getRectangle()) && !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
-						//					Gdx.app.log(TAG,"Colliding");
-						if (object instanceof Tornado){
-							damage += 200f;
-						} else if (object instanceof Sword){
-							damage += 300f;
-						} else if (object instanceof Sunstrike){
-							damage += 500f;
-							gameObjects.remove(object);
-						} else if (object instanceof Boomerang){
-							damage += 300f;
-						}
-					}
+					} else if (object instanceof Boomerang){
+						damage += 200f;
+					} else if (object instanceof Firewall){
+						damage += 500f;
+					} else if (object instanceof Thunderstorm){
+						damage += 500f;
+					} else if (object instanceof Sunstrike){
+						damage += 500f;
+						gameObjects.remove(object);
+					} 
 				}
 			}
 			if(!bob.takeDamage(damage*delta)){
@@ -432,7 +415,6 @@ public class GameWorld {
 	}
 
 	public boolean isGameEnd() {
-<<<<<<< HEAD
         int playingUser = 0;
         for (Bob playerModel : playerModels.values()) {
         	synchronized (playerModel) {
@@ -441,15 +423,6 @@ public class GameWorld {
                 }
 			}
         }
-=======
-
-		int playingUser = 0;
-		for (Bob playerModel : playerModels.values()) {
-			if (playerModel.getState() != Bob.STATE_DEAD) {
-				playingUser++;
-			}
-		}
->>>>>>> 90ebcfa409b593a3bacddfc1758c982210bac079
 		Gdx.app.log(TAG,"isGameEnd: "+(playingUser <= 1));
 		return playingUser <= 1;
 	}
@@ -481,12 +454,7 @@ public class GameWorld {
 			createThunderstorm(bob);
 			break;
 		case SUNSTRIKE:
-
-<<<<<<< HEAD
-=======
-		case MINE:
 			createSunstrike(bob, x, y);
->>>>>>> 90ebcfa409b593a3bacddfc1758c982210bac079
 			break;
 
 		case LASER:
@@ -573,17 +541,10 @@ public class GameWorld {
 						synchronized (gameObjects) {
 							gameObjects.remove(thunderstorm);
 						}
-<<<<<<< HEAD
 		            }
 		        }, 
 		        4000 
 		);
-=======
-					}
-				}, 
-				1500 
-				);
->>>>>>> 90ebcfa409b593a3bacddfc1758c982210bac079
 	}
 
 	private void blinkBob(Bob bob){
