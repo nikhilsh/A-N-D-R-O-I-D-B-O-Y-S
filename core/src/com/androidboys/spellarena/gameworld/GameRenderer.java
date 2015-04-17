@@ -66,7 +66,7 @@ public class GameRenderer {
 	private Animation bobDeathAnimation;	
 
 	private Animation tornadoAnimation, shieldAnimation, swordAnimation, dustAnimation, 
-	reverseDustAnimation, laserAnimation, fireAnimation;
+	reverseDustAnimation, laserAnimation, fireAnimation, energyAnimation;
 	TextureRegion[] thunderstormAnimation;
 
 	private ShaderProgram defaultShader;
@@ -162,6 +162,7 @@ public class GameRenderer {
 		laserAnimation = AssetLoader.laserAnimation;
 		thunderstormAnimation = AssetLoader.thunderstormAnimation;
 		fireAnimation = AssetLoader.fireAnimation;
+		energyAnimation = AssetLoader.energyAnimation;
 	}
 
 	public void initGameObjects(){
@@ -319,8 +320,8 @@ renderSunstrike(runTime, (Sunstrike)o);
 		shapeRenderer.end();
 		batcher.begin();
 		//		batcher.setColor(Color.WHITE);
-		batcher.draw(swordAnimation.getKeyFrame(runTime),
-				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
+		batcher.draw(energyAnimation.getKeyFrame(runTime),
+				o.getPosition().x-25,o.getPosition().y-25,50f,50f);
 		batcher.end();
 
 	}

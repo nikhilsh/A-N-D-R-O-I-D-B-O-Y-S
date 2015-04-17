@@ -63,6 +63,9 @@ public class AssetLoader {
 	public static Texture fireTexture;
 	public static Animation fireAnimation;
 	
+	public static Texture energyTexture;
+	public static Animation energyAnimation;
+	
 	public static Texture greenTexture, redTexture;
 
 	public static BitmapFont header, playText, playTextSmall, swordText, parchmentText, smallParchmentText;
@@ -89,6 +92,7 @@ public class AssetLoader {
 		manager.load("sprites/explode.png", Texture.class, param);
 		manager.load("sprites/lightning.png", Texture.class, param);
 		manager.load("sprites/fire.GIF", Texture.class, param);
+		manager.load("sprites/energy.png", Texture.class, param);
 		
 		manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
 		manager.load("fonts/header.TTF",FreeTypeFontGenerator.class);
@@ -187,6 +191,9 @@ public class AssetLoader {
 		}
 		if(fireTexture == null){
 			fireTexture = manager.get("sprites/fire.GIF",Texture.class);
+		}
+		if(energyTexture == null){
+			energyTexture = manager.get("sprites/energy.png",Texture.class);
 		}
 		if(map == null){
 			map = manager.get("maps/Dungeon.tmx",TiledMap.class);
@@ -287,12 +294,13 @@ public class AssetLoader {
 				new TextureRegion(charTexture, 120, 125, 30, 30)
 			});
 		
-		bobDeathAnimation = new Animation(0.06f,new TextureRegion[]{
+		bobDeathAnimation = new Animation(2.0f,new TextureRegion[]{
 				new TextureRegion(charTexture, 120, 275, 30, 30),
 				new TextureRegion(charTexture, 90, 275, 30, 30),
 				new TextureRegion(charTexture, 60, 275, 30, 30),
 				new TextureRegion(charTexture, 30, 275, 30, 30)
         });
+		
 		dustAnimation = new Animation(0.06f, new TextureRegion[]{
 				new TextureRegion(dustTexture, 0, 0, 180, 180),
 				new TextureRegion(dustTexture, 180, 0, 180, 180),
@@ -377,6 +385,18 @@ public class AssetLoader {
 				new TextureRegion(fireTexture, 147, 0, 49, 94),
 		});
         
+        energyAnimation = new Animation(0.06f, new TextureRegion[]{
+				new TextureRegion(energyTexture, 0, 33, 33, 33),
+				new TextureRegion(energyTexture, 33, 33, 33, 33),
+				new TextureRegion(energyTexture, 66, 33, 33, 33),
+				new TextureRegion(energyTexture, 0, 66, 33, 33),
+				new TextureRegion(energyTexture, 33, 66, 33, 33),
+				new TextureRegion(energyTexture, 66, 66, 33, 33),
+				new TextureRegion(energyTexture, 0, 99, 33, 33),
+				new TextureRegion(energyTexture, 33, 99, 33, 33),
+				new TextureRegion(energyTexture, 66, 99, 33, 33),
+		});
+        
 		northBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northEastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		eastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
@@ -394,6 +414,7 @@ public class AssetLoader {
 		reverseDustAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		laserAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 		fireAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		energyAnimation.setPlayMode(Animation.PlayMode.LOOP);
 	}
 
 	private static void loadSprites(){
