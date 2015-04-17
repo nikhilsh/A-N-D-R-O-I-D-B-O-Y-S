@@ -112,6 +112,18 @@ public class GameWorld {
 			for(Object object: gameObjects.toArray()){
 				//				Gdx.app.log(TAG,"Checking object collision: "+object);
 				GameObject gameObject = (GameObject)object;
+				if (gameObject instanceof Laser && !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
+					boolean isHit = false;
+					for (Rectangle rectangle : ((Laser) gameObject).getRectangleArray()){
+						if (bob.getbobRect().overlaps(rectangle)){
+							isHit = true;
+							break;
+						}
+					}
+					if (isHit){
+						damage += 200f;
+					}
+				}
 				if (bob.getbobRect().overlaps(gameObject.getRectangle()) 
 						&& !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
 //					Gdx.app.log(TAG,"Colliding");
@@ -119,17 +131,6 @@ public class GameWorld {
 						damage += 200f;
 					} else if (object instanceof Sword){
 						damage += 300f;
-					} else if (gameObject instanceof Laser){
-						boolean isHit = false;
-						for (Rectangle rectangle : ((Laser) gameObject).getRectangleArray()){
-							if (bob.getbobRect().overlaps(rectangle)){
-								isHit = true;
-								break;
-							}
-						}
-						if (isHit){
-							damage += 200f;
-						}
 					} else if (object instanceof Boomerang){
 						damage += 200f;
 					} else if (object instanceof Firewall){
@@ -138,7 +139,6 @@ public class GameWorld {
 						damage += 500f;
 					} else if (object instanceof Sunstrike){
 						damage += 500f;
-						gameObjects.remove(object);
 					} 
 				}
 			}
@@ -524,12 +524,22 @@ public class GameWorld {
 	}
 
 	private void createSunstrike(Bob bob, float x, float y){
-		Sunstrike sunstrike = new Sunstrike(x, y, bob.getPlayerName());
+		final Sunstrike sunstrike = new Sunstrike(x, y, bob.getPlayerName());
 		synchronized (gameObjects) {
 			gameObjects.add(sunstrike);
 		}
+		new java.util.Timer().schedule( 
+				new java.util.TimerTask() {
+					@Override
+					public void run() {
+						synchronized (gameObjects) {
+							gameObjects.remove(sunstrike);
+						}
+		            }
+		        }, 
+		        4000 
+		);
 	}
-
 
 	private void createThunderstorm(Bob bob) {
 		final Thunderstorm thunderstorm = new Thunderstorm(bob.getPosition().x, bob.getPosition().y, bob.getDirection(), bob.getPlayerName());
@@ -550,7 +560,6 @@ public class GameWorld {
 	private void blinkBob(Bob bob){
 		final DummyBlinkObject blinkObject = new DummyBlinkObject(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName());
 		gameObjects.add(blinkObject);
-
 		switch (bob.getDirection()) {
 		case EAST:
 			bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
