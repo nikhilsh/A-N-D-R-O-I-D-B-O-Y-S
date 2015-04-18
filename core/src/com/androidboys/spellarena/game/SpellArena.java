@@ -3,6 +3,7 @@ package com.androidboys.spellarena.game;
 import java.util.Stack;
 
 import com.androidboys.spellarena.helper.AssetLoader;
+import com.androidboys.spellarena.helper.AudioManager;
 import com.androidboys.spellarena.mediators.GameScreenMediator;
 import com.androidboys.spellarena.net.NetworkInterface;
 import com.androidboys.spellarena.net.appwarp.AppWarpClient;
@@ -19,14 +20,14 @@ public class SpellArena extends Game {
 	private static final String TAG = "SpellArena";
 	
 	FPSLogger fps;
-	final private Stack<Screen> screens = new Stack<Screen>();
-	
+	final private Stack<Screen> screens = new Stack<Screen>();	
 	//Three types of screens
     public static enum ScreenType {
         SPLASH, PLAY, LOBBY
     }
 	
 	private NetworkInterface client = new AppWarpClient(UserSession.getInstance().getUserName());
+	private AudioManager audioManager = new AudioManager();
 
 	private Screen topScreen;
 	
@@ -39,6 +40,7 @@ public class SpellArena extends Game {
 		setScreen(new SplashScreen(this));
 		Gdx.input.setCatchBackKey(true);
 		fps = new FPSLogger();
+		audioManager.initialize();
 	}
 
 	/**
@@ -145,4 +147,8 @@ public class SpellArena extends Game {
 	public int getNumberScreens() {
 		return screens.size();
 	}
+	
+	public AudioManager getAudioManager() {
+        return this.audioManager;
+    }
 }

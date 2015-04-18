@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.androidboys.spellarena.gameworld.GameFactory.GameModel;
 import com.androidboys.spellarena.helper.AssetLoader;
+import com.androidboys.spellarena.helper.AudioManager;
 import com.androidboys.spellarena.mediators.GameScreenMediator;
 import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.Bob.Direction;
@@ -131,7 +132,7 @@ public class GameWorld {
 					} else if (object instanceof Thunderstorm){
 						damage += 500f;
 					} else if (object instanceof Sunstrike){
-						damage += 500f;
+						damage += 800f;
 					}
 				}	
 			}
@@ -365,7 +366,7 @@ public class GameWorld {
 		Bob bob = getPlayerModel(playerName);
 		switch (spellEnum) {
 		case SPARK:
-			castSpectralThrow(bob);
+			castSpark(bob);
 			break;
 		case DIVINESHIELD:
 			bob.setInvulnerable();
@@ -444,7 +445,7 @@ public class GameWorld {
 
 	}
 
-	private void castSpectralThrow(Bob bob) {
+	private void castSpark(Bob bob) {
 		Boomerang boomerang = new Boomerang(bob.getPosition().x, 
 				bob.getPosition().y, bob.getDirection(), bob.getPlayerName(), bob);
 		synchronized (gameObjects) {
@@ -454,6 +455,7 @@ public class GameWorld {
 
 	private void createSunstrike(Bob bob, float x, float y){
 		final Sunstrike sunstrike = new Sunstrike(x, y, bob.getPlayerName());
+		
 		synchronized (gameObjects) {
 			gameObjects.add(sunstrike);
 		}

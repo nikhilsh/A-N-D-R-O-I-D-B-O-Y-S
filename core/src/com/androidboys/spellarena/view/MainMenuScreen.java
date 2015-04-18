@@ -6,6 +6,7 @@ import java.util.Random;
 import com.androidboys.spellarena.game.SpellArena;
 import com.androidboys.spellarena.game.SpellArena.ScreenType;
 import com.androidboys.spellarena.helper.AssetLoader;
+import com.androidboys.spellarena.helper.AudioManager;
 import com.androidboys.spellarena.helper.StyleLoader;
 import com.androidboys.spellarena.net.NetworkListenerAdapter;
 import com.androidboys.spellarena.net.model.RoomModel;
@@ -59,7 +60,7 @@ public class MainMenuScreen implements Screen {
 	private Group connectionErrorPopUp;
 	
 	private NetworkListenerAdapter networkListenerAdapter;
-	
+
 	private float updateCounter;
 	
 	public MainMenuScreen(SpellArena game) {
@@ -210,6 +211,7 @@ public class MainMenuScreen implements Screen {
 		
 		displayLoadingWidget();
 		game.getClient().connect();
+		game.getAudioManager().playMainTheme();
 	}
 
 	private void initializeGameList() {
@@ -318,7 +320,9 @@ public class MainMenuScreen implements Screen {
 	public void render(float delta) {
 		update(delta);
 		stage.act(delta);
-		stage.draw();
+		synchronized (gameTable) {
+			stage.draw();
+		}
 	}
 
 	
@@ -399,6 +403,7 @@ public class MainMenuScreen implements Screen {
 					+ " Room " 
 					+ random.nextInt(1000));
 		}
+
 	}
 	
 	private void joinGame(RoomModel roomModel) {
@@ -406,6 +411,7 @@ public class MainMenuScreen implements Screen {
 		displayLoadingWidget();
 		UserSession.getInstance().setRoom(roomModel);
 		game.getClient().getRoomInfo(roomModel.getId());
+
 	}
 	
 	public void removeLoadingWidget() {

@@ -146,7 +146,6 @@ public class GameScreen implements Screen{
 	private HashMap<String,Boolean> clientsReady = new HashMap<String, Boolean>();
 	private InputMultiplexer multiplexer;
 	
-	//Constructor for debugging w/o multiplayer
 	public GameScreen(SpellArena game, Mediator mediator) {
 		this.game = game;
 		this.mediator = mediator;
@@ -170,7 +169,9 @@ public class GameScreen implements Screen{
 		this.stage = new Stage(new StretchViewport(720, 480));
 //
 		renderer = new GameRenderer(batcher, world);	
-//	
+		game.getAudioManager().stopMainTheme();
+		game.getAudioManager().playStartGame();
+//
 		
 //		createTouchpad();
 //		inputHandler = new InputHandler(world,this);
@@ -359,6 +360,7 @@ public class GameScreen implements Screen{
 	private void backToLobby() {
 		gameScreenMediator.disconnect(gameStarted);
 		game.backToPreviousScreen();
+		game.getAudioManager().playMainTheme();
 	}
 	
 	private void prepareInputProcessor() {
@@ -842,6 +844,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				DIVINESHIELD_COOLDOWN = 5;
 			}
+			game.getAudioManager().playShieldSound();
 			break;		
 		case 1:
 			if (BLINK_COOLDOWN > 0){
@@ -851,6 +854,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				BLINK_COOLDOWN = 2;
 			}
+			game.getAudioManager().playBlink();
 			break;		
 		case 2:
 			if (HASTE_COOLDOWN > 0){
@@ -860,6 +864,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				HASTE_COOLDOWN = 5;
 			}
+			game.getAudioManager().playHaste();
 			break;		
 		case 3:
 			if (FIREWALL_COOLDOWN > 0){
@@ -869,6 +874,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				FIREWALL_COOLDOWN = 5;
 			}
+			game.getAudioManager().playFirewall();
 			break;		
 		case 4:
 			if (BLADESTORM_COOLDOWN > 0){
@@ -878,6 +884,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				BLADESTORM_COOLDOWN = 5;
 			}
+			game.getAudioManager().playHurricane();
 			break;		
 		case 5:
 			if (THUNDERSTORM_COOLDOWN > 0){
@@ -887,6 +894,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				THUNDERSTORM_COOLDOWN = 5;
 			}
+			game.getAudioManager().playThunderstorm();
 			break;		
 		case 6:
 			if (SUNSTRIKE_COOLDOWN > 0){
@@ -896,6 +904,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				SUNSTRIKE_COOLDOWN = 5;
 			}
+			game.getAudioManager().playSunstrike();
 			break;		
 		case 7:
 			if (LASER_COOLDOWN > 0){
@@ -905,6 +914,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				LASER_COOLDOWN = 5;
 			}
+			game.getAudioManager().playLaser();
 			break;		
 		case 8:
 			if (SPARK_COOLDOWN > 0){
@@ -914,6 +924,8 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				SPARK_COOLDOWN = 5;
 			}
+			game.getAudioManager().playBoomerang();
+
 			break;		
 		case 9:
 			if (TORNADO_COOLDOWN > 0){
@@ -923,6 +935,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				TORNADO_COOLDOWN = 5;
 			}
+			game.getAudioManager().playSpark();
 			break;		
 		default:
 			break;
@@ -1234,7 +1247,7 @@ public class GameScreen implements Screen{
 			break;
 		case 111:
 			spellCountdown = ((BLADESTORM_COOLDOWN <= 0) ? "Ready" : ""+((int)BLADESTORM_COOLDOWN+1));
-			spellName = "Hurricane" +  spellCountdown;
+			spellName = "Hurricane " +  spellCountdown;
 			break;
 		case 120:
 			spellCountdown = ((SPARK_COOLDOWN <= 0) ? "Ready" : ""+((int)SPARK_COOLDOWN+1));
@@ -1522,16 +1535,19 @@ public class GameScreen implements Screen{
 
 
 	public void displayWinGamePopup() {
+		game.getAudioManager().playEndGame();
 		winGamePopUp.setVisible(true);
 		gameEnded = true;
 	}
 
 	public void displayLoseGamePopup(String winnerName) {
+		game.getAudioManager().playEndGame();
 		loseGamePopUp.setVisible(true);
 		gameEnded = true;
 	}
 
 	public void onOwnerLeft() {
+		game.getAudioManager().playEndGame();
 		gameScreenMediator.disconnect(gameStarted);
 		if(!world.isGameEnd()){
 			roomOwnerLeftPopUp.setVisible(true);
