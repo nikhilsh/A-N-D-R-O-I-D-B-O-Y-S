@@ -186,13 +186,9 @@ public class GameRenderer {
 		batcher.setProjectionMatrix(getCam().combined);
 		if(bob!=null)renderBob(runTime);
 		if(!enemies.isEmpty())renderEnemy(runTime);
-<<<<<<< HEAD
 		
 		synchronized (world.getGameObjects()) {
-=======
 
-		synchronized (world.getGameObjects().toArray()) {
->>>>>>> 372372f22d1bdd4090b5043763ad7d115f596652
 			for(Object o: world.getGameObjects()){
 				if(o instanceof Projectile){
 					renderProjectile(runTime,(Projectile)o);

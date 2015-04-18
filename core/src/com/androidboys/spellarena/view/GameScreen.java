@@ -104,11 +104,6 @@ public class GameScreen implements Screen{
 	
 	private OrthographicCamera cam;
 	private SpriteBatch batcher;
-<<<<<<< HEAD
-
-=======
-	
->>>>>>> 372372f22d1bdd4090b5043763ad7d115f596652
 	private TouchpadStyle touchpadStyle;
 	private Touchpad touchpad;
 	private int movement = MOVEMENT_NONE;
@@ -1239,15 +1234,15 @@ public class GameScreen implements Screen{
 			break;
 		case 111:
 			spellCountdown = ((BLADESTORM_COOLDOWN <= 0) ? "Ready" : ""+((int)BLADESTORM_COOLDOWN+1));
-			spellName = "Bladestorm" +  spellCountdown;
+			spellName = "Hurricane" +  spellCountdown;
 			break;
 		case 120:
 			spellCountdown = ((SPARK_COOLDOWN <= 0) ? "Ready" : ""+((int)SPARK_COOLDOWN+1));
-			spellName = "Spark " + spellCountdown;
+			spellName = "Boomerang " + spellCountdown;
 			break;
 		case 201:
 			spellCountdown = ((SUNSTRIKE_COOLDOWN <= 0) ? "Ready" : ""+((int)SUNSTRIKE_COOLDOWN+1));
-			spellName = "Fire strike " +  spellCountdown;
+			spellName = "Explosion " +  spellCountdown;
 			break;
 		case 210:
 			spellCountdown = ((LASER_COOLDOWN <= 0) ? "Ready" : ""+((int)LASER_COOLDOWN+1));
