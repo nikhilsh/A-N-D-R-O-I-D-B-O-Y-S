@@ -41,6 +41,10 @@ public abstract class GameObject {
 	public Vector2 getPosition(){
 		return position;
 	}
+	
+	public void setPosition(Vector2 position){
+		this.position = position;
+	}
 
 	public void update(float delta){
 		this.position.add((this.getVelocity().cpy()).scl(delta));

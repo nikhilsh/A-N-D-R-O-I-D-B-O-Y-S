@@ -63,6 +63,9 @@ public class AssetLoader {
 	public static Texture fireTexture;
 	public static Animation fireAnimation;
 	
+	public static Texture sunstrikeTexture;
+	public static Animation sunstrikeAnimation;
+	
 	public static Texture energyTexture;
 	public static Animation energyAnimation;
 	
@@ -93,6 +96,7 @@ public class AssetLoader {
 		manager.load("sprites/lightning.png", Texture.class, param);
 		manager.load("sprites/fire.GIF", Texture.class, param);
 		manager.load("sprites/energy.png", Texture.class, param);
+		manager.load("sprites/explosion.png", Texture.class, param);
 		
 		manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
 		manager.load("fonts/header.TTF",FreeTypeFontGenerator.class);
@@ -194,6 +198,9 @@ public class AssetLoader {
 		}
 		if(energyTexture == null){
 			energyTexture = manager.get("sprites/energy.png",Texture.class);
+		}
+		if(sunstrikeTexture == null){
+			sunstrikeTexture = manager.get("sprites/explosion.png",Texture.class);
 		}
 		if(map == null){
 			map = manager.get("maps/Dungeon.tmx",TiledMap.class);
@@ -397,6 +404,24 @@ public class AssetLoader {
 				new TextureRegion(energyTexture, 66, 99, 33, 33),
 		});
         
+        sunstrikeAnimation = new Animation(0.06f, new TextureRegion[]{
+				new TextureRegion(sunstrikeTexture, 0, 192, 96, 96),
+				new TextureRegion(sunstrikeTexture, 96, 192, 96, 96),
+				new TextureRegion(sunstrikeTexture, 192, 192, 96, 96),
+				new TextureRegion(sunstrikeTexture, 288, 192, 96, 96),
+				new TextureRegion(sunstrikeTexture, 384, 192, 96, 96),
+				new TextureRegion(sunstrikeTexture, 0, 96, 96, 96),
+				new TextureRegion(sunstrikeTexture, 96, 96, 96, 96),
+				new TextureRegion(sunstrikeTexture, 192, 96, 96, 96),
+				new TextureRegion(sunstrikeTexture, 288, 96, 96, 96),
+				new TextureRegion(sunstrikeTexture, 384, 96, 96, 96),
+				new TextureRegion(sunstrikeTexture, 0, 0, 96, 96),
+				new TextureRegion(sunstrikeTexture, 96, 0, 96, 96),
+				new TextureRegion(sunstrikeTexture, 192, 0, 96, 96),
+				new TextureRegion(sunstrikeTexture, 288, 0, 96, 96),
+				new TextureRegion(sunstrikeTexture, 384, 0, 96, 96),
+		});
+        
 		northBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		northEastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		eastBobAnimation.setPlayMode(Animation.PlayMode.LOOP);
@@ -415,6 +440,7 @@ public class AssetLoader {
 		laserAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 		fireAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		energyAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		sunstrikeAnimation.setPlayMode(Animation.PlayMode.LOOP);
 	}
 
 	private static void loadSprites(){

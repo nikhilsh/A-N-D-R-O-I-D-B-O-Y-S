@@ -84,7 +84,7 @@ public class GameScreen implements Screen{
 	private static float TORNADO_COOLDOWN = 0;
 	private static float DIVINESHIELD_COOLDOWN = 0;
 	private static float FIREWALL_COOLDOWN = 0;
-	private static float MINE_COOLDOWN = 0;
+	private static float SUNSTRIKE_COOLDOWN = 0;
 	private static float SPARK_COOLDOWN = 0;
 	private static float THUNDERSTORM_COOLDOWN = 0;
 	private static float BLADESTORM_COOLDOWN = 0;
@@ -552,9 +552,9 @@ public class GameScreen implements Screen{
 				spell.spellSettler(spellList[0], spellList[1], spellList[2]);
 				if (spell.getSpell() == 6){
 					Vector3 touchPoint = new Vector3(screenX, screenY, 0);
-					Vector3 touch = cam.unproject(touchPoint, 0, 0, 720, 480);
-				    System.out.println("VECTORX: " +touch.x);
-					System.out.println("VECTORY: " +touch.y);
+					touchPoint = renderer.getCam().unproject(touchPoint);
+				    System.out.println("VECTORX: " +touchPoint.x);
+					System.out.println("VECTORY: " +touchPoint.y);
 					if (castSpell(UserSession.getInstance().getUserName(),
 							touchPoint.x, touchPoint.y, spell.getSpell(), direction)){
 						gameScreenMediator.spellCommand(direction, spell.getSpell(), 
@@ -894,12 +894,12 @@ public class GameScreen implements Screen{
 			}
 			break;		
 		case 6:
-			if (MINE_COOLDOWN > 0){
+			if (SUNSTRIKE_COOLDOWN > 0){
 				return false;
 			}
 			spellEnum =  Spells.SUNSTRIKE;
 			if (playerName == UserSession.getInstance().getUserName()){
-				MINE_COOLDOWN = 5;
+				SUNSTRIKE_COOLDOWN = 5;
 			}
 			break;		
 		case 7:
@@ -1190,8 +1190,8 @@ public class GameScreen implements Screen{
 		 if (BLINK_COOLDOWN>0){
 			 BLINK_COOLDOWN -= delta;
 		 }
-		 if (MINE_COOLDOWN>0){
-			 MINE_COOLDOWN-= delta;
+		 if (SUNSTRIKE_COOLDOWN>0){
+			 SUNSTRIKE_COOLDOWN-= delta;
 		 }
 		 if (BLADESTORM_COOLDOWN>0){
 			 BLADESTORM_COOLDOWN -= delta;
@@ -1246,8 +1246,8 @@ public class GameScreen implements Screen{
 			spellName = "Spark " + spellCountdown;
 			break;
 		case 201:
-			spellCountdown = ((MINE_COOLDOWN <= 0) ? "Ready" : ""+((int)MINE_COOLDOWN+1));
-			spellName = "Mine " +  spellCountdown;
+			spellCountdown = ((SUNSTRIKE_COOLDOWN <= 0) ? "Ready" : ""+((int)SUNSTRIKE_COOLDOWN+1));
+			spellName = "Fire strike " +  spellCountdown;
 			break;
 		case 210:
 			spellCountdown = ((LASER_COOLDOWN <= 0) ? "Ready" : ""+((int)LASER_COOLDOWN+1));

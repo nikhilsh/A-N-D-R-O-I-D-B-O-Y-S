@@ -705,6 +705,8 @@ public class Bob {
 		this.boosted = true;
 		this.boostTimer = 1f;
 		this.MAX_SPEED = 300f;
+		this.velocity = new Vector2((Math.abs(getVelocity().x) == 100 ? 300 : getVelocity().x), (Math.abs(getVelocity().y) == 100 ? 300 : getVelocity().y));
+
 	}
 
 	/**

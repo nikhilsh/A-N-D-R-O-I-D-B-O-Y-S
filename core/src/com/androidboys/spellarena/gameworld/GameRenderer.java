@@ -66,7 +66,7 @@ public class GameRenderer {
 	private Animation bobDeathAnimation;	
 
 	private Animation tornadoAnimation, shieldAnimation, swordAnimation, dustAnimation, 
-	reverseDustAnimation, laserAnimation, fireAnimation, energyAnimation;
+	reverseDustAnimation, laserAnimation, fireAnimation, energyAnimation, sunstrikeAnimation;
 	TextureRegion[] thunderstormAnimation;
 
 	private ShaderProgram defaultShader;
@@ -91,9 +91,9 @@ public class GameRenderer {
 	public GameRenderer(SpriteBatch batcher, GameWorld world) {
 		this.world = world;
 		//Create a new camera
-		this.cam = new OrthographicCamera(960,540);
+		this.setCam(new OrthographicCamera(960,540));
 		//Initialization of camera
-		cam.position.set(1920/2, 1080/2, 0);
+		getCam().position.set(1920/2, 1080/2, 0);
 		this.enemies = new ArrayList<Bob>();
 		this.batcher = batcher;
 		shapeRenderer = new ShapeRenderer();
@@ -163,6 +163,7 @@ public class GameRenderer {
 		thunderstormAnimation = AssetLoader.thunderstormAnimation;
 		fireAnimation = AssetLoader.fireAnimation;
 		energyAnimation = AssetLoader.energyAnimation;
+		sunstrikeAnimation = AssetLoader.sunstrikeAnimation;
 	}
 
 	public void initGameObjects(){
@@ -190,10 +191,10 @@ public class GameRenderer {
 		if(bob!=null)renderLight();
 
 		batcher.setShader(currentShader);
-		mapRenderer.setView(cam);
+		mapRenderer.setView(getCam());
 		mapRenderer.render();
 
-		batcher.setProjectionMatrix(cam.combined);
+		batcher.setProjectionMatrix(getCam().combined);
 		if(bob!=null)renderBob(runTime);
 		if(!enemies.isEmpty())renderEnemy(runTime);
 		
@@ -215,8 +216,8 @@ public class GameRenderer {
 					renderThunderstorm(runTime, (Thunderstorm)o);
 				}
 				else if(o instanceof Sunstrike){
-renderSunstrike(runTime, (Sunstrike)o);
-}
+					renderSunstrike(runTime, (Sunstrike)o);
+				}
 				else if(o instanceof Boomerang){
 					renderBoomerang(runTime, (Boomerang)o);
 				}
@@ -232,7 +233,7 @@ renderSunstrike(runTime, (Sunstrike)o);
 		batcher.draw(fireAnimation.getKeyFrame(runTime),
 				o.getPosition().x,o.getPosition().y,50f,100f);
 		batcher.end();
-		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.setProjectionMatrix(getCam().combined);
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLUE);
 		shapeRenderer.rect(o.getRectangle().x,
@@ -247,7 +248,7 @@ renderSunstrike(runTime, (Sunstrike)o);
 		batcher.draw(swordAnimation.getKeyFrame(runTime),
 				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
 		batcher.end();
-		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.setProjectionMatrix(getCam().combined);
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLUE);
 		shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-25,110f,100f);
@@ -256,21 +257,21 @@ renderSunstrike(runTime, (Sunstrike)o);
 		shapeRenderer.setColor(Color.BLUE);
 		shapeRenderer.rect(o.getDestination().x,o.getDestination().y,5,5);
 		shapeRenderer.end();
-		
+
 	}
 
 	private void renderThunderstorm(float runTime, Thunderstorm o) {
-		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.setProjectionMatrix(getCam().combined);
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLUE);
 		shapeRenderer.rect(o.getPosition().x-100,o.getPosition().y-75,200f,112f);
 		shapeRenderer.end();
 		batcher.begin();
 		//FIRST LAYER
-//		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-//				o.getPosition().x-150,o.getPosition().y-50,100f,200f);
-//		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-//				o.getPosition().x-50,o.getPosition().y-50,100f,200f);
+		//		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
+		//				o.getPosition().x-150,o.getPosition().y-50,100f,200f);
+		//		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
+		//				o.getPosition().x-50,o.getPosition().y-50,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
 				o.getPosition().x-125,o.getPosition().y-75,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
@@ -286,7 +287,7 @@ renderSunstrike(runTime, (Sunstrike)o);
 	}
 
 	private void renderSword(float runTime, Sword o) {
-		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.setProjectionMatrix(getCam().combined);
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLUE);
 		shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-15,105f,90f);
@@ -306,14 +307,14 @@ renderSunstrike(runTime, (Sunstrike)o);
 		batcher.begin();
 		light.bind(0);
 		batcher.draw(light, 
-				(cam.position.x - 960*bob.getLightRadius()),
-				(cam.position.y - 540*bob.getLightRadius()), 1920f*bob.getLightRadius(),1080f*bob.getLightRadius());
+				(getCam().position.x - 960*bob.getLightRadius()),
+				(getCam().position.y - 540*bob.getLightRadius()), 1920f*bob.getLightRadius(),1080f*bob.getLightRadius());
 		batcher.end();
 		fbo.end();
 	}
 
 	private void renderProjectile(float runTime, Projectile o) {
-		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.setProjectionMatrix(getCam().combined);
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLUE);
 		shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-25,110f,100f);
@@ -337,28 +338,32 @@ renderSunstrike(runTime, (Sunstrike)o);
 
 		batcher.end();
 	}
-	
+
 	private void renderSunstrike(float runTime, Sunstrike o){
-		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.setProjectionMatrix(getCam().combined);
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(o.getPosition().x-100,o.getPosition().y-100,200f,200f);
+		shapeRenderer.rect(o.getPosition().x-50,o.getPosition().y-50,100f,100f);
 		shapeRenderer.end();
+
+		batcher.begin();		
+		batcher.draw(sunstrikeAnimation.getKeyFrame(runTime), o.getPosition().x-50f,o.getPosition().y-50f,100f,100f);
+		batcher.end();
 	}
 
 	private void renderLaser(float runTime, Laser o){
 		Bob laserOwner = world.getPlayerModel(o.getUsername());
-//		shapeRenderer.setProjectionMatrix(cam.combined);
-//		shapeRenderer.begin(ShapeType.Line);
-//		shapeRenderer.setColor(Color.BLUE);
-//		shapeRenderer.rect(laserOwner.getPosition().x+20,laserOwner.getPosition().y-10,20f,25f);
-//		shapeRenderer.rect(laserOwner.getPosition().x+35,laserOwner.getPosition().y-25f,20f,25f);
-//		shapeRenderer.rect(laserOwner.getPosition().x+52,laserOwner.getPosition().y-42.5f,20f,25f);
-//		shapeRenderer.rect(laserOwner.getPosition().x+70,laserOwner.getPosition().y-65.5f,20f,25f);
-//		shapeRenderer.rect(laserOwner.getPosition().x+90,laserOwner.getPosition().y-84f,20f,25f);
-//		shapeRenderer.rect(laserOwner.getPosition().x+110,laserOwner.getPosition().y-107.5f,20f,25f);
-//		shapeRenderer.rect(laserOwner.getPosition().x+130,laserOwner.getPosition().y-120f,20f,25f);
-//		shapeRenderer.end();
+		//		shapeRenderer.setProjectionMatrix(cam.combined);
+		//		shapeRenderer.begin(ShapeType.Line);
+		//		shapeRenderer.setColor(Color.BLUE);
+		//		shapeRenderer.rect(laserOwner.getPosition().x+20,laserOwner.getPosition().y-10,20f,25f);
+		//		shapeRenderer.rect(laserOwner.getPosition().x+35,laserOwner.getPosition().y-25f,20f,25f);
+		//		shapeRenderer.rect(laserOwner.getPosition().x+52,laserOwner.getPosition().y-42.5f,20f,25f);
+		//		shapeRenderer.rect(laserOwner.getPosition().x+70,laserOwner.getPosition().y-65.5f,20f,25f);
+		//		shapeRenderer.rect(laserOwner.getPosition().x+90,laserOwner.getPosition().y-84f,20f,25f);
+		//		shapeRenderer.rect(laserOwner.getPosition().x+110,laserOwner.getPosition().y-107.5f,20f,25f);
+		//		shapeRenderer.rect(laserOwner.getPosition().x+130,laserOwner.getPosition().y-120f,20f,25f);
+		//		shapeRenderer.end();
 		int sum = 0;
 		batcher.begin();
 		sum += Gdx.graphics.getDeltaTime();
@@ -616,13 +621,21 @@ renderSunstrike(runTime, (Sunstrike)o);
 
 	public void moveCamera(){
 		if(bob != null){
-			cam.position.set(bob.getPosition().x+15f,bob.getPosition().y+25f,0);
+			getCam().position.set(bob.getPosition().x+15f,bob.getPosition().y+25f,0);
 		}
-		cam.update();
+		getCam().update();
 	}
 
 	public void removePlayer(String playerName) {
 		enemies.remove(world.getPlayerModel(playerName));
+	}
+
+	public OrthographicCamera getCam() {
+		return cam;
+	}
+
+	public void setCam(OrthographicCamera cam) {
+		this.cam = cam;
 	}
 
 }
