@@ -538,7 +538,7 @@ public class GameWorld {
 						}
 		            }
 		        }, 
-		        4000 
+		        3000 
 		);
 	}
 

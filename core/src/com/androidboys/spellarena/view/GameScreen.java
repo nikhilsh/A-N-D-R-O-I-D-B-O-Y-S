@@ -105,8 +105,6 @@ public class GameScreen implements Screen{
 	private OrthographicCamera cam;
 	private SpriteBatch batcher;
 	
-	private StartMultiplayerScreen prevScreen;
-
 	private TouchpadStyle touchpadStyle;
 	private Touchpad touchpad;
 	private int movement = MOVEMENT_NONE;
@@ -185,13 +183,6 @@ public class GameScreen implements Screen{
 		map = AssetLoader.map;
 		mapRenderer = new OrthogonalTiledMapRenderer(map);
 		world.initialize(GameFactory.getGameModel());
-	}
-
-	
-	public GameScreen(Game game, StartMultiplayerScreen prevScreen) {
-		
-		//this(game);
-		this.prevScreen = prevScreen;
 	}
 
 	/**

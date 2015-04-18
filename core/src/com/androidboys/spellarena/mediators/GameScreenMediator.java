@@ -1,17 +1,11 @@
 package com.androidboys.spellarena.mediators;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import com.androidboys.spellarena.game.SpellArena;
-import com.androidboys.spellarena.gameworld.GameFactory;
 import com.androidboys.spellarena.model.Bob;
-import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.net.NetworkInterface;
 import com.androidboys.spellarena.net.NetworkListenerAdapter;
 import com.androidboys.spellarena.net.model.RoomModel;
@@ -21,12 +15,12 @@ import com.androidboys.spellarena.net.protocol.Command;
 import com.androidboys.spellarena.net.protocol.CommandFactory;
 import com.androidboys.spellarena.net.protocol.CreateGameCommand;
 import com.androidboys.spellarena.net.protocol.GameEndCommand;
+import com.androidboys.spellarena.net.protocol.GameEndCommand.GameEndReason;
+import com.androidboys.spellarena.net.protocol.MoveCommand;
 import com.androidboys.spellarena.net.protocol.ReadyCommand;
 import com.androidboys.spellarena.net.protocol.SpellCommand;
 import com.androidboys.spellarena.net.protocol.StartGameCommand;
 import com.androidboys.spellarena.net.protocol.UpdateCommand;
-import com.androidboys.spellarena.net.protocol.GameEndCommand.GameEndReason;
-import com.androidboys.spellarena.net.protocol.MoveCommand;
 import com.androidboys.spellarena.servers.GameClient;
 import com.androidboys.spellarena.servers.GameServer;
 import com.androidboys.spellarena.session.UserSession;
@@ -34,7 +28,6 @@ import com.androidboys.spellarena.view.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.async.AsyncExecutor;
 
 public class GameScreenMediator extends Mediator{
 
@@ -46,9 +39,7 @@ public class GameScreenMediator extends Mediator{
 	private NetworkListenerAdapter networkListenerAdapter;
 	private GameScreen gameScreen;
 	private CommandFactory commandFactory = new CommandFactory();
-	private GameFactory.GameModel gameModel;
 	private RoomModel room;
-	private int level = 1;
 
 	ExecutorService executor = Executors.newCachedThreadPool(Executors.defaultThreadFactory());
 	
@@ -56,7 +47,6 @@ public class GameScreenMediator extends Mediator{
 	
 	public GameScreenMediator(SpellArena game, NetworkInterface networkInterface) {
 		super(game);
-		this.gameModel = GameFactory.getGameModel(level);
 		this.networkInterface = networkInterface;
 		this.networkListenerAdapter = new NetworkListenerAdapter(){
 			
@@ -428,6 +418,4 @@ public class GameScreenMediator extends Mediator{
 			}
 		}
 	}
-
-	
 }
