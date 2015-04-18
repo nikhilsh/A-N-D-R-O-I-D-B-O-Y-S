@@ -1,6 +1,5 @@
 package com.androidboys.spellarena.game;
 
-import java.util.Map;
 import java.util.Stack;
 
 import com.androidboys.spellarena.helper.AssetLoader;
@@ -9,16 +8,11 @@ import com.androidboys.spellarena.net.NetworkInterface;
 import com.androidboys.spellarena.net.appwarp.AppWarpClient;
 import com.androidboys.spellarena.session.UserSession;
 import com.androidboys.spellarena.view.GameScreen;
-import com.androidboys.spellarena.view.MainMenuScreen;
 import com.androidboys.spellarena.view.SplashScreen;
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class SpellArena extends Game {
 	

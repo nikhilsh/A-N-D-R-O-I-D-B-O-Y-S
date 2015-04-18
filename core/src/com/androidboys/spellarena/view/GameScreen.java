@@ -1352,6 +1352,7 @@ public class GameScreen implements Screen{
                         Gdx.app.postRunnable(new Runnable() {
                             @Override
                             public void run() {
+                        		gameScreenMediator.disconnect(gameStarted);
                                 if (game.getNumberScreens() > 1) {
                                     game.backToPreviousScreen();
                                 }
@@ -1525,11 +1526,13 @@ public class GameScreen implements Screen{
 
 
 	public void displayWinGamePopup() {
+		gameScreenMediator.disconnect(gameStarted);
 		winGamePopUp.setVisible(true);
 		gameStarted = false;
 	}
 
 	public void displayLoseGamePopup(String winnerName) {
+		gameScreenMediator.disconnect(gameStarted);
 		loseGamePopUp.setVisible(true);
 		gameStarted = false;
 	}
