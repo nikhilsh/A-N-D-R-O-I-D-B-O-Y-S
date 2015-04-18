@@ -1,6 +1,5 @@
 package com.androidboys.spellarena.model;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 

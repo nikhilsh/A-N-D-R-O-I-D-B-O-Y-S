@@ -1,8 +1,6 @@
 package com.androidboys.spellarena.model;
 
 import java.util.ArrayList;
-
-import com.androidboys.spellarena.model.Bob.Direction;
 import com.badlogic.gdx.math.Rectangle;
 
 //Laser object

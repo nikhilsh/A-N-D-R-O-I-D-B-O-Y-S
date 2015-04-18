@@ -1,19 +1,8 @@
 package com.androidboys.spellarena.model;
 
 
-import java.util.ArrayList;
-
-import org.json.JSONObject;
-
-import com.androidboys.spellarena.gameworld.GameWorld;
-import com.androidboys.spellarena.net.WarpController;
-import com.androidboys.spellarena.model.Spell.Spells;
-import com.androidboys.spellarena.session.UserSession;
-import com.androidboys.spellarena.view.GameScreen;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
-import com.badlogic.gdx.utils.Array;
 
 public abstract class GameObject {
 	

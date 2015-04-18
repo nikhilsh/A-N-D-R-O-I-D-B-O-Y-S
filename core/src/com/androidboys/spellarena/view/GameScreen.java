@@ -104,7 +104,11 @@ public class GameScreen implements Screen{
 	
 	private OrthographicCamera cam;
 	private SpriteBatch batcher;
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 372372f22d1bdd4090b5043763ad7d115f596652
 	private TouchpadStyle touchpadStyle;
 	private Touchpad touchpad;
 	private int movement = MOVEMENT_NONE;

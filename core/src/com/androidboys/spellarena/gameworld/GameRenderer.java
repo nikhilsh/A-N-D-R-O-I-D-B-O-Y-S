@@ -10,7 +10,6 @@ import com.androidboys.spellarena.model.DummyBlinkObject;
 import com.androidboys.spellarena.model.Firewall;
 import com.androidboys.spellarena.model.Laser;
 import com.androidboys.spellarena.model.Projectile;
-import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.model.Sunstrike;
 import com.androidboys.spellarena.model.Sword;
 import com.androidboys.spellarena.model.Thunderstorm;
@@ -31,6 +30,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
 public class GameRenderer {
@@ -52,8 +52,7 @@ public class GameRenderer {
 	private TextureRegion southBob, southWestBob, westBob, northWestBob,
 	northBob, northEastBob, eastBob, southEastBob;
 	private Animation southBobAnimation, southWestBobAnimation, westBobAnimation, northWestBobAnimation,
-	northBobAnimation, northEastBobAnimation, eastBobAnimation, southEastBobAnimation;
-	private Animation bobDeathAnimation;	
+	northBobAnimation, northEastBobAnimation, eastBobAnimation, southEastBobAnimation, bobDeathAnimation;
 
 	private Animation tornadoAnimation, shieldAnimation, swordAnimation, dustAnimation, 
 	reverseDustAnimation, laserAnimation, fireAnimation, energyAnimation, sunstrikeAnimation;
@@ -70,7 +69,7 @@ public class GameRenderer {
 	private int width;
 	private Texture greenHealthBar;
 	private Texture redHealthBar;
-
+	private Boolean isDebugOn = false;
 
 	private final static Vector3 bright = new Vector3(0.7f, 0.7f, 0.9f);
 	// Load shaders from text files
@@ -177,7 +176,7 @@ public class GameRenderer {
 
 		moveCamera();
 
-		//		batcher.setProjectionMatrix(cam.combined);
+		//batcher.setProjectionMatrix(cam.combined);
 		if(bob!=null)renderLight();
 
 		batcher.setShader(currentShader);
@@ -187,8 +186,13 @@ public class GameRenderer {
 		batcher.setProjectionMatrix(getCam().combined);
 		if(bob!=null)renderBob(runTime);
 		if(!enemies.isEmpty())renderEnemy(runTime);
+<<<<<<< HEAD
 		
 		synchronized (world.getGameObjects()) {
+=======
+
+		synchronized (world.getGameObjects().toArray()) {
+>>>>>>> 372372f22d1bdd4090b5043763ad7d115f596652
 			for(Object o: world.getGameObjects()){
 				if(o instanceof Projectile){
 					renderProjectile(runTime,(Projectile)o);
@@ -223,39 +227,46 @@ public class GameRenderer {
 		batcher.draw(fireAnimation.getKeyFrame(runTime),
 				o.getPosition().x,o.getPosition().y,50f,100f);
 		batcher.end();
-		shapeRenderer.setProjectionMatrix(getCam().combined);
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(o.getRectangle().x,
-				o.getRectangle().y,
-				o.getRectangle().width,
-				o.getRectangle().height);
-		shapeRenderer.end();
+
+		if (isDebugOn){
+			shapeRenderer.setProjectionMatrix(getCam().combined);
+			shapeRenderer.begin(ShapeType.Line);
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.rect(o.getRectangle().x,
+					o.getRectangle().y,
+					o.getRectangle().width,
+					o.getRectangle().height);
+			shapeRenderer.end();
+		}
 	}
+
 
 	private void renderBoomerang(float runTime, Boomerang o) {
 		batcher.begin();
 		batcher.draw(swordAnimation.getKeyFrame(runTime),
 				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
 		batcher.end();
-		shapeRenderer.setProjectionMatrix(getCam().combined);
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-25,110f,100f);
-		shapeRenderer.end();
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(o.getDestination().x,o.getDestination().y,5,5);
-		shapeRenderer.end();
-
+		if (isDebugOn){
+			shapeRenderer.setProjectionMatrix(getCam().combined);
+			shapeRenderer.begin(ShapeType.Line);
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-25,110f,100f);
+			shapeRenderer.end();
+			shapeRenderer.begin(ShapeType.Filled);
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.rect(o.getDestination().x,o.getDestination().y,5,5);
+			shapeRenderer.end();
+		}
 	}
 
 	private void renderThunderstorm(float runTime, Thunderstorm o) {
-		shapeRenderer.setProjectionMatrix(getCam().combined);
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(o.getPosition().x-100,o.getPosition().y-75,200f,112f);
-		shapeRenderer.end();
+		if (isDebugOn){
+			shapeRenderer.setProjectionMatrix(getCam().combined);
+			shapeRenderer.begin(ShapeType.Line);
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.rect(o.getPosition().x-100,o.getPosition().y-75,200f,112f);
+			shapeRenderer.end();
+		}
 		batcher.begin();
 		//FIRST LAYER
 		//		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
@@ -277,13 +288,15 @@ public class GameRenderer {
 	}
 
 	private void renderSword(float runTime, Sword o) {
-		shapeRenderer.setProjectionMatrix(getCam().combined);
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-15,105f,90f);
-		shapeRenderer.end();
+		if (isDebugOn){
+			shapeRenderer.setProjectionMatrix(getCam().combined);
+			shapeRenderer.begin(ShapeType.Line);
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-15,105f,90f);
+			shapeRenderer.end();
+		}
 		batcher.begin();
-		//		batcher.setColor(Color.WHITE);
+		//batcher.setColor(Color.WHITE);
 		batcher.draw(tornadoAnimation.getKeyFrame(runTime),
 				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
 		batcher.end();
@@ -304,11 +317,13 @@ public class GameRenderer {
 	}
 
 	private void renderProjectile(float runTime, Projectile o) {
-		shapeRenderer.setProjectionMatrix(getCam().combined);
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-25,110f,100f);
-		shapeRenderer.end();
+		if (isDebugOn){
+			shapeRenderer.setProjectionMatrix(getCam().combined);
+			shapeRenderer.begin(ShapeType.Line);
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.rect(o.getPosition().x-35,o.getPosition().y-25,110f,100f);
+			shapeRenderer.end();
+		}
 		batcher.begin();
 		//		batcher.setColor(Color.WHITE);
 		batcher.draw(energyAnimation.getKeyFrame(runTime),
@@ -318,24 +333,21 @@ public class GameRenderer {
 	}
 
 	private void renderBlink(float runTime, DummyBlinkObject o){
-
 		Bob blinkOwner = world.getPlayerModel(o.getUsername());
-
 		batcher.begin();
-
 		batcher.draw(dustAnimation.getKeyFrame(runTime), blinkOwner.getPosition().x-25f,blinkOwner.getPosition().y-25f,75f,75f);
 		batcher.draw(reverseDustAnimation.getKeyFrame(runTime), o.getPosition().x-25f,o.getPosition().y-25f,75f,75f);
-
 		batcher.end();
 	}
 
 	private void renderSunstrike(float runTime, Sunstrike o){
-		shapeRenderer.setProjectionMatrix(getCam().combined);
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(o.getPosition().x-50,o.getPosition().y-50,100f,100f);
-		shapeRenderer.end();
-
+		if (isDebugOn){
+			shapeRenderer.setProjectionMatrix(getCam().combined);
+			shapeRenderer.begin(ShapeType.Line);
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.rect(o.getPosition().x-50,o.getPosition().y-50,100f,100f);
+			shapeRenderer.end();
+		}
 		batcher.begin();		
 		batcher.draw(sunstrikeAnimation.getKeyFrame(runTime), o.getPosition().x-50f,o.getPosition().y-50f,100f,100f);
 		batcher.end();
@@ -343,17 +355,19 @@ public class GameRenderer {
 
 	private void renderLaser(float runTime, Laser o){
 		Bob laserOwner = world.getPlayerModel(o.getUsername());
-		//		shapeRenderer.setProjectionMatrix(cam.combined);
-		//		shapeRenderer.begin(ShapeType.Line);
-		//		shapeRenderer.setColor(Color.BLUE);
-		//		shapeRenderer.rect(laserOwner.getPosition().x+20,laserOwner.getPosition().y-10,20f,25f);
-		//		shapeRenderer.rect(laserOwner.getPosition().x+35,laserOwner.getPosition().y-25f,20f,25f);
-		//		shapeRenderer.rect(laserOwner.getPosition().x+52,laserOwner.getPosition().y-42.5f,20f,25f);
-		//		shapeRenderer.rect(laserOwner.getPosition().x+70,laserOwner.getPosition().y-65.5f,20f,25f);
-		//		shapeRenderer.rect(laserOwner.getPosition().x+90,laserOwner.getPosition().y-84f,20f,25f);
-		//		shapeRenderer.rect(laserOwner.getPosition().x+110,laserOwner.getPosition().y-107.5f,20f,25f);
-		//		shapeRenderer.rect(laserOwner.getPosition().x+130,laserOwner.getPosition().y-120f,20f,25f);
-		//		shapeRenderer.end();
+		if (isDebugOn){
+			shapeRenderer.setProjectionMatrix(cam.combined);
+			shapeRenderer.begin(ShapeType.Line);
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.rect(laserOwner.getPosition().x+20,laserOwner.getPosition().y-10,20f,25f);
+			shapeRenderer.rect(laserOwner.getPosition().x+35,laserOwner.getPosition().y-25f,20f,25f);
+			shapeRenderer.rect(laserOwner.getPosition().x+52,laserOwner.getPosition().y-42.5f,20f,25f);
+			shapeRenderer.rect(laserOwner.getPosition().x+70,laserOwner.getPosition().y-65.5f,20f,25f);
+			shapeRenderer.rect(laserOwner.getPosition().x+90,laserOwner.getPosition().y-84f,20f,25f);
+			shapeRenderer.rect(laserOwner.getPosition().x+110,laserOwner.getPosition().y-107.5f,20f,25f);
+			shapeRenderer.rect(laserOwner.getPosition().x+130,laserOwner.getPosition().y-120f,20f,25f);
+			shapeRenderer.end();
+		}
 		int sum = 0;
 		batcher.begin();
 		sum += Gdx.graphics.getDeltaTime();
@@ -392,35 +406,26 @@ public class GameRenderer {
 
 	private void renderBob(float runTime){
 		//Renders collision shape for debugging purposes
-		//
-		//				shapeRenderer.setProjectionMatrix(cam.combined);
-		//				shapeRenderer.begin(ShapeType.Line);
-		//				shapeRenderer.setColor(Color.BLUE);
-		//				shapeRenderer.rect(70,70,1780,940);
-		//				shapeRenderer.end();
-		//				
-		//				shapeRenderer.begin(ShapeType.Filled);
-		//				shapeRenderer.setColor(Color.RED);
-		//				for(Rectangle rect: bob.getTiles()){
-		//					shapeRenderer.rect(rect.x,rect.y,rect.width,rect.height);
-		//				}
-		//				shapeRenderer.setColor(Color.BLUE);
-		//				shapeRenderer.rect(bob.getCollisionEdge().x,
-		//						bob.getCollisionEdge().y,
-		//						bob.getCollisionEdge().width,
-		//						bob.getCollisionEdge().height);
-		//				shapeRenderer.end();
+		if (isDebugOn){
+			shapeRenderer.setProjectionMatrix(cam.combined);
+			shapeRenderer.begin(ShapeType.Line);
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.rect(70,70,1780,940);
+			shapeRenderer.end();
 
-		//dark pact
-		//		shapeRenderer.begin(ShapeType.Line);
-		//		shapeRenderer.setColor(Color.BLACK);
-		//		shapeRenderer.circle(bob.getPosition().x, bob.getPosition().y, 300);
-		//				shapeRenderer.end();
-
-
+			shapeRenderer.begin(ShapeType.Filled);
+			shapeRenderer.setColor(Color.RED);
+			for(Rectangle rect: bob.getTiles()){
+				shapeRenderer.rect(rect.x,rect.y,rect.width,rect.height);
+			}
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.rect(bob.getCollisionEdge().x,
+					bob.getCollisionEdge().y,
+					bob.getCollisionEdge().width,
+					bob.getCollisionEdge().height);
+			shapeRenderer.end();
+		}
 		batcher.begin();
-		//		batcher.setColor(1f,1f,1f,0.5f);
-		//		batcher.setColor(Color.WHITE);
 		if(bob.getState() == Bob.STATE_ALIVE){
 			switch(bob.getDirection()){
 			case EAST:
@@ -515,7 +520,7 @@ public class GameRenderer {
 		//		batcher.setColor(255/255f,128/255f,128/255f,1f);
 		for(Bob enemy: enemies){
 			batcher.begin();
-			if(enemy.getState() == Bob.STATE_ALIVE&&enemy.getPlayerName()!=UserSession.getInstance().getUserName()){
+			if(enemy.getState() == Bob.STATE_ALIVE && enemy.getPlayerName()!=UserSession.getInstance().getUserName()){
 				switch(enemy.getDirection()){
 				case EAST:
 					batcher.draw(eastBob,enemy.getPosition().x-25f,enemy.getPosition().y-25f,75f,75f);
@@ -602,11 +607,11 @@ public class GameRenderer {
 					enemy.getPosition().y+50f,
 					50*(1-healthPercentage),5);
 			batcher.end();
+			if (isDebugOn){
+				shapeRenderer.setColor(Color.RED);
+				shapeRenderer.rect(enemy.getPosition().x,enemy.getPosition().y,50,50);
+			}
 		}
-
-
-		//shapeRenderer.setColor(Color.RED);
-		//shapeRenderer.rect(enemy.getPosition().x,enemy.getPosition().y,50,50);
 	}
 
 	public void moveCamera(){
@@ -627,5 +632,4 @@ public class GameRenderer {
 	public void setCam(OrthographicCamera cam) {
 		this.cam = cam;
 	}
-
 }

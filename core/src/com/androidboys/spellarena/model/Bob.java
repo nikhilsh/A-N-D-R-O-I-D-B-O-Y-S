@@ -7,7 +7,6 @@ import org.json.JSONObject;
 
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.net.WarpController;
-import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.session.UserSession;
 import com.androidboys.spellarena.view.GameScreen;
 import com.badlogic.gdx.math.Rectangle;
@@ -56,13 +55,6 @@ public class Bob {
 	//Direction
 	private Direction direction;
 	
-	@Deprecated
-	private int lifeCount = 3;
-	@Deprecated
-	private float manaCount = 200;
-
-	@Deprecated
-	private boolean isEnemy;
 	//Whether the Bob needs update (for position, direction or velocity)
 	private boolean needsUpdate;
 
@@ -95,10 +87,9 @@ public class Bob {
 	 * Create a new Bob instance, with initial position
 	 * @param i,j		initial position
 	 */
-	public Bob(int i, int j, boolean isEnemy) {
+	public Bob(int i, int j) {
 		this.position = new Vector2(i,j);
 		this.velocity = new Vector2(); //Velocity is (0,0)
-		this.isEnemy = isEnemy;
 		this.direction = Direction.SOUTH; //Face to south (bottom of screen)
 		this.state = STATE_ALIVE; //Alive
 		this.bobRect = new Rectangle();
@@ -219,7 +210,6 @@ public class Bob {
 	private void updateVelocity(){
 		Vector2 newV = null;
 		if(playerName.equals(UserSession.getInstance().getUserName())){
-			incrementManaCount();
 			float touchX = touchpad.getKnobPercentX();
 			float touchY = touchpad.getKnobPercentY();
 			if(touchX > 0.5){
@@ -416,11 +406,6 @@ public class Bob {
 		velocity = new Vector2(vx,vy);
 	}
 
-	@Deprecated
-	private void scaleAndSetVelocity(float touchX, float touchY) {
-		velocity = new Vector2(touchX*MAX_SPEED, touchY*MAX_SPEED);
-	}
-
 	public void setTouchpad(Touchpad touchpad){
 		this.touchpad = touchpad;
 	}
@@ -452,42 +437,7 @@ public class Bob {
 	public void setPosition(float x, float y) {
 		this.position = new Vector2(x,y);
 	}
-
-	@Deprecated
-	public void decrementLifeCount() {
-		if (state == STATE_INVULNERABLE) {
-			return;
-		}
-		this.lifeCount = this.lifeCount - 1;
-	}
-
-	@Deprecated
-	public void setLifeCount(int x) {
-		this.lifeCount = x;
-	}
-
-	@Deprecated
-	public int getLifeCount() {
-		return this.lifeCount;
-	}
-
-	@Deprecated
-	public float getManaCount(){
-		return this.manaCount;
-	}
-
-	@Deprecated
-	public void decrementManaCount(int x){
-		this.manaCount -= x;
-	}
-
-	@Deprecated
-	public void incrementManaCount(){
-		if (this.manaCount<200){
-			this.manaCount += 0.1;
-		}
-	}
-
+	
 	/**
 	 * Get the state of Bob.
 	 * @return state of Bob
@@ -554,16 +504,6 @@ public class Bob {
 		this.gameIndex = gameIndex;
 	}
 	
-	@Deprecated
-	public void setAtosSpeed(){
-		if (isEnemy){
-			MAX_SPEED = 100;
-		}
-		else {
-			MAX_SPEED = 500;
-		}
-	}
-
 	/**
 	 * Move Bob towards a specified direction
 	 * @param time

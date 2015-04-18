@@ -3,7 +3,6 @@ package com.androidboys.spellarena.gameworld;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import com.androidboys.spellarena.gameworld.GameFactory.GameModel;
 import com.androidboys.spellarena.helper.AssetLoader;
@@ -21,23 +20,19 @@ import com.androidboys.spellarena.model.Thunderstorm;
 import com.androidboys.spellarena.model.Projectile;
 import com.androidboys.spellarena.model.Boomerang;
 import com.androidboys.spellarena.session.UserSession;
-import com.androidboys.spellarena.view.GameScreen;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
+
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 
 public class GameWorld {
-
-	private Random random = new Random();
 
 	//Boundaries
 	public static final float WORLD_BOUND_LEFT = 80;
@@ -122,12 +117,12 @@ public class GameWorld {
 						}
 					}
 					if (isHit){
-						damage += 200f;
+						damage += 400f;
 					}
 				}
 				if (bob.getbobRect().overlaps(gameObject.getRectangle()) 
 						&& !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
-//					Gdx.app.log(TAG,"Colliding");
+					//					Gdx.app.log(TAG,"Colliding");
 					if (object instanceof Projectile){
 						damage += 200f;
 					} else if (object instanceof Sword){
@@ -140,7 +135,7 @@ public class GameWorld {
 						damage += 500f;
 					} else if (object instanceof Sunstrike){
 						damage += 500f;
-                     }
+					}
 				}	
 			}
 			if(!bob.takeDamage(damage*delta)){
@@ -416,14 +411,14 @@ public class GameWorld {
 	}
 
 	public boolean isGameEnd() {
-        int playingUser = 0;
-        for (Bob playerModel : playerModels.values()) {
-        	synchronized (playerModel) {
-                if (playerModel.getState() != Bob.STATE_DEAD) {
-                    playingUser++;
-                }
+		int playingUser = 0;
+		for (Bob playerModel : playerModels.values()) {
+			synchronized (playerModel) {
+				if (playerModel.getState() != Bob.STATE_DEAD) {
+					playingUser++;
+				}
 			}
-        }
+		}
 		Gdx.app.log(TAG,"isGameEnd: "+(playingUser <= 1));
 		return playingUser <= 1;
 	}
@@ -457,12 +452,9 @@ public class GameWorld {
 		case SUNSTRIKE:
 			createSunstrike(bob, x, y);
 			break;
-
 		case LASER:
 			createLaser(bob);
 			break;
-
-
 		case TORNADO:
 			createTornado(bob);
 			break;
@@ -536,10 +528,10 @@ public class GameWorld {
 						synchronized (gameObjects) {
 							gameObjects.remove(sunstrike);
 						}
-		            }
-		        }, 
-		        4000 
-		);
+					}
+				}, 
+				3000 
+				);
 	}
 
 	private void createThunderstorm(Bob bob) {
@@ -554,10 +546,10 @@ public class GameWorld {
 						synchronized (gameObjects) {
 							gameObjects.remove(thunderstorm);
 						}
-		            }
-		        }, 
-		        4000 
-		);
+					}
+				}, 
+				4000 
+				);
 	}
 
 	private void blinkBob(Bob bob){
@@ -621,7 +613,7 @@ public class GameWorld {
 						}
 					}
 				}, 
-				2000 
+				3000 
 				);
 	}
 
@@ -639,29 +631,29 @@ public class GameWorld {
 	private void createTornado(Bob bob) {
 		float rotation = 0;
 		switch(bob.getDirection()){
-			case NORTH:
-				rotation = 90;
-				break;
-			case NORTHEAST:
-				rotation = 45;
-				break;
-			case NORTHWEST:
-				rotation = 135;
-				break;
-			case SOUTH:
-				rotation = 270;
-				break;
-			case SOUTHEAST:
-				rotation = 325;
-				break;
-			case SOUTHWEST:
-				rotation = 225;
-				break;
-			case WEST:
-				rotation = 180;
-				break;
-			default:
-				break;
+		case NORTH:
+			rotation = 90;
+			break;
+		case NORTHEAST:
+			rotation = 45;
+			break;
+		case NORTHWEST:
+			rotation = 135;
+			break;
+		case SOUTH:
+			rotation = 270;
+			break;
+		case SOUTHEAST:
+			rotation = 325;
+			break;
+		case SOUTHWEST:
+			rotation = 225;
+			break;
+		case WEST:
+			rotation = 180;
+			break;
+		default:
+			break;
 		}
 		Projectile tornado0 = new Projectile(bob.getPosition().x, bob.getPosition().y, rotation-15, bob.getPlayerName());
 		Projectile tornado1 = new Projectile(bob.getPosition().x, bob.getPosition().y, rotation, bob.getPlayerName());

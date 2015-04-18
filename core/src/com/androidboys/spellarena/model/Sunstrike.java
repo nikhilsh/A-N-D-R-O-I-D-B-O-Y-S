@@ -26,7 +26,7 @@ public class Sunstrike extends GameObject {
 						setPosition(new Vector2(actualX, actualY));
 		            }
 		        }, 
-		        2000 
+		        1000 
 		);
 		super.update(delta);
 	}
