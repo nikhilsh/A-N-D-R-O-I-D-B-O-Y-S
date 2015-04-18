@@ -20,15 +20,12 @@ import com.androidboys.spellarena.model.Thunderstorm;
 import com.androidboys.spellarena.model.Projectile;
 import com.androidboys.spellarena.model.Boomerang;
 import com.androidboys.spellarena.session.UserSession;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 
@@ -155,7 +152,7 @@ public class GameWorld {
 			bob.setRect(newPos);
 			if(tiles != null){
 				for(Rectangle tile: tiles){
-					if(tile.overlaps(bob.getbobRect())){
+					if(tile.overlaps(bob.getCollisionEdge())){
 						switch(bob.getDirection()){
 						case EAST:
 							newPos.x = tile.x - 40;
@@ -220,77 +217,16 @@ public class GameWorld {
 						}
 					}
 				}
-				if(bob.getState() == Bob.STATE_RUNNING){
-					for(Bob otherBob: playerModels.values()){
-						if(!bob.equals(otherBob)){
-							Rectangle rect = otherBob.getbobRect();
-							if(rect.overlaps(bob.getCollisionEdge())){
-								switch(bob.getDirection()){
-								case EAST:
-									newPos.x = rect.x - 40;
-									break;
-								case NORTH:
-									newPos.y = rect.y - 50;
-									break;
-								case NORTHEAST:
-									float x = (newPos.x + 40) - rect.x;
-									float y = (newPos.y + 50) - rect.y;
-									if(x>y){
-										newPos.x -= y;
-										newPos.y -= y;
-									} else {
-										newPos.x -= x;
-										newPos.y -= x;
-									}
-									break;
-								case NORTHWEST:
-									x = rect.x + rect.width - (newPos.x - 10);
-									y = (newPos.y + 50) - rect.y;
-									if(x>y){
-										newPos.x += y;
-										newPos.y -= y;
-									} else {
-										newPos.x += x;
-										newPos.y -= x;
-									}
-									break;
-								case SOUTH:
-									newPos.y = rect.y + rect.height;	
-									break;
-								case SOUTHEAST:
-									x = (newPos.x + 40) - rect.x;
-									y = rect.y + rect.height - (newPos.y);
-									if(x>y){
-										newPos.x -= y;
-										newPos.y += y;
-									} else {
-										newPos.x -= x;
-										newPos.y += x;
-									}
-									break;
-								case SOUTHWEST:
-									x = rect.x + rect.width - (newPos.x - 10);
-									y = rect.y + rect.height - (newPos.y);
-									//						System.out.println("x: "+x+"y: "+y);
-									if(x>y){
-										newPos.x += y;
-										newPos.y += y;
-									} else {
-										newPos.x += x;
-										newPos.y += x;
-									}
-									break;
-								case WEST:
-									newPos.x = rect.x + rect.width + 10;
-									break;
-								default:
-									break;
-
-								}
-							}
-						}
-					}
-				}
+			}
+			if(newPos.x > GameWorld.WORLD_BOUND_RIGHT){
+				newPos.x = GameWorld.WORLD_BOUND_RIGHT;
+			} else if (newPos.x < GameWorld.WORLD_BOUND_LEFT){
+				newPos.x = GameWorld.WORLD_BOUND_LEFT;
+			}
+			if(newPos.y > GameWorld.WORLD_BOUND_TOP){
+				newPos.y = GameWorld.WORLD_BOUND_TOP;
+			} else if (newPos.y < GameWorld.WORLD_BOUND_BOTTOM){
+				newPos.y = GameWorld.WORLD_BOUND_BOTTOM;
 			}
 			bob.setPosition(newPos);
 		}

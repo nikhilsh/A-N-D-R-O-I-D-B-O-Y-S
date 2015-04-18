@@ -406,6 +406,7 @@ public class Bob {
 		velocity = new Vector2(vx,vy);
 	}
 
+
 	public void setTouchpad(Touchpad touchpad){
 		this.touchpad = touchpad;
 	}
@@ -645,8 +646,18 @@ public class Bob {
 		this.boosted = true;
 		this.boostTimer = 1f;
 		this.MAX_SPEED = 300f;
-		this.velocity = new Vector2((Math.abs(getVelocity().x) == 100 ? 300 : getVelocity().x), (Math.abs(getVelocity().y) == 100 ? 300 : getVelocity().y));
-
+		if (getVelocity().x == 100){
+			this.velocity.x = 300;
+		}
+		if (getVelocity().x == -100){
+			this.velocity.x = -300;
+		}
+		if (getVelocity().y == 100){
+			this.velocity.y = 300;
+		}
+		if (getVelocity().y == -100){
+			this.velocity.y = 300;
+		}
 	}
 
 	/**
