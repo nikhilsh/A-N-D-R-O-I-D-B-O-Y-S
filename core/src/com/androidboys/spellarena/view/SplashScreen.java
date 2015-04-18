@@ -3,8 +3,6 @@ package com.androidboys.spellarena.view;
 import com.androidboys.spellarena.game.SpellArena;
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.helper.StyleLoader;
-import com.androidboys.spellarena.mediators.MainMenuMediator;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -53,33 +51,25 @@ public class SplashScreen implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act();
 		stage.draw();
-		
 		if(AssetLoader.update()){
 			if(animationDone){
 				AssetLoader.setMainMenuResources();
 				StyleLoader.prepareStyles();
-				MainMenuMediator mediator = new MainMenuMediator(game);
-				game.addScreen(mediator.createScreen());
+				game.addScreen(new MainMenuScreen(game));
 			}
 		}
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

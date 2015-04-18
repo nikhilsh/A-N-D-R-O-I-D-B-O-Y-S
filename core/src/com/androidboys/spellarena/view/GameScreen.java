@@ -104,8 +104,6 @@ public class GameScreen implements Screen{
 	
 	private OrthographicCamera cam;
 	private SpriteBatch batcher;
-	
-	private StartMultiplayerScreen prevScreen;
 
 	private TouchpadStyle touchpadStyle;
 	private Touchpad touchpad;
@@ -154,9 +152,11 @@ public class GameScreen implements Screen{
 		this.game = game;
 		this.mediator = mediator;
 		world.setMediator((GameScreenMediator)mediator);
-		this.gameStarted = false;
+
 		this.serverReady = false;
 		this.connectedToServer = false;
+		this.gameStarted = false;
+		this.gameEnded = false;
 		
 		this.gameScreenMediator = (GameScreenMediator) mediator;
 		this.gameScreenMediator.setRoom(UserSession.getInstance().getRoom());
@@ -187,13 +187,6 @@ public class GameScreen implements Screen{
 		world.initialize(GameFactory.getGameModel());
 	}
 
-	
-	public GameScreen(Game game, StartMultiplayerScreen prevScreen) {
-		
-		//this(game);
-		this.prevScreen = prevScreen;
-	}
-
 	/**
 	 * Called when this screen becomes the current screen for a Game.
 	 */
@@ -219,7 +212,7 @@ public class GameScreen implements Screen{
 			gameServer.startServer();
 			gameScreenMediator.setGameServer(gameServer);
 		} else {
-			initializeClient();
+
 		}
 		
 	}
@@ -365,6 +358,7 @@ public class GameScreen implements Screen{
 
 
 	private void backToLobby() {
+		gameScreenMediator.disconnect(gameStarted);
 		game.backToPreviousScreen();
 	}
 	
@@ -693,6 +687,7 @@ public class GameScreen implements Screen{
 	}
 	
 	private void initializeClient() {
+		Gdx.app.log(TAG, "Initializing game client");
 		gameClient = new GameClient();
 		gameClient.initialize(game.getClient(), gameScreenMediator);
 	}
@@ -714,6 +709,7 @@ public class GameScreen implements Screen{
 	private ButtonWidget myButton3;
 	private boolean roomInfoProcessed;
 	private Label spellLabel;
+	private boolean gameEnded;
 	
 	private void update(float delta) {
 		synchronized (world.getPlayerModels()) {
@@ -721,7 +717,7 @@ public class GameScreen implements Screen{
 			if(n%10 == 0){
 				prevMovementChanged = false;
 			}
-			if(gameStarted){
+			if(gameStarted&&!gameEnded){
 				world.update(delta);
 			}
 			stage.act(delta);
@@ -1437,6 +1433,7 @@ public class GameScreen implements Screen{
 
 
 	public void connectToServer(String ip) {
+		initializeClient();
 		this.serverIp = ip;
 		Gdx.app.log(TAG, "connectToServer");
 		gameClient.connectToServer(ip);
@@ -1526,15 +1523,13 @@ public class GameScreen implements Screen{
 
 
 	public void displayWinGamePopup() {
-		gameScreenMediator.disconnect(gameStarted);
 		winGamePopUp.setVisible(true);
-		gameStarted = false;
+		gameEnded = true;
 	}
 
 	public void displayLoseGamePopup(String winnerName) {
-		gameScreenMediator.disconnect(gameStarted);
 		loseGamePopUp.setVisible(true);
-		gameStarted = false;
+		gameEnded = true;
 	}
 
 	public void onOwnerLeft() {

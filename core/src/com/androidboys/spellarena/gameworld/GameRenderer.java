@@ -188,7 +188,7 @@ public class GameRenderer {
 		if(bob!=null)renderBob(runTime);
 		if(!enemies.isEmpty())renderEnemy(runTime);
 		
-		synchronized (world.getGameObjects().toArray()) {
+		synchronized (world.getGameObjects()) {
 			for(Object o: world.getGameObjects()){
 				if(o instanceof Projectile){
 					renderProjectile(runTime,(Projectile)o);

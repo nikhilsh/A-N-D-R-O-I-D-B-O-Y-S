@@ -180,7 +180,7 @@ public class GameServer {
 		}).start();
 	}
 
-	public void close() {
-		server.close();
+	public void stop() {
+		server.stop();
 	}
 }

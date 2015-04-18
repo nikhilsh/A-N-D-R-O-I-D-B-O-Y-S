@@ -7,7 +7,6 @@ import com.androidboys.spellarena.game.SpellArena;
 import com.androidboys.spellarena.game.SpellArena.ScreenType;
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.helper.StyleLoader;
-import com.androidboys.spellarena.mediators.MainMenuMediator;
 import com.androidboys.spellarena.net.NetworkListenerAdapter;
 import com.androidboys.spellarena.net.model.RoomModel;
 import com.androidboys.spellarena.session.UserSession;
@@ -18,7 +17,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -38,58 +36,44 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class MainMenuScreen implements Screen {
 
-	protected static final String TAG = "MainMenuScreen";
+	private static final String TAG = "MainMenuScreen";
 	private static final float PERIODIC_REQUEST_INTERVAL = 5;
 	
-	
 	private SpellArena game;
-	private MainMenuMediator mediator;
-	
-	float time;
 	
 	final float width = 480;
 	final float height = 320;
+	
 	private boolean processingJoinRoom;
-	private Group joinedRoomFailedPopUp;
 	
-	OrthographicCamera cam;
-	SpriteBatch batcher;
-	
+	private OrthographicCamera cam;
+	private SpriteBatch batcher;
 	private Stage stage;
 	
-	private Image background;
-	
+	private TextField userNameLabel;	
 	private Table gameTable;
 	private TextButton createButton;
-	private Group[] joinGameList;
 
 	private LoadingWidget loadingWidget;
-	
-	private ShapeRenderer debugRenderer;
-	private NetworkListenerAdapter networkListenerAdapter;
-	private TextField userNameLabel;
+	private Group joinedRoomFailedPopUp;
 	private Group connectionErrorPopUp;
+	
+	private NetworkListenerAdapter networkListenerAdapter;
+	
 	private float updateCounter;
 	
-	public MainMenuScreen(SpellArena game, MainMenuMediator mediator) {
+	public MainMenuScreen(SpellArena game) {
 		super();
 		this.game = game;
-		this.mediator = mediator;
-
 		this.stage = new Stage(new StretchViewport(720,480));
-		this.time = 0;
-
-		cam = new OrthographicCamera(width,height);
-		cam.position.set(width/2, height/2 , 0);
-		
-		debugRenderer = new ShapeRenderer();
-		batcher = new SpriteBatch();
+		this.cam = new OrthographicCamera(width,height);
+		this.cam.position.set(width/2, height/2 , 0);
+		this.batcher = new SpriteBatch();
 		
 		initialize();
 	}
 	
 	public void initialize(){
-		
 		gameTable = new Table();
 		gameTable.setTouchable(Touchable.enabled);
 		
@@ -137,7 +121,7 @@ public class MainMenuScreen implements Screen {
 			}
 			
 		});
-		//createButton.debugActor();
+
 		initializeGameList();
 		networkListenerAdapter = new NetworkListenerAdapter(){
 
@@ -232,15 +216,11 @@ public class MainMenuScreen implements Screen {
 		Table gameList = new Table();
 		stage.addActor(gameList);
 		gameList.align(Align.bottom);
-//		gameList.debug();
 		
 		gameTable.align(Align.bottom);
 		gameTable.setFillParent(true);
-		//gameTable.setScale(100,100);
-//		gameTable.debug();
 		
 		final ScrollPane scrollPane = new ScrollPane(gameTable);
-//		scrollPane.debug();
 		scrollPane.setClamp(true);
 		scrollPane.setOverscroll(false, false);
 		scrollPane.setFillParent(true);
@@ -301,7 +281,6 @@ public class MainMenuScreen implements Screen {
 		} else {
 			joinGameButton = new TextButton("Join Game", smallButtonStyle);
 		}
-		//joinGameButton.debugActor();
 		group.addActor(label);
 		group.addActor(joinGameButton);
 		joinGameButton.right();
@@ -337,7 +316,6 @@ public class MainMenuScreen implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
-		time+=delta;
 		update(delta);
 		stage.act(delta);
 		stage.draw();
@@ -350,37 +328,24 @@ public class MainMenuScreen implements Screen {
             game.getClient().listRooms();
             updateCounter = 0;
         }
-		
-//		if(Gdx.input.justTouched()){
-////			WarpController.getInstance().startApp(getRandomHexString(10));
-////			game.setScreen(new StartMultiplayerScreen(game,width,height));
-//			game.setScreen(new GameScreen(game));
-//			return;
-//		}
 	}
 
+	@SuppressWarnings("unused")
 	@Deprecated
+	/**
+	 * Method to render the main menu, not obsolete due to using stage.
+	 */
 	private void draw() {
 		Gdx.gl20.glClearColor(1, 0, 0, 1);
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		cam.update();
 		batcher.setProjectionMatrix(cam.combined);
-		
-//		batcher.disableBlending();
-//		batcher.begin();
-//		batcher.draw(AssetLoader.backgroundRegion, 0, 0 ,width, height);
-//		batcher.end();
-		
 		batcher.enableBlending();
 		batcher.begin();
 		
 		AssetLoader.header.draw(batcher, "Spell", width/2-165, 300);
 		AssetLoader.header.draw(batcher, "Arena", width/2-165+50, 300-40);
-//		if(!((int)time%3 == 0)){ //Blink
-//			AssetLoader.playText.draw(batcher, "Tap screen to play", width/2-165+25, 150);
-//		}
-//		
 		batcher.end();
 	}
 
@@ -391,8 +356,6 @@ public class MainMenuScreen implements Screen {
 	 */
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -401,7 +364,6 @@ public class MainMenuScreen implements Screen {
 	 */
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -410,7 +372,6 @@ public class MainMenuScreen implements Screen {
 	 */
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -419,8 +380,6 @@ public class MainMenuScreen implements Screen {
 	 */
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -428,14 +387,11 @@ public class MainMenuScreen implements Screen {
 	 */
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
 	}
 	
 	protected void createNewGame() {
 		Gdx.app.log(TAG, "New game created.");
 		processingJoinRoom = true;
-		//UserSession.getInstance().setUserName(userNameLabel.getMessageText());
 		displayLoadingWidget();
 		Random random = new Random(System.currentTimeMillis());
 		synchronized (gameTable) {
@@ -446,7 +402,6 @@ public class MainMenuScreen implements Screen {
 	}
 	
 	private void joinGame(RoomModel roomModel) {
-		//UserSession.getInstance().setUserName(userNameLabel.getText());
 		processingJoinRoom = true;
 		displayLoadingWidget();
 		UserSession.getInstance().setRoom(roomModel);
@@ -464,7 +419,6 @@ public class MainMenuScreen implements Screen {
                 }
             }
         });
-
     }
 	
 	private void displayLoadingWidget(){
@@ -478,7 +432,6 @@ public class MainMenuScreen implements Screen {
 				400, 100);
 		loadingWidget.setVisible(true);
 		stage.addActor(loadingWidget);
-		
 	}
 	
 	private void onConnectionError() {

@@ -422,7 +422,7 @@ public class GameScreenMediator extends Mediator{
 			}
 		} else {
 			if(UserSession.getInstance().isServer()){
-				gameServer.close();
+//				gameServer.stop();
 			} else {
 				gameClient.close();
 			}

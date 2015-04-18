@@ -37,6 +37,7 @@ public class GameClient {
 		this.gameScreenMediator = gameScreenMediator;
 		this.client = new Client();
 		this.client.start();
+		Gdx.app.log(TAG, "Client started");
 //		this.client.getKryo().register(String.class);
 		
 	}

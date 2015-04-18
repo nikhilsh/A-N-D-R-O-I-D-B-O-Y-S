@@ -1,8 +1,6 @@
 package com.androidboys.spellarena.view.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 public class ChangingLabel extends Label{
 		
