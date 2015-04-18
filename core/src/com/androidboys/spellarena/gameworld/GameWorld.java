@@ -142,11 +142,16 @@ public class GameWorld {
 					} else if (object instanceof Sunstrike){
 						damage += 500f;
                      }
-						synchronized (gameObject) {
+				}
+				if (bob.getbobRect().overlaps(gameObject.getRectangle()) 
+						&& UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
+					if (object instanceof Boomerang){
+						synchronized (gameObjects) {
 							gameObjects.remove(object);
 						}
-					 
+					}
 				}
+				
 			}
 			if(!bob.takeDamage(damage*delta)){
 				if(UserSession.getInstance().isServer()){
