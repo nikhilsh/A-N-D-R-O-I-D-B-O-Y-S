@@ -3,25 +3,19 @@ package com.androidboys.spellarena.gameworld;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.json.JSONObject;
-
 import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.model.Bob;
+import com.androidboys.spellarena.model.Boomerang;
 import com.androidboys.spellarena.model.DummyBlinkObject;
 import com.androidboys.spellarena.model.Firewall;
-import com.androidboys.spellarena.model.GameObject;
 import com.androidboys.spellarena.model.Laser;
-import com.androidboys.spellarena.model.Spell;
-import com.androidboys.spellarena.model.Boomerang;
+import com.androidboys.spellarena.model.Projectile;
 import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.model.Sunstrike;
 import com.androidboys.spellarena.model.Sword;
 import com.androidboys.spellarena.model.Thunderstorm;
-import com.androidboys.spellarena.model.Projectile;
-import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.session.UserSession;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -37,9 +31,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.World;
 
 public class GameRenderer {
 
@@ -52,8 +44,6 @@ public class GameRenderer {
 
 	private Bob bob;
 	private ArrayList<Bob> enemies;
-
-	private Spells spell;
 
 	private TiledMap map;
 	private TiledMapRenderer mapRenderer;

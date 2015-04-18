@@ -735,7 +735,7 @@ public class Bob {
 	 * @return light radius
 	 */
 	public float getLightRadius(){
-		return health/MAX_HEALTH > 0 ? health/MAX_HEALTH : 1;
+		return health/MAX_HEALTH > 0 ? Math.max(health/MAX_HEALTH , 0.15f): 1;
 	}
 	
 	/**
