@@ -1,14 +1,7 @@
 package com.androidboys.spellarena.model;
 
-import org.json.JSONObject;
-
 import com.androidboys.spellarena.gameworld.GameWorld;
-import com.androidboys.spellarena.helper.AssetLoader;
-import com.androidboys.spellarena.net.WarpController;
 import com.androidboys.spellarena.session.UserSession;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Spell {

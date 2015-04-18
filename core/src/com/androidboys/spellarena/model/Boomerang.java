@@ -72,7 +72,6 @@ public class Boomerang extends GameObject {
 	@Override
 	public Rectangle getRectangle() {
 		return new Rectangle(getPosition().x-35,getPosition().y-15,105f,90f);
-
 	}
 	
 	@Override

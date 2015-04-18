@@ -1,7 +1,6 @@
 package com.androidboys.spellarena.mediators;
 
 import com.androidboys.spellarena.game.SpellArena;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 
 public abstract class Mediator {
@@ -16,9 +15,7 @@ public abstract class Mediator {
 	public abstract Screen createScreen();
 	
 	public final void onScreenShowInternal(){
-		
 		onScreenShow();
-		
 	}
 
 	protected void onScreenShow(){};

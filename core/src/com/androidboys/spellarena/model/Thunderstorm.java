@@ -2,13 +2,11 @@ package com.androidboys.spellarena.model;
 
 import com.androidboys.spellarena.model.Bob.Direction;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 public class Thunderstorm extends GameObject{
 
 	public Thunderstorm(float x, float y, Direction direction, String playerName) {
 		super(x, y, playerName);
-		float rotation = 0;
 		switch(direction){
 			case EAST:
 				this.getPosition().add(300, 25);
@@ -39,7 +37,6 @@ public class Thunderstorm extends GameObject{
 		}
 	}
 
-	
 	@Override
 	public Rectangle getRectangle() {
 		return new Rectangle(getPosition().x-100,
