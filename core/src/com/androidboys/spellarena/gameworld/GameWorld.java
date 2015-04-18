@@ -14,7 +14,6 @@ import com.androidboys.spellarena.model.DummyBlinkObject;
 import com.androidboys.spellarena.model.Firewall;
 import com.androidboys.spellarena.model.GameObject;
 import com.androidboys.spellarena.model.Laser;
-import com.androidboys.spellarena.model.Spell;
 import com.androidboys.spellarena.model.Sunstrike;
 import com.androidboys.spellarena.model.Spell.Spells;
 import com.androidboys.spellarena.model.Sword;
@@ -142,16 +141,7 @@ public class GameWorld {
 					} else if (object instanceof Sunstrike){
 						damage += 500f;
                      }
-				}
-				if (bob.getbobRect().overlaps(gameObject.getRectangle()) 
-						&& UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
-					if (object instanceof Boomerang){
-						synchronized (gameObjects) {
-							gameObjects.remove(object);
-						}
-					}
-				}
-				
+				}	
 			}
 			if(!bob.takeDamage(damage*delta)){
 				if(UserSession.getInstance().isServer()){
