@@ -1535,13 +1535,17 @@ public class GameScreen implements Screen{
 
 
 	public void displayWinGamePopup() {
-		game.getAudioManager().playEndGame();
+		if(!gameEnded){
+			game.getAudioManager().playEndGame();
+		}
 		winGamePopUp.setVisible(true);
 		gameEnded = true;
 	}
 
 	public void displayLoseGamePopup(String winnerName) {
-		game.getAudioManager().playEndGame();
+		if(!gameEnded){
+			game.getAudioManager().playEndGame();
+		}
 		loseGamePopUp.setVisible(true);
 		gameEnded = true;
 	}
