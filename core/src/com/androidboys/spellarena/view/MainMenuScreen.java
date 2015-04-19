@@ -289,17 +289,19 @@ public class MainMenuScreen implements Screen {
 		label.setPosition(0, 0);
 		label.setSize(300, 25);
 		joinGameButton.setBounds(300,0,160,25);
-		joinGameButton.addListener(new InputListener(){
-			
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				Gdx.app.log(TAG, "Join game clicked");
-				joinGame(roomModel);
-				return super.touchDown(event, x, y, pointer, button);
-			}
-			
-		});
+		if(roomModel != null){
+			joinGameButton.addListener(new InputListener(){
+				
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y,
+						int pointer, int button) {
+					Gdx.app.log(TAG, "Join game clicked");
+					joinGame(roomModel);
+					return super.touchDown(event, x, y, pointer, button);
+				}
+				
+			});
+		}
 		return group;
 	}
 
