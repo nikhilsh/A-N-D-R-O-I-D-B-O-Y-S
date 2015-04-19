@@ -211,7 +211,7 @@ public class MainMenuScreen implements Screen {
 		
 		displayLoadingWidget();
 		game.getClient().connect();
-		game.getAudioManager().playMainTheme();
+		AudioManager.playMainTheme();
 	}
 
 	private void initializeGameList() {

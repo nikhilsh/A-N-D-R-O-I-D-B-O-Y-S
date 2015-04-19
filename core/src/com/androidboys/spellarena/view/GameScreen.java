@@ -7,6 +7,7 @@ import com.androidboys.spellarena.gameworld.GameFactory;
 import com.androidboys.spellarena.gameworld.GameRenderer;
 import com.androidboys.spellarena.gameworld.GameWorld;
 import com.androidboys.spellarena.helper.AssetLoader;
+import com.androidboys.spellarena.helper.AudioManager;
 import com.androidboys.spellarena.helper.StyleLoader;
 import com.androidboys.spellarena.mediators.GameScreenMediator;
 import com.androidboys.spellarena.mediators.Mediator;
@@ -169,8 +170,8 @@ public class GameScreen implements Screen{
 		this.stage = new Stage(new StretchViewport(720, 480));
 //
 		renderer = new GameRenderer(batcher, world);	
-		game.getAudioManager().stopMainTheme();
-		game.getAudioManager().playStartGame();
+		AudioManager.stopMainTheme();
+		AudioManager.playStartGame();
 //
 		
 //		createTouchpad();
@@ -360,7 +361,7 @@ public class GameScreen implements Screen{
 	private void backToLobby() {
 		gameScreenMediator.disconnect(gameStarted);
 		game.backToPreviousScreen();
-		game.getAudioManager().playMainTheme();
+		AudioManager.playMainTheme();
 	}
 	
 	private void prepareInputProcessor() {
@@ -844,7 +845,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				DIVINESHIELD_COOLDOWN = 5;
 			}
-			game.getAudioManager().playShieldSound();
+			AudioManager.playShieldSound();
 			break;		
 		case 1:
 			if (BLINK_COOLDOWN > 0){
@@ -854,7 +855,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				BLINK_COOLDOWN = 2;
 			}
-			game.getAudioManager().playBlink();
+			AudioManager.playBlink();
 			break;		
 		case 2:
 			if (HASTE_COOLDOWN > 0){
@@ -864,7 +865,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				HASTE_COOLDOWN = 5;
 			}
-			game.getAudioManager().playHaste();
+			AudioManager.playHaste();
 			break;		
 		case 3:
 			if (FIREWALL_COOLDOWN > 0){
@@ -874,7 +875,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				FIREWALL_COOLDOWN = 5;
 			}
-			game.getAudioManager().playFirewall();
+			AudioManager.playFirewall();
 			break;		
 		case 4:
 			if (BLADESTORM_COOLDOWN > 0){
@@ -884,7 +885,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				BLADESTORM_COOLDOWN = 5;
 			}
-			game.getAudioManager().playHurricane();
+			AudioManager.playHurricane();
 			break;		
 		case 5:
 			if (THUNDERSTORM_COOLDOWN > 0){
@@ -894,7 +895,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				THUNDERSTORM_COOLDOWN = 5;
 			}
-			game.getAudioManager().playThunderstorm();
+			AudioManager.playThunderstorm();
 			break;		
 		case 6:
 			if (SUNSTRIKE_COOLDOWN > 0){
@@ -904,7 +905,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				SUNSTRIKE_COOLDOWN = 5;
 			}
-			game.getAudioManager().playSunstrike();
+			AudioManager.playSunstrike();
 			break;		
 		case 7:
 			if (LASER_COOLDOWN > 0){
@@ -914,7 +915,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				LASER_COOLDOWN = 5;
 			}
-			game.getAudioManager().playLaser();
+			AudioManager.playLaser();
 			break;		
 		case 8:
 			if (SPARK_COOLDOWN > 0){
@@ -924,7 +925,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				SPARK_COOLDOWN = 5;
 			}
-			game.getAudioManager().playBoomerang();
+			AudioManager.playBoomerang();
 
 			break;		
 		case 9:
@@ -935,7 +936,7 @@ public class GameScreen implements Screen{
 			if (playerName == UserSession.getInstance().getUserName()){
 				TORNADO_COOLDOWN = 5;
 			}
-			game.getAudioManager().playSpark();
+			AudioManager.playSpark();
 			break;		
 		default:
 			break;
@@ -1536,7 +1537,7 @@ public class GameScreen implements Screen{
 
 	public void displayWinGamePopup() {
 		if(!gameEnded){
-			game.getAudioManager().playEndGame();
+			AudioManager.playEndGame();
 		}
 		winGamePopUp.setVisible(true);
 		gameEnded = true;
@@ -1544,14 +1545,14 @@ public class GameScreen implements Screen{
 
 	public void displayLoseGamePopup(String winnerName) {
 		if(!gameEnded){
-			game.getAudioManager().playEndGame();
+			AudioManager.playEndGame();
 		}
 		loseGamePopUp.setVisible(true);
 		gameEnded = true;
 	}
 
 	public void onOwnerLeft() {
-		game.getAudioManager().playEndGame();
+		AudioManager.playEndGame();
 		gameScreenMediator.disconnect(gameStarted);
 		if(!world.isGameEnd()){
 			roomOwnerLeftPopUp.setVisible(true);

@@ -8,6 +8,15 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 
 public class AudioManager {
+	
+	private static AudioManager INSTANCE;
+
+	public static AudioManager getInstance() {
+		if(INSTANCE == null){
+			INSTANCE = new AudioManager();
+		}
+		return INSTANCE;
+	}
 
 	private static final String SOUND_PATH ="gamesounds/";
 	
@@ -26,13 +35,14 @@ public class AudioManager {
 	private static final String THUNDERSTORM = SOUND_PATH + "thunderstorm.mp3";
 	private static final String BOOMERANG = SOUND_PATH + "boomerang.mp3";
 
+	private static final String TAG = "AudioManager";
 
-	private AssetManager assetManager;
+	private static AssetManager assetManager;
 
-	private Music activeMusic;
+	private static Music activeMusic;
 
-	public void initialize(){
-		this.assetManager = new AssetManager();
+	public static void initialize(){
+		assetManager = new AssetManager();
 		activeMusic = null;
 
 		if ( Gdx.app.getType() == Application.ApplicationType.Android){
@@ -58,18 +68,17 @@ public class AudioManager {
 			assetManager.load(THUNDERSTORM, Sound.class);
 			assetManager.load(BOOMERANG, Sound.class);
 		}
-		assetManager.finishLoading();
 	}
 
-	public void unload(){
+	public static void unload(){
 		assetManager.clear();
 	}
 
-	private boolean playSound( String name){
+	private static boolean playSound( String name){
 		return playSound( name, false);
 	}
 
-	private boolean playSound(final String name, final boolean isLoop){
+	private static boolean playSound(final String name, final boolean isLoop){
 		try {
 			Gdx.app.postRunnable(new Runnable() {
 
@@ -91,7 +100,8 @@ public class AudioManager {
 		return true;
 	}
 
-	private boolean playMusic(String name, boolean isLoop){
+	private static boolean playMusic(String name, boolean isLoop){
+		Gdx.app.log(TAG,"Playing music "+name);
 		try {
 			Music music = Gdx.app.getAudio().newMusic(Gdx.files.internal(name));
 			music.setLooping(isLoop);
@@ -104,7 +114,7 @@ public class AudioManager {
 		return true;
 	}
 
-	private void stopMusic(){
+	private static void stopMusic(){
 		if (activeMusic != null){
 			activeMusic.stop();
 			activeMusic.dispose();
@@ -112,61 +122,63 @@ public class AudioManager {
 		activeMusic = null;
 	}
 
-	public void playMainTheme() {
+	public static void playMainTheme() {
 		playMusic(MAIN_THEME, true);
 	}
 	
-	public void stopMainTheme() {
+	public static void stopMainTheme() {
 		stopMusic();
 	}
 	
-	public void playStartGame() {
+	public static void playStartGame() {
 		playMusic(START_GAME, false);
 	}
 	
-	public void playEndGame() {
+	public static void playEndGame() {
 		playMusic(END_GAME, false);
 	}	
 		
-	public void playShieldSound() {
+	public static void playShieldSound() {
 		playSound(SHIELD, false);
 	}
 
-	public void playBoomerang() {
+	public static void playBoomerang() {
 		playSound(BOOMERANG,false);
 	}
 
-	public void playFirewall() {
+	public static void playFirewall() {
 		playSound(FIREWALL,false);
 	}
 
-	public void playBlink() {
+	public static void playBlink() {
 		playMusic(BLINK, false);
 	}
 
-	public void playHaste() {
+	public static void playHaste() {
 		playMusic(HASTE, false);
 	}
 	
-	public void playHurricane() {
+	public static void playHurricane() {
 		playMusic(HURRICANE, false);
 	}
 	
-	public void playSpark() {
+	public static void playSpark() {
 		playMusic(SPARK, false);
 	}
 	
-	public void playThunderstorm() {
+	public static void playThunderstorm() {
 		playMusic(THUNDERSTORM, false);
 	}
 	
-	public void playLaser() {
+	public static void playLaser() {
 		playMusic(LASER, false);
 	}
 	
-	public void playSunstrike(){
+	public static void playSunstrike(){
 		playMusic(SUNSTRIKE, false);
 	}
-	
 
+	public static boolean update() {
+		return assetManager.update();
+	}
 }

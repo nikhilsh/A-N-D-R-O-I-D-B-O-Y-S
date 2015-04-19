@@ -27,7 +27,6 @@ public class SpellArena extends Game {
     }
 	
 	private NetworkInterface client = new AppWarpClient(UserSession.getInstance().getUserName());
-	private AudioManager audioManager = new AudioManager();
 
 	private Screen topScreen;
 	
@@ -40,7 +39,6 @@ public class SpellArena extends Game {
 		setScreen(new SplashScreen(this));
 		Gdx.input.setCatchBackKey(true);
 		fps = new FPSLogger();
-		audioManager.initialize();
 	}
 
 	/**
@@ -147,8 +145,4 @@ public class SpellArena extends Game {
 	public int getNumberScreens() {
 		return screens.size();
 	}
-	
-	public AudioManager getAudioManager() {
-        return this.audioManager;
-    }
 }

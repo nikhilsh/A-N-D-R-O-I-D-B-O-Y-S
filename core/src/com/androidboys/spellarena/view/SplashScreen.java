@@ -2,6 +2,7 @@ package com.androidboys.spellarena.view;
 
 import com.androidboys.spellarena.game.SpellArena;
 import com.androidboys.spellarena.helper.AssetLoader;
+import com.androidboys.spellarena.helper.AudioManager;
 import com.androidboys.spellarena.helper.StyleLoader;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -30,6 +31,7 @@ public class SplashScreen implements Screen{
 	@Override
 	public void show() {
 		AssetLoader.queueLoading();
+		AudioManager.initialize();
 		splashImage.setSize(stage.getWidth(), stage.getHeight());
 		stage.addActor(splashImage);
 		splashImage.addAction(Actions.sequence(Actions.alpha(0),
@@ -51,7 +53,7 @@ public class SplashScreen implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act();
 		stage.draw();
-		if(AssetLoader.update()){
+		if(AssetLoader.update()&&AudioManager.update()){
 			if(animationDone){
 				AssetLoader.setMainMenuResources();
 				StyleLoader.prepareStyles();
