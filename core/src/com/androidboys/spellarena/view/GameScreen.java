@@ -208,8 +208,8 @@ public class GameScreen implements Screen{
 		
 		if(UserSession.getInstance().isServer()) {
 			initializeGameOnServer();
-			gameServer = new GameServer(world);
-			gameServer.initialize(game.getClient(),gameScreenMediator);
+			gameServer = GameServer.getInstance();
+			gameServer.initialize(world, game.getClient(),gameScreenMediator);
 			gameServer.startServer();
 			gameScreenMediator.setGameServer(gameServer);
 		} else {
@@ -1361,10 +1361,13 @@ public class GameScreen implements Screen{
                         Gdx.app.postRunnable(new Runnable() {
                             @Override
                             public void run() {
-                        		gameScreenMediator.disconnect(gameStarted);
-                                if (game.getNumberScreens() > 1) {
-                                    game.backToPreviousScreen();
-                                }
+                            	if(!gameStarted||gameEnded)
+                            		{
+		                        		gameScreenMediator.disconnect(gameStarted);
+		                                if (game.getNumberScreens() > 1) {
+		                                    game.backToPreviousScreen();
+		                                }
+                            		}
                             }
                         });
 	                }

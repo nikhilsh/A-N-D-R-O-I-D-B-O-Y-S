@@ -26,6 +26,15 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 public class GameServer {
+	
+	private static GameServer INSTANCE;
+	
+	public static GameServer getInstance(){
+		if(INSTANCE == null){
+			INSTANCE = new GameServer();
+		}
+		return INSTANCE;
+	}
 
 	private LinkedList<String> inBuffer = new LinkedList<String>();
 	private LinkedList<String> outBuffer = new LinkedList<String>();
@@ -36,7 +45,7 @@ public class GameServer {
 	public static final int UDP_PORT = 4456;
 	protected static final String TAG = "GameServer";
 	private ScheduledExecutorService executorService;
-    private boolean isGameStarted = false;
+    private boolean isServerStarted;
     private boolean isDisposed = false;
 	
 	private GameWorld world;
@@ -46,13 +55,18 @@ public class GameServer {
 
 	private Server server;
 	
-	public GameServer(GameWorld world){
-		this.world = world;
+	public GameServer(){
+		this.isServerStarted = false;
 	}
 	
-	public void initialize(NetworkInterface client,
+//	public GameServer(GameWorld world){
+//		this.world = world;
+//		this.isServerStarted = false;
+//	}
+	
+	public void initialize(GameWorld gameWorld, NetworkInterface client,
 			GameScreenMediator gameScreenMediator){
-		
+		this.world = gameWorld;
 		this.networkInterface = client;
 		this.gameScreenMediator = gameScreenMediator;
 		this.networkInterface.addNetworkListener(new NetworkListenerAdapter() {
@@ -78,50 +92,56 @@ public class GameServer {
 	}
 	
 	public void startServer(){
-		this.server = new Server();
-//		this.server.getKryo().register(String.class);
-		this.server.start();
-		try {
-			this.server.bind(TCP_PORT, UDP_PORT);
-			this.server.addListener(new Listener(){
-				
-				@Override
-				public void connected(Connection connection) {
-					connectionsList.put(connection, null);
-				}
-				
-				@Override
-				public void disconnected(Connection connection) {
-					Gdx.app.log("GameServer", connection+" disconnected");
-					String user = connectionsList.get(connection);
-					gameScreenMediator.onPlayerLeftRoom(user);
-				}
-				
-				@Override
-				public void received(Connection connection, Object object) {
-					if(connectionsList.get(connection) == null){
-						Command command = commandFactory.createCommand((String)object);
-						if(command == null){
-							Gdx.app.log(TAG, "Waiting for split message");
-							return;
+		Gdx.app.log(TAG,""+isServerStarted);
+		if(!isServerStarted){
+			isServerStarted = true;
+			Gdx.app.log(TAG,""+isServerStarted);
+			this.server = new Server();
+	//		this.server.getKryo().register(String.class);
+			this.server.start();
+			try {
+				this.server.bind(TCP_PORT, UDP_PORT);
+				this.server.addListener(new Listener(){
+					
+					@Override
+					public void connected(Connection connection) {
+						connectionsList.put(connection, null);
+					}
+					
+					@Override
+					public void disconnected(Connection connection) {
+						Gdx.app.log("GameServer", connection+" disconnected");
+						String user = connectionsList.get(connection);
+						gameScreenMediator.onPlayerLeftRoom(user);
+					}
+					
+					@Override
+					public void received(Connection connection, Object object) {
+						if(connectionsList.get(connection) == null){
+							Command command = commandFactory.createCommand((String)object);
+							if(command == null){
+								Gdx.app.log(TAG, "Waiting for split message");
+								return;
+							}
+							String user = command.getFromUser();
+							connectionsList.put(connection, user);
 						}
-						String user = command.getFromUser();
-						connectionsList.put(connection, user);
+						if(object instanceof String){
+							Gdx.app.log(TAG, "Sending to all: "+object);
+							gameScreenMediator.processMessage((String) object);
+	//						server.sendToAllTCP(object);
+							server.sendToAllExceptTCP(connection.getID(), object);
+						}
 					}
-					if(object instanceof String){
-						Gdx.app.log(TAG, "Sending to all: "+object);
-						gameScreenMediator.processMessage((String) object);
-//						server.sendToAllTCP(object);
-						server.sendToAllExceptTCP(connection.getID(), object);
-					}
-				}
-				
-			});
+				});
+				gameScreenMediator.onServerStarted();
+			} catch (IOException e) {
+				gameScreenMediator.onServerStartFail();
+			}
+			this.initSender();
+		} else {
 			gameScreenMediator.onServerStarted();
-		} catch (IOException e) {
-			gameScreenMediator.onServerStartFail();
 		}
-		this.initSender();
 	}
 
 	protected void handleClockSyncResponseCommand(Command command) {
