@@ -17,7 +17,7 @@ public class Projectile extends GameObject {
 
 	@Override
 	public Rectangle getRectangle() {
-		return new Rectangle(getPosition().x-50,getPosition().y-50,150f,150f);
+		return new Rectangle(getPosition().x-25,getPosition().y-25,50f,50f);
 	}
 	
 	@Override
