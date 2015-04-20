@@ -124,11 +124,11 @@ public class GameWorld {
 					if (object instanceof Projectile){
 						damage += 200f;
 					} else if (object instanceof Sword){
-						damage += 300f;
-					} else if (object instanceof Boomerang){
 						damage += 200f;
+					} else if (object instanceof Boomerang){
+						damage += 300f;
 					} else if (object instanceof Firewall){
-						damage += 500f;
+						damage += 350f;
 					} else if (object instanceof Thunderstorm){
 						damage += 500f;
 					} else if (object instanceof Sunstrike){
@@ -142,6 +142,8 @@ public class GameWorld {
 						Gdx.app.log(TAG, "Host dead, game is lost");
 						mediator.endGame(getWinner());
 					}
+				} else {
+					mediator.update(getPlayerModel(UserSession.getInstance().getUserName()));
 				}
 			}
 		}
