@@ -527,7 +527,7 @@ public class AssetLoader {
 			return prefs.getString("name");
 		}else {
 			Gdx.app.log(TAG, "null");
-			return null;
+			return "";
 		}
 
 	}

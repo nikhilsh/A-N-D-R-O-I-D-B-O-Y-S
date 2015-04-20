@@ -599,7 +599,6 @@ public class MainMenuScreen implements Screen {
 	private void changeUserInfo(String name){
 		UserSession.getInstance().setUserName(name);
 		game.getClient().disconnect();
-		game.getClient().connect();
 	}
 	
 	private void prepareHelpPopUp(){

@@ -26,7 +26,7 @@ public class UserSession {
 	}
 	
 	private UserSession(){
-		if(AssetLoader.getUsername().equals(null)){
+		if(AssetLoader.getUsername().equals("")){
 			this.setUserName(generateUserName());
 		} else {
 			this.userName = AssetLoader.getUsername();

@@ -99,6 +99,7 @@ public class AudioManager {
 			music.play();
 			stopMusic();
 			activeMusic = music;
+			toggleMusic();
 		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
