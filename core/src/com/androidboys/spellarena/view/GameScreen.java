@@ -127,6 +127,7 @@ public class GameScreen implements Screen{
 	private Group beforeGamePanel;
 	private Group winGamePopUp;
 	private Group loseGamePopUp;
+	private Group helpPopUp;
 	private TextButton startGameButton;
 	
 	private ButtonWidget[] commandList = new ButtonWidget[3];
@@ -1236,7 +1237,7 @@ public class GameScreen implements Screen{
 			break;
 		case 21:
 			spellCountdown = ((TORNADO_COOLDOWN <= 0) ? "Ready" : ""+((int)TORNADO_COOLDOWN+1));
-			spellName = "Tornado " +  spellCountdown;
+			spellName = "Shadow Blast " +  spellCountdown;
 			break;
 		case 30:
 			spellCountdown = ((THUNDERSTORM_COOLDOWN <= 0) ? "Ready" : ""+((int)THUNDERSTORM_COOLDOWN+1));
@@ -1252,7 +1253,7 @@ public class GameScreen implements Screen{
 			break;
 		case 120:
 			spellCountdown = ((SPARK_COOLDOWN <= 0) ? "Ready" : ""+((int)SPARK_COOLDOWN+1));
-			spellName = "Boomerang " + spellCountdown;
+			spellName = "Spectral Throw " + spellCountdown;
 			break;
 		case 201:
 			spellCountdown = ((SUNSTRIKE_COOLDOWN <= 0) ? "Ready" : ""+((int)SUNSTRIKE_COOLDOWN+1));
