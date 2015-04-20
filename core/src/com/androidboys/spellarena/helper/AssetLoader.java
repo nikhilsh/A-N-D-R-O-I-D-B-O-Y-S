@@ -34,7 +34,9 @@ public class AssetLoader {
 	
 	public static Texture loadingTexture;
 	
-	public static Texture questionTexture;
+	public static Texture questionTexture, musicOnTexture, musicOffTexture;
+	
+	public static Texture quasTexture, wexTexture, exortTexture;
 	
 	public static Texture charTexture;
 	public static TextureRegion northBob, eastBob, southBob, westBob, 
@@ -86,9 +88,15 @@ public class AssetLoader {
 		manager.load("images/bg.jpg", Texture.class);
 		manager.load("images/ParchmentLabel.png", Texture.class);
 		manager.load("images/question.png", Texture.class);
+		manager.load("images/music_on.png", Texture.class);
+		manager.load("images/music_off.png", Texture.class);
+		
 		TextureParameter param = new TextureParameter();
 		param.minFilter = TextureFilter.Nearest;
 		param.magFilter = TextureFilter.Nearest;
+		manager.load("images/quas.png", Texture.class);
+		manager.load("images/wex.png", Texture.class);
+		manager.load("images/exort.png", Texture.class);
 		manager.load("sprites/wizard.png", Texture.class, param);
 		
 		manager.load("sprites/tornado.PNG", Texture.class, param);
@@ -121,6 +129,12 @@ public class AssetLoader {
 		backgroundRegion = new TextureRegion(backgroundTexture);
 		if (questionTexture == null){
 			questionTexture = manager.get("images/question.png",Texture.class);
+		}
+		if (musicOnTexture == null){
+			musicOnTexture = manager.get("images/music_on.png",Texture.class);
+		}
+		if (musicOffTexture == null){
+			musicOffTexture = manager.get("images/music_off.png",Texture.class);
 		}
 		FreeTypeFontParameter fontPars;
 		if (header == null){
@@ -173,6 +187,15 @@ public class AssetLoader {
 			fontPars.borderColor = Color.BLACK;
 			fontPars.borderWidth = 1;
 			swordText = manager.get("fonts/Fantasy.ttf",FreeTypeFontGenerator.class).generateFont(fontPars);
+		}
+		if(quasTexture == null){
+			quasTexture = manager.get("images/quas.png",Texture.class);
+		}
+		if(wexTexture == null){
+			wexTexture = manager.get("images/wex.png",Texture.class);
+		}
+		if(exortTexture == null){
+			exortTexture = manager.get("images/exort.png",Texture.class);
 		}
 	}
 	

@@ -55,18 +55,21 @@ public class MainMenuScreen implements Screen {
 	private Stage stage;
 	
 	private TextField userNameLabel;	
+	private ImageButton helpButton;
+	private ImageButton musicOnButton, musicOffButton;
 	private Table gameTable;
 	private TextButton createButton;
 
 	private LoadingWidget loadingWidget;
 	private Group joinedRoomFailedPopUp;
 	private Group connectionErrorPopUp;
+	private Group helpPopUp;
 	
 	private NetworkListenerAdapter networkListenerAdapter;
 
 	private float updateCounter;
-	private ImageButton helpButton;
-	private Group helpPopUp;
+
+
 	
 	public MainMenuScreen(SpellArena game) {
 		super();
@@ -123,6 +126,34 @@ public class MainMenuScreen implements Screen {
 				super.clicked(event, x, y);
 			}
 			
+		});
+		
+		musicOnButton = new ImageButton(new SpriteDrawable(new Sprite(AssetLoader.musicOnTexture)));
+		stage.addActor(musicOnButton);
+		musicOnButton.setBounds(stage.getWidth() - 90, stage.getHeight() - 45, 
+				40, 40);
+		musicOnButton.setVisible(true);
+		musicOnButton.addListener(new ClickListener(){
+			
+			public void clicked(InputEvent event, float x, float y) {
+				AudioManager.toggleMusic();		
+				musicOffButton.setVisible(true);
+				musicOnButton.setVisible(false);
+			};
+		});
+		
+		musicOffButton = new ImageButton(new SpriteDrawable(new Sprite(AssetLoader.musicOffTexture)));
+		stage.addActor(musicOffButton);
+		musicOffButton.setBounds(stage.getWidth() - 90, stage.getHeight() - 45, 
+				40, 40);
+		musicOffButton.setVisible(false);
+		musicOffButton.addListener(new ClickListener(){
+			
+			public void clicked(InputEvent event, float x, float y) {
+				AudioManager.toggleMusic();
+				musicOffButton.setVisible(false);
+				musicOnButton.setVisible(true);
+			};
 		});
 		
 		createButton = new TextButton("Create Game",StyleLoader.textButtonStyle);
@@ -568,10 +599,14 @@ public class MainMenuScreen implements Screen {
 		helpTitle.setAlignment(Align.center);
 		helpTitle.setBounds(100, 300, 400, 60);
 		
-		
+		Group scrollGroup = new Group();
+//		scrollGroup.debugAll();
+		helpPopUp.addActor(scrollGroup);
+		scrollGroup.setBounds(0, 20, 600, 280);
 		
 		Table helpTable = new Table();
 		helpTable.setFillParent(true);
+		helpTable.align(Align.bottom);
 		
 		final ScrollPane scrollPane = new ScrollPane(helpTable);
 		scrollPane.setClamp(true);
@@ -580,31 +615,209 @@ public class MainMenuScreen implements Screen {
 		scrollPane.setTouchable(Touchable.enabled);
 		scrollPane.setScrollingDisabled(true, false);
 		scrollPane.setScrollbarsOnTop(false);
-		helpPopUp.addActor(scrollPane);
-		scrollPane.setBounds(0, 0, 300, 300);
-		helpTable.add(new Label("Defeat all enemies to win\n", StyleLoader.smallParchmentLabel));
+		scrollGroup.addActor(scrollPane);
+
+		helpTable.align(Align.bottom);
+		helpTable.add(new Label("Defeat all enemies to win\n", 
+				StyleLoader.smallParchmentLabel)).height(40);
 		helpTable.row();
-		helpTable.add(new Label("Damage enemies by casting spells\n", StyleLoader.smallParchmentLabel));
+		helpTable.add(new Label("Damage enemies by casting spells\n", 
+				StyleLoader.smallParchmentLabel)).height(40);
 		helpTable.row();
-		helpTable.add(new Label("Move your character with the touchpad\n", StyleLoader.smallParchmentLabel));
+		helpTable.add(new Label("Move your character with the touchpad\n", 
+				StyleLoader.smallParchmentLabel)).height(40);
 		helpTable.row();
-		helpTable.add(new Label("Select your skills by tapping the orbs\n", StyleLoader.smallParchmentLabel));
+		helpTable.add(new Label("Change your active spell by tapping the orbs\n", 
+				StyleLoader.smallParchmentLabel)).height(40);
 		helpTable.row();
-		helpTable.add(new Label("Your selected skills are decided by the last three selected orbs", StyleLoader.smallParchmentLabel));
+		Label label0 = new Label("Your last three selected orbs will \ndetermine your active spell\n", 
+				StyleLoader.smallParchmentLabel);
+		label0.setAlignment(Align.center);
+		helpTable.add(label0).height(60);
 		helpTable.row();
-		helpTable.add(new Label("Your selected skills are decided by the last three selected orbs", StyleLoader.smallParchmentLabel));
+		Label label1 = new Label("The order of the orbs does not matter\n only the combination does\n", 
+				StyleLoader.smallParchmentLabel);
+		label1.setAlignment(Align.center);
+		helpTable.add(label1).height(60);
 		helpTable.row();
-		helpTable.add(new Label("Your selected skills are decided by the last three selected orbs", StyleLoader.smallParchmentLabel));
+		helpTable.add(new Label("Tap anywhere on the screen to cast your active spell\n", 
+				StyleLoader.smallParchmentLabel)).height(40);
 		helpTable.row();
-		helpTable.add(new Label("Your selected skills are decided by the last three selected orbs", StyleLoader.smallParchmentLabel));
+		
+		helpTable.add(new Label("Spell List", 
+				StyleLoader.parchmentLabel)).height(60);
 		helpTable.row();
-		helpTable.add(new Label("Your selected skills are decided by the last three selected orbs", StyleLoader.smallParchmentLabel));
+		helpTable.add(new Label("Defensive skills\n", 
+				StyleLoader.smallParchmentLabel)).height(40);
 		helpTable.row();
-		helpTable.add(new Label("Your selected skills are decided by the last three selected orbs", StyleLoader.smallParchmentLabel));
+		
+		Table spellTable0 = new Table();
+		spellTable0.setSize(360, 40);
+		spellTable0.add(new Image(AssetLoader.wexTexture)).width(40).height(40);
+		spellTable0.add(new Image(AssetLoader.wexTexture)).width(40).height(40);
+		spellTable0.add(new Image(AssetLoader.wexTexture)).width(40).height(40);
+		Label spellLabel0 = new Label("Divine Shield", StyleLoader.smallParchmentLabel);
+		spellLabel0.setAlignment(Align.right);
+		spellTable0.add(spellLabel0).width(240).height(40);
+		helpTable.add(spellTable0).width(360).height(40);
 		helpTable.row();
-		helpTable.add(new Label("Select your skills by tapping the orbs\n", StyleLoader.smallParchmentLabel));
+		Label spellDesc0 = new Label("Renders your character invulnerable\n for a short duration\n", 
+				StyleLoader.smallParchmentLabel);
+		spellDesc0.setAlignment(Align.center);
+		helpTable.add(spellDesc0).height(60);
 		helpTable.row();
-		helpTable.add(new Label("Select your skills by tapping the orbs\n", StyleLoader.smallParchmentLabel));
+		
+		Table spellTable1 = new Table();
+		spellTable1.setSize(360, 40);
+		spellTable1.add(new Image(AssetLoader.wexTexture)).width(40).height(40);
+		spellTable1.add(new Image(AssetLoader.wexTexture)).width(40).height(40);
+		spellTable1.add(new Image(AssetLoader.quasTexture)).width(40).height(40);
+		Label spellLabel1 = new Label("Haste", StyleLoader.smallParchmentLabel);
+		spellLabel1.setAlignment(Align.right);
+		spellTable1.add(spellLabel1).width(240).height(40);
+		helpTable.add(spellTable1).width(360).height(40);
+		helpTable.row();
+		Label spellDesc1 = new Label("Speeds up your character for a short duration\n", 
+				StyleLoader.smallParchmentLabel);
+		spellDesc1.setAlignment(Align.center);
+		helpTable.add(spellDesc1).height(40);
+		helpTable.row();
+		
+		Table spellTable2 = new Table();
+		spellTable2.setSize(360, 40);
+		spellTable2.add(new Image(AssetLoader.wexTexture)).width(40).height(40);
+		spellTable2.add(new Image(AssetLoader.wexTexture)).width(40).height(40);
+		spellTable2.add(new Image(AssetLoader.exortTexture)).width(40).height(40);
+		Label spellLabel2 = new Label("Blink", StyleLoader.smallParchmentLabel);
+		spellLabel2.setAlignment(Align.right);
+		spellTable2.add(spellLabel2).width(240).height(40);
+		helpTable.add(spellTable2).width(360).height(40);
+		helpTable.row();
+		Label spellDesc2 = new Label("Teleports your character a short distance\n in front of you\n", 
+				StyleLoader.smallParchmentLabel);
+		spellDesc1.setAlignment(Align.center);
+		helpTable.add(spellDesc2).height(60);
+		helpTable.row();
+		
+		helpTable.add(new Label("Offensive skills\n", 
+				StyleLoader.smallParchmentLabel)).height(40);
+		helpTable.row();
+		
+		Table spellTable3 = new Table();
+		spellTable3.setSize(360, 40);
+		spellTable3.add(new Image(AssetLoader.wexTexture)).width(40).height(40);
+		spellTable3.add(new Image(AssetLoader.quasTexture)).width(40).height(40);
+		spellTable3.add(new Image(AssetLoader.quasTexture)).width(40).height(40);
+		Label spellLabel3 = new Label("Shadow Ball", StyleLoader.smallParchmentLabel);
+		spellLabel3.setAlignment(Align.right);
+		spellTable3.add(spellLabel3).width(240).height(40);
+		helpTable.add(spellTable3).width(360).height(40);
+		helpTable.row();
+		Label spellDesc3 = new Label("Shoots out three damaging orbs in front of you\n", 
+				StyleLoader.smallParchmentLabel);
+		spellDesc3.setAlignment(Align.center);
+		helpTable.add(spellDesc3).height(40);
+		helpTable.row();
+		
+		Table spellTable4 = new Table();
+		spellTable4.setSize(360, 40);
+		spellTable4.add(new Image(AssetLoader.wexTexture)).width(40).height(40);
+		spellTable4.add(new Image(AssetLoader.quasTexture)).width(40).height(40);
+		spellTable4.add(new Image(AssetLoader.exortTexture)).width(40).height(40);
+		Label spellLabel4 = new Label("Hurricane", StyleLoader.smallParchmentLabel);
+		spellLabel4.setAlignment(Align.right);
+		spellTable4.add(spellLabel4).width(240).height(40);
+		helpTable.add(spellTable4).width(360).height(40);
+		helpTable.row();
+		Label spellDesc4 = new Label("Summons three damaging tornados that spirals out \n"
+				+ "from your location\n", 
+				StyleLoader.smallParchmentLabel);
+		spellDesc4.setAlignment(Align.center);
+		helpTable.add(spellDesc4).height(60);
+		helpTable.row();
+		
+		Table spellTable5 = new Table();
+		spellTable5.setSize(360, 40);
+		spellTable5.add(new Image(AssetLoader.wexTexture)).width(40).height(40);
+		spellTable5.add(new Image(AssetLoader.exortTexture)).width(40).height(40);
+		spellTable5.add(new Image(AssetLoader.exortTexture)).width(40).height(40);
+		Label spellLabel5 = new Label("Explosion", StyleLoader.smallParchmentLabel);
+		spellLabel5.setAlignment(Align.right);
+		spellTable5.add(spellLabel5).width(240).height(40);
+		helpTable.add(spellTable5).width(360).height(40);
+		helpTable.row();
+		Label spellDesc5 = new Label("Creates an extremely damaging explosion at \n"
+				+ "the point you tapped after a second delay\n", 
+				StyleLoader.smallParchmentLabel);
+		spellDesc5.setAlignment(Align.center);
+		helpTable.add(spellDesc5).height(60);
+		helpTable.row();
+		
+		Table spellTable6 = new Table();
+		spellTable6.setSize(360, 40);
+		spellTable6.add(new Image(AssetLoader.quasTexture)).width(40).height(40);
+		spellTable6.add(new Image(AssetLoader.quasTexture)).width(40).height(40);
+		spellTable6.add(new Image(AssetLoader.quasTexture)).width(40).height(40);
+		Label spellLabel6 = new Label("Thunderstorm", StyleLoader.smallParchmentLabel);
+		spellLabel6.setAlignment(Align.right);
+		spellTable6.add(spellLabel6).width(240).height(40);
+		helpTable.add(spellTable6).width(360).height(40);
+		helpTable.row();
+		Label spellDesc6 = new Label("Summons an extremely powerful thunderstorm\n"
+				+ " in front of you\n", 
+				StyleLoader.smallParchmentLabel);
+		spellDesc6.setAlignment(Align.center);
+		helpTable.add(spellDesc6).height(60);
+		helpTable.row();
+		
+		Table spellTable7 = new Table();
+		spellTable7.setSize(360, 40);
+		spellTable7.add(new Image(AssetLoader.quasTexture)).width(40).height(40);
+		spellTable7.add(new Image(AssetLoader.quasTexture)).width(40).height(40);
+		spellTable7.add(new Image(AssetLoader.exortTexture)).width(40).height(40);
+		Label spellLabel7 = new Label("Spectral Throw", StyleLoader.smallParchmentLabel);
+		spellLabel7.setAlignment(Align.right);
+		spellTable7.add(spellLabel7).width(240).height(40);
+		helpTable.add(spellTable7).width(360).height(40);
+		helpTable.row();
+		Label spellDesc7 = new Label("Throws out a ghostly sword that will return to you\n", 
+				StyleLoader.smallParchmentLabel);
+		spellDesc7.setAlignment(Align.center);
+		helpTable.add(spellDesc7).height(40);
+		helpTable.row();
+		
+		Table spellTable8 = new Table();
+		spellTable8.setSize(360, 40);
+		spellTable8.add(new Image(AssetLoader.quasTexture)).width(40).height(40);
+		spellTable8.add(new Image(AssetLoader.exortTexture)).width(40).height(40);
+		spellTable8.add(new Image(AssetLoader.exortTexture)).width(40).height(40);
+		Label spellLabel8 = new Label("Laser", StyleLoader.smallParchmentLabel);
+		spellLabel8.setAlignment(Align.right);
+		spellTable8.add(spellLabel8).width(240).height(40);
+		helpTable.add(spellTable8).width(360).height(40);
+		helpTable.row();
+		Label spellDesc8 = new Label("Burns your enemies with a laser in front of you \n"
+				+ "Pew pew pew\n", 
+				StyleLoader.smallParchmentLabel);
+		spellDesc8.setAlignment(Align.center);
+		helpTable.add(spellDesc8).height(60);
+		helpTable.row();
+		
+		Table spellTable9 = new Table();
+		spellTable9.setSize(360, 40);
+		spellTable9.add(new Image(AssetLoader.exortTexture)).width(40).height(40);
+		spellTable9.add(new Image(AssetLoader.exortTexture)).width(40).height(40);
+		spellTable9.add(new Image(AssetLoader.exortTexture)).width(40).height(40);
+		Label spellLabel9 = new Label("Firewall", StyleLoader.smallParchmentLabel);
+		spellLabel9.setAlignment(Align.right);
+		spellTable9.add(spellLabel9).width(240).height(40);
+		helpTable.add(spellTable9).width(360).height(40);
+		helpTable.row();
+		Label spellDesc9 = new Label("Creates an extremely damaging yet slow moving \n"
+				+ "wall of fire in front of you\n", 
+				StyleLoader.smallParchmentLabel);
+		spellDesc9.setAlignment(Align.center);
+		helpTable.add(spellDesc9).height(60);
 		helpTable.row();
 	}
 	
