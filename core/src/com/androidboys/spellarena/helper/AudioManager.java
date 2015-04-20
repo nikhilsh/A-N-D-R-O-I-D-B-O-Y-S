@@ -8,15 +8,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 
 public class AudioManager {
-	
-	private static AudioManager INSTANCE;
-
-	public static AudioManager getInstance() {
-		if(INSTANCE == null){
-			INSTANCE = new AudioManager();
-		}
-		return INSTANCE;
-	}
 
 	private static final String SOUND_PATH ="gamesounds/";
 	
@@ -41,6 +32,8 @@ public class AudioManager {
 
 	private static Music activeMusic;
 
+	private static boolean muted = false;
+	
 	public static void initialize(){
 		assetManager = new AssetManager();
 		activeMusic = null;
@@ -101,17 +94,20 @@ public class AudioManager {
 	}
 
 	private static boolean playMusic(String name, boolean isLoop){
-		Gdx.app.log(TAG,"Playing music "+name);
-		try {
-			Music music = Gdx.app.getAudio().newMusic(Gdx.files.internal(name));
-			music.setLooping(isLoop);
-			music.play();
-			stopMusic();
-			activeMusic = music;
-		} catch (Throwable ex) {
-			ex.printStackTrace();
+		if(!muted){
+			Gdx.app.log(TAG,"Playing music "+name);
+			try {
+				Music music = Gdx.app.getAudio().newMusic(Gdx.files.internal(name));
+				music.setLooping(isLoop);
+				music.play();
+				stopMusic();
+				activeMusic = music;
+			} catch (Throwable ex) {
+				ex.printStackTrace();
+			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	private static void stopMusic(){
@@ -180,5 +176,14 @@ public class AudioManager {
 
 	public static boolean update() {
 		return assetManager.update();
+	}
+	
+	public static void toggleMusic(){
+		muted = !muted;
+		if(muted){
+			activeMusic.setVolume(0);
+		} else {
+			activeMusic.setVolume(1);
+		}
 	}
 }

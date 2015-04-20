@@ -34,7 +34,7 @@ public class AssetLoader {
 	
 	public static Texture loadingTexture;
 	
-	public static Texture questionTexture;
+	public static Texture questionTexture, musicOnTexture, musicOffTexture;
 	
 	public static Texture quasTexture, wexTexture, exortTexture;
 	
@@ -88,6 +88,9 @@ public class AssetLoader {
 		manager.load("images/bg.jpg", Texture.class);
 		manager.load("images/ParchmentLabel.png", Texture.class);
 		manager.load("images/question.png", Texture.class);
+		manager.load("images/music_on.png", Texture.class);
+		manager.load("images/music_off.png", Texture.class);
+		
 		TextureParameter param = new TextureParameter();
 		param.minFilter = TextureFilter.Nearest;
 		param.magFilter = TextureFilter.Nearest;
@@ -126,6 +129,12 @@ public class AssetLoader {
 		backgroundRegion = new TextureRegion(backgroundTexture);
 		if (questionTexture == null){
 			questionTexture = manager.get("images/question.png",Texture.class);
+		}
+		if (musicOnTexture == null){
+			musicOnTexture = manager.get("images/music_on.png",Texture.class);
+		}
+		if (musicOffTexture == null){
+			musicOffTexture = manager.get("images/music_off.png",Texture.class);
 		}
 		FreeTypeFontParameter fontPars;
 		if (header == null){

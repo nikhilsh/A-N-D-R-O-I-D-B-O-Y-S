@@ -55,18 +55,21 @@ public class MainMenuScreen implements Screen {
 	private Stage stage;
 	
 	private TextField userNameLabel;	
+	private ImageButton helpButton;
+	private ImageButton musicOnButton, musicOffButton;
 	private Table gameTable;
 	private TextButton createButton;
 
 	private LoadingWidget loadingWidget;
 	private Group joinedRoomFailedPopUp;
 	private Group connectionErrorPopUp;
+	private Group helpPopUp;
 	
 	private NetworkListenerAdapter networkListenerAdapter;
 
 	private float updateCounter;
-	private ImageButton helpButton;
-	private Group helpPopUp;
+
+
 	
 	public MainMenuScreen(SpellArena game) {
 		super();
@@ -123,6 +126,34 @@ public class MainMenuScreen implements Screen {
 				super.clicked(event, x, y);
 			}
 			
+		});
+		
+		musicOnButton = new ImageButton(new SpriteDrawable(new Sprite(AssetLoader.musicOnTexture)));
+		stage.addActor(musicOnButton);
+		musicOnButton.setBounds(stage.getWidth() - 90, stage.getHeight() - 45, 
+				40, 40);
+		musicOnButton.setVisible(true);
+		musicOnButton.addListener(new ClickListener(){
+			
+			public void clicked(InputEvent event, float x, float y) {
+				AudioManager.toggleMusic();		
+				musicOffButton.setVisible(true);
+				musicOnButton.setVisible(false);
+			};
+		});
+		
+		musicOffButton = new ImageButton(new SpriteDrawable(new Sprite(AssetLoader.musicOffTexture)));
+		stage.addActor(musicOffButton);
+		musicOffButton.setBounds(stage.getWidth() - 90, stage.getHeight() - 45, 
+				40, 40);
+		musicOffButton.setVisible(false);
+		musicOffButton.addListener(new ClickListener(){
+			
+			public void clicked(InputEvent event, float x, float y) {
+				AudioManager.toggleMusic();
+				musicOffButton.setVisible(false);
+				musicOnButton.setVisible(true);
+			};
 		});
 		
 		createButton = new TextButton("Create Game",StyleLoader.textButtonStyle);
