@@ -17,6 +17,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -24,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -33,6 +35,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class MainMenuScreen implements Screen {
@@ -62,6 +65,8 @@ public class MainMenuScreen implements Screen {
 	private NetworkListenerAdapter networkListenerAdapter;
 
 	private float updateCounter;
+	private ImageButton helpButton;
+	private Group helpPopUp;
 	
 	public MainMenuScreen(SpellArena game) {
 		super();
@@ -105,8 +110,22 @@ public class MainMenuScreen implements Screen {
 		userNameLabel = new TextField("",StyleLoader.textFieldStyle);
 		stage.addActor(userNameLabel);
 		userNameLabel.setBounds(20, stage.getHeight() - 40, userNameLabel.getWidth(), 40);
-				
-		createButton = new TextButton("Create Game",StyleLoader.buttonStyle);
+		
+		helpButton = new ImageButton(new SpriteDrawable(new Sprite(AssetLoader.questionTexture)));
+		stage.addActor(helpButton);
+		helpButton.setBounds(stage.getWidth() - 45, stage.getHeight() - 45, 
+				40, 40);
+		helpButton.addListener(new ClickListener(){
+			
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				displayHelpPopUp();
+				super.clicked(event, x, y);
+			}
+			
+		});
+		
+		createButton = new TextButton("Create Game",StyleLoader.textButtonStyle);
 		stage.addActor(createButton);
 		createButton.setBounds(
 				stage.getWidth()/2-createButton.getWidth()/2, 
@@ -124,6 +143,7 @@ public class MainMenuScreen implements Screen {
 		});
 
 		initializeGameList();
+		prepareHelpPopUp();
 		networkListenerAdapter = new NetworkListenerAdapter(){
 
 			@Override
@@ -534,5 +554,62 @@ public class MainMenuScreen implements Screen {
 		userNameLabel.setMessageText(UserSession.getInstance().getUserName());
 	}
 	
+	private void prepareHelpPopUp(){
+		helpPopUp = new Group();
+		helpPopUp.setVisible(false);
+		stage.addActor(helpPopUp);
+		helpPopUp.setBounds((stage.getWidth()-600)/2,
+				(stage.getHeight()-360)/2, 600, 360);
+		Image panelBackground = new Image(AssetLoader.loadingTexture);
+		helpPopUp.addActor(panelBackground);
+		panelBackground.setFillParent(true);
+		Label helpTitle = new Label("\nHow to Play\n", StyleLoader.parchmentLabel);
+		helpPopUp.addActor(helpTitle);
+		helpTitle.setAlignment(Align.center);
+		helpTitle.setBounds(100, 300, 400, 60);
+		
+		
+		
+		Table helpTable = new Table();
+		helpTable.setFillParent(true);
+		
+		final ScrollPane scrollPane = new ScrollPane(helpTable);
+		scrollPane.setClamp(true);
+		scrollPane.setOverscroll(false, false);
+		scrollPane.setFillParent(true);
+		scrollPane.setTouchable(Touchable.enabled);
+		scrollPane.setScrollingDisabled(true, false);
+		scrollPane.setScrollbarsOnTop(false);
+		helpPopUp.addActor(scrollPane);
+		scrollPane.setBounds(0, 0, 300, 300);
+		helpTable.add(new Label("Defeat all enemies to win\n", StyleLoader.smallParchmentLabel));
+		helpTable.row();
+		helpTable.add(new Label("Damage enemies by casting spells\n", StyleLoader.smallParchmentLabel));
+		helpTable.row();
+		helpTable.add(new Label("Move your character with the touchpad\n", StyleLoader.smallParchmentLabel));
+		helpTable.row();
+		helpTable.add(new Label("Select your skills by tapping the orbs\n", StyleLoader.smallParchmentLabel));
+		helpTable.row();
+		helpTable.add(new Label("Your selected skills are decided by the last three selected orbs", StyleLoader.smallParchmentLabel));
+		helpTable.row();
+		helpTable.add(new Label("Your selected skills are decided by the last three selected orbs", StyleLoader.smallParchmentLabel));
+		helpTable.row();
+		helpTable.add(new Label("Your selected skills are decided by the last three selected orbs", StyleLoader.smallParchmentLabel));
+		helpTable.row();
+		helpTable.add(new Label("Your selected skills are decided by the last three selected orbs", StyleLoader.smallParchmentLabel));
+		helpTable.row();
+		helpTable.add(new Label("Your selected skills are decided by the last three selected orbs", StyleLoader.smallParchmentLabel));
+		helpTable.row();
+		helpTable.add(new Label("Your selected skills are decided by the last three selected orbs", StyleLoader.smallParchmentLabel));
+		helpTable.row();
+		helpTable.add(new Label("Select your skills by tapping the orbs\n", StyleLoader.smallParchmentLabel));
+		helpTable.row();
+		helpTable.add(new Label("Select your skills by tapping the orbs\n", StyleLoader.smallParchmentLabel));
+		helpTable.row();
+	}
+	
+	private void displayHelpPopUp() {
+		helpPopUp.setVisible(!helpPopUp.isVisible());
+	}
 	
 }

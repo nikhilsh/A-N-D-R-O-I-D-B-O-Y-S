@@ -594,7 +594,7 @@ public class GameScreen implements Screen{
 	private void initializeBeforeGamePanel() {
 		Gdx.app.log(TAG, "initializeBeforeGamePanel");
 		beforeGamePanel = new Group();
-		beforeGamePanel.debugAll();
+//		beforeGamePanel.debugAll();
 		beforeGamePanel.setVisible(true);
 		stage.addActor(beforeGamePanel);
 		beforeGamePanel.setBounds((stage.getWidth()-600)/2,

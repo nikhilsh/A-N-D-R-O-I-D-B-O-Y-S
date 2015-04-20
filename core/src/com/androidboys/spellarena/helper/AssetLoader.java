@@ -34,6 +34,8 @@ public class AssetLoader {
 	
 	public static Texture loadingTexture;
 	
+	public static Texture questionTexture;
+	
 	public static Texture charTexture;
 	public static TextureRegion northBob, eastBob, southBob, westBob, 
 		northEastBob, southEastBob, southWestBob, northWestBob;
@@ -83,6 +85,7 @@ public class AssetLoader {
 		
 		manager.load("images/bg.jpg", Texture.class);
 		manager.load("images/ParchmentLabel.png", Texture.class);
+		manager.load("images/question.png", Texture.class);
 		TextureParameter param = new TextureParameter();
 		param.minFilter = TextureFilter.Nearest;
 		param.magFilter = TextureFilter.Nearest;
@@ -116,6 +119,9 @@ public class AssetLoader {
 			loadingTexture = manager.get("images/ParchmentLabel.png",Texture.class);
 		}
 		backgroundRegion = new TextureRegion(backgroundTexture);
+		if (questionTexture == null){
+			questionTexture = manager.get("images/question.png",Texture.class);
+		}
 		FreeTypeFontParameter fontPars;
 		if (header == null){
 			fontPars = new FreeTypeFontParameter();
