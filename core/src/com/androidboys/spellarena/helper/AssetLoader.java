@@ -84,6 +84,7 @@ public class AssetLoader {
 
 	
 	public static void queueLoading(){
+		loadPreferences();
 		
 		manager.load("images/bg.jpg", Texture.class);
 		manager.load("images/ParchmentLabel.png", Texture.class);
@@ -199,6 +200,13 @@ public class AssetLoader {
 		}
 	}
 	
+	public static void loadPreferences() {
+		prefs = Gdx.app.getPreferences("Spell Arena");
+		if(!prefs.contains("audio")){
+			prefs.putBoolean("audio",false);
+		}
+	}
+
 	public static void setGameResources(){
 		Gdx.app.log(TAG, "Setting game resources");
 		if(charTexture == null){
@@ -248,21 +256,6 @@ public class AssetLoader {
 	
 	public static boolean update(){
 		return manager.update();
-	}
-	
-	public static void load(){
-		
-		backgroundRegion = new TextureRegion(new Texture(Gdx.files.internal("images/bg.jpg")));
-		
-		//buttonTexture = new Texture(Gdx.files.internal("items/textures.pack.png"));
-		
-		//playRegion = new TextureRegion(buttonTexture, 2, 2, 200, 50);
-		//helpRegion = new TextureRegion(buttonTexture, 2, 2, 204, 50);
-		
-		loadFonts();
-		loadMaps();
-		loadSprites();
-		loadAnimations();
 	}
 	
 	private static void loadAnimations() {
@@ -519,21 +512,39 @@ public class AssetLoader {
 		fontGen.dispose();
 	}
 	
-	private static void loadMaps(){
-		map = new TmxMapLoader().load("maps/Dungeon.tmx");
+	public static boolean getAudioSettings(){
+		return prefs.getBoolean("audio");
 	}
 	
-	public static int getHighScore(){
-		return prefs.getInteger("highScore");
+	public static void setAudioSettings(boolean newAudio){
+		prefs.putBoolean("audio",newAudio);
+		prefs.flush();
 	}
 	
-	public static void setHighScore(int newScore){
-		prefs.putInteger("highScore",newScore);
+	public static String getUsername(){
+		if(prefs.contains("name")){
+			Gdx.app.log(TAG, prefs.getString("name"));
+			return prefs.getString("name");
+		}else {
+			Gdx.app.log(TAG, "null");
+			return null;
+		}
+
+	}
+	
+	public static void setUsername(String newName){
+		Gdx.app.log(TAG,"Setting username: "+newName);
+		prefs.putString("name",newName);
 		prefs.flush();
 	}
 	
 	public static void dispose(){
 		header.dispose();
+	}
+
+	public static void toggleMusic() {
+		prefs.putBoolean("audio", !prefs.getBoolean("audio"));
+		prefs.flush();
 	}
 }
 

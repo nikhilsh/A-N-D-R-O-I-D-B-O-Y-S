@@ -6,6 +6,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.Random;
 
+import com.androidboys.spellarena.helper.AssetLoader;
 import com.androidboys.spellarena.net.model.RoomModel;
 import com.badlogic.gdx.Gdx;
 
@@ -25,8 +26,11 @@ public class UserSession {
 	}
 	
 	private UserSession(){
-		this.userId = generateUserId();
-		this.userName = generateUserName();
+		if(AssetLoader.getUsername().equals(null)){
+			this.setUserName(generateUserName());
+		} else {
+			this.userName = AssetLoader.getUsername();
+		}
 		randomSeed = System.nanoTime();
 		rng = new Random(randomSeed);
 	}
@@ -37,7 +41,7 @@ public class UserSession {
 	
 	private String generateUserName() {
 //		return "haohaohao";
-		return "nik "+Long.toString((userId%20));
+		return "Player "+Long.toString((userId%20));
 	}
 
 	private long generateUserId() {
@@ -58,6 +62,8 @@ public class UserSession {
 
 	public void setUserName(String userName) {
 		Gdx.app.log(TAG, "User name changed: "+userName);
+		AssetLoader.setUsername(userName);
+		Gdx.app.log(TAG, "new username: "+AssetLoader.getUsername());
 		this.userName = userName;
 	}
 
