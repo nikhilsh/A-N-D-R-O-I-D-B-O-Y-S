@@ -31,8 +31,6 @@ public class AudioManager {
 	private static AssetManager assetManager;
 
 	private static Music activeMusic;
-
-	private static boolean muted = false;
 	
 	public static void initialize(){
 		assetManager = new AssetManager();
@@ -94,20 +92,18 @@ public class AudioManager {
 	}
 
 	private static boolean playMusic(String name, boolean isLoop){
-		if(!muted){
-			Gdx.app.log(TAG,"Playing music "+name);
-			try {
-				Music music = Gdx.app.getAudio().newMusic(Gdx.files.internal(name));
-				music.setLooping(isLoop);
-				music.play();
-				stopMusic();
-				activeMusic = music;
-			} catch (Throwable ex) {
-				ex.printStackTrace();
-			}
-			return true;
+		Gdx.app.log(TAG,"Playing music "+name);
+		try {
+			Music music = Gdx.app.getAudio().newMusic(Gdx.files.internal(name));
+			music.setLooping(isLoop);
+			music.play();
+			stopMusic();
+			activeMusic = music;
+			toggleMusic();
+		} catch (Throwable ex) {
+			ex.printStackTrace();
 		}
-		return false;
+		return true;
 	}
 
 	private static void stopMusic(){
@@ -179,11 +175,11 @@ public class AudioManager {
 	}
 	
 	public static void toggleMusic(){
-		muted = !muted;
-		if(muted){
-			activeMusic.setVolume(0);
-		} else {
+		boolean musicOn = AssetLoader.getAudioSettings();
+		if(musicOn){
 			activeMusic.setVolume(1);
+		} else {
+			activeMusic.setVolume(0);
 		}
 	}
 }

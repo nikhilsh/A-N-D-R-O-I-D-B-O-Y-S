@@ -113,6 +113,14 @@ public class MainMenuScreen implements Screen {
 		userNameLabel = new TextField("",StyleLoader.textFieldStyle);
 		stage.addActor(userNameLabel);
 		userNameLabel.setBounds(20, stage.getHeight() - 40, userNameLabel.getWidth(), 40);
+		userNameLabel.setTextFieldListener(new TextField.TextFieldListener() {
+			
+			@Override
+			public void keyTyped(TextField textField, char c) {
+				String userName = userNameLabel.getText();
+				changeUserInfo(userName);
+			}
+		});
 		
 		helpButton = new ImageButton(new SpriteDrawable(new Sprite(AssetLoader.questionTexture)));
 		stage.addActor(helpButton);
@@ -132,10 +140,11 @@ public class MainMenuScreen implements Screen {
 		stage.addActor(musicOnButton);
 		musicOnButton.setBounds(stage.getWidth() - 90, stage.getHeight() - 45, 
 				40, 40);
-		musicOnButton.setVisible(true);
+		musicOnButton.setVisible(AssetLoader.getAudioSettings());
 		musicOnButton.addListener(new ClickListener(){
 			
 			public void clicked(InputEvent event, float x, float y) {
+				AssetLoader.toggleMusic();
 				AudioManager.toggleMusic();		
 				musicOffButton.setVisible(true);
 				musicOnButton.setVisible(false);
@@ -146,10 +155,11 @@ public class MainMenuScreen implements Screen {
 		stage.addActor(musicOffButton);
 		musicOffButton.setBounds(stage.getWidth() - 90, stage.getHeight() - 45, 
 				40, 40);
-		musicOffButton.setVisible(false);
+		musicOffButton.setVisible(!AssetLoader.getAudioSettings());
 		musicOffButton.addListener(new ClickListener(){
 			
 			public void clicked(InputEvent event, float x, float y) {
+				AssetLoader.toggleMusic();
 				AudioManager.toggleMusic();
 				musicOffButton.setVisible(false);
 				musicOnButton.setVisible(true);
@@ -263,6 +273,7 @@ public class MainMenuScreen implements Screen {
 		displayLoadingWidget();
 		game.getClient().connect();
 		AudioManager.playMainTheme();
+		AudioManager.toggleMusic();
 	}
 
 	private void initializeGameList() {
@@ -583,6 +594,11 @@ public class MainMenuScreen implements Screen {
 	
 	private void updateUserInfo(){
 		userNameLabel.setMessageText(UserSession.getInstance().getUserName());
+	}
+	
+	private void changeUserInfo(String name){
+		UserSession.getInstance().setUserName(name);
+		game.getClient().disconnect();
 	}
 	
 	private void prepareHelpPopUp(){

@@ -26,7 +26,7 @@ public class SpellArena extends Game {
         SPLASH, PLAY, LOBBY
     }
 	
-	private NetworkInterface client = new AppWarpClient(UserSession.getInstance().getUserName());
+	private NetworkInterface client = new AppWarpClient();
 
 	private Screen topScreen;
 	

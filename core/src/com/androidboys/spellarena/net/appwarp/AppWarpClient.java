@@ -10,6 +10,7 @@ import java.util.Set;
 import com.androidboys.spellarena.net.NetworkInterface;
 import com.androidboys.spellarena.net.NetworkInterface.NetworkListener;
 import com.androidboys.spellarena.net.model.RoomModel;
+import com.androidboys.spellarena.session.UserSession;
 import com.badlogic.gdx.Gdx;
 import com.shephertz.app42.gaming.multiplayer.client.ConnectionState;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
@@ -31,7 +32,6 @@ public class AppWarpClient implements NetworkInterface{
 	public final static String GAME_STARTED_KEY = "GAME_STARTED";
 	private static final String TAG = "AppWarpClient";
 	
-	private final String userName;
 	private Set<NetworkListener> networkListeners = Collections.synchronizedSet(new HashSet<NetworkListener>());
 	private WarpClient warpClient;
 	
@@ -42,14 +42,14 @@ public class AppWarpClient implements NetworkInterface{
 		put(GAME_STARTED_KEY, false);
 	}};
 
-	public AppWarpClient(String userName){
-		this.userName = userName;
+	public AppWarpClient(){
+
 		roomFilterForNotStartedGames.put(GAME_STARTED_KEY, false);
 		roomFilterForStartedGames.put(GAME_STARTED_KEY, true);
 	}
 	
 	public String getUserName(){
-		return userName;
+		return UserSession.getInstance().getUserName();
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class AppWarpClient implements NetworkInterface{
 		addZoneRequestListener();
 		addRoomRequestListener();
 		addNotificationListener();
-		warpClient.connectWithUserName(userName);
+		warpClient.connectWithUserName(getUserName());
 	}
 
 	private void addNotificationListener() {
@@ -253,7 +253,7 @@ public class AppWarpClient implements NetworkInterface{
 
 	@Override
 	public void createRoom(String roomName) {
-		warpClient.createRoom(roomName, userName, MAX_USERS, this.roomFilterForNotStartedGames);
+		warpClient.createRoom(roomName, getUserName(), MAX_USERS, this.roomFilterForNotStartedGames);
 	}
 
 	@Override
