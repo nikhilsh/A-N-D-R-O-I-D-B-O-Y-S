@@ -1130,8 +1130,7 @@ public class GameScreen implements Screen{
 	}
 	
 	public void createSpellButtons(){
-		Texture textureUp   = new Texture(Gdx.files.internal("images/wex.png"));
-        myButton   = new ButtonWidget(textureUp);
+        myButton   = new ButtonWidget(AssetLoader.wexTexture);
 
         myButton.setPosition(480, 40);
         myButton.setSize(80, 80);
@@ -1143,9 +1142,7 @@ public class GameScreen implements Screen{
             }
         });
 
-        Texture textureUp2   = new Texture(Gdx.files.internal("images/quas.png"));
-
-        myButton2   = new ButtonWidget(textureUp2);
+        myButton2   = new ButtonWidget(AssetLoader.quasTexture);
 
         myButton2.setPosition(600, 40);
         myButton2.setSize(80, 80);
@@ -1158,9 +1155,7 @@ public class GameScreen implements Screen{
 
         });
 
-        Texture textureUp3   = new Texture(Gdx.files.internal("images/exort.png"));
-
-        myButton3   = new ButtonWidget(textureUp3);
+        myButton3   = new ButtonWidget(AssetLoader.exortTexture);
 
         myButton3.setPosition(600, 150);
         myButton3.setSize(80, 80);
@@ -1288,13 +1283,13 @@ public class GameScreen implements Screen{
 	        Texture texture = null;
 	        switch (indexOfButtonPressed) {
 	            case 1:
-	                texture = new Texture(Gdx.files.internal("images/wex.png"));
+	                texture = AssetLoader.wexTexture;
 	                break;
 	            case 10:
-	                texture = new Texture(Gdx.files.internal("images/quas.png"));
+	                texture = AssetLoader.quasTexture;
 	                break;
 	            case 100:
-	                texture = new Texture(Gdx.files.internal("images/exort.png"));
+	                texture = AssetLoader.exortTexture;
 	                break;	
 	        }
 

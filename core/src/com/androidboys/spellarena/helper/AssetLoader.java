@@ -36,6 +36,8 @@ public class AssetLoader {
 	
 	public static Texture questionTexture;
 	
+	public static Texture quasTexture, wexTexture, exortTexture;
+	
 	public static Texture charTexture;
 	public static TextureRegion northBob, eastBob, southBob, westBob, 
 		northEastBob, southEastBob, southWestBob, northWestBob;
@@ -89,6 +91,9 @@ public class AssetLoader {
 		TextureParameter param = new TextureParameter();
 		param.minFilter = TextureFilter.Nearest;
 		param.magFilter = TextureFilter.Nearest;
+		manager.load("images/quas.png", Texture.class);
+		manager.load("images/wex.png", Texture.class);
+		manager.load("images/exort.png", Texture.class);
 		manager.load("sprites/wizard.png", Texture.class, param);
 		
 		manager.load("sprites/tornado.PNG", Texture.class, param);
@@ -173,6 +178,15 @@ public class AssetLoader {
 			fontPars.borderColor = Color.BLACK;
 			fontPars.borderWidth = 1;
 			swordText = manager.get("fonts/Fantasy.ttf",FreeTypeFontGenerator.class).generateFont(fontPars);
+		}
+		if(quasTexture == null){
+			quasTexture = manager.get("images/quas.png",Texture.class);
+		}
+		if(wexTexture == null){
+			wexTexture = manager.get("images/wex.png",Texture.class);
+		}
+		if(exortTexture == null){
+			exortTexture = manager.get("images/exort.png",Texture.class);
 		}
 	}
 	
