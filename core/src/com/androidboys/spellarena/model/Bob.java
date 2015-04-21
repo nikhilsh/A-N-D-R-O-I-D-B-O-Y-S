@@ -656,7 +656,7 @@ public class Bob {
 			this.velocity.y = 300;
 		}
 		if (getVelocity().y == -100){
-			this.velocity.y = 300;
+			this.velocity.y = -300;
 		}
 	}
 
