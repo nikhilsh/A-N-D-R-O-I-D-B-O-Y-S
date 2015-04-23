@@ -70,7 +70,7 @@ public class GameScreenMediator extends Mediator{
 			@Override
 			public void onPlayerJoinedRoom(RoomModel room, String playerName) {
 				super.onPlayerJoinedRoom(room, playerName);
-				Gdx.app.log(TAG,""+GameScreenMediator.this.getRoom().getId().equals(room.getId()));
+//				Gdx.app.log(TAG,""+GameScreenMediator.this.getRoom().getId().equals(room.getId()));
 				if(GameScreenMediator.this.getRoom().getId().equals(room.getId()) && !playerName.equals(UserSession.getInstance().getUserName())){
 					GameScreenMediator.this.onPlayerJoinedRoom(playerName);
 				}
@@ -106,7 +106,7 @@ public class GameScreenMediator extends Mediator{
 	}
 	
 	private void handleReadyGameCommand(Command command) {
-		Gdx.app.log(TAG, "handleReadyGameCommand "+command);
+//		Gdx.app.log(TAG, "handleReadyGameCommand "+command);
 		String playerName = command.getFromUser();
 		if(UserSession.getInstance().isServer()){
 			
@@ -132,7 +132,7 @@ public class GameScreenMediator extends Mediator{
 	
 	private void handleClockSyncResponseCommand(Command c){
 		long delay = ((ClockSyncResCommand)c).getInitialTimeStamp() - c.getTimeStamp();
-		Gdx.app.log(TAG,"lag: "+delay);
+//		Gdx.app.log(TAG,"lag: "+delay);
 	}
 	
 	private void handleMoveCommand(Command c){
@@ -180,7 +180,7 @@ public class GameScreenMediator extends Mediator{
 	}
 	
 	private void onPlayerJoinedRoom(String playerName) {
-		Gdx.app.log(TAG, "Player: "+playerName+" has joined room "+room.getName());
+//		Gdx.app.log(TAG, "Player: "+playerName+" has joined room "+room.getName());
 		gameScreen.onPlayerJoinedRoom(playerName);
 	}
 
@@ -260,12 +260,12 @@ public class GameScreenMediator extends Mediator{
 	}
 
 	public void onServerStarted() {
-		Gdx.app.log(TAG, "onServerStarted");
+//		Gdx.app.log(TAG, "onServerStarted");
 		gameScreen.onServerStarted();
 	}
 
 	public void onServerStartFail() {
-		Gdx.app.log(TAG, "onServerStartFail");
+//		Gdx.app.log(TAG, "onServerStartFail");
 		gameScreen.onServerStartFail();
 	}
 
@@ -284,7 +284,7 @@ public class GameScreenMediator extends Mediator{
 		if(client!=null){
 			this.gameClient = client;
 		}
-		Gdx.app.log(TAG, "connectToServerSuccess");
+//		Gdx.app.log(TAG, "connectToServerSuccess");
 		gameScreen.connectToServerSuccess();
 		ReadyCommand command = new ReadyCommand();
 		command.setFromUser(UserSession.getInstance().getUserName());
@@ -301,7 +301,7 @@ public class GameScreenMediator extends Mediator{
 	}
 
 	public void connectToServerFailed() {
-		Gdx.app.log(TAG, "connectToServerFailed");
+//		Gdx.app.log(TAG, "connectToServerFailed");
 		gameScreen.connectToServerFail();
 	}
 
@@ -333,11 +333,11 @@ public class GameScreenMediator extends Mediator{
 							executor.execute(new Runnable() {
 								@Override
 								public void run() {
-									Gdx.app.log(TAG,"Accepting command: "+message);
+//									Gdx.app.log(TAG,"Accepting command: "+message);
 									Command command = commandFactory.createCommand(message);
 									//Gdx.app.log(TAG, "Time difference: "+(command.getTimeStamp()-System.currentTimeMillis()));
 									if(command == null){
-										Gdx.app.log(TAG, "Waiting for split message");
+//										Gdx.app.log(TAG, "Waiting for split message");
 										return;
 									}
 									switch(command.getCommand()){
@@ -373,7 +373,7 @@ public class GameScreenMediator extends Mediator{
 							});
 						}
 		    		} catch (Exception e){
-		    			Gdx.app.log(TAG,"Message handling failed");
+//		    			Gdx.app.log(TAG,"Message handling failed");
 		    		}
 				}
 			}

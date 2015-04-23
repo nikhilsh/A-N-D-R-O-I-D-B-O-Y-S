@@ -20,10 +20,10 @@ public class CommandFactory {
 	
 	public Command createCommand(String jsonString){
 		if(receivedCommands.contains(jsonString)){
-			Gdx.app.log(TAG, "Duplicate message received: "+jsonString);
+//			Gdx.app.log(TAG, "Duplicate message received: "+jsonString);
 			return null;
 		}
-		Gdx.app.log(TAG, "Received: "+jsonString);
+//		Gdx.app.log(TAG, "Received: "+jsonString);
 		receivedCommands.add(jsonString);
 		
 		if(jsonString.startsWith("split")){

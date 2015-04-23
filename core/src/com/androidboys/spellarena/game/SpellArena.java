@@ -89,7 +89,7 @@ public class SpellArena extends Game {
 	 */
 	public void addScreen(Screen screen) {
 		if(screen == null){
-			Gdx.app.log(TAG,"No screen found");
+//			Gdx.app.log(TAG,"No screen found");
 		}
 		if(getTopScreen() != null){
 			getTopScreen().hide();
