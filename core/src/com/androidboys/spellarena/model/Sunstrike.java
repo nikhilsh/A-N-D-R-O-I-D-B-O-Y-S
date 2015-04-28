@@ -8,6 +8,13 @@ public class Sunstrike extends GameObject {
 	private float actualX;
 	private float actualY;
 
+	/**
+	 * Instantiates a new sunstrike.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param playerName the player name
+	 */
 	public Sunstrike(float x, float y, String playerName) {
 		super(x, y, playerName);
 		actualX = x;

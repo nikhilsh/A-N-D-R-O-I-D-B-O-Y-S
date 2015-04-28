@@ -14,6 +14,12 @@ public class MoveCommand extends Command{
 	private float x;
 	private float y;
 	
+	/**
+	 * Builds the json file for the movement of player.
+	 *
+	 * @param json the json
+	 * @return the command
+	 */
 	public static Command build(JSONObject json) {
 		MoveCommand command = new MoveCommand();
 		try{
@@ -40,19 +46,40 @@ public class MoveCommand extends Command{
 		return MOVE;
 	}
 
+	/**
+	 * Sets the position.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
 	public void setPosition(float x, float y){
 		this.x = x;
 		this.y = y;
 	}
 	
+	/**
+	 * Gets the position.
+	 *
+	 * @return the position
+	 */
 	public Vector2 getPosition(){
 		return new Vector2(x,y);
 	}
 	
+	/**
+	 * Sets the movement.
+	 *
+	 * @param movement the new movement
+	 */
 	public void setMovement(int movement) {
 		this.movement = movement;
 	}
 
+	/**
+	 * Gets the movement.
+	 *
+	 * @return the movement
+	 */
 	public int getMovement() {
 		return movement;
 	}

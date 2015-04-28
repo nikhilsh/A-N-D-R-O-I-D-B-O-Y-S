@@ -71,6 +71,11 @@ public class MainMenuScreen implements Screen {
 
 
 	
+	/**
+	 * Instantiates a new main menu screen.
+	 *
+	 * @param game the game
+	 */
 	public MainMenuScreen(SpellArena game) {
 		super();
 		this.game = game;
@@ -82,6 +87,9 @@ public class MainMenuScreen implements Screen {
 		initialize();
 	}
 	
+	/**
+	 * Initialize the stage and all other stuff.
+	 */
 	public void initialize(){
 		gameTable = new Table();
 		gameTable.setTouchable(Touchable.enabled);
@@ -276,6 +284,9 @@ public class MainMenuScreen implements Screen {
 		AudioManager.toggleMusic();
 	}
 
+	/**
+	 * Initialize game list with the scroll panes and others.
+	 */
 	private void initializeGameList() {
 		Table gameList = new Table();
 		stage.addActor(gameList);
@@ -297,6 +308,11 @@ public class MainMenuScreen implements Screen {
 
 	}
 	
+	/**
+	 * Reload game list panels.
+	 *
+	 * @param rooms the rooms
+	 */
 	private void reloadGameListPanels(List<RoomModel> rooms) {
 		synchronized(gameTable){
 			gameTable.clearChildren();
@@ -326,6 +342,12 @@ public class MainMenuScreen implements Screen {
 		}
 	}
 
+	/**
+	 * Creates the game list item.
+	 *
+	 * @param roomModel the room model
+	 * @return the group
+	 */
 	private Group createGameListItem(final RoomModel roomModel) {
 		final Group group = new Group();
 		final Label label;
@@ -390,6 +412,11 @@ public class MainMenuScreen implements Screen {
 	}
 
 	
+	/**
+	 * Update.
+	 *
+	 * @param delta the delta
+	 */
 	private void update(float delta) {
 		updateCounter += delta;
 		if(!processingJoinRoom && updateCounter >= PERIODIC_REQUEST_INTERVAL) {
@@ -491,6 +518,9 @@ public class MainMenuScreen implements Screen {
         });
     }
 	
+	/**
+	 * Display loading widget.
+	 */
 	private void displayLoadingWidget(){
 		if(loadingWidget != null){
 			loadingWidget.setVisible(false);
@@ -545,6 +575,9 @@ public class MainMenuScreen implements Screen {
 		stage.addActor(connectionErrorPopUp);
 	}
 
+	/**
+	 * On joined room failed.
+	 */
 	private void onJoinedRoomFailed() {
 		if(joinedRoomFailedPopUp == null){
 			prepareJoinedRoomFailedPopUp();
@@ -552,6 +585,9 @@ public class MainMenuScreen implements Screen {
 		joinedRoomFailedPopUp.setVisible(true);
 	}
 	
+	/**
+	 * Prepare joined room failed pop up.
+	 */
 	private void prepareJoinedRoomFailedPopUp() {
 		joinedRoomFailedPopUp = new Group();
 		joinedRoomFailedPopUp.setVisible(true);
@@ -601,6 +637,9 @@ public class MainMenuScreen implements Screen {
 		game.getClient().disconnect();
 	}
 	
+	/**
+	 * Prepare help pop up.
+	 */
 	private void prepareHelpPopUp(){
 		helpPopUp = new Group();
 		helpPopUp.setVisible(false);
@@ -616,7 +655,6 @@ public class MainMenuScreen implements Screen {
 		helpTitle.setBounds(100, 300, 400, 60);
 		
 		Group scrollGroup = new Group();
-//		scrollGroup.debugAll();
 		helpPopUp.addActor(scrollGroup);
 		scrollGroup.setBounds(0, 20, 600, 280);
 		
@@ -837,6 +875,9 @@ public class MainMenuScreen implements Screen {
 		helpTable.row();
 	}
 	
+	/**
+	 * Display help pop up.
+	 */
 	private void displayHelpPopUp() {
 		helpPopUp.setVisible(!helpPopUp.isVisible());
 	}

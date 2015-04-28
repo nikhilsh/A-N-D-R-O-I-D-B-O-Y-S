@@ -25,10 +25,20 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GameServer.
+ */
 public class GameServer {
 	
+	/** The instance. */
 	private static GameServer INSTANCE;
 	
+	/**
+	 * Gets the single instance of GameServer.
+	 *
+	 * @return single instance of GameServer
+	 */
 	public static GameServer getInstance(){
 		if(INSTANCE == null){
 			INSTANCE = new GameServer();
@@ -36,25 +46,51 @@ public class GameServer {
 		return INSTANCE;
 	}
 
+	/** The in buffer. */
 	private LinkedList<String> inBuffer = new LinkedList<String>();
+	
+	/** The out buffer. */
 	private LinkedList<String> outBuffer = new LinkedList<String>();
 	
+	/** The connections list. */
 	private HashMap<Connection, String> connectionsList = new HashMap<Connection, String>();
 	
+	/** The Constant TCP_PORT. */
 	public static final int TCP_PORT = 4455;
+	
+	/** The Constant UDP_PORT. */
 	public static final int UDP_PORT = 4456;
+	
+	/** The Constant TAG. */
 	protected static final String TAG = "GameServer";
+	
+	/** The executor service. */
 	private ScheduledExecutorService executorService;
+    
+    /** The is server started. */
     private boolean isServerStarted;
+    
+    /** The is disposed. */
     private boolean isDisposed = false;
 	
+	/** The world. */
 	private GameWorld world;
+	
+	/** The network interface. */
 	private NetworkInterface networkInterface;
+	
+	/** The command factory. */
 	private CommandFactory commandFactory = new CommandFactory();
+	
+	/** The game screen mediator. */
 	private GameScreenMediator gameScreenMediator;
 
+	/** The server. */
 	private Server server;
 	
+	/**
+	 * Instantiates a new game server.
+	 */
 	public GameServer(){
 		this.isServerStarted = false;
 	}
@@ -64,7 +100,14 @@ public class GameServer {
 //		this.isServerStarted = false;
 //	}
 	
-	public void initialize(GameWorld gameWorld, NetworkInterface client,
+	/**
+ * Initialize.
+ *
+ * @param gameWorld the game world
+ * @param client the client
+ * @param gameScreenMediator the game screen mediator
+ */
+public void initialize(GameWorld gameWorld, NetworkInterface client,
 			GameScreenMediator gameScreenMediator){
 		this.world = gameWorld;
 		this.networkInterface = client;
@@ -91,6 +134,9 @@ public class GameServer {
 //		executorService = Executors.newScheduledThreadPool(corePoolSize) 
 	}
 	
+	/**
+	 * Start server.
+	 */
 	public void startServer(){
 		Gdx.app.log(TAG,""+isServerStarted);
 		if(!isServerStarted){
@@ -144,11 +190,19 @@ public class GameServer {
 		}
 	}
 
+	/**
+	 * Handle clock sync response command.
+	 *
+	 * @param command the command
+	 */
 	protected void handleClockSyncResponseCommand(Command command) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Creates the game.
+	 */
 	public void createGame() {
 		CreateGameCommand createGameCommand = new CreateGameCommand();
 		createGameCommand.setFromUser(UserSession.getInstance().getUserName());
@@ -166,12 +220,20 @@ public class GameServer {
 //		isGameStarted = true;
 //		networkInterface.startGame(UserSession.getInstance().getRoom().getId());
 //	}
-	public void sendMessage(String serialize) {
+	/**
+ * Send message.
+ *
+ * @param serialize the serialize
+ */
+public void sendMessage(String serialize) {
 		synchronized (outBuffer) {
 			outBuffer.add(serialize);
 		}
 	}
 	
+	/**
+	 * Inits the sender.
+	 */
 	private void initSender(){
 		new Thread(new Runnable(){
 			@Override
@@ -200,6 +262,9 @@ public class GameServer {
 		}).start();
 	}
 
+	/**
+	 * Stop.
+	 */
 	public void stop() {
 		server.stop();
 	}

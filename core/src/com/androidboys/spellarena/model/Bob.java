@@ -58,8 +58,10 @@ public class Bob {
 	//Whether the Bob needs update (for position, direction or velocity)
 	private boolean needsUpdate;
 
+	//intance of the touchpad
 	private Touchpad touchpad;
 
+	//state of bob
 	private int state;
 
 	//Rectangle area that symbolizes Bob
@@ -153,10 +155,13 @@ public class Bob {
 		updateState();
 	}
 
+	/**
+	 * Apply update to bob position.
+	 *
+	 * @param delta the delta
+	 */
 	private void applyUpdate(float delta) {
-		//float timeDiff = (System.currentTimeMillis() - updateTimestamp)/1000f;
 		this.position = new Vector2(updatePosition);
-//		this.position = new Vector2(updatePosition.add(updateVelocity.scl(timeDiff)));
 	}
 
 	/**
@@ -205,100 +210,7 @@ public class Bob {
 		}
 	}
 	
-	
-	@Deprecated
-	private void updateVelocity(){
-		Vector2 newV = null;
-		if(playerName.equals(UserSession.getInstance().getUserName())){
-			float touchX = touchpad.getKnobPercentX();
-			float touchY = touchpad.getKnobPercentY();
-			if(touchX > 0.5){
-				if(touchY > 0.5){
-					this.direction = Direction.NORTHEAST;
-					newV = new Vector2(MAX_SPEED, MAX_SPEED);
 
-				} else if (touchY < -0.5){
-					this.direction = Direction.SOUTHEAST;
-					newV = new Vector2(MAX_SPEED, -MAX_SPEED);
-
-				} else {
-					this.direction = Direction.EAST;
-					newV = new Vector2(MAX_SPEED, 0);
-				}
-			}else if (touchX < -0.5){
-				if(touchY > 0.5){
-					this.direction = Direction.NORTHWEST;
-					newV = new Vector2(-MAX_SPEED, MAX_SPEED);
-				} else if (touchY < -0.5){
-					this.direction = Direction.SOUTHWEST;
-					newV = new Vector2(-MAX_SPEED, -MAX_SPEED);
-				} else {
-					this.direction = Direction.WEST;
-					newV = new Vector2(-MAX_SPEED, 0);
-				}
-			} else {
-				if(touchY > 0.5){
-					this.direction = Direction.NORTH;
-					newV = new Vector2(0, MAX_SPEED);
-				} else if(touchY < -0.5) {
-					this.direction = Direction.SOUTH;
-					newV = new Vector2(0, -MAX_SPEED);
-				} else {
-					newV = new Vector2(0,0);
-				}
-			}
-			if(!newV.equals(velocity)){
-				this.setVelocity(newV.x, newV.y);
-				//this.stateChangeListener.onVelocityChange(state, direction);
-			}
-			//this.scaleAndSetVelocity(touchX, touchY);
-		} else {
-			if(this.velocity.x > 0){
-				if(this.velocity.y > 0){
-					this.direction = Direction.NORTHEAST;
-				} else if (this.velocity.y < 0){
-					this.direction = Direction.SOUTHEAST;
-				} else {
-					this.direction = Direction.EAST;
-				}
-			} else if (this.velocity.x < 0){
-				if(this.velocity.y > 0){
-					this.direction = Direction.NORTHWEST;
-				} else if (this.velocity.y < 0){
-					this.direction = Direction.SOUTHWEST;
-				} else {
-					this.direction = Direction.WEST;
-				}
-			} else {
-				if(this.velocity.y > 0){
-					this.direction = Direction.NORTH;
-				} else if (this.velocity.y < 0){
-					this.direction = Direction.SOUTH;
-				}
-			}
-		}
-	}
-
-
-	@Deprecated
-	private void checkBoundaries(float delta){
-		this.position.add(this.velocity.cpy().scl(delta));			
-		//		System.out.println("Position: "+this.position);
-		if(position.x > GameWorld.WORLD_BOUND_RIGHT){
-			System.out.println("Hit Right");
-			position.x = GameWorld.WORLD_BOUND_RIGHT;
-		} else if (position.x < GameWorld.WORLD_BOUND_LEFT){
-			System.out.println("Hit Left");
-			position.x = GameWorld.WORLD_BOUND_LEFT;
-		}
-		if(position.y > GameWorld.WORLD_BOUND_TOP){
-			System.out.println("Hit Top");
-			position.y = GameWorld.WORLD_BOUND_TOP;
-		} else if (position.y < GameWorld.WORLD_BOUND_BOTTOM){
-			System.out.println("Hit Bottom");
-			position.y = GameWorld.WORLD_BOUND_BOTTOM;
-		}
-	}
 
 	/**
 	 * Check whether a collision happens
@@ -407,28 +319,13 @@ public class Bob {
 	}
 
 
+	/**
+	 * Sets the touchpad.
+	 *
+	 * @param touchpad the new touchpad
+	 */
 	public void setTouchpad(Touchpad touchpad){
 		this.touchpad = touchpad;
-	}
-
-	/**
-	 * Send the location of Bob with JSON.
-	 * @param state	the state of Bob
-	 */
-	public void sendLocation(int state){
-		if(needsUpdate){
-			needsUpdate = false;
-			try {
-				JSONObject data = new JSONObject();
-				data.put("x", position.x);
-				data.put("y", position.y);
-				data.put("vx", velocity.x);
-				data.put("vy", velocity.y);
-				data.put("state", state);
-				WarpController.getInstance().sendGameUpdate(data.toString());
-			} catch (Exception e) {
-			}
-		}
 	}
 
 	/**
@@ -455,9 +352,13 @@ public class Bob {
 		this.state = state;
 	}
 
+	/**
+	 * update tiles
+	 * 
+	 * @param tiles
+	 */
 	public void updateObstacles(Array<Rectangle> tiles) {
 		this.tiles = tiles;
-		//		System.out.println("tiles updated");
 	}
 
 	/**
@@ -476,31 +377,66 @@ public class Bob {
 		return bobRect;
 	}
 	
+	/**
+	 * Checks if player is invulnerable.
+	 *
+	 * @return true, if is invulnerable
+	 */
 	public boolean isInvulnerable() {
 		return invulnerable;
 	}
 	
+	/**
+	 * Checks if player is boosted.
+	 *
+	 * @return true, if is boosted
+	 */
 	public boolean isBoosted(){
 		return boosted;
 	}
 
+	/**
+	 * Gets the game index.
+	 *
+	 * @return the game index
+	 */
 	public int getGameIndex() {
 		return gameIndex;
 	}
 
+	/**
+	 * Sets the player name.
+	 *
+	 * @param playerName the new player name
+	 */
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}
 
+	/**
+	 * Gets the player name.
+	 *
+	 * @return the player name
+	 */
 	public String getPlayerName() {
 		return playerName;
 	}
 
+	/**
+	 * Sets the position.
+	 *
+	 * @param loadStartPosition the new position
+	 */
 	public void setPosition(Vector2 loadStartPosition) {
 		this.position.x = loadStartPosition.x;
 		this.position.y = loadStartPosition.y;
 	}
 
+	/**
+	 * Sets the game index.
+	 *
+	 * @param gameIndex the new game index
+	 */
 	public void setGameIndex(int gameIndex) {
 		this.gameIndex = gameIndex;
 	}
@@ -543,10 +479,16 @@ public class Bob {
 				this.velocity = new Vector2(-MAX_SPEED, 0);
 				break;
 		}
-//		float timeDiff = (System.currentTimeMillis() - time)/1000f;
-//		this.position = new Vector2(position).add(new Vector2(velocity).scl(timeDiff));
+
 	}
 
+	/**
+	 * Sets the update details.
+	 *
+	 * @param timestamp the timestamp
+	 * @param position the position
+	 * @param velocity the velocity
+	 */
 	public void setUpdateDetails(long timestamp, Vector2 position, Vector2 velocity) {
 		needsUpdate = true;
 		this.updateTimestamp = timestamp;
@@ -590,10 +532,20 @@ public class Bob {
 		}
 	}
 
+	/**
+	 * Sets the game objects.
+	 *
+	 * @param gameObjects the new game objects
+	 */
 	public void setGameObjects(ArrayList<Object> gameObjects) {
 		this.gameObjects = gameObjects;
 	}
 	
+	/**
+	 * Gets the collision edge.
+	 *
+	 * @return the collision edge
+	 */
 	public Rectangle getCollisionEdge(){
 		Rectangle rect;
 		switch(direction){

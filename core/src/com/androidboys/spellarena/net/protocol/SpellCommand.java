@@ -16,6 +16,12 @@ public class SpellCommand extends Command {
 	private float y;
 	private int direction;
 	
+	/**
+	 * Builds the JSON file to be sent for spells.
+	 *
+	 * @param json the json
+	 * @return the command
+	 */
 	public static Command build(JSONObject json) {
 		SpellCommand command = new SpellCommand();
 		try{
@@ -44,27 +50,58 @@ public class SpellCommand extends Command {
 		return CAST;
 	}
 	
+	/**
+	 * Sets the position of the spell
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
 	public void setPosition(float x, float y){
 		this.x = x;
 		this.y = y;
 	}
 	
+	/**
+	 * Gets the position of the spell.
+	 *
+	 * @return the position
+	 */
 	public Vector2 getPosition(){
 		return new Vector2(x,y);
 	}
 	
+	/**
+	 * Sets the spell.
+	 *
+	 * @param spell the new spell
+	 */
 	public void setSpell(int spell){
 		this.spell = spell;
 	}
 
+	/**
+	 * Gets the spell.
+	 *
+	 * @return the spell
+	 */
 	public int getSpell(){
 		return spell;
 	}
 	
+	/**
+	 * Gets the direction of the spell.
+	 *
+	 * @return the direction
+	 */
 	public int getDirection(){
 		return direction;
 	}
 	
+	/**
+	 * Sets the direction of the spell.
+	 *
+	 * @param direction the new direction
+	 */
 	public void setDirection(int direction){
 		this.direction = direction;
 	}

@@ -7,10 +7,20 @@ public class UndefinedCommand extends Command {
 
 	private String message;
 	
+	/**
+	 * Instantiates a new undefined command.
+	 *
+	 * @param string the string
+	 */
 	public UndefinedCommand(String string) {
 		this.message = string;
 	}
 
+	/**
+	 * Gets the message.
+	 *
+	 * @return the message
+	 */
 	public String getMessage(){
 		return this.message;
 	}

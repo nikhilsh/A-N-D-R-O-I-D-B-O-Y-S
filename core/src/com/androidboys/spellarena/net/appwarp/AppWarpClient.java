@@ -24,49 +24,85 @@ import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
 import com.shephertz.app42.gaming.multiplayer.client.listener.ConnectionRequestListener;
 import com.sun.javafx.property.adapter.PropertyDescriptor.Listener;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AppWarpClient.
+ */
 public class AppWarpClient implements NetworkInterface{
 	
+	/** The Constant API_KEY. */
 	public final static String API_KEY = "b00bdd0998a53bb5916349f708de074644dca88a88aa731dda20d7362a17eda8";
+	
+	/** The Constant PVT_KEY. */
 	public final static String PVT_KEY = "85a61da6f2e21775d09b45cdc02543408add69719d80b195412170026751e597";
 	
+	/** The Constant GAME_STARTED_KEY. */
 	public final static String GAME_STARTED_KEY = "GAME_STARTED";
+	
+	/** The Constant TAG. */
 	private static final String TAG = "AppWarpClient";
 	
+	/** The network listeners. */
 	private Set<NetworkListener> networkListeners = Collections.synchronizedSet(new HashSet<NetworkListener>());
+	
+	/** The warp client. */
 	private WarpClient warpClient;
 	
+	/** The room filter for started games. */
 	private HashMap<String, Object> roomFilterForStartedGames = new HashMap<String, Object>() {{
 		put(GAME_STARTED_KEY, true);
 	}};
+	
+	/** The room filter for not started games. */
 	private HashMap<String, Object> roomFilterForNotStartedGames = new HashMap<String, Object>() {{
 		put(GAME_STARTED_KEY, false);
 	}};
 
+	/**
+	 * Instantiates a new app warp client.
+	 */
 	public AppWarpClient(){
 
 		roomFilterForNotStartedGames.put(GAME_STARTED_KEY, false);
 		roomFilterForStartedGames.put(GAME_STARTED_KEY, true);
 	}
 	
+	/**
+	 * Gets the user name.
+	 *
+	 * @return the user name
+	 */
 	public String getUserName(){
 		return UserSession.getInstance().getUserName();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#addNetworkListener(com.androidboys.spellarena.net.NetworkInterface.NetworkListener)
+	 */
 	@Override
 	public void addNetworkListener(NetworkListener listener) {
 		networkListeners.add(listener);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#removeNetworkListener(com.androidboys.spellarena.net.NetworkInterface.NetworkListener)
+	 */
 	@Override
 	public void removeNetworkListener(NetworkListener listener) {
 		networkListeners.remove(listener);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#clearNetworkListeners()
+	 */
 	@Override
 	public void clearNetworkListeners() {
 		networkListeners.clear();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#connect()
+	 */
 	@Override
 	public void connect() {
 		WarpClient.initialize(API_KEY, PVT_KEY);
@@ -84,6 +120,9 @@ public class AppWarpClient implements NetworkInterface{
 		warpClient.connectWithUserName(getUserName());
 	}
 
+	/**
+	 * Adds the notification listener.
+	 */
 	private void addNotificationListener() {
 		warpClient.addNotificationListener(new NotificationListenerAdapter(){
 			
@@ -118,6 +157,9 @@ public class AppWarpClient implements NetworkInterface{
 		});
 	}
 
+	/**
+	 * Adds the room request listener.
+	 */
 	private void addRoomRequestListener() {
 		warpClient.addRoomRequestListener(new RoomListenerAdapter(){
 			
@@ -151,6 +193,9 @@ public class AppWarpClient implements NetworkInterface{
 		});
 	}
 
+	/**
+	 * Adds the zone request listener.
+	 */
 	private void addZoneRequestListener() {
 		warpClient.addZoneRequestListener(new ZoneListenerAdapter(){
 			
@@ -205,6 +250,9 @@ public class AppWarpClient implements NetworkInterface{
 		});
 	}
 
+	/**
+	 * Adds the connection request listener.
+	 */
 	private void addConnectionRequestListener() {
 		warpClient.addConnectionRequestListener(new ConnectionRequestListener() {
 			
@@ -239,44 +287,68 @@ public class AppWarpClient implements NetworkInterface{
 		});
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#disconnect()
+	 */
 	@Override
 	public void disconnect() {
 		Gdx.app.log(TAG, "Disconnecting");
 		warpClient.disconnect();		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#listRooms()
+	 */
 	@Override
 	public void listRooms() {
 		Gdx.app.log(TAG, "Listing rooms");
 		warpClient.getRoomWithProperties(roomFilterForNotStartedGames);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#createRoom(java.lang.String)
+	 */
 	@Override
 	public void createRoom(String roomName) {
 		warpClient.createRoom(roomName, getUserName(), MAX_USERS, this.roomFilterForNotStartedGames);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#deleteRoom(java.lang.String)
+	 */
 	@Override
 	public void deleteRoom(String roomId) {
 		warpClient.deleteRoom(roomId);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#joinRoom(java.lang.String)
+	 */
 	@Override
 	public void joinRoom(String roomId) {
 		warpClient.joinRoom(roomId);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#leaveRoom(java.lang.String)
+	 */
 	@Override
 	public void leaveRoom(String roomId) {
 		warpClient.leaveRoom(roomId);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#sendMessage(java.lang.String)
+	 */
 	@Override
 	public void sendMessage(String message) {
 		Gdx.app.log(TAG, "Sending message "+message);
 		warpClient.sendChat(message);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#sendMessageTo(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public void sendMessageTo(final String destination, final String message) {
 		Gdx.app.log(TAG, "Sending message "+message+" to "+destination);
@@ -288,21 +360,36 @@ public class AppWarpClient implements NetworkInterface{
 		}.start();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#startGame(java.lang.String)
+	 */
 	@Override
 	public void startGame(String roomId) {
 		warpClient.updateRoomProperties(roomId, roomFilterForStartedGames, new String[0]);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#getRoomInfo(java.lang.String)
+	 */
 	@Override
 	public void getRoomInfo(String roomId) {
 		warpClient.getLiveRoomInfo(roomId);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.androidboys.spellarena.net.NetworkInterface#isConnected()
+	 */
 	@Override
 	public boolean isConnected() {
 		return warpClient.getConnectionState() == ConnectionState.CONNECTED;
 	}
 	
+	/**
+	 * Creates the room model from room data.
+	 *
+	 * @param roomData the room data
+	 * @return the room model
+	 */
 	private RoomModel createRoomModelFromRoomData(RoomData roomData){
 		RoomModel room = new RoomModel();
 		room.setName(roomData.getName());

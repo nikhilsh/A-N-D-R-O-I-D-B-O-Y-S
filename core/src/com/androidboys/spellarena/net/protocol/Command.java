@@ -25,6 +25,12 @@ public abstract class Command {
     
     public static final int MAX_MESSAGE_LENGTH = 200;
     
+    /**
+     * Parses the common fields.
+     *
+     * @param json the json
+     * @throws JSONException the JSON exception
+     */
     protected void parseCommonFields(JSONObject json) throws JSONException {
         this.timestamp = json.getLong("t");
         this.command = json.getInt("command");
@@ -47,6 +53,12 @@ public abstract class Command {
         return json.toString();
     }
     
+    /**
+     * Split message in case too big.
+     *
+     * @param message the message
+     * @return the string[]
+     */
     public String[] splitMessage(String message) {
         if (message.length() > MAX_MESSAGE_LENGTH) {
             int id = (int)(Math.random()*1000);
@@ -66,14 +78,29 @@ public abstract class Command {
 
     public abstract int getCommand();
     
+    /**
+     * Gets the time stamp.
+     *
+     * @return the time stamp
+     */
     public long getTimeStamp(){
     	return timestamp;
     }
     
+    /**
+     * Gets the from user.
+     *
+     * @return the from user
+     */
     public String getFromUser(){
     	return fromUser;
     }
     
+    /**
+     * Sets the from user.
+     *
+     * @param fromUser the new from user
+     */
     public void setFromUser(String fromUser){
     	this.fromUser = fromUser;
     }

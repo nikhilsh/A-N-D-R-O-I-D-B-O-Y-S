@@ -18,18 +18,39 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GameClient.
+ */
 public class GameClient {
 	
+	/** The out buffer. */
 	private LinkedList<String> outBuffer = new LinkedList<String>();
 	
+	/** The Constant TCP_PORT. */
 	public static final int TCP_PORT = 4455;
+	
+	/** The Constant UDP_PORT. */
 	public static final int UDP_PORT = 4456;
+	
+	/** The Constant TAG. */
 	protected static final String TAG = "GameClient";
 	
+	/** The network interface. */
 	private NetworkInterface networkInterface;
+	
+	/** The game screen mediator. */
 	private GameScreenMediator gameScreenMediator;
+	
+	/** The client. */
 	private Client client;
 	
+	/**
+	 * Initialize.
+	 *
+	 * @param client the client
+	 * @param gameScreenMediator the game screen mediator
+	 */
 	public void initialize(NetworkInterface client,
 			GameScreenMediator gameScreenMediator){
 		
@@ -42,6 +63,11 @@ public class GameClient {
 		
 	}
 	
+	/**
+	 * Connect to server.
+	 *
+	 * @param host the host
+	 */
 	public void connectToServer(String host){
 		try {
 			initListener();
@@ -55,6 +81,9 @@ public class GameClient {
 		}
 	}
 	
+	/**
+	 * Inits the listener.
+	 */
 	public void initListener(){
 		this.client.addListener(new Listener(){
 			
@@ -73,6 +102,9 @@ public class GameClient {
 		});
 	}
 	
+	/**
+	 * Sets the up sender.
+	 */
 	private void setUpSender(){
 		new Thread(new Runnable(){
 			@Override
@@ -101,6 +133,11 @@ public class GameClient {
 		}).start();
 	}
 
+	/**
+	 * Send message.
+	 *
+	 * @param serialize the serialize
+	 */
 	public void sendMessage(String serialize) {
 		synchronized (outBuffer) {
 			Gdx.app.log(TAG,"Adding message to buffer");
@@ -108,6 +145,9 @@ public class GameClient {
 		}
 	}
 
+	/**
+	 * Close.
+	 */
 	public void close() {
 		client.close();
 	}

@@ -10,6 +10,14 @@ public class Laser extends GameObject {
 	private Rectangle rectangle;
 	private ArrayList<Rectangle> rectangleArray = new ArrayList<Rectangle>();
 
+	/**
+	 * Instantiates a new laser.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param playerName the player name
+	 * @param bob the bob
+	 */
 	public Laser(float x, float y, String playerName, Bob bob) {
 		super(x, y, playerName);
 		this.bob = bob;
@@ -85,6 +93,11 @@ public class Laser extends GameObject {
 		return rectangle;
 	}
 	
+	/**
+	 * Gets the rectangle array.
+	 *
+	 * @return the rectangle array
+	 */
 	public ArrayList<Rectangle> getRectangleArray(){
 		return rectangleArray;
 	}

@@ -13,7 +13,7 @@ public abstract class GameObject {
 	private String playerName;
 	
 	/**
-	 * Create a new Bob instance.
+	 * Create a new gameobject instance.
 	 * @param i,j		initial position
 	 * @param isEnemy	whether it is enemy
 	 */
@@ -24,13 +24,18 @@ public abstract class GameObject {
 	}
 
 	/**
-	 * Get the position of Bob.
-	 * @return Bob's position
+	 * Get the position of the gameobject.
+	 * @return gameobject's position
 	 */
 	public Vector2 getPosition(){
 		return position;
 	}
 	
+	/**
+	 * Sets the position.
+	 *
+	 * @param position the new position
+	 */
 	public void setPosition(Vector2 position){
 		this.position = position;
 	}
@@ -40,16 +45,16 @@ public abstract class GameObject {
 	}
 
 	/**
-	 * Get the velocity of Bob
-	 * @return Bob's velocity
+	 * Get the velocity of gameobject
+	 * @return gameobject velocity
 	 */
 	public Vector2 getVelocity() {
 		return velocity;
 	}
 
 	/**
-	 * Set the velocity of Bob
-	 * @param velocity: Bob's new velocity
+	 * Set the velocity of gameobject
+	 * @param velocity: gameobject new velocity
 	 */
 	public void setVelocity(Vector2 velocity) {
 		this.velocity = velocity;
@@ -63,5 +68,10 @@ public abstract class GameObject {
 		return playerName;
 	}
 
+	/**
+	 * Gets the rectangle around the gameobject to look for collisions.
+	 *
+	 * @return the rectangle
+	 */
 	public abstract Rectangle getRectangle();
 }

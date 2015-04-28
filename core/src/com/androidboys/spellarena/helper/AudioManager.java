@@ -32,6 +32,9 @@ public class AudioManager {
 
 	private static Music activeMusic;
 	
+	/**
+	 * Initialize audio assets.
+	 */
 	public static void initialize(){
 		assetManager = new AssetManager();
 		activeMusic = null;
@@ -61,14 +64,22 @@ public class AudioManager {
 		}
 	}
 
+	/**
+	 * Unload audio files.
+	 */
 	public static void unload(){
 		assetManager.clear();
 	}
 
-	private static boolean playSound( String name){
-		return playSound( name, false);
-	}
 
+
+	/**
+	 * Play music.
+	 *
+	 * @param name the name of the file to play
+	 * @param isLoop set if audio is to be looped
+	 * @return return if played
+	 */
 	private static boolean playSound(final String name, final boolean isLoop){
 		try {
 			Gdx.app.postRunnable(new Runnable() {
@@ -91,6 +102,13 @@ public class AudioManager {
 		return true;
 	}
 
+	/**
+	 * Play music.
+	 *
+	 * @param name the name of the file to play
+	 * @param isLoop set if audio is to be looped
+	 * @return return if played
+	 */
 	private static boolean playMusic(String name, boolean isLoop){
 		Gdx.app.log(TAG,"Playing music "+name);
 		try {
@@ -106,6 +124,9 @@ public class AudioManager {
 		return true;
 	}
 
+	/**
+	 * Stop music.
+	 */
 	private static void stopMusic(){
 		if (activeMusic != null){
 			activeMusic.stop();
@@ -114,66 +135,116 @@ public class AudioManager {
 		activeMusic = null;
 	}
 
+	/**
+	 * Play main theme.
+	 */
 	public static void playMainTheme() {
 		playMusic(MAIN_THEME, true);
 	}
 	
+	/**
+	 * Stop main theme.
+	 */
 	public static void stopMainTheme() {
 		stopMusic();
 	}
 	
+	/**
+	 * Play start game.
+	 */
 	public static void playStartGame() {
 		playMusic(START_GAME, false);
 	}
 	
+	/**
+	 * Play end game sound.
+	 */
 	public static void playEndGame() {
 		playMusic(END_GAME, false);
 	}	
 		
+	/**
+	 * Play shield sound.
+	 */
 	public static void playShieldSound() {
 		playSound(SHIELD, false);
 	}
 
+	/**
+	 * Play boomerang sound.
+	 */
 	public static void playBoomerang() {
 		playSound(BOOMERANG,false);
 	}
 
+	/**
+	 * Play firewall sound.
+	 */
 	public static void playFirewall() {
 		playSound(FIREWALL,false);
 	}
 
+	/**
+	 * Play blink sound.
+	 */
 	public static void playBlink() {
 		playMusic(BLINK, false);
 	}
 
+	/**
+	 * Play haste sound.
+	 */
 	public static void playHaste() {
 		playMusic(HASTE, false);
 	}
 	
+	/**
+	 * Play hurricane sound.
+	 */
 	public static void playHurricane() {
 		playMusic(HURRICANE, false);
 	}
 	
+	/**
+	 * Play spark sound.
+	 */
 	public static void playSpark() {
 		playMusic(SPARK, false);
 	}
 	
+	/**
+	 * Play thunderstorm sound.
+	 */
 	public static void playThunderstorm() {
 		playMusic(THUNDERSTORM, false);
 	}
 	
+	/**
+	 * Play laser sound.
+	 */
 	public static void playLaser() {
 		playMusic(LASER, false);
 	}
 	
+	/**
+	 * Play sunstrike sound.
+	 */
 	public static void playSunstrike(){
 		playMusic(SUNSTRIKE, false);
 	}
 
+	/**
+	 * Update sound.
+	 *
+	 * @return true, if successful
+	 */
 	public static boolean update() {
 		return assetManager.update();
 	}
 	
+	/**
+	 * Toggle music on or off.
+	 */
 	public static void toggleMusic(){
 		boolean musicOn = AssetLoader.getAudioSettings();
 		if(musicOn){

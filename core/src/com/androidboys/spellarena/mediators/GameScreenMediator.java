@@ -45,6 +45,12 @@ public class GameScreenMediator extends Mediator{
 	
 	private LinkedList<String> receivedMessages = new LinkedList<String>();
 	
+	/**
+	 * Instantiates a new game screen mediator.
+	 *
+	 * @param game the game object
+	 * @param networkInterface the network interface
+	 */
 	public GameScreenMediator(SpellArena game, NetworkInterface networkInterface) {
 		super(game);
 		this.networkInterface = networkInterface;
@@ -53,10 +59,8 @@ public class GameScreenMediator extends Mediator{
 			@Override
 			public void onMessageReceived(String from, final String message) {
 				synchronized (receivedMessages) {
-//					Gdx.app.log(TAG, "accessing lock");
 					receivedMessages.addLast(message);
 				}
-//				Gdx.app.log(TAG, "exiting lock");
 			}
 			
 			@Override
@@ -95,18 +99,29 @@ public class GameScreenMediator extends Mediator{
 		initCommandHandler();
 	}
 
+	/**
+	 * function to tell if room info processed.
+	 */
 	protected void roomInfoProcessed() {
 		gameScreen.roomInfoProcessed();
 	}
 
-	private void handleCreateGameCommand(Command c){
-		String ip = ((CreateGameCommand)c).getIP();
-//		gameScreen.setServerReady(true);
+	/**
+	 * Handle create game command.
+	 *
+	 * @param c the command
+	 */
+	private void handleCreateGameCommand(Command command){
+		String ip = ((CreateGameCommand)command).getIP();
 		gameScreen.connectToServer(ip);
 	}
 	
+	/**
+	 * Handle ready game command.
+	 *
+	 * @param command the command
+	 */
 	private void handleReadyGameCommand(Command command) {
-//		Gdx.app.log(TAG, "handleReadyGameCommand "+command);
 		String playerName = command.getFromUser();
 		if(UserSession.getInstance().isServer()){
 			
@@ -115,6 +130,11 @@ public class GameScreenMediator extends Mediator{
 		gameScreen.onPlayerReady(playerName);
 	}
 	
+	/**
+	 * Handle start game command.
+	 *
+	 * @param c the command
+	 */
 	private void handleStartGameCommand(Command c){
 		networkInterface.removeNetworkListener(networkListenerAdapter);
 		gameScreen.onStartGame();
@@ -123,6 +143,11 @@ public class GameScreenMediator extends Mediator{
 		}
 	}
 	
+	/**
+	 * Handle clock sync request command.
+	 *
+	 * @param c the command
+	 */
 	private void handleClockSyncRequestCommand(Command c){
 		ClockSyncResCommand command = new ClockSyncResCommand();
 		command.setFromUser(UserSession.getInstance().getUserName());
@@ -130,11 +155,20 @@ public class GameScreenMediator extends Mediator{
 		gameClient.sendMessage(command.serialize());
 	}
 	
+	/**
+	 * Handle clock sync response command.
+	 *
+	 * @param c the command
+	 */
 	private void handleClockSyncResponseCommand(Command c){
 		long delay = ((ClockSyncResCommand)c).getInitialTimeStamp() - c.getTimeStamp();
-//		Gdx.app.log(TAG,"lag: "+delay);
 	}
 	
+	/**
+	 * Handle move command.
+	 *
+	 * @param c the command
+	 */
 	private void handleMoveCommand(Command c){
 		long time = c.getTimeStamp();
 		int movement = ((MoveCommand)c).getMovement();
@@ -144,6 +178,11 @@ public class GameScreenMediator extends Mediator{
 		}
 	}
 	
+	/**
+	 * Handle update command.
+	 *
+	 * @param c the command
+	 */
 	private void handleUpdateCommand(Command c){
 		Vector2 position = ((UpdateCommand)c).getPosition();
 		Vector2 velocity = ((UpdateCommand)c).getVelocity();
@@ -154,6 +193,11 @@ public class GameScreenMediator extends Mediator{
 		}
 	}
 	
+	/**
+	 * Handle game end command.
+	 *
+	 * @param command the command
+	 */
 	private void handleGameEndCommand(Command command) {
         if (((GameEndCommand)command).getReason() == GameEndCommand.GameEndReason.GAME_END) {
         	String winnerName = ((GameEndCommand)command).getWinner();
@@ -165,11 +209,20 @@ public class GameScreenMediator extends Mediator{
         }
     }
 	
+	/**
+	 * Handle spell command.
+	 *
+	 * @param command the command
+	 */
 	private void handleSpellCommand(Command command){
 		SpellCommand spellCommand = (SpellCommand)command;
 		String playerName = command.getFromUser();
 		gameScreen.castSpell(playerName, spellCommand.getPosition().x, spellCommand.getPosition().y, spellCommand.getSpell(), spellCommand.getDirection());
 	}
+	
+	/**
+	 * Gets id of rooms when the main screen appears
+	 */
 	
 	@Override
 	protected void onScreenShow() {
@@ -179,17 +232,31 @@ public class GameScreenMediator extends Mediator{
 		}
 	}
 	
+	/**
+	 * On player joined room.
+	 *
+	 * @param playerName the player name
+	 */
 	private void onPlayerJoinedRoom(String playerName) {
-//		Gdx.app.log(TAG, "Player: "+playerName+" has joined room "+room.getName());
 		gameScreen.onPlayerJoinedRoom(playerName);
 	}
 
+	/**
+	 * Check sync.
+	 *
+	 * @param playerName the player name
+	 */
 	private void checkSync(String playerName){
 		ClockSyncReqCommand command = new ClockSyncReqCommand();
 		command.setFromUser(UserSession.getInstance().getUserName());
 		gameServer.sendMessage(command.serialize());
 	}
 	
+	/**
+	 * Remove player when player has left room
+	 *
+	 * @param playerName the player name
+	 */
 	public void onPlayerLeftRoom(String playerName) {
 		if((playerName != null)&&playerName.equals(getRoom().getOwner())){
 			onGameOwnerLeft();
@@ -198,10 +265,16 @@ public class GameScreenMediator extends Mediator{
 		}
 	}
 	
+	/**
+	 * On game owner left, notify game screen
+	 */
 	private void onGameOwnerLeft() {
         gameScreen.onOwnerLeft();
 	}
 
+	/**
+	 * Create the gamescreen
+	 */
 	@Override
 	public Screen createScreen() {
 		this.screen = new GameScreen(game,this);
@@ -209,22 +282,45 @@ public class GameScreenMediator extends Mediator{
 		return screen;
 	}
 
+	/**
+	 * Gets the network listener adapter.
+	 *
+	 * @return the network listener adapter
+	 */
 	public NetworkListenerAdapter getNetworkListenerAdapter() {
 		return networkListenerAdapter;
 	}
 	
+	/**
+	 * Gets the room.
+	 *
+	 * @return the room
+	 */
 	public RoomModel getRoom() {
 		return room;
 	}
 
+	/**
+	 * Sets the room.
+	 *
+	 * @param room the new room
+	 */
 	public void setRoom(RoomModel room) {
 		this.room = room;
 	}
 
+	/**
+	 * Sets the game server.
+	 *
+	 * @param gameServer the new game server
+	 */
 	public void setGameServer(GameServer gameServer) {
 		this.gameServer = gameServer;
 	}
 
+	/**
+	 * Start game.
+	 */
 	public void startGame(){
 		StartGameCommand command = new StartGameCommand();
 		command.setFromUser(UserSession.getInstance().getUserName());
@@ -232,6 +328,11 @@ public class GameScreenMediator extends Mediator{
 		gameScreen.onStartGame();
 	}
 	
+	/**
+	 * Move player.
+	 *
+	 * @param movement the movement
+	 */
 	public void move(int movement) {
 		MoveCommand command = new MoveCommand();
 		command.setMovement(movement);
@@ -244,6 +345,11 @@ public class GameScreenMediator extends Mediator{
 		}
 	}
 
+	/**
+	 * Update player's details.
+	 *
+	 * @param playerModel the player model
+	 */
 	public void update(Bob playerModel) {
 		if(playerModel != null){
 			UpdateCommand command = new UpdateCommand();
@@ -259,16 +365,25 @@ public class GameScreenMediator extends Mediator{
 		}
 	}
 
+	/**
+	 * On server started, notify gamescreen
+	 */
 	public void onServerStarted() {
-//		Gdx.app.log(TAG, "onServerStarted");
 		gameScreen.onServerStarted();
 	}
 
+	/**
+	 * On server start fail, notify game screen
+	 */
 	public void onServerStartFail() {
-//		Gdx.app.log(TAG, "onServerStartFail");
 		gameScreen.onServerStartFail();
 	}
 
+	/**
+	 * Send server address to network interface
+	 *
+	 * @param playerName the player name
+	 */
 	public void sendServerAddress(String playerName) {
 		try {
 			CreateGameCommand command = new CreateGameCommand();
@@ -280,17 +395,26 @@ public class GameScreenMediator extends Mediator{
 		}
 	}
 
+	/**
+	 * Tells game client if connection to server was a success.
+	 *
+	 * @param client the client
+	 */
 	public void connectToServerSuccess(GameClient client) {
 		if(client!=null){
 			this.gameClient = client;
 		}
-//		Gdx.app.log(TAG, "connectToServerSuccess");
 		gameScreen.connectToServerSuccess();
 		ReadyCommand command = new ReadyCommand();
 		command.setFromUser(UserSession.getInstance().getUserName());
 		gameClient.sendMessage(command.serialize());
 	}
 	
+	/**
+	 * Upon end game, tell other clients
+	 *
+	 * @param winner the winner
+	 */
 	public void endGame(String winner) {
 		GameEndCommand command = new GameEndCommand();
 		command.setFromUser(UserSession.getInstance().getUserName());
@@ -300,17 +424,27 @@ public class GameScreenMediator extends Mediator{
 		handleGameEndCommand(command);
 	}
 
+	/**
+	 * tell game screen that connect to server failed.
+	 */
 	public void connectToServerFailed() {
-//		Gdx.app.log(TAG, "connectToServerFailed");
 		gameScreen.connectToServerFail();
 	}
 
+	/**
+	 * process incoming messages and add to received messages
+	 *
+	 * @param object the object
+	 */
 	public void processMessage(String object) {
 		synchronized (receivedMessages) {
 			receivedMessages.addLast(object);
 		}
 	}
 
+	/**
+	 * Inits the command handler. takes care of messages in the received messages list
+	 */
 	public void initCommandHandler() {
 		new Thread( new Runnable() {
 				
@@ -321,23 +455,18 @@ public class GameScreenMediator extends Mediator{
 						Thread.sleep(75);
 						final String message;
 						synchronized (receivedMessages) {
-//							Gdx.app.log(TAG, "accessing lock");
 							if(!receivedMessages.isEmpty()){
 								message = receivedMessages.removeFirst();
 							} else {
 								message = null;
 							}
 						}
-//						Gdx.app.log(TAG, "exiting lock");
 						if(message != null){
 							executor.execute(new Runnable() {
 								@Override
 								public void run() {
-//									Gdx.app.log(TAG,"Accepting command: "+message);
 									Command command = commandFactory.createCommand(message);
-									//Gdx.app.log(TAG, "Time difference: "+(command.getTimeStamp()-System.currentTimeMillis()));
 									if(command == null){
-//										Gdx.app.log(TAG, "Waiting for split message");
 										return;
 									}
 									switch(command.getCommand()){
@@ -373,17 +502,27 @@ public class GameScreenMediator extends Mediator{
 							});
 						}
 		    		} catch (Exception e){
-//		    			Gdx.app.log(TAG,"Message handling failed");
 		    		}
 				}
 			}
 		}).start();
 	}
 
+	/**
+	 * tells networking interface that local client has left room.
+	 */
 	public void leaveRoom() {
 		networkInterface.leaveRoom(UserSession.getInstance().getRoom().getId());
 	}
 	
+	/**
+	 * tell other clients that spell command is casted
+	 *
+	 * @param direction the direction player  was facing
+ 	 * @param spell the spell casted
+	 * @param x the x of the spell
+	 * @param y the y of the spell
+	 */
 	public void spellCommand(int direction, int spell, float x, float y){
 		SpellCommand command = new SpellCommand();
 		command.setDirection(direction);
@@ -398,6 +537,11 @@ public class GameScreenMediator extends Mediator{
 		}
 	}
 
+	/**
+	 * Method is called on disconnect. Handles deleting room and removing network listeners so that can join other rooms
+	 *
+	 * @param gameStarted boolena on whether the game has started
+	 */
 	public void disconnect(boolean gameStarted) {
 		if(!gameStarted){
 			if(this.getNetworkListenerAdapter() != null){

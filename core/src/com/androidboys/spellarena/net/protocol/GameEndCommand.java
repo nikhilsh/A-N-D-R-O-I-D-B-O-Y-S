@@ -17,6 +17,12 @@ public class GameEndCommand extends Command{
 	private GameEndReason reason;
 	private String winner;
 	
+	/**
+	 * Builds the json file to end game.
+	 *
+	 * @param json the json
+	 * @return the command
+	 */
 	public static Command build(JSONObject json){
 		GameEndCommand command = new GameEndCommand();
 		try{
@@ -46,18 +52,38 @@ public class GameEndCommand extends Command{
 		return GAME_END;
 	}
 
+	/**
+	 * Gets the reason.
+	 *
+	 * @return the reason
+	 */
 	public GameEndReason getReason() {
 		return reason;
 	}
 
+	/**
+	 * Sets the reason.
+	 *
+	 * @param reason the new reason
+	 */
 	public void setReason(GameEndReason reason) {
 		this.reason = reason;
 	}
 
+	/**
+	 * Gets the winner.
+	 *
+	 * @return the winner
+	 */
 	public String getWinner() {
 		return winner;
 	}
 
+	/**
+	 * Sets the winner.
+	 *
+	 * @param winner the new winner
+	 */
 	public void setWinner(String winner) {
 		this.winner = winner;
 	}

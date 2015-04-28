@@ -6,6 +6,14 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Firewall extends GameObject{
 
+	/**
+	 * Instantiates a new firewall.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param direction the direction
+	 * @param playerName the player name
+	 */
 	public Firewall(float x, float y, Direction direction, String playerName) {
 		super(x, y, playerName);
 		float rotation = 0;

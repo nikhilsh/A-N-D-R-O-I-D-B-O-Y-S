@@ -12,12 +12,12 @@ public class Spell {
 		BLINK,
 		HASTE,
 		FIREWALL,
-		BLADESTORM,
+		HURRICANE,
 		THUNDERSTORM,
-		SUNSTRIKE,
+		EXPLOSION,
 		LASER,
-		SPARK,
-		TORNADO;
+		SPECTRALTHROW,
+		SHADOWBLAST;
 	}
 
 	public static enum State {
@@ -29,25 +29,39 @@ public class Spell {
 	private int index = 0;
 	private Vector2 position = new Vector2();
 	private GameWorld world;
-	private Bob bob;
-	private int direction;
 	private float remainingSeconds = 0;
 
+	/**
+	 * Instantiates a new spell.
+	 *
+	 * @param world the world
+	 * @param x the x
+	 * @param y the y
+	 * @param spell the spell
+	 * @param direction the direction
+	 */
 	public Spell(GameWorld world, float x, float y, Spells spell, int direction) {
 		this.position = position.set(x, y);
 		this.spell = spell;
 		this.world = world;
-		this.bob = world.getPlayerModel(UserSession.getInstance().getUserName());
-		this.direction = direction;
 	}
 
+	/**
+	 * Update.
+	 *
+	 * @param deltaTime the delta time
+	 */
 	public void update(float deltaTime) {
 		this.remainingSeconds -= deltaTime; //Decrease duration of spell
 		if (remainingSeconds <= 0) { //End
-
 		}
 	}
 
+	/**
+	 * Gets the remaining seconds.
+	 *
+	 * @return the remaining seconds
+	 */
 	public float getRemainingSeconds() {
 		return remainingSeconds;
 	}
@@ -58,17 +72,20 @@ public class Spell {
 
 	/**
 	 * Calculate the spell according to the state of x,y,z
-	 * x,y,z: Quas is 1, Wex is 10, Exort is 100
+	 * x,y,z: Ice is 1, Lightning is 10, Fire is 100
 	 * QQQ = Divine Shield
 	 * QQW = Haste
 	 * QQE = Blink
-	 * WWQ = Tornado
+	 * WWQ = Shadow Blast
 	 * WWW = Thunderstorm
 	 * WWE = Spark
 	 * EEQ = Mine
 	 * EEW = Laser
 	 * EEE = Firewall
 	 * QWE = Bladestorm
+	 * where Q = Ice
+	 * where W = Lightning
+	 * where E = Fire
 	 */
 	public void spellSettler(int x, int y, int z) {
 		index = x + y + z;
@@ -79,7 +96,7 @@ public class Spell {
 			spell = Spells.HASTE;
 		}
 		else if (index == 21) { //WWQ
-			spell = Spells.TORNADO;
+			spell = Spells.SHADOWBLAST;
 		}
 		else if (index == 30) { //WWW
 			spell = Spells.THUNDERSTORM;
@@ -88,13 +105,13 @@ public class Spell {
 			spell = Spells.BLINK;
 		}
 		else if (index == 111) { //QWE
-			spell = Spells.BLADESTORM;
+			spell = Spells.HURRICANE;
 		}
 		else if (index == 120) { //WWE
-			spell = Spells.SPARK;
+			spell = Spells.SPECTRALTHROW;
 		}
 		else if (index == 201) { //EEQ
-			spell = Spells.SUNSTRIKE;
+			spell = Spells.EXPLOSION;
 		}
 		else if (index == 210) { //EEW
 			spell = Spells.LASER;
@@ -106,92 +123,12 @@ public class Spell {
 		}
 		this.world.setSpell(spell);
 	}	
-	
-//	public void castSpell() {
-//		switch (spell) {
-//		case ACID:
-//			//consider changing
-//			//check for collision
-//			//send position and time remaining to server
-//			//display on UI
-//			//clear on screen
-//			break;
-//		case DIVINESHIELD:
-//			
-//			break;
-//		case FORCESTAFF:
-//				switch (direction) {
-//				case 0:
-//					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
-//					break;
-//				case 1:
-//					bob.setPosition(bob.getPosition().x, bob.getPosition().y+100);
-//					break;
-//				case 2:
-//					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y+100);
-//					break;
-//				case 3:
-//					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y+100);
-//					break;
-//				case 4:
-//					bob.setPosition(bob.getPosition().x, bob.getPosition().y-100);
-//					break;
-//				case 5:
-//					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y-100);
-//					break;
-//				case 6:
-//					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y-100);
-//					break;
-//				case 7:
-//					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y);
-//					break;
-//
-//				default:
-//					break;
-//				}
-//
-//			break;
-//
-//		case ATOS:
-//			
-//			break;
-//
-//		case STASISTRAP:
-//
-//			//collision with sprite model (+100 radius)
-//			//insert mine at bob position
-//			//if stasis trap near enemy,
-//			break;
-//
-//		case SPROUT:
-//			//collision with sprite
-//			//mana cost 40
-//
-//			//need add new collision			
-//			break;
-//
-//		case DARKPACT:
-//			
-//			break;
-//
-//		case MINE:
-//			//collision with sprite, decrement health
-//
-//			//insert mine at bob position
-//			break;
-//
-//		case LASER:
-//			
-//			break;
-//
-//		case FANOFKNIVES:
-//			
-//		default:
-//			break;
-//		}
-//	}
 
-	
+	/**
+	 * Gets the integer value of spell enum.
+	 *
+	 * @return the spell
+	 */
 	public int getSpell(){
 
 		switch (spell) {
@@ -203,40 +140,21 @@ public class Spell {
 			return 2;
 		case FIREWALL:
 			return 3;
-		case BLADESTORM:
+		case HURRICANE:
 			return 4;
 		case THUNDERSTORM:
 			return 5;
-		case SUNSTRIKE:
+		case EXPLOSION:
 			return 6;
 		case LASER:
 			return 7;
-		case SPARK:
+		case SPECTRALTHROW:
 			return 8;
-		case TORNADO:
+		case SHADOWBLAST:
 			return 9;
 		default:
 			break;
 		}
 		return 0;
 	}
-
-	public Boolean checkCollision(Bob bob){
-		if(bob.getPosition().x > GameWorld.WORLD_BOUND_RIGHT){
-			bob.setPosition(GameWorld.WORLD_BOUND_RIGHT, bob.getPosition().y);
-			return false;
-		} else if (bob.getPosition().x < GameWorld.WORLD_BOUND_LEFT){
-			bob.setPosition(GameWorld.WORLD_BOUND_LEFT, bob.getPosition().y);
-			return false;
-		}
-		if(bob.getPosition().y > GameWorld.WORLD_BOUND_TOP){
-			bob.setPosition(bob.getPosition().x,GameWorld.WORLD_BOUND_TOP);
-			return false;
-		} else if (bob.getPosition().y < GameWorld.WORLD_BOUND_BOTTOM){
-			bob.setPosition(bob.getPosition().x,GameWorld.WORLD_BOUND_BOTTOM);
-			return false;
-		}
-		return true;
-	}
-
 }

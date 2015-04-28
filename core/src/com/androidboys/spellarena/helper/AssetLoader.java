@@ -5,21 +5,17 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
-import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
@@ -83,6 +79,9 @@ public class AssetLoader {
 
 
 	
+	/**
+	 * Queue loading.
+	 */
 	public static void queueLoading(){
 		loadPreferences();
 		
@@ -119,6 +118,9 @@ public class AssetLoader {
 		manager.load("maps/Dungeon.tmx",TiledMap.class);
 	}
 	
+	/**
+	 * Sets the main menu resources.
+	 */
 	public static void setMainMenuResources(){
 		Gdx.app.log(TAG, "Setting main menu resources");
 		if (backgroundTexture == null){
@@ -158,7 +160,6 @@ public class AssetLoader {
 		if (parchmentText == null){
 			fontPars = new FreeTypeFontParameter();
 			fontPars.size = 28;
-//			fontPars.color = new Color(180/255f, 122/255f, 115/255f, 1);
 			fontPars.color = Color.BLACK;
 			fontPars.borderColor = Color.GRAY;
 			fontPars.borderWidth = 1;
@@ -175,7 +176,6 @@ public class AssetLoader {
 		if (smallParchmentText == null){
 			fontPars = new FreeTypeFontParameter();
 			fontPars.size = 18;
-//			fontPars.color = new Color(180/255f, 122/255f, 115/255f, 1);
 			fontPars.color = Color.BLACK;
 			fontPars.borderColor = Color.GRAY;
 			fontPars.borderWidth = 1;
@@ -200,6 +200,9 @@ public class AssetLoader {
 		}
 	}
 	
+	/**
+	 * Load preferences like audio
+	 */
 	public static void loadPreferences() {
 		prefs = Gdx.app.getPreferences("Spell Arena");
 		if(!prefs.contains("audio")){
@@ -207,6 +210,9 @@ public class AssetLoader {
 		}
 	}
 
+	/**
+	 * Sets the game resources.
+	 */
 	public static void setGameResources(){
 		Gdx.app.log(TAG, "Setting game resources");
 		if(charTexture == null){
@@ -254,10 +260,18 @@ public class AssetLoader {
 		loadAnimations();
 	}
 	
+	/**
+	 * Update.
+	 *
+	 * @return true, if there is an update
+	 */
 	public static boolean update(){
 		return manager.update();
 	}
 	
+	/**
+	 * Load animations.
+	 */
 	private static void loadAnimations() {
 		northBobAnimation = new Animation(0.06f,new TextureRegion[]{
 				new TextureRegion(charTexture, 0, 155, 30, 30),
@@ -465,6 +479,9 @@ public class AssetLoader {
 		sunstrikeAnimation.setPlayMode(Animation.PlayMode.LOOP);
 	}
 
+	/**
+	 * Load sprites.
+	 */
 	private static void loadSprites(){
 		
 		southBob = new TextureRegion(charTexture, 60, 35, 30, 30);
@@ -477,6 +494,9 @@ public class AssetLoader {
 		southEastBob = new TextureRegion(charTexture, 210, 65, 30, 30);	
 	}
 	
+	/**
+	 * Load fonts.
+	 */
 	private static void loadFonts(){
 		FreeTypeFontGenerator fontGen = new FreeTypeFontGenerator(Gdx.files.internal("fonts/header.TTF"));
 		FreeTypeFontParameter fontPars = new FreeTypeFontParameter();
@@ -512,15 +532,46 @@ public class AssetLoader {
 		fontGen.dispose();
 	}
 	
+	/**
+	 * Dispose of header.
+	 */
+	public static void dispose(){
+		header.dispose();
+	}
+
+	
+	/**
+	 * Gets the audio settings.
+	 *
+	 * @return the audio settings
+	 */
 	public static boolean getAudioSettings(){
 		return prefs.getBoolean("audio");
 	}
 	
+	/**
+	 * Sets the audio settings.
+	 *
+	 * @param newAudio sets whether muted or not
+	 */
 	public static void setAudioSettings(boolean newAudio){
 		prefs.putBoolean("audio",newAudio);
 		prefs.flush();
 	}
 	
+	/**
+	 * Toggle music.
+	 */
+	public static void toggleMusic() {
+		prefs.putBoolean("audio", !prefs.getBoolean("audio"));
+		prefs.flush();
+	}
+	
+	/**
+	 * Gets the username.
+	 *
+	 * @return the username
+	 */
 	public static String getUsername(){
 		if(prefs.contains("name")){
 			Gdx.app.log(TAG, prefs.getString("name"));
@@ -529,21 +580,16 @@ public class AssetLoader {
 			Gdx.app.log(TAG, "null");
 			return "";
 		}
-
 	}
 	
+	/**
+	 * Sets the username.
+	 *
+	 * @param newName the new username
+	 */
 	public static void setUsername(String newName){
 		Gdx.app.log(TAG,"Setting username: "+newName);
 		prefs.putString("name",newName);
-		prefs.flush();
-	}
-	
-	public static void dispose(){
-		header.dispose();
-	}
-
-	public static void toggleMusic() {
-		prefs.putBoolean("audio", !prefs.getBoolean("audio"));
 		prefs.flush();
 	}
 }

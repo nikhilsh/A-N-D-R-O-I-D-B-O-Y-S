@@ -33,50 +33,109 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GameRenderer.
+ */
 public class GameRenderer {
 
+	/** The Constant TAG. */
 	private static final String TAG = "Game Renderer";
+
+	/** The world. */
 	private GameWorld world;
+
+	/** The cam. */
 	private OrthographicCamera cam;
 
+	/** The batcher. */
 	private SpriteBatch batcher;
+
+	/** The shape renderer. */
 	private ShapeRenderer shapeRenderer;
 
+	/** The bob. */
 	private Bob bob;
+
+	/** The enemies. */
 	private ArrayList<Bob> enemies;
 
+	/** The map. */
 	private TiledMap map;
+
+	/** The map renderer. */
 	private TiledMapRenderer mapRenderer;
 
 	//Game Assets
+	/** The south east bob. */
 	private TextureRegion southBob, southWestBob, westBob, northWestBob,
 	northBob, northEastBob, eastBob, southEastBob;
+
+	/** The bob death animation. */
 	private Animation southBobAnimation, southWestBobAnimation, westBobAnimation, northWestBobAnimation,
 	northBobAnimation, northEastBobAnimation, eastBobAnimation, southEastBobAnimation, bobDeathAnimation;
 
+	/** The sunstrike animation. */
 	private Animation tornadoAnimation, shieldAnimation, swordAnimation, dustAnimation, 
 	reverseDustAnimation, laserAnimation, fireAnimation, energyAnimation, sunstrikeAnimation;
+
+	/** The thunderstorm animation. */
 	TextureRegion[] thunderstormAnimation;
 
+	/** The default shader. */
 	private ShaderProgram defaultShader;
+
+	/** The final shader. */
 	private ShaderProgram finalShader;
+
+	/** The ambient color. */
 	private Vector3 ambientColor;
+
+	/** The current shader. */
 	private ShaderProgram currentShader;
+
+	/** The light. */
 	private Texture light;
+
+	/** The fbo. */
 	private FrameBuffer fbo;
+
+	/** The ambient intensity. */
 	private float ambientIntensity = 0.3f;
+
+	/** The height. */
 	private int height;
+
+	/** The width. */
 	private int width;
+
+	/** The green health bar. */
 	private Texture greenHealthBar;
+
+	/** The red health bar. */
 	private Texture redHealthBar;
+
+	/** The is debug on. */
 	private Boolean isDebugOn = false;
 
+	/** The Constant bright. */
 	private final static Vector3 bright = new Vector3(0.7f, 0.7f, 0.9f);
 	// Load shaders from text files
+	/** The Constant vertexShader. */
 	private final static String vertexShader = Gdx.files.internal("data/shaders/vertexShader.glsl").readString();
+
+	/** The Constant defaultPixelShader. */
 	private final static String defaultPixelShader = Gdx.files.internal("data/shaders/defaultPixelShader.glsl").readString();
+
+	/** The Constant finalPixelShader. */
 	private final static String finalPixelShader =  Gdx.files.internal("data/shaders/pixelShader.glsl").readString();
 
+	/**
+	 * Instantiates a new game renderer.
+	 *
+	 * @param batcher batcher to render the sprites
+	 * @param world reference to the game world
+	 */
 	public GameRenderer(SpriteBatch batcher, GameWorld world) {
 		this.world = world;
 		//Create a new camera
@@ -91,6 +150,9 @@ public class GameRenderer {
 		initShaders();
 	}
 
+	/**
+	 * Initializes the shaders.
+	 */
 	private void initShaders() {
 		ShaderProgram.pedantic = false;
 		defaultShader = new ShaderProgram(vertexShader, defaultPixelShader);
@@ -117,6 +179,9 @@ public class GameRenderer {
 		mapRenderer = new OrthogonalTiledMapRenderer(map,batcher);
 	}
 
+	/**
+	 * Initializes the assets.
+	 */
 	private void initAssets(){
 		map = AssetLoader.map;
 
@@ -155,6 +220,9 @@ public class GameRenderer {
 		sunstrikeAnimation = AssetLoader.sunstrikeAnimation;
 	}
 
+	/**
+	 * Initializes the game objects.
+	 */
 	public void initGameObjects(){
 		Gdx.app.log(TAG,"Initialising game objects");
 		Map<String,Bob> bobs = world.getPlayerModels();
@@ -170,13 +238,17 @@ public class GameRenderer {
 	}
 
 
+	/**
+	 * Render. This method is called to render most of the game objects in the game world like spells
+	 *
+	 * @param runTime the run time
+	 */
 	public void render(float runTime) {
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		moveCamera();
 
-		//batcher.setProjectionMatrix(cam.combined);
 		if(bob!=null)renderLight();
 
 		batcher.setShader(currentShader);
@@ -186,7 +258,7 @@ public class GameRenderer {
 		batcher.setProjectionMatrix(getCam().combined);
 		if(bob!=null)renderBob(runTime);
 		if(!enemies.isEmpty())renderEnemy(runTime);
-		
+
 		synchronized (world.getGameObjects()) {
 
 			for(Object o: world.getGameObjects()){
@@ -218,6 +290,12 @@ public class GameRenderer {
 		}
 	}
 
+	/**
+	 * Render firewall.
+	 *
+	 * @param runTime runtime(like delta)
+	 * @param o the instance of the firewall
+	 */
 	private void renderFirewall(float runTime, Firewall o) {
 		batcher.begin();
 		batcher.draw(fireAnimation.getKeyFrame(runTime),
@@ -237,6 +315,12 @@ public class GameRenderer {
 	}
 
 
+	/**
+	 * Render boomerang.
+	 *
+	 * @param runTime runtime(like delta)
+	 * @param o the instance of the boomerang
+	 */
 	private void renderBoomerang(float runTime, Boomerang o) {
 		batcher.begin();
 		batcher.draw(swordAnimation.getKeyFrame(runTime),
@@ -255,6 +339,12 @@ public class GameRenderer {
 		}
 	}
 
+	/**
+	 * Render thunderstorm.
+	 *
+	 * @param runTime runtime(like delta)
+	 * @param o the instance of the thunderstorm
+	 */
 	private void renderThunderstorm(float runTime, Thunderstorm o) {
 		if (isDebugOn){
 			shapeRenderer.setProjectionMatrix(getCam().combined);
@@ -264,11 +354,6 @@ public class GameRenderer {
 			shapeRenderer.end();
 		}
 		batcher.begin();
-		//FIRST LAYER
-		//		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-		//				o.getPosition().x-150,o.getPosition().y-50,100f,200f);
-		//		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
-		//				o.getPosition().x-50,o.getPosition().y-50,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
 				o.getPosition().x-125,o.getPosition().y-75,100f,200f);
 		batcher.draw(thunderstormAnimation[(int) ((Math.random()*4)%4)],
@@ -283,6 +368,12 @@ public class GameRenderer {
 		batcher.end();
 	}
 
+	/**
+	 * Render sword.
+	 *
+	 * @param runTime runtime(like delta)
+	 * @param o the instance of the sword
+	 */
 	private void renderSword(float runTime, Sword o) {
 		if (isDebugOn){
 			shapeRenderer.setProjectionMatrix(getCam().combined);
@@ -292,26 +383,18 @@ public class GameRenderer {
 			shapeRenderer.end();
 		}
 		batcher.begin();
-		//batcher.setColor(Color.WHITE);
 		batcher.draw(tornadoAnimation.getKeyFrame(runTime),
 				o.getPosition().x-50,o.getPosition().y-50,150f,150f);
 		batcher.end();
 	}
 
-	private void renderLight() {
-		fbo.begin();
-		fbo.getColorBufferTexture().bind(1);
-		batcher.setShader(defaultShader);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batcher.begin();
-		light.bind(0);
-		batcher.draw(light, 
-				(getCam().position.x - 960*bob.getLightRadius()),
-				(getCam().position.y - 540*bob.getLightRadius()), 1920f*bob.getLightRadius(),1080f*bob.getLightRadius());
-		batcher.end();
-		fbo.end();
-	}
 
+	/**
+	 * Render projectile.
+	 *
+	 * @param runTime runtime(like delta)
+	 * @param o the instance of the projectile
+	 */
 	private void renderProjectile(float runTime, Projectile o) {
 		if (isDebugOn){
 			shapeRenderer.setProjectionMatrix(getCam().combined);
@@ -321,13 +404,18 @@ public class GameRenderer {
 			shapeRenderer.end();
 		}
 		batcher.begin();
-		//		batcher.setColor(Color.WHITE);
 		batcher.draw(energyAnimation.getKeyFrame(runTime),
 				o.getPosition().x-25,o.getPosition().y-25,50f,50f);
 		batcher.end();
 
 	}
 
+	/**
+	 * Render blink.
+	 *
+	 * @param runTime runtime(like delta)
+	 * @param o the instance of blinking
+	 */
 	private void renderBlink(float runTime, DummyBlinkObject o){
 		Bob blinkOwner = world.getPlayerModel(o.getUsername());
 		batcher.begin();
@@ -336,6 +424,12 @@ public class GameRenderer {
 		batcher.end();
 	}
 
+	/**
+	 * Render sunstrike.
+	 *
+	 * @param runTime runtime(like delta)
+	 * @param o the instance of the sunstrike
+	 */
 	private void renderSunstrike(float runTime, Sunstrike o){
 		if (isDebugOn){
 			shapeRenderer.setProjectionMatrix(getCam().combined);
@@ -349,6 +443,12 @@ public class GameRenderer {
 		batcher.end();
 	}
 
+	/**
+	 * Render laser.
+	 *
+	 * @param runTime runtime(like delta)
+	 * @param o the laser object
+	 */
 	private void renderLaser(float runTime, Laser o){
 		Bob laserOwner = world.getPlayerModel(o.getUsername());
 		if (isDebugOn){
@@ -400,6 +500,29 @@ public class GameRenderer {
 
 	}
 
+	/**
+	 * Render light.
+	 */
+	private void renderLight() {
+		fbo.begin();
+		fbo.getColorBufferTexture().bind(1);
+		batcher.setShader(defaultShader);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batcher.begin();
+		light.bind(0);
+		batcher.draw(light, 
+				(getCam().position.x - 960*bob.getLightRadius()),
+				(getCam().position.y - 540*bob.getLightRadius()), 1920f*bob.getLightRadius(),1080f*bob.getLightRadius());
+		batcher.end();
+		fbo.end();
+	}
+
+
+	/**
+	 * Render bob.
+	 *
+	 * @param runTime runtime(like delta)
+	 */
 	private void renderBob(float runTime){
 		//Renders collision shape for debugging purposes
 		if (isDebugOn){
@@ -511,9 +634,12 @@ public class GameRenderer {
 		batcher.end();
 	}
 
+	/**
+	 * Render enemy.
+	 *
+	 * @param runTime runtime(like delta)
+	 */
 	private void renderEnemy(float runTime){
-
-		//		batcher.setColor(255/255f,128/255f,128/255f,1f);
 		for(Bob enemy: enemies){
 			batcher.begin();
 			if(enemy.getState() == Bob.STATE_ALIVE && enemy.getPlayerName()!=UserSession.getInstance().getUserName()){
@@ -610,6 +736,9 @@ public class GameRenderer {
 		}
 	}
 
+	/**
+	 * Move camera.
+	 */
 	public void moveCamera(){
 		if(bob != null){
 			getCam().position.set(bob.getPosition().x+15f,bob.getPosition().y+25f,0);
@@ -617,14 +746,29 @@ public class GameRenderer {
 		getCam().update();
 	}
 
+	/**
+	 * Removes the player from render.
+	 *
+	 * @param playerName the player name
+	 */
 	public void removePlayer(String playerName) {
 		enemies.remove(world.getPlayerModel(playerName));
 	}
 
+	/**
+	 * Gets the cam.
+	 *
+	 * @return the cam
+	 */
 	public OrthographicCamera getCam() {
 		return cam;
 	}
 
+	/**
+	 * Sets the cam.
+	 *
+	 * @param cam the new cam
+	 */
 	public void setCam(OrthographicCamera cam) {
 		this.cam = cam;
 	}

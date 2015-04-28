@@ -5,6 +5,14 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Thunderstorm extends GameObject{
 
+	/**
+	 * Instantiates a new thunderstorm.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param direction the direction
+	 * @param playerName the player name
+	 */
 	public Thunderstorm(float x, float y, Direction direction, String playerName) {
 		super(x, y, playerName);
 		switch(direction){

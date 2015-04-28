@@ -31,6 +31,12 @@ public class UpdateCommand extends Command{
 		return Command.UPDATE;
 	}
 
+	/**
+	 * Sets the update.
+	 *
+	 * @param position the position
+	 * @param velocity the velocity
+	 */
 	public void setUpdate(Vector2 position, Vector2 velocity) {
 		this.x = position.x;
 		this.y = position.y;
@@ -38,14 +44,30 @@ public class UpdateCommand extends Command{
 		this.vy = velocity.y;
 	}
 	
+	/**
+	 * Gets the position.
+	 *
+	 * @return the position
+	 */
 	public Vector2 getPosition(){
 		return new Vector2(x,y);
 	}
 
+	/**
+	 * Gets the velocity.
+	 *
+	 * @return the velocity
+	 */
 	public Vector2 getVelocity(){
 		return new Vector2(vx,vy);
 	}
 	
+	/**
+	 * Builds the json file for updating players detail.
+	 *
+	 * @param json the json
+	 * @return the command
+	 */
 	public static Command build(JSONObject json) {
 		UpdateCommand command = new UpdateCommand();
 		try{

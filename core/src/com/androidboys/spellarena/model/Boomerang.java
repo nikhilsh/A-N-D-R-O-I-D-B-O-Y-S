@@ -13,6 +13,15 @@ public class Boomerang extends GameObject {
 	private Vector2 destination;
 	private Bob owner;
 	
+	/**
+	 * Instantiates a new boomerang.
+	 *
+	 * @param x the x of the boomerang
+	 * @param y the y of the boomerang
+	 * @param direction the direction to be thrown towards
+	 * @param playerName the player name that threw the boomerang
+	 * @param bob the bob that owns the boomerang
+	 */
 	public Boomerang(float x, float y, Direction direction, String playerName, Bob bob) {
 		super(x, y, playerName);
 		this.owner = bob;
@@ -55,6 +64,9 @@ public class Boomerang extends GameObject {
 		}
 	}
 	
+	/** 
+	 * on every update, changes the velocity of boomerang (its return location changes)
+	 */
 	@Override
 	public void update(float delta) {
 		if(!isReturning){
@@ -69,6 +81,9 @@ public class Boomerang extends GameObject {
 		super.update(delta);
 	}
 
+	/**
+	 * The rectangle of the boomerang that will be called in game world to see if any player hits it
+	 */
 	@Override
 	public Rectangle getRectangle() {
 		return new Rectangle(getPosition().x-35,getPosition().y-15,105f,90f);
@@ -79,10 +94,20 @@ public class Boomerang extends GameObject {
 		return "Boomerang created by "+getUsername();
 	}
 
+	/**
+	 * Check if boomerang has returned to user.
+	 *
+	 * @return true, if successful
+	 */
 	public boolean checkFinished() {
 		return owner.getbobRect().overlaps(getRectangle())&&isReturning;
 	}
 
+	/**
+	 * Gets the destination for the boomerang.
+	 *
+	 * @return the destination
+	 */
 	public Vector2 getDestination() {
 		return destination;
 	}

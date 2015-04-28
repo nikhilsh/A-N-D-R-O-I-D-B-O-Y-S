@@ -82,11 +82,11 @@ public class GameScreen implements Screen{
 
 	private static float LASER_COOLDOWN = 0;
 	private static float BLINK_COOLDOWN = 0;
-	private static float TORNADO_COOLDOWN = 0;
+	private static float SHADOWBLAST_COOLDOWN = 0;
 	private static float DIVINESHIELD_COOLDOWN = 0;
 	private static float FIREWALL_COOLDOWN = 0;
-	private static float SUNSTRIKE_COOLDOWN = 0;
-	private static float SPARK_COOLDOWN = 0;
+	private static float EXPLOSION_COOLDOWN = 0;
+	private static float SPECTRALTHROW_COOLDOWN = 0;
 	private static float THUNDERSTORM_COOLDOWN = 0;
 	private static float BLADESTORM_COOLDOWN = 0;
 	private static float HASTE_COOLDOWN = 0;
@@ -592,9 +592,7 @@ public class GameScreen implements Screen{
 	}
 
 	private void initializeBeforeGamePanel() {
-		Gdx.app.log(TAG, "initializeBeforeGamePanel");
 		beforeGamePanel = new Group();
-//		beforeGamePanel.debugAll();
 		beforeGamePanel.setVisible(true);
 		stage.addActor(beforeGamePanel);
 		beforeGamePanel.setBounds((stage.getWidth()-600)/2,
@@ -651,6 +649,9 @@ public class GameScreen implements Screen{
 	}
 
 
+	/**
+	 * Creates the touchpad.
+	 */
 	private void createTouchpad(){
 		Pixmap.setBlending(Blending.None);
 		Pixmap background = new Pixmap(152,152,Format.RGBA8888);
@@ -681,14 +682,18 @@ public class GameScreen implements Screen{
 	}
 	
 
+	/**
+	 * Initialize game on server.
+	 */
 	private void initializeGameOnServer() {
 		Gdx.app.log(TAG, "initializeGameOnServer");
 		GameFactory.GameModel gameModel = GameFactory.getGameModel();
 		addPlayerModelToWorld(UserSession.getInstance().getUserName(),1);
-		
-		//world.addObstacles
 	}
 	
+	/**
+	 * Initialize client.
+	 */
 	private void initializeClient() {
 		Gdx.app.log(TAG, "Initializing game client");
 		gameClient = new GameClient();
@@ -714,6 +719,11 @@ public class GameScreen implements Screen{
 	private Label spellLabel;
 	private boolean gameEnded;
 	
+	/**
+	 * Update.
+	 *
+	 * @param delta the delta
+	 */
 	private void update(float delta) {
 		synchronized (world.getPlayerModels()) {
 			n++;
@@ -732,6 +742,9 @@ public class GameScreen implements Screen{
 		updateSpellLabel();
 	}
 
+	/**
+	 * Draw.
+	 */
 	private void draw() {
 		drawMap();
 		renderer.render(runTime);
@@ -788,52 +801,306 @@ public class GameScreen implements Screen{
 	public void dispose() {
 		gameScreenMediator.disconnect(gameStarted);
 	}
-
-	/*
 	
-	@Override
-	public void onWaitingStarted(String message) {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * Gets the stage.
+	 *
+	 * @return the stage
+	 */
+	public Stage getStage(){
+		return stage;
+	}
+	
+	/**
+	 * Gets the touchpad.
+	 *
+	 * @return the touchpad
+	 */
+	public Touchpad getTouchpad(){
+		return touchpad;
+	}
+	
+	/**
+	 * Display loading widget.
+	 */
+	public void displayLoadingWidget(){
+		if(loadingWidget != null){
+			loadingWidget.setVisible(false);
+			loadingWidget.remove();
+		}
+		loadingWidget = LoadingWidget.getInstance();
+		loadingWidget.setBounds((stage.getWidth() - 400)/2, 
+				(stage.getHeight() - 100)/2, 
+				400, 100);
+		loadingWidget.setVisible(true);
+		stage.addActor(loadingWidget);
 	}
 
-	@Override
-	public void onError(String message) {
-		// TODO Auto-generated method stub
-		
+
+	/**
+	 * On disconnected.
+	 */
+	public void onDisconnected() {
+		disconnectPopUp.setVisible(true);
 	}
 
-	@Override
-	public void onGameStarted(String message) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void onGameFinished(int code, boolean isRemote) {
-		if(isRemote) {
-			prevScreen.onGameFinished(code, true);
+	/**
+	 * On player joined room.
+	 *
+	 * @param playerName the player name
+	 */
+	public void onPlayerJoinedRoom(String playerName)  {
+		if(!existPlayerOnWorld(playerName)) {
+			int gameIndex = world.getNextGameIndex();
+			addPlayerModelToWorld(playerName, gameIndex);
+			playersList.put(playerName,gameIndex);
+			Gdx.app.log(TAG,"Player "+playerName+" joined with index "+gameIndex);
+			switch(gameIndex){
+				case 1:
+					roomOwner.setText("Room Owner\n\n"+playerName);
+					roomOwner.setVisible(true);
+					break;
+				case 2:
+					p2Label.setText(playerName);
+					p2Label.setVisible(true);
+					break;
+				case 3:
+					p3Label.setText(playerName);
+					p3Label.setVisible(true);
+					break;
+				case 4:
+					p4Label.setText(playerName);
+					p4Label.setVisible(true);
+					break;	
+			}
+			clientsReady.put(playerName, false);
+			if(connectedToServer){
+				gameScreenMediator.connectToServerSuccess(null);
+			}
+			if(UserSession.getInstance().isServer()){
+				if(serverReady)gameScreenMediator.sendServerAddress(playerName);
+			}
 		} else {
-
-		}
-		WarpController.getInstance().handleLeave();
-	}
-
-	@Override
-	public void onGameUpdateReceived(String message) {
-		try{
-			JSONObject data = new JSONObject(message);
-			float x = (float)data.getDouble("x");	
-			float y = (float)data.getDouble("y");
-			float vx = (float)data.getDouble("vx");
-			float vy = (float)data.getDouble("vy");
-			int state = (int)data.getDouble("state");
-			world.updateEnemy(x, y, vx, vy, state);
-		} catch (Exception e){
+			Gdx.app.log(TAG,"Player already in room");
 		}
 	}
-	*/
 	
+	/**
+	 * Creates the spell element buttons.
+	 */
+	public void createSpellButtons(){
+        myButton   = new ButtonWidget(AssetLoader.wexTexture);
+
+        myButton.setPosition(480, 40);
+        myButton.setSize(80, 80);
+        myButton.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                displayButtonCommand(1);
+                updateSpellLabel();
+            }
+        });
+
+        myButton2   = new ButtonWidget(AssetLoader.quasTexture);
+
+        myButton2.setPosition(600, 40);
+        myButton2.setSize(80, 80);
+        myButton2.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                displayButtonCommand(10);
+                updateSpellLabel();
+            }
+
+        });
+
+        myButton3   = new ButtonWidget(AssetLoader.exortTexture);
+
+        myButton3.setPosition(600, 150);
+        myButton3.setSize(80, 80);
+        myButton3.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                displayButtonCommand(100);
+                updateSpellLabel();
+            }
+
+        });
+
+        stage.addActor(myButton);
+        stage.addActor(myButton2);
+        stage.addActor(myButton3);
+        myButton.setVisible(false);
+        myButton2.setVisible(false);
+        myButton3.setVisible(false);
+	}
+	
+	/**
+	 * Update cooldown.
+	 *
+	 * @param delta the delta
+	 */
+	private void updateCooldown(float delta){
+		 if (SHADOWBLAST_COOLDOWN>0){
+			 SHADOWBLAST_COOLDOWN -= delta;
+		 }
+		 if (SPECTRALTHROW_COOLDOWN>0){
+			 SPECTRALTHROW_COOLDOWN -= delta;
+		 }
+		 if (HASTE_COOLDOWN>0){
+			 HASTE_COOLDOWN -= delta;
+		 }
+		 if (DIVINESHIELD_COOLDOWN>0){
+			 DIVINESHIELD_COOLDOWN -= delta;
+		 }
+		 if (FIREWALL_COOLDOWN>0){
+			 FIREWALL_COOLDOWN -= delta;
+		 }
+		 if (BLINK_COOLDOWN>0){
+			 BLINK_COOLDOWN -= delta;
+		 }
+		 if (EXPLOSION_COOLDOWN>0){
+			 EXPLOSION_COOLDOWN-= delta;
+		 }
+		 if (BLADESTORM_COOLDOWN>0){
+			 BLADESTORM_COOLDOWN -= delta;
+		 }
+		 if (SHADOWBLAST_COOLDOWN>0){
+			 SHADOWBLAST_COOLDOWN -= delta;
+		 }
+		 if (THUNDERSTORM_COOLDOWN>0){
+			 THUNDERSTORM_COOLDOWN -= delta;
+		 }
+		 if (LASER_COOLDOWN>0){
+			 LASER_COOLDOWN -= delta;
+		 }
+	}
+	
+	/**
+	 * Update spell label.
+	 */
+	private void updateSpellLabel(){
+		int spellId = 0;
+		for(int i = 0; i< commandList.length ; i++){
+			if (commandList[i] != null){
+				spellId += commandList[i].getCommandIndex();
+			}
+		}
+		String spellName;
+		String spellCountdown;
+		switch(spellId){
+		case 3:
+			spellCountdown = ((DIVINESHIELD_COOLDOWN <= 0) ? "Ready" : ""+((int)DIVINESHIELD_COOLDOWN+1));
+			spellName = "Divine Shield " + spellCountdown;
+			break;
+		case 12:
+			spellCountdown = ((HASTE_COOLDOWN <= 0) ? "Ready" : ""+((int)HASTE_COOLDOWN+1));
+			spellName = "Haste " + spellCountdown;
+			break;
+		case 21:
+			spellCountdown = ((SHADOWBLAST_COOLDOWN <= 0) ? "Ready" : ""+((int)SHADOWBLAST_COOLDOWN+1));
+			spellName = "Shadow Blast " +  spellCountdown;
+			break;
+		case 30:
+			spellCountdown = ((THUNDERSTORM_COOLDOWN <= 0) ? "Ready" : ""+((int)THUNDERSTORM_COOLDOWN+1));
+			spellName = "Thunderstorm " + spellCountdown;
+			break;
+		case 102:
+			spellCountdown = ((BLINK_COOLDOWN <= 0) ? "Ready" : ""+((int)BLINK_COOLDOWN+1));
+			spellName = "Blink " + spellCountdown;
+			break;
+		case 111:
+			spellCountdown = ((BLADESTORM_COOLDOWN <= 0) ? "Ready" : ""+((int)BLADESTORM_COOLDOWN+1));
+			spellName = "Hurricane " +  spellCountdown;
+			break;
+		case 120:
+			spellCountdown = ((SPECTRALTHROW_COOLDOWN <= 0) ? "Ready" : ""+((int)SPECTRALTHROW_COOLDOWN+1));
+			spellName = "Spectral Throw " + spellCountdown;
+			break;
+		case 201:
+			spellCountdown = ((EXPLOSION_COOLDOWN <= 0) ? "Ready" : ""+((int)EXPLOSION_COOLDOWN+1));
+			spellName = "Explosion " +  spellCountdown;
+			break;
+		case 210:
+			spellCountdown = ((LASER_COOLDOWN <= 0) ? "Ready" : ""+((int)LASER_COOLDOWN+1));
+			spellName = "Laser " +  spellCountdown;
+			break;
+		case 300:
+			spellCountdown = ((FIREWALL_COOLDOWN <= 0) ? "Ready" : ""+((int)FIREWALL_COOLDOWN+1));
+			spellName = "Firewall " + spellCountdown;
+			break;
+		default:
+			spellName = "";
+		}
+		spellLabel.setText(spellName);
+	}
+	
+	/**
+	 * Creates the spell label.
+	 */
+	private void createSpellLabel(){
+		spellLabel = new Label("", StyleLoader.tableLabelStyle);
+		stage.addActor(spellLabel);
+		spellLabel.setBounds(0, 420, 640, 60);
+		spellLabel.setVisible(false);
+		spellLabel.setAlignment(Align.right);
+	}
+	
+	 /**
+ 	 * Creates the images of the last three spells
+ 	 *
+ 	 * @param indexOfButtonPressed the index of button pressed
+ 	 */
+ 	public void displayButtonCommand(int indexOfButtonPressed) {
+	        if (commandCount > 2) {
+	            return;
+	        }
+	        Texture texture = null;
+	        switch (indexOfButtonPressed) {
+	            case 1:
+	                texture = AssetLoader.wexTexture;
+	                break;
+	            case 10:
+	                texture = AssetLoader.quasTexture;
+	                break;
+	            case 100:
+	                texture = AssetLoader.exortTexture;
+	                break;	
+	        }
+
+	        ButtonWidget newButton = new ButtonWidget(texture, indexOfButtonPressed);
+	        newButton.setSize(40,40);
+	        if (commandList[2] != null) {
+	        	commandList[2].remove();
+	        }
+	        commandList[2] = commandList[1];
+	        commandList[1] = commandList[0];
+	        commandList[0] = newButton;
+	        int y = 420;
+	        int spacing = 50;
+	        int x0 = 30;
+	        for (int i = 0; i < 3; i++) {
+	        	int x = x0 + spacing *i;
+	        	try {
+	        		commandList[i].setPosition(x, y);
+	        	} catch (Exception e) {
+	        		break;
+	        	}
+	        }
+	        stage.addActor(commandList[0]);
+	    }
+ 	
+	/**
+	 * Cast spell.
+	 *
+	 * @param playerName the player name
+	 * @param x the x
+	 * @param y the y
+	 * @param spell the spell
+	 * @param direction the direction
+	 * @return the boolean
+	 */
 	public Boolean castSpell(String playerName, float x, float y, int spell, int direction){
 		Gdx.app.log(TAG,"Casting spell: "+spell);
 		Spells spellEnum = null;
@@ -882,7 +1149,7 @@ public class GameScreen implements Screen{
 			if (BLADESTORM_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum =  Spells.BLADESTORM;
+			spellEnum =  Spells.HURRICANE;
 			if (playerName == UserSession.getInstance().getUserName()){
 				BLADESTORM_COOLDOWN = 5;
 			}
@@ -899,12 +1166,12 @@ public class GameScreen implements Screen{
 			AudioManager.playThunderstorm();
 			break;		
 		case 6:
-			if (SUNSTRIKE_COOLDOWN > 0){
+			if (EXPLOSION_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum =  Spells.SUNSTRIKE;
+			spellEnum =  Spells.EXPLOSION;
 			if (playerName == UserSession.getInstance().getUserName()){
-				SUNSTRIKE_COOLDOWN = 5;
+				EXPLOSION_COOLDOWN = 5;
 			}
 			AudioManager.playSunstrike();
 			break;		
@@ -919,23 +1186,23 @@ public class GameScreen implements Screen{
 			AudioManager.playLaser();
 			break;		
 		case 8:
-			if (SPARK_COOLDOWN > 0){
+			if (SPECTRALTHROW_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum =  Spells.SPARK;
+			spellEnum =  Spells.SPECTRALTHROW;
 			if (playerName == UserSession.getInstance().getUserName()){
-				SPARK_COOLDOWN = 5;
+				SPECTRALTHROW_COOLDOWN = 5;
 			}
 			AudioManager.playBoomerang();
 
 			break;		
 		case 9:
-			if (TORNADO_COOLDOWN > 0){
+			if (SHADOWBLAST_COOLDOWN > 0){
 				return false;
 			}
-			spellEnum = Spells.TORNADO;
+			spellEnum = Spells.SHADOWBLAST;
 			if (playerName == UserSession.getInstance().getUserName()){
-				TORNADO_COOLDOWN = 5;
+				SHADOWBLAST_COOLDOWN = 5;
 			}
 			AudioManager.playSpark();
 			break;		
@@ -945,376 +1212,7 @@ public class GameScreen implements Screen{
 		
 		world.castSpell(playerName,x,y,spellEnum,direction);
 		return true;
-		/*
-		Spell spellInstance = new Spell(world, x, y, spellEnum, direction);
-		switch (spellEnum) {
-		case ACID:
-			//consider changing
-			//check for collision
-			//send position and time remaining to server
-			//display on UI
-			//clear on screen
-			break;
-		case DIVINESHIELD:
-			if (bob.getManaCount()>50){
-				bob.decrementManaCount(50);
-				bob.setState(Bob.STATE_INVULNERABLE);
-				//send time remaining and state to server
-			}
-			break;
-		case FORCESTAFF:
-			if (bob.getManaCount()>30){
-				bob.decrementManaCount(30);
-				switch (bob.getDirection()) {
-				case EAST:
-					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y);
-					break;
-				case NORTH:
-					bob.setPosition(bob.getPosition().x, bob.getPosition().y+100);
-					break;
-				case NORTHEAST:
-					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y+100);
-					break;
-				case NORTHWEST:
-					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y+100);
-					break;
-				case SOUTH:
-					bob.setPosition(bob.getPosition().x, bob.getPosition().y-100);
-					break;
-				case SOUTHEAST:
-					bob.setPosition(bob.getPosition().x+100, bob.getPosition().y-100);
-					break;
-				case SOUTHWEST:
-					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y-100);
-					break;
-				case WEST:
-					bob.setPosition(bob.getPosition().x-100, bob.getPosition().y);
-					break;
-
-				default:
-					break;
-				}
-			}
-			else {
-				System.out.println("No enough Mana!");
-			}
-			break;
-
-		case ATOS:
-			if (bob.getManaCount()>50){
-				bob.decrementManaCount(50);
-			}
-			else {
-				System.out.println("No enough Mana!");
-			}
-			break;
-
-		case STASISTRAP:
-
-			//collision with sprite model (+100 radius)
-			//insert mine at bob position
-			//if stasis trap near enemy,
-			break;
-
-		case SPROUT:
-			//collision with sprite
-			//mana cost 40
-
-			//need add new collision			
-			break;
-
-		case DARKPACT:
-			if (bob.getManaCount()>80){
-				bob.decrementManaCount(80);
-				//so start animation 3 seconds before,
-				//then if the state is end,			
-			
-			}
-			else {
-				System.out.println("No enough Mana!");
-			}
-			break;
-
-		case MINE:
-			//collision with sprite, decrement health
-
-			//insert mine at bob position
-			break;
-
-		case LASER:
-			if (bob.getManaCount()>80){
-				bob.decrementManaCount(80);
-				
-			}
-			else {
-				System.out.println("No enough Mana!");
-			}
-			break;
-
-		case FANOFKNIVES:
-			if (bob.getManaCount()>100){
-				bob.decrementManaCount(100);
-				
-			}
-			else {
-				System.out.println("No enough Mana!");
-			}
-		default:
-			break;
-		}
-		*/
 	}
-	
-	public Stage getStage(){
-		return stage;
-	}
-	
-	public Touchpad getTouchpad(){
-		return touchpad;
-	}
-	
-	public void displayLoadingWidget(){
-		if(loadingWidget != null){
-			loadingWidget.setVisible(false);
-			loadingWidget.remove();
-		}
-		loadingWidget = LoadingWidget.getInstance();
-		loadingWidget.setBounds((stage.getWidth() - 400)/2, 
-				(stage.getHeight() - 100)/2, 
-				400, 100);
-		loadingWidget.setVisible(true);
-		stage.addActor(loadingWidget);
-	}
-
-
-	public void onDisconnected() {
-		disconnectPopUp.setVisible(true);
-	}
-
-
-	public void onPlayerJoinedRoom(String playerName)  {
-		if(!existPlayerOnWorld(playerName)) {
-			int gameIndex = world.getNextGameIndex();
-			addPlayerModelToWorld(playerName, gameIndex);
-			playersList.put(playerName,gameIndex);
-			Gdx.app.log(TAG,"Player "+playerName+" joined with index "+gameIndex);
-			switch(gameIndex){
-				case 1:
-					roomOwner.setText("Room Owner\n\n"+playerName);
-					roomOwner.setVisible(true);
-					break;
-				case 2:
-					p2Label.setText(playerName);
-					p2Label.setVisible(true);
-					break;
-				case 3:
-					p3Label.setText(playerName);
-					p3Label.setVisible(true);
-					break;
-				case 4:
-					p4Label.setText(playerName);
-					p4Label.setVisible(true);
-					break;	
-			}
-			clientsReady.put(playerName, false);
-			if(connectedToServer){
-				gameScreenMediator.connectToServerSuccess(null);
-			}
-			if(UserSession.getInstance().isServer()){
-				if(serverReady)gameScreenMediator.sendServerAddress(playerName);
-//				startGameButton.setVisible(true);
-			}
-		} else {
-			Gdx.app.log(TAG,"Player already in room");
-		}
-	}
-	
-	public void createSpellButtons(){
-        myButton   = new ButtonWidget(AssetLoader.wexTexture);
-
-        myButton.setPosition(480, 40);
-        myButton.setSize(80, 80);
-        myButton.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                displayButtonCommand(1);
-                updateSpellLabel();
-            }
-        });
-
-        myButton2   = new ButtonWidget(AssetLoader.quasTexture);
-
-        myButton2.setPosition(600, 40);
-        myButton2.setSize(80, 80);
-        myButton2.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                displayButtonCommand(10);
-                updateSpellLabel();
-            }
-
-        });
-
-        myButton3   = new ButtonWidget(AssetLoader.exortTexture);
-
-        myButton3.setPosition(600, 150);
-        myButton3.setSize(80, 80);
-        myButton3.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                displayButtonCommand(100);
-                updateSpellLabel();
-            }
-
-        });
-
-        stage.addActor(myButton);
-        stage.addActor(myButton2);
-        stage.addActor(myButton3);
-        myButton.setVisible(false);
-        myButton2.setVisible(false);
-        myButton3.setVisible(false);
-	}
-	
-	private void updateCooldown(float delta){
-		 if (TORNADO_COOLDOWN>0){
-			 TORNADO_COOLDOWN -= delta;
-		 }
-		 if (SPARK_COOLDOWN>0){
-			 SPARK_COOLDOWN -= delta;
-		 }
-		 if (HASTE_COOLDOWN>0){
-			 HASTE_COOLDOWN -= delta;
-		 }
-		 if (DIVINESHIELD_COOLDOWN>0){
-			 DIVINESHIELD_COOLDOWN -= delta;
-		 }
-		 if (FIREWALL_COOLDOWN>0){
-			 FIREWALL_COOLDOWN -= delta;
-		 }
-		 if (BLINK_COOLDOWN>0){
-			 BLINK_COOLDOWN -= delta;
-		 }
-		 if (SUNSTRIKE_COOLDOWN>0){
-			 SUNSTRIKE_COOLDOWN-= delta;
-		 }
-		 if (BLADESTORM_COOLDOWN>0){
-			 BLADESTORM_COOLDOWN -= delta;
-		 }
-		 if (TORNADO_COOLDOWN>0){
-			 TORNADO_COOLDOWN -= delta;
-		 }
-		 if (THUNDERSTORM_COOLDOWN>0){
-			 THUNDERSTORM_COOLDOWN -= delta;
-		 }
-		 if (LASER_COOLDOWN>0){
-			 LASER_COOLDOWN -= delta;
-		 }
-	}
-	
-	private void updateSpellLabel(){
-		int spellId = 0;
-		for(int i = 0; i< commandList.length ; i++){
-			if (commandList[i] != null){
-				spellId += commandList[i].getCommandIndex();
-			}
-		}
-		String spellName;
-		String spellCountdown;
-		switch(spellId){
-		case 3:
-			spellCountdown = ((DIVINESHIELD_COOLDOWN <= 0) ? "Ready" : ""+((int)DIVINESHIELD_COOLDOWN+1));
-			spellName = "Divine Shield " + spellCountdown;
-			break;
-		case 12:
-			spellCountdown = ((HASTE_COOLDOWN <= 0) ? "Ready" : ""+((int)HASTE_COOLDOWN+1));
-			spellName = "Haste " + spellCountdown;
-			break;
-		case 21:
-			spellCountdown = ((TORNADO_COOLDOWN <= 0) ? "Ready" : ""+((int)TORNADO_COOLDOWN+1));
-			spellName = "Shadow Blast " +  spellCountdown;
-			break;
-		case 30:
-			spellCountdown = ((THUNDERSTORM_COOLDOWN <= 0) ? "Ready" : ""+((int)THUNDERSTORM_COOLDOWN+1));
-			spellName = "Thunderstorm " + spellCountdown;
-			break;
-		case 102:
-			spellCountdown = ((BLINK_COOLDOWN <= 0) ? "Ready" : ""+((int)BLINK_COOLDOWN+1));
-			spellName = "Blink " + spellCountdown;
-			break;
-		case 111:
-			spellCountdown = ((BLADESTORM_COOLDOWN <= 0) ? "Ready" : ""+((int)BLADESTORM_COOLDOWN+1));
-			spellName = "Hurricane " +  spellCountdown;
-			break;
-		case 120:
-			spellCountdown = ((SPARK_COOLDOWN <= 0) ? "Ready" : ""+((int)SPARK_COOLDOWN+1));
-			spellName = "Spectral Throw " + spellCountdown;
-			break;
-		case 201:
-			spellCountdown = ((SUNSTRIKE_COOLDOWN <= 0) ? "Ready" : ""+((int)SUNSTRIKE_COOLDOWN+1));
-			spellName = "Explosion " +  spellCountdown;
-			break;
-		case 210:
-			spellCountdown = ((LASER_COOLDOWN <= 0) ? "Ready" : ""+((int)LASER_COOLDOWN+1));
-			spellName = "Laser " +  spellCountdown;
-			break;
-		case 300:
-			spellCountdown = ((FIREWALL_COOLDOWN <= 0) ? "Ready" : ""+((int)FIREWALL_COOLDOWN+1));
-			spellName = "Firewall " + spellCountdown;
-			break;
-		default:
-			spellName = "";
-		}
-		spellLabel.setText(spellName);
-	}
-	
-	private void createSpellLabel(){
-		spellLabel = new Label("", StyleLoader.tableLabelStyle);
-		stage.addActor(spellLabel);
-		spellLabel.setBounds(0, 420, 640, 60);
-		spellLabel.setVisible(false);
-		spellLabel.setAlignment(Align.right);
-	}
-	
-	 public void displayButtonCommand(int indexOfButtonPressed) {
-	        if (commandCount > 2) {
-	            return;
-	        }
-	        Texture texture = null;
-	        switch (indexOfButtonPressed) {
-	            case 1:
-	                texture = AssetLoader.wexTexture;
-	                break;
-	            case 10:
-	                texture = AssetLoader.quasTexture;
-	                break;
-	            case 100:
-	                texture = AssetLoader.exortTexture;
-	                break;	
-	        }
-
-	        ButtonWidget newButton = new ButtonWidget(texture, indexOfButtonPressed);
-//	        newButton.setPosition(10, 550);
-	        newButton.setSize(40,40);
-	        if (commandList[2] != null) {
-	        	commandList[2].remove();
-	        }
-	        commandList[2] = commandList[1];
-	        commandList[1] = commandList[0];
-	        commandList[0] = newButton;
-	        int y = 420;
-	        int spacing = 50;
-	        int x0 = 30;
-	        for (int i = 0; i < 3; i++) {
-	        	int x = x0 + spacing *i;
-	        	try {
-	        		commandList[i].setPosition(x, y);
-	        	} catch (Exception e) {
-	        		break;
-	        	}
-	        }
-	        stage.addActor(commandList[0]);
-	    }
 
 		private Bob addPlayerModelToWorld(String playerName, int gameIndex) {
 			Gdx.app.log(TAG, "addPlayerModelToWorld: "+playerName+","+gameIndex);

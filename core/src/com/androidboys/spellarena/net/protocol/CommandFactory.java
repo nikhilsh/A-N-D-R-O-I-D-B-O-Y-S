@@ -18,12 +18,16 @@ public class CommandFactory {
 	
 	private Map<Integer, Map<Integer,String>> messages = new HashMap<Integer, Map<Integer,String>>();
 	
+	/**
+	 * Creates a new Command object.
+	 *
+	 * @param jsonString the json string
+	 * @return the command
+	 */
 	public Command createCommand(String jsonString){
 		if(receivedCommands.contains(jsonString)){
-//			Gdx.app.log(TAG, "Duplicate message received: "+jsonString);
 			return null;
 		}
-//		Gdx.app.log(TAG, "Received: "+jsonString);
 		receivedCommands.add(jsonString);
 		
 		if(jsonString.startsWith("split")){

@@ -20,6 +20,9 @@ public class StyleLoader {
 	
 	public static TextFieldStyle textFieldStyle;
 	
+	/**
+	 * Prepare styles for the parchment style of banners.
+	 */
 	public static void prepareStyles(){
 		
 		parchmentLabel = new LabelStyle();

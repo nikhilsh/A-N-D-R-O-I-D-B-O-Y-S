@@ -26,6 +26,7 @@ public class SpellArena extends Game {
         SPLASH, PLAY, LOBBY
     }
 	
+    //initialize new appwarp client
 	private NetworkInterface client = new AppWarpClient();
 
 	private Screen topScreen;
@@ -118,6 +119,9 @@ public class SpellArena extends Game {
 		}
 	}
 
+	/**
+	 * Display loading widget.
+	 */
 	private void displayLoadingWidget() {
 		Screen screen = getScreen();
 		if (screen instanceof GameScreen) {
@@ -126,10 +130,18 @@ public class SpellArena extends Game {
 		
 	}
 
+	/**
+	 * Gets the client.
+	 *
+	 * @return the client
+	 */
 	public NetworkInterface getClient(){
 		return client;
 	}
 
+	/**
+	 * Back to previous screen.
+	 */
 	public void backToPreviousScreen() {
 		try{
 			Screen top = screens.pop();
@@ -142,6 +154,11 @@ public class SpellArena extends Game {
 
 	}
 
+	/**
+	 * Gets the number screens.
+	 *
+	 * @return the number screens
+	 */
 	public int getNumberScreens() {
 		return screens.size();
 	}

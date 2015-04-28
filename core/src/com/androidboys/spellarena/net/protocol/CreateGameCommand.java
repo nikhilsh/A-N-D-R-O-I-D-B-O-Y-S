@@ -23,6 +23,12 @@ public class CreateGameCommand extends Command{
 		return CREATE_GAME;
 	}
 
+	/**
+	 * Builds the JSON message to send over.
+	 *
+	 * @param json the json
+	 * @return the command
+	 */
 	public static Command build(JSONObject json) {
 		CreateGameCommand command = new CreateGameCommand();
 		try{
@@ -36,18 +42,38 @@ public class CreateGameCommand extends Command{
 		return command;
 	}
 
+	/**
+	 * Sets the ip.
+	 *
+	 * @param ip the new ip
+	 */
 	public void setIP(String ip) {
 		this.ip = ip;
 	}
 
+	/**
+	 * Gets the ip.
+	 *
+	 * @return the ip
+	 */
 	public String getIP() {
 		return ip;
 	}
 
+	/**
+	 * Gets the random.
+	 *
+	 * @return the random
+	 */
 	public long getRandom() {
 		return random;
 	}
 
+	/**
+	 * Sets the random.
+	 *
+	 * @param random the new random
+	 */
 	public void setRandom(long random) {
 		this.random = random;
 	}

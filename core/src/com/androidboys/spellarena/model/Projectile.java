@@ -8,6 +8,14 @@ public class Projectile extends GameObject {
 
 	private static final float MAX_SPEED = 300f;
 	
+	/**
+	 * Instantiates a new projectile.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param rotation the rotation
+	 * @param playerName the player name
+	 */
 	public Projectile(float x, float y, float rotation, String playerName) {
 		super(x, y, playerName);
 		this.getPosition().add(15, 25);

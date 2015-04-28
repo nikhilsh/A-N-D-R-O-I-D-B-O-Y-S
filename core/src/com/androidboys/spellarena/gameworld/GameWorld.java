@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.androidboys.spellarena.gameworld.GameFactory.GameModel;
 import com.androidboys.spellarena.helper.AssetLoader;
-import com.androidboys.spellarena.helper.AudioManager;
 import com.androidboys.spellarena.mediators.GameScreenMediator;
 import com.androidboys.spellarena.model.Bob;
 import com.androidboys.spellarena.model.Bob.Direction;
@@ -21,7 +20,6 @@ import com.androidboys.spellarena.model.Thunderstorm;
 import com.androidboys.spellarena.model.Projectile;
 import com.androidboys.spellarena.model.Boomerang;
 import com.androidboys.spellarena.session.UserSession;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -38,12 +36,14 @@ public class GameWorld {
 	public static final float WORLD_BOUND_TOP = 960;
 	public static final float WORLD_BOUND_BOTTOM = 70;
 
+	//Tag for the world
 	private static final String TAG = "GameWorld";
 
 	//Characters
 	private Map<String, Bob> playerModels = new HashMap<String, Bob>();
 	private ArrayList<Object> gameObjects = new ArrayList<Object>();
-
+	
+	//Instance of spell
 	private Spells spell;
 
 	//Map
@@ -57,14 +57,21 @@ public class GameWorld {
 	};
 	private Array<Rectangle> tiles = new Array<Rectangle>();
 
+	//Reference of GameScreenMediator
 	private GameScreenMediator mediator;
 
+	//Initialize the game world
 	public void initialize(GameModel model){
-		//Create new characters
 		map = AssetLoader.map;
 		prepareObstacles();
 	}
 
+	
+	/**
+	 * Update player models.
+	 *
+	 * @param delta the delta value, which is the game render rate
+	 */
 	private void updatePlayerModels(float delta){
 		for(Bob bob: playerModels.values()){
 			if (bob.getState() != Bob.STATE_DEAD){
@@ -73,11 +80,20 @@ public class GameWorld {
 		}
 	}
 
+	/**
+	 * Update player model.
+	 *
+	 * @param bob takes in a player model
+	 * @param delta the delta value
+	 */
 	private void updatePlayerModel(Bob bob, float delta) {
 		bob.update(delta);
 		checkPlayerCollision(delta);
 	}
 
+	/**
+	 * Check object collision.
+	 */
 	private void checkObjectCollision() {
 		for(Object object: gameObjects.toArray()){
 			if(tiles != null){
@@ -99,12 +115,16 @@ public class GameWorld {
 		}
 	}
 
+	/**
+	 * Check player object collision. This is used to see if game objects (damage dealing objects) hit the player rectangle
+	 *
+	 * @param delta the delta value
+	 */
 	private void checkPlayerObjectCollision(float delta) {
 		Bob bob = getPlayerModel(UserSession.getInstance().getUserName());
 		if(!bob.isInvulnerable()){
 			float damage = 0;
 			for(Object object: gameObjects.toArray()){
-				//				Gdx.app.log(TAG,"Checking object collision: "+object);
 				GameObject gameObject = (GameObject)object;
 				if (gameObject instanceof Laser && !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
 					boolean isHit = false;
@@ -120,7 +140,6 @@ public class GameWorld {
 				}
 				if (bob.getbobRect().overlaps(gameObject.getRectangle()) 
 						&& !UserSession.getInstance().getUserName().equals(gameObject.getUsername())){
-					//					Gdx.app.log(TAG,"Colliding");
 					if (object instanceof Projectile){
 						damage += 200f;
 					} else if (object instanceof Sword){
@@ -139,7 +158,6 @@ public class GameWorld {
 			if(!bob.takeDamage(damage*delta)){
 				if(UserSession.getInstance().isServer()){
 					if(this.isGameEnd()){
-						Gdx.app.log(TAG, "Host dead, game is lost");
 						mediator.endGame(getWinner());
 					}
 				} else {
@@ -149,6 +167,11 @@ public class GameWorld {
 		}
 	}
 
+	/**
+	 * Check player collision against walls
+	 *
+	 * @param delta the delta value
+	 */
 	private void checkPlayerCollision(float delta) {
 		for(Bob bob: playerModels.values()){
 			Vector2 newPos = (bob.getPosition().cpy()).add((bob.getVelocity().cpy()).scl(delta));
@@ -235,8 +258,11 @@ public class GameWorld {
 		}
 	}
 
+	
 	/**
-	 * Update game world.
+	 * Update the gameworld
+	 *
+	 * @param delta the delta value
 	 */
 	public void update(float delta) {
 		updatePlayerModels(delta);
@@ -244,6 +270,11 @@ public class GameWorld {
 		checkPlayerObjectCollision(delta);
 	}
 
+	/**
+	 * Update game objects and see if collision occurs
+	 *
+	 * @param delta the delta value
+	 */
 	private void updateGameObjects(float delta) {
 		for(Object o: gameObjects.toArray()){
 			if(o instanceof GameObject){
@@ -253,43 +284,55 @@ public class GameWorld {
 		checkObjectCollision();
 	}
 
+	/**
+	 * Prepare obstacles for the map, such as the wall and the firepit
+	 */
 	private void prepareObstacles(){
-		//Get the "Collidable" layer of map
 		MapLayer layer = (MapLayer) map.getLayers().get("Collidable");
-		//Puts objects of "tiles" in the pool.
 		rectPool.freeAll(tiles);
 		tiles.clear();
 		for(MapObject obj: layer.getObjects()){
-			//			System.out.println("Object found");
 			float x = (Float) obj.getProperties().get("x");
 			float y = (Float) obj.getProperties().get("y");
 			float width = (Float) obj.getProperties().get("width");
 			float height = (Float) obj.getProperties().get("height");
-			//			System.out.println(x+" "+y+" "+width+" "+height);
 			Rectangle rect = rectPool.obtain();
 			rect.set(x, y, width, height);
 			tiles.add(rect);
 		}
 	}
 
+	/**
+	 * Gets the player model.
+	 *
+	 * @param playerName the player name
+	 * @return the player model
+	 */
 	public Bob getPlayerModel(String playerName) {
 		return playerModels.get(playerName);
 	}
 
+	/**
+	 * Gets the next game index.
+	 *
+	 * @return the next game index
+	 */
 	public int getNextGameIndex() {
 		int max = 0;
 		for(Bob bob: playerModels.values()){
-			Gdx.app.log(TAG,"Game index: "+bob.getGameIndex());
 			if(bob.getGameIndex() > max) {
-				Gdx.app.log(TAG,"Game index: "+bob.getGameIndex());
 				max = bob.getGameIndex();
 			}
 		}
 		return max + 1;
 	}
 
+	/**
+	 * Adds the player model to the world and updates obstacles.
+	 *
+	 * @param bob the bob
+	 */
 	public void addPlayerModel(Bob bob) {
-		Gdx.app.log(TAG,bob.toString());
 		bob.updateObstacles(tiles);
 		synchronized (playerModels) {
 			playerModels.put(bob.getPlayerName(), bob);
@@ -297,36 +340,73 @@ public class GameWorld {
 
 	}
 
+	/**
+	 * Gets the spell.
+	 *
+	 * @return the spell
+	 */
 	public Spells getSpell(){
 		return spell;
 	}
 
+	/**
+	 * Sets the spell.
+	 *
+	 * @param spell the new spell
+	 */
 	public void setSpell(Spells spell){
 		this.spell = spell;
 
 	}
 
+	/**
+	 * Gets the player models in the world.
+	 *
+	 * @return the player models
+	 */
 	public Map<String,Bob> getPlayerModels() {
 		return playerModels;
 	}
 
+	/**
+	 * Moves player.
+	 *
+	 * @param time the time
+	 * @param fromUser which user movement is affecting
+	 * @param movement the movement enum
+	 * @param x the x value
+	 * @param y the y value
+	 */
 	public void movePlayer(long time, String fromUser, int movement, float x, float y) {
 		Bob bob = playerModels.get(fromUser);
 		bob.move(time, movement, x, y);
 	}
 
+	/**
+	 * Update player.
+	 *
+	 * @param fromUser which user is affected
+	 * @param timestamp the timestamp that update occurred
+	 * @param position the position that user is at
+	 * @param velocity the velocity that user has
+	 * @param health the health of the player
+	 */
 	public void updatePlayer(String fromUser, long timestamp, Vector2 position, Vector2 velocity, float health) {
 		Bob bob = playerModels.get(fromUser);
 		bob.setUpdateDetails(timestamp, position, velocity);
 		if((!bob.updateHealth(health))&&UserSession.getInstance().isServer()){
 			if(isGameEnd()){
-				Gdx.app.log("TAG", "Enemy died");
 				mediator.endGame(getWinner());
 			}
 		};
 
 	}
 
+	/**
+	 * Gets the winner of the game!
+	 *
+	 * @return the winner
+	 */
 	private String getWinner() {
 		for(String playerName: playerModels.keySet()){
 			synchronized (playerModels.get(playerName)) {
@@ -338,17 +418,33 @@ public class GameWorld {
 		return null;
 	}
 
+	/**
+	 * Moves player.
+	 *
+	 * @param userName the user name of the player
+	 * @param movement the movement
+	 */
 	public void movePlayer(String userName, int movement) {
 		Bob bob = playerModels.get(userName);
 		bob.move(movement);
 	}
 
+	/**
+	 * Removes the player from game.
+	 *
+	 * @param playerName the player name
+	 */
 	public void removePlayer(String playerName) {
 		synchronized (playerModels) {
 			playerModels.remove(playerName);
 		}
 	}
 
+	/**
+	 * Checks if game has ended
+	 *
+	 * @return true, if game has ended
+	 */
 	public boolean isGameEnd() {
 		int playingUser = 0;
 		for (Bob playerModel : playerModels.values()) {
@@ -358,16 +454,23 @@ public class GameWorld {
 				}
 			}
 		}
-		Gdx.app.log(TAG,"isGameEnd: "+(playingUser <= 1));
 		return playingUser <= 1;
 	}
 
+	/**
+	 * Cast spell that user has invoked
+	 *
+	 * @param playerName the player that is casting the spell
+	 * @param x the x position of the spell
+	 * @param y the y position of the spell
+	 * @param spellEnum the spell enum, which is the name of the spell
+	 * @param direction the direction that the spell is going to be cast in
+	 */
 	public void castSpell(String playerName, float x, float y, Spells spellEnum,
 			int direction) {
-		Gdx.app.log(TAG, "Casting spell "+spellEnum);
 		Bob bob = getPlayerModel(playerName);
 		switch (spellEnum) {
-		case SPARK:
+		case SPECTRALTHROW:
 			castSpark(bob);
 			break;
 		case DIVINESHIELD:
@@ -382,19 +485,19 @@ public class GameWorld {
 		case FIREWALL:
 			castFirewall(bob);
 			break;
-		case BLADESTORM:
+		case HURRICANE:
 			createFlyingSword(bob);
 			break;
 		case THUNDERSTORM:
 			createThunderstorm(bob);
 			break;
-		case SUNSTRIKE:
+		case EXPLOSION:
 			createSunstrike(bob, x, y);
 			break;
 		case LASER:
 			createLaser(bob);
 			break;
-		case TORNADO:
+		case SHADOWBLAST:
 			createTornado(bob);
 			break;
 
@@ -402,6 +505,12 @@ public class GameWorld {
 			break;
 		}
 	}
+	
+	/**
+	 * Cast firewall.
+	 *
+	 * @param bob takes in player
+	 */
 	private void castFirewall(Bob bob) {
 		Direction direction = bob.getDirection();
 		float rotation = 0;
@@ -447,6 +556,11 @@ public class GameWorld {
 
 	}
 
+	/**
+	 * Cast spark.
+	 *
+	 * @param bob takes in player
+	 */
 	private void castSpark(Bob bob) {
 		Boomerang boomerang = new Boomerang(bob.getPosition().x, 
 				bob.getPosition().y, bob.getDirection(), bob.getPlayerName(), bob);
@@ -455,6 +569,13 @@ public class GameWorld {
 		}
 	}
 
+	/**
+	 * Creates the sunstrike.
+	 *
+	 * @param bob takes in player
+	 * @param x x coordinate of where the screen was tapped
+	 * @param y y coordinate of where the screen was tapped
+	 */
 	private void createSunstrike(Bob bob, float x, float y){
 		final Sunstrike sunstrike = new Sunstrike(x, y, bob.getPlayerName());
 		
@@ -474,6 +595,11 @@ public class GameWorld {
 				);
 	}
 
+	/**
+	 * Creates the thunderstorm.
+	 *
+	 * @param bob takes in player
+	 */
 	private void createThunderstorm(Bob bob) {
 		final Thunderstorm thunderstorm = new Thunderstorm(bob.getPosition().x, bob.getPosition().y, bob.getDirection(), bob.getPlayerName());
 		synchronized (gameObjects) {
@@ -492,6 +618,11 @@ public class GameWorld {
 				);
 	}
 
+	/**
+	 * Blink bob.
+	 *
+	 * @param bob takes in player
+	 */
 	private void blinkBob(Bob bob){
 		final DummyBlinkObject blinkObject = new DummyBlinkObject(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName());
 		synchronized (gameObjects) {
@@ -539,6 +670,11 @@ public class GameWorld {
 				);	
 	}
 
+	/**
+	 * Creates the laser.
+	 *
+	 * @param bob takes in player
+	 */
 	private void createLaser(Bob bob){
 		final Laser laser = new Laser(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName(), bob);
 		synchronized (gameObjects) {
@@ -557,6 +693,11 @@ public class GameWorld {
 				);
 	}
 
+	/**
+	 * Creates the flying sword.
+	 *
+	 * @param bob takes in player
+	 */
 	private void createFlyingSword(Bob bob) {
 		Sword sword0 = new Sword(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName(),(float) Math.toRadians(0));
 		Sword sword1 = new Sword(bob.getPosition().x, bob.getPosition().y, bob.getPlayerName(),(float) Math.toRadians(120));
@@ -568,6 +709,11 @@ public class GameWorld {
 		}
 	}
 
+	/**
+	 * Creates the tornado.
+	 *
+	 * @param bob takes in player
+	 */
 	private void createTornado(Bob bob) {
 		float rotation = 0;
 		switch(bob.getDirection()){
@@ -605,10 +751,20 @@ public class GameWorld {
 		}
 	}
 
+	/**
+	 * Gets the list of game objects.
+	 *
+	 * @return the game objects
+	 */
 	public ArrayList<Object> getGameObjects() {
 		return gameObjects;
 	}
 
+	/**
+	 * Sets the game mediator.
+	 *
+	 * @param mediator the new mediator
+	 */
 	public void setMediator(GameScreenMediator mediator) {
 		this.mediator = mediator;
 	}

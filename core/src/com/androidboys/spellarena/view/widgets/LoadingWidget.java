@@ -5,13 +5,25 @@ import com.androidboys.spellarena.helper.StyleLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 
+/**
+ * The Class LoadingWidget.
+ */
 public class LoadingWidget extends Stack {
 
+	/** The background. */
 	private Image background;
+	
+	/** The text. */
 	private ChangingLabel text;
 	
+	/** The instance. */
 	private static LoadingWidget INSTANCE;
 
+	/**
+	 * Gets the single instance of LoadingWidget.
+	 *
+	 * @return single instance of LoadingWidget
+	 */
 	public static LoadingWidget getInstance(){
 		if(INSTANCE == null){
 			INSTANCE = new LoadingWidget();
@@ -19,6 +31,9 @@ public class LoadingWidget extends Stack {
 		return INSTANCE;
 	}
 	
+	/**
+	 * Instantiates a new loading widget.
+	 */
 	private LoadingWidget(){
 		background = new Image(AssetLoader.loadingTexture);
 		text = new ChangingLabel(

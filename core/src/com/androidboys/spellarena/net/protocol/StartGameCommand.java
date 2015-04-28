@@ -10,6 +10,12 @@ public class StartGameCommand extends Command{
 
 	private static final String TAG = null;
 
+	/**
+	 * Builds the json file to start game.
+	 *
+	 * @param json the json
+	 * @return the command
+	 */
 	public static Command build(JSONObject json) {
 		StartGameCommand command = new StartGameCommand();
 		try{

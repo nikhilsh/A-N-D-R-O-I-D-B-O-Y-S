@@ -21,6 +21,12 @@ public class ReadyCommand extends Command{
 		return READY;
 	}
 
+	/**
+	 * Builds the json file to say ready.
+	 *
+	 * @param json the json
+	 * @return the command
+	 */
 	public static Command build(JSONObject json) {
 		ReadyCommand command = new ReadyCommand();
 		try{

@@ -14,20 +14,39 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SplashScreen.
+ */
 public class SplashScreen implements Screen{
 
+	/** The game. */
 	private SpellArena game;
 	
+	/** The splash texture. */
 	private Texture splashTexture = new Texture(Gdx.files.internal("images/androidboys.png"));
+	
+	/** The splash image. */
 	private Image splashImage = new Image(splashTexture);
+	
+	/** The stage. */
 	private Stage stage = new Stage(new ScreenViewport(new OrthographicCamera()));
 	
+	/** The animation done. */
 	private boolean animationDone = false;
 	
+	/**
+	 * Instantiates a new splash screen.
+	 *
+	 * @param game the game
+	 */
 	public SplashScreen(SpellArena game) {
 		this.game = game;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.badlogic.gdx.Screen#show()
+	 */
 	@Override
 	public void show() {
 		AssetLoader.queueLoading();
@@ -47,6 +66,9 @@ public class SplashScreen implements Screen{
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.badlogic.gdx.Screen#render(float)
+	 */
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -62,23 +84,38 @@ public class SplashScreen implements Screen{
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.badlogic.gdx.Screen#resize(int, int)
+	 */
 	@Override
 	public void resize(int width, int height) {
 	}
 
+	/* (non-Javadoc)
+	 * @see com.badlogic.gdx.Screen#pause()
+	 */
 	@Override
 	public void pause() {
 	}
 
+	/* (non-Javadoc)
+	 * @see com.badlogic.gdx.Screen#resume()
+	 */
 	@Override
 	public void resume() {
 	}
 
+	/* (non-Javadoc)
+	 * @see com.badlogic.gdx.Screen#hide()
+	 */
 	@Override
 	public void hide() {
 		dispose();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.badlogic.gdx.Screen#dispose()
+	 */
 	@Override
 	public void dispose() {
 		splashTexture.dispose();

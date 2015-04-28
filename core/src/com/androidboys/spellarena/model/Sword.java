@@ -12,8 +12,15 @@ public class Sword extends GameObject{
 	
 	private float radius = 1;
 	private float rotation;
-//	private float radius = 0;
 	
+	/**
+	 * Instantiates a new sword.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param playerName the player name
+	 * @param rotation the rotation
+	 */
 	public Sword(float x, float y, String playerName, float rotation) {
 		super(x, y, playerName);
 		this.rotation = rotation;
