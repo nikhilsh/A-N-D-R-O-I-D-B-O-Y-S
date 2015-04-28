@@ -58,27 +58,27 @@ __Thunderstorm (LLL)__
 > Duration: 1.5s
 > Cooldown: 5s
 
-__Spectral Throw(Lightning Lightning Fire)__
+__Spectral Throw(LLF)__
 > Throws a sword out from in front of the user. The sword returns to the user after three seconds if it hits nothing., with speed 300.
 > Damage: 200
 > Cooldown: 5s
 
-__Explosion (Fire Fire Ice)__
+__Explosion (FFI)__
 > Casts an explosion at the location where the user taps the screen. The explosion takes 1 second to appear.
 > Damage: 800
 > Cooldown: 5s
 
-__Laser (Fire Fire Lightning)__
+__Laser (FFL)__
 > Create a laser.
 > Damage: 200
 > Duration: 3
 
-__Firewall (Fire Fire Fire)__
+__Firewall (FFF)__
 > Create a firewall in front of Bob, with speed 85
 > Damage: 350
 > Cooldown: 5s
 
-__Hurricane (Ice Fire Lightning)__
+__Hurricane (IFL)__
 > Create three moving hurricanes around the user locations, with an increasing radius
 > Damage: 300
 > Cooldown: 5s
