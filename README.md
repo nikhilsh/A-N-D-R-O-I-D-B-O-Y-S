@@ -22,64 +22,64 @@ When a combination of Quas, Wex and Exort is valid, the corresponding ability wi
 Touch the screen to cast a spell on enemy.
 
 ### Spells
-* QQQ = Divine Shield
-* QQW = Haste
-* QQE = Blink
-* WWQ = Tornado
-* WWW = Thunderstorm
-* WWE = Spark
-* EEQ = Mine
-* EEW = Laser
-* EEE = Firewall
-* QWE = Bladestorm
+* Ice Ice Ice = Divine Shield
+* Ice Ice Lightning = Haste
+* Ice Ice Fire = Blink
+* Lightning Lightning Ice = Shadow Blast
+* Lightning Lightning Lightning = Thunderstorm
+* Lightning Lightning Fire = Spectral Throw
+* Fire Fire Ice = Explosion
+* Fire Fire Lightning = Laser
+* Fire Fire Fire = Firewall
+* Ice Fire Lightning = Hurricane
 
-__Divine Shield (QQQ)__
+__Divine Shield (III)__
 > Invulnerable.
 > Duration: 1.5s
 > Cooldown: 5s
 
-__Haste (QQW)__
+__Haste (IIL)__
 > Increase speed to 300.
 > Duration: 1s
 > Cooldown: 5s
 
-__Blink (QQE)__
+__Blink (IIE)__
 > Push Bob 100 distance ahead.
 > Cooldown: 2s
 
-__Tornado (WWQ)__
-> Create a tornado, with speed 300.
+__Shadow Blast (LLI)__
+> Fires 3 energy balls from the front of the user, with speed 300.
 > Damage: 200.
-> Cooldown: 5s? (The CD in game seems faster)
+> Cooldown: 5s
 
-__Thunderstorm (WWW)__
+__Thunderstorm (LLL)__
 > Create a thunderstorm at the distance of 150.
-> Damage: ?
+> Damage: 500
 > Duration: 1.5s
 > Cooldown: 5s
 
-__Spark (WWE)__
-> Create a boomerang, with speed 300.
+__Spectral Throw(Lightning Lightning Fire)__
+> Throws a sword out from in front of the user. The sword returns to the user after three seconds if it hits nothing., with speed 300.
 > Damage: 200
 > Cooldown: 5s
 
-__Mine (EEQ)__
-> (TODO)
+__Explosion (Fire Fire Ice)__
+> Casts an explosion at the location where the user taps the screen. The explosion takes 1 second to appear.
+> Damage: 800
 > Cooldown: 5s
 
-__Laser (EEW)__
+__Laser (Fire Fire Lightning)__
 > Create a laser.
-> Area: 210x35
 > Damage: 200
-> Duration: ?
+> Duration: 3
 
-__Firewall (EEE)__
+__Firewall (Fire Fire Fire)__
 > Create a firewall in front of Bob, with speed 85
-> Damage: ?
+> Damage: 350
 > Cooldown: 5s
 
-__Bladestorm (QWE)__
-> Create three flying swords around Bob, with angular velocity of 3 and an increasing radius
+__Hurricane (Ice Fire Lightning)__
+> Create three moving hurricanes around the user locations, with an increasing radius
 > Damage: 300
 > Cooldown: 5s
 
